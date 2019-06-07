@@ -45,9 +45,6 @@ namespace Doug
 
             services.AddSingleton(new HttpClient(new HttpClientHandler(), false));
 
-            //services.AddHangfire(config => config.UseSQLiteStorage("Data Source=jobs.db;"));
-            //services.AddHangfireServer();
-
             services.AddTransient<IEventService, EventService>();
             services.AddTransient<IMessageSender, SlackWebApi>();
 
@@ -58,7 +55,10 @@ namespace Doug
 
 
             var connectionString = Configuration.GetConnectionString("dougbotdb");
-            //connectionString = string.Format(Configuration.GetConnectionString("DougDb"), Environment.GetEnvironmentVariable("DB_USER"), Environment.GetEnvironmentVariable("DB_PASS"));
+            connectionString = string.Format(Configuration.GetConnectionString("DougDb"), Environment.GetEnvironmentVariable("DB_USER"), Environment.GetEnvironmentVariable("DB_PASS"));
+
+            services.AddHangfire(config => config.UseSqlServerStorage(connectionString));
+            services.AddHangfireServer();
 
             services.AddDbContext<DougContext>(options => options.UseSqlServer(connectionString)); 
 
