@@ -49,7 +49,7 @@ namespace Doug.Controllers
             }
             catch (Exception ex)
             {
-                return Ok("Beep boop error test : " + ex.Message);
+                return Ok(string.Format(DougMessages.DougError, ex.Message));
             }
         }
 
@@ -63,7 +63,7 @@ namespace Doug.Controllers
             }
             catch (Exception ex)
             {
-                return Ok("Beep boop error test : " + ex.Message);
+                return Ok(string.Format(DougMessages.DougError, ex.Message));
             }
         }
     }
