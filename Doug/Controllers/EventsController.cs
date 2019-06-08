@@ -13,11 +13,11 @@ namespace Doug.Controllers
     public class EventsController : ControllerBase
     {
         private const string MessageType = "message";
-        private readonly IEventService eventService;
+        private readonly IEventService _eventService;
 
         public EventsController(IEventService eventService)
         {
-            this.eventService = eventService;
+            this._eventService = eventService;
         }
 
         [HttpGet]
@@ -37,7 +37,7 @@ namespace Doug.Controllers
             switch (slackEvent.Event.Type)
             {
                 case MessageType:
-                    await eventService.MessageReceived(slackEvent.Event);
+                    await _eventService.MessageReceived(slackEvent.Event);
                     return Ok();
                 default:
                     return Ok();

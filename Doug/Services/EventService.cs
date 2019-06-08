@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Doug.Controllers;
 using Doug.Models;
+using Doug.Slack;
 using Hangfire;
 
 namespace Doug.Services
@@ -15,14 +15,14 @@ namespace Doug.Services
 
     public class EventService : IEventService
     {
-        private const int CoffeeRemindDelay = 25;
-        private IMessageSender slack;
-        private DougContext db;
+        private const int _CoffeeRemindDelay = 25;
+        private readonly ISlackWebApi _slack;
+        private readonly DougContext _db;
 
-        public EventService(IMessageSender messageSender, DougContext dougContext)
+        public EventService(ISlackWebApi messageSender, DougContext dougContext)
         {
-            this.slack = messageSender;
-            this.db = dougContext;
+            _slack = messageSender;
+            _db = dougContext;
         }
 
         public async Task MessageReceived(MessageEvent message)
@@ -43,7 +43,7 @@ namespace Doug.Services
 
         public void CoffeeRemind(string ChannelId)
         {
-            slack.SendMessage("reminding", ChannelId);
+            _slack.SendMessage("reminding", ChannelId);
         }
     }
 }

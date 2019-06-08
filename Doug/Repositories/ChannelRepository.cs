@@ -14,25 +14,25 @@ namespace Doug.Repositories
 
     public class ChannelRepository : IChannelRepository
     {
-        private DougContext db;
+        private DougContext _db;
 
         public ChannelRepository(DougContext dougContext)
         {
-            this.db = dougContext;
+            this._db = dougContext;
         }
 
         public void AddToRoster(string userId)
         {
-            if (!db.Roster.Any(user => user.Id == userId))
+            if (!_db.Roster.Any(user => user.Id == userId))
             {
-                db.Roster.Add(new Roster() { Id = userId });
-                db.SaveChanges();
+                _db.Roster.Add(new Roster() { Id = userId });
+                _db.SaveChanges();
             }
         }
 
         public string GetAccessToken()
         {
-            return db.Channel.Single().Token;
+            return _db.Channel.Single().Token;
         }
     }
 }

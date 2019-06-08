@@ -13,11 +13,11 @@ namespace Doug.Controllers
     [ApiController]
     public class CoffeeBreakController : ControllerBase
     {
-        private ICoffeeCommands coffeeCommands;
+        private ICoffeeCommands _coffeeCommands;
 
         public CoffeeBreakController(ICoffeeCommands coffeeCommands)
         {
-            this.coffeeCommands = coffeeCommands;
+            this._coffeeCommands = coffeeCommands;
         }
 
         public class SlackCommand
@@ -35,7 +35,14 @@ namespace Doug.Controllers
         [HttpPost("joincoffee")]
         public ActionResult JoinCoffee([FromForm]SlackCommand slackCommand)
         {
-            coffeeCommands.JoinCoffee(slackCommand.ToCommand());
+            _coffeeCommands.JoinCoffee(slackCommand.ToCommand());
+            return Ok();
+        }
+
+        [HttpPost("joinsomeone")]
+        public async Task<ActionResult> JoinCoffeeOther([FromForm]SlackCommand slackCommand)
+        {
+            await _coffeeCommands.JoinSomeone(slackCommand.ToCommand());
             return Ok();
         }
     }

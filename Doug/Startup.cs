@@ -7,6 +7,7 @@ using Doug.Commands;
 using Doug.Models;
 using Doug.Repositories;
 using Doug.Services;
+using Doug.Slack;
 using Hangfire;
 using Hangfire.SQLite;
 using Microsoft.AspNetCore.Builder;
@@ -46,7 +47,7 @@ namespace Doug
             services.AddSingleton(new HttpClient(new HttpClientHandler(), false));
 
             services.AddTransient<IEventService, EventService>();
-            services.AddTransient<IMessageSender, SlackWebApi>();
+            services.AddTransient<ISlackWebApi, SlackWebApi>();
 
             services.AddTransient<ICoffeeCommands, CoffeeCommands>();
 
