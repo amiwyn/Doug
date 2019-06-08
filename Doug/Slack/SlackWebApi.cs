@@ -19,7 +19,7 @@ namespace Doug.Slack
     public class SlackWebApi : ISlackWebApi
     {
         private const string PostMessageUrl = "https://slack.com/api/chat.postMessage";
-
+        private const string UserInfoUrl = "https://slack.com/api/users.info";
         private readonly HttpClient _client;
         private readonly string _token;
         private readonly JsonSerializerSettings _jsonSettings;
@@ -55,7 +55,7 @@ namespace Doug.Slack
 
         public async Task<UserInfo> GetUserInfo(string userId)
         {
-            var builder = new UriBuilder("https://slack.com/api/users.info");
+            var builder = new UriBuilder(UserInfoUrl);
             var query = HttpUtility.ParseQueryString(builder.Query);
             query["token"] = _token;
             query["user"] = userId;
