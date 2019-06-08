@@ -11,6 +11,7 @@ namespace Doug.Repositories
         void AddToRoster(string userId);
         string GetAccessToken();
         void RemoveFromRoster(string userId);
+        void SkipUser(string userId);
     }
 
     public class ChannelRepository : IChannelRepository
@@ -42,6 +43,16 @@ namespace Doug.Repositories
             if (user != null)
             {
                 _db.Roster.Remove(user);
+                _db.SaveChanges();
+            }
+        }
+
+        public void SkipUser(string userId)
+        {
+            var user = _db.Roster.SingleOrDefault(usr => usr.Id == userId);
+            if (user != null)
+            {
+                user.IsSkipping = true;
                 _db.SaveChanges();
             }
         }

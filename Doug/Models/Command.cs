@@ -20,6 +20,11 @@ namespace Doug.Models
 
         public bool IsUserArgument()
         {
+            if (string.IsNullOrWhiteSpace(Text))
+            {
+                return false;
+            }
+
             var argument = GetArgumentAt(0);
             return argument.StartsWith("<@");
         }

@@ -80,10 +80,14 @@ namespace Doug.Commands
             if (command.IsUserArgument())
             {
                 await _adminValidator.ValidateUserIsAdmin(command.UserId);
+
+                _channelRepository.SkipUser(command.GetTargetUserId());
+            }
+            else
+            {
+                _channelRepository.SkipUser(command.UserId);
             }
 
-
-            throw new NotImplementedException();
         }
     }
 }
