@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Doug
+namespace Doug.Services
 {
     public interface IAdminValidator
     {
@@ -26,7 +26,7 @@ namespace Doug
 
             if (!isAdmin)
             {
-                throw new Exception(DougMessages.NotAnAdmin);
+                throw new UserNotAdminException();
             }
         }
     }
