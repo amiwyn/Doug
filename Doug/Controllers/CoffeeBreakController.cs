@@ -54,5 +54,33 @@ namespace Doug.Controllers
                 return Ok(string.Format(DougMessages.DougError, ex.Message));
             }
         }
+
+        [HttpPost("resolve")]
+        public async Task<ActionResult> Resolve([FromForm]SlackCommandDto slackCommand)
+        {
+            try
+            {
+                await _coffeeCommands.Resolve(slackCommand.ToCommand());
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return Ok(string.Format(DougMessages.DougError, ex.Message));
+            }
+        }
+
+        [HttpPost("skip")]
+        public async Task<ActionResult> Skip([FromForm]SlackCommandDto slackCommand)
+        {
+            try
+            {
+                await _coffeeCommands.Skip(slackCommand.ToCommand());
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return Ok(string.Format(DougMessages.DougError, ex.Message));
+            }
+        }
     }
 }

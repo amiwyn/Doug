@@ -21,15 +21,15 @@ namespace Doug.Commands
 
     public class CoffeeCommands : ICoffeeCommands
     {
-        private readonly IChannelRepository _channelRepository;
+        private readonly ICoffeeRepository _coffeeRepository;
         private readonly IUserRepository _userRepository;
         private readonly ISlackWebApi _slack;
         private readonly IAdminValidator _adminValidator;
-        private readonly ICoffeeBreakService _coffeeBreakService;
+        private readonly ICoffeeService _coffeeBreakService;
 
-        public CoffeeCommands(IChannelRepository channelRepository, IUserRepository userRepository, ISlackWebApi messageSender, IAdminValidator adminValidator, ICoffeeBreakService coffeeBreakService)
+        public CoffeeCommands(ICoffeeRepository coffeeRepository, IUserRepository userRepository, ISlackWebApi messageSender, IAdminValidator adminValidator, ICoffeeService coffeeBreakService)
         {
-            _channelRepository = channelRepository;
+            _coffeeRepository = coffeeRepository;
             _userRepository = userRepository;
             _slack = messageSender;
             _adminValidator = adminValidator;
@@ -43,7 +43,7 @@ namespace Doug.Commands
 
         private void JoinUser(string userId, string channelId)
         {
-            _channelRepository.AddToRoster(userId);
+            _coffeeRepository.AddToRoster(userId);
             _userRepository.AddUser(userId);
 
             string text = string.Format(DougMessages.JoinedCoffee, Utils.UserMention(userId));
@@ -62,7 +62,7 @@ namespace Doug.Commands
             await _adminValidator.ValidateUserIsAdmin(command.UserId);
 
             var targetUser = command.GetTargetUserId();
-            _channelRepository.RemoveFromRoster(targetUser);
+            _coffeeRepository.RemoveFromRoster(targetUser);
 
             string text = string.Format(DougMessages.KickedCoffee, Utils.UserMention(targetUser));
             _slack.SendMessage(text, command.ChannelId);
@@ -77,17 +77,21 @@ namespace Doug.Commands
 
         public async Task Skip(Command command)
         {
+            var user = string.Empty;
+
             if (command.IsUserArgument())
             {
                 await _adminValidator.ValidateUserIsAdmin(command.UserId);
 
-                _channelRepository.SkipUser(command.GetTargetUserId());
+                user = command.GetTargetUserId();
             }
             else
             {
-                _channelRepository.SkipUser(command.UserId);
+                user = command.UserId;
             }
 
+            _coffeeRepository.SkipUser(user);
+            _slack.SendMessage(string.Format(DougMessages.SkippedCoffee, Utils.UserMention(user)), command.ChannelId);
         }
     }
 }

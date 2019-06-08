@@ -6,18 +6,22 @@ using System.Threading.Tasks;
 
 namespace Doug.Repositories
 {
-    public interface IChannelRepository
+    public interface ICoffeeRepository
     {
-        string GetAccessToken();
-        string GetRemindJob();
-        void SetRemindJob(string jobId);
+        void AddToRoster(string userId);
+        void RemoveFromRoster(string userId);
+        void SkipUser(string userId);
+        void ConfirmUserReady(string userId);
+        ICollection<string> GetReadyParticipants();
+        ICollection<string> GetMissingParticipants();
+        void ResetRoster();
     }
 
-    public class ChannelRepository : IChannelRepository
+    public class CoffeeRepository : ICoffeeRepository
     {
         private readonly DougContext _db;
 
-        public ChannelRepository(DougContext dougContext)
+        public CoffeeRepository(DougContext dougContext)
         {
             _db = dougContext;
         }
@@ -41,14 +45,14 @@ namespace Doug.Repositories
             }
         }
 
-        public string GetAccessToken()
+        public ICollection<string> GetMissingParticipants()
         {
-            return _db.Channel.Single().Token;
+            return _db.Roster.Where(user => !user.IsSkipping && !user.IsReady).Select(user => user.Id).ToList();
         }
 
-        public string GetRemindJob()
+        public ICollection<string> GetReadyParticipants()
         {
-            return _db.Channel.Single().CoffeeRemindJobId;
+            return _db.Roster.Where(user => !user.IsSkipping && user.IsReady).Select(user => user.Id).ToList();
         }
 
         public void RemoveFromRoster(string userId)
@@ -61,9 +65,14 @@ namespace Doug.Repositories
             }
         }
 
-        public void SetRemindJob(string jobId)
+        public void ResetRoster()
         {
-            _db.Channel.Single().CoffeeRemindJobId = jobId;
+            var participants = _db.Roster.ToList();
+            participants.ForEach(participant =>
+            {
+                participant.IsReady = false;
+                participant.IsSkipping = false;
+            });
             _db.SaveChanges();
         }
 

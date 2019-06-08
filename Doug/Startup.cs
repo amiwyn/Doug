@@ -52,10 +52,11 @@ namespace Doug
             services.AddTransient<IAdminValidator, AdminValidator>();
 
             services.AddTransient<ICoffeeCommands, CoffeeCommands>();
-            services.AddTransient<ICoffeeBreakService, CoffeeBreakService>();
+            services.AddTransient<ICoffeeService, CoffeeService>();
 
             services.AddTransient<IChannelRepository, ChannelRepository>();
             services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<ICoffeeRepository, CoffeeRepository>();
 
 
             var connectionString = Configuration.GetConnectionString("dougbotdb");

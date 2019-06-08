@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Doug.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class EventsController : ControllerBase
     {

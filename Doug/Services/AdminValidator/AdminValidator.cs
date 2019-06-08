@@ -1,4 +1,4 @@
-﻿using Doug.Repositories;
+﻿using Doug.Slack;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,18 +13,18 @@ namespace Doug.Services
 
     public class AdminValidator : IAdminValidator
     {
-        private IUserRepository _userRepository;
+        private ISlackWebApi _slack;
 
-        public AdminValidator(IUserRepository userRepository)
+        public AdminValidator(ISlackWebApi slackWebApi)
         {
-            _userRepository = userRepository;
+            _slack = slackWebApi;
         }
 
         public async Task ValidateUserIsAdmin(string userId)
         {
-            bool isAdmin = await _userRepository.IsAdmin(userId);
+            var userInfo = await _slack.GetUserInfo(userId);
 
-            if (!isAdmin)
+            if (!userInfo.IsAdmin)
             {
                 throw new UserNotAdminException();
             }

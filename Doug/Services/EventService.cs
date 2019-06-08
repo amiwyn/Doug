@@ -14,9 +14,9 @@ namespace Doug.Services
 
     public class EventService : IEventService
     {
-        private readonly ICoffeeBreakService _coffeeBreakService;
+        private readonly ICoffeeService _coffeeBreakService;
 
-        public EventService(ICoffeeBreakService coffeeBreakService)
+        public EventService(ICoffeeService coffeeBreakService)
         {
             _coffeeBreakService = coffeeBreakService;
         }
@@ -25,7 +25,7 @@ namespace Doug.Services
         {
             if (message.IsValidCoffeeParrot())
             {
-                _coffeeBreakService.CountParrot(message.User, message.Channel);
+                _coffeeBreakService.CountParrot(message.User, message.Channel, DateTime.UtcNow);
             }
         }
     }

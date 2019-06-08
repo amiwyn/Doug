@@ -1,5 +1,6 @@
 ﻿using Doug.Repositories;
 using Doug.Services;
+using Doug.Slack;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System.Threading.Tasks;
@@ -13,28 +14,28 @@ namespace Test
 
         private const string User = "robert";
 
-        private readonly Mock<IUserRepository> _userRepository = new Mock<IUserRepository>();
+        private readonly Mock<ISlackWebApi> _slack = new Mock<ISlackWebApi>();
 
         [TestInitialize]
         public void Setup()
         {
-            _adminValidator = new AdminValidator(_userRepository.Object);
+            _adminValidator = new AdminValidator(_slack.Object);
         }
 
         [TestMethod]
         public async Task GivenUserIsAdmin_WhenValidatingUser_GetInformationFromRepository()
         {
-            _userRepository.Setup(repo => repo.IsAdmin(User)).Returns(Task.FromResult(true));
+            _slack.Setup(slack => slack.GetUserInfo(User)).Returns(Task.FromResult(new UserInfo { IsAdmin = true }));
 
             await _adminValidator.ValidateUserIsAdmin(User);
 
-            _userRepository.Verify(userRepo => userRepo.IsAdmin(User));
+            _slack.Verify(slack => slack.GetUserInfo(User));
         }
 
         [TestMethod]
         public async Task GivenUserIsNotAdmin_WhenValidatingUser_ThrowException()
         {
-            _userRepository.Setup(repo => repo.IsAdmin(User)).Returns(Task.FromResult(false));
+            _slack.Setup(repo => repo.GetUserInfo(User)).Returns(Task.FromResult(new UserInfo { IsAdmin = false }));
 
             await Assert.ThrowsExceptionAsync<UserNotAdminException>(async () => await _adminValidator.ValidateUserIsAdmin(User));
         }
