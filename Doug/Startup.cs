@@ -59,8 +59,12 @@ namespace Doug
             services.AddTransient<ICoffeeRepository, CoffeeRepository>();
 
 
-            var connectionString = Configuration.GetConnectionString("dougbotdb");
-            connectionString = string.Format(Configuration.GetConnectionString("DougDb"), Environment.GetEnvironmentVariable("DB_USER"), Environment.GetEnvironmentVariable("DB_PASS"));
+            var connectionString = string.Format(Configuration.GetConnectionString("DougDb"), Environment.GetEnvironmentVariable("DB_USER"), Environment.GetEnvironmentVariable("DB_PASS"));
+
+            if (Environment.GetEnvironmentVariable("APP_ENV") == "production")
+            {
+                connectionString = Configuration.GetConnectionString("dougbotdb");
+            }
 
             services.AddHangfire(config => config.UseSqlServerStorage(connectionString));
             services.AddHangfireServer();

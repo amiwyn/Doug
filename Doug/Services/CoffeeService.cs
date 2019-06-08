@@ -37,11 +37,11 @@ namespace Doug.Services
 
         public void CountParrot(string userId, string channelId, DateTime currentTime)
         {
-            //if (!Utils.IsInTimespan(currentTime, TimeSpan.FromHours(MorningBreak), Tolerance) && 
-            //    !Utils.IsInTimespan(currentTime, TimeSpan.FromHours(AfternoonBreak), Tolerance))
-            //{
-            //    return;
-            //}
+            if (!Utils.IsInTimespan(currentTime, TimeSpan.FromHours(MorningBreak), Tolerance) &&
+                !Utils.IsInTimespan(currentTime, TimeSpan.FromHours(AfternoonBreak), Tolerance))
+            {
+                return;
+            }
 
             _coffeeRepository.ConfirmUserReady(userId);
 
