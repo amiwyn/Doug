@@ -17,7 +17,7 @@ namespace Doug.Controllers
 
         public CoffeeBreakController(ICoffeeCommands coffeeCommands)
         {
-            this._coffeeCommands = coffeeCommands;
+            _coffeeCommands = coffeeCommands;
         }
 
         public class SlackCommand
@@ -42,8 +42,29 @@ namespace Doug.Controllers
         [HttpPost("joinsomeone")]
         public async Task<ActionResult> JoinCoffeeOther([FromForm]SlackCommand slackCommand)
         {
-            await _coffeeCommands.JoinSomeone(slackCommand.ToCommand());
-            return Ok();
+            try
+            {
+                await _coffeeCommands.JoinSomeone(slackCommand.ToCommand());
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return Ok("Beep boop error test : " + ex.Message);
+            }
+        }
+
+        [HttpPost("kick")]
+        public async Task<ActionResult> Kick([FromForm]SlackCommand slackCommand)
+        {
+            try
+            {
+                await _coffeeCommands.KickCoffee(slackCommand.ToCommand());
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return Ok("Beep boop error test : " + ex.Message);
+            }
         }
     }
 }

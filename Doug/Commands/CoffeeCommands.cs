@@ -12,7 +12,7 @@ namespace Doug.Commands
     {
         void JoinCoffee(Command command);
         Task JoinSomeone(Command command);
-        void KickCoffee(Command command);
+        Task KickCoffee(Command command);
         void Resolve(Command command);
         void Skip(Command command);
     }
@@ -25,9 +25,9 @@ namespace Doug.Commands
 
         public CoffeeCommands(IChannelRepository channelRepository, IUserRepository userRepository, ISlackWebApi messageSender)
         {
-            this._channelRepository = channelRepository;
-            this._userRepository = userRepository;
-            this._slack = messageSender;
+            _channelRepository = channelRepository;
+            _userRepository = userRepository;
+            _slack = messageSender;
         }
 
         public void JoinCoffee(Command command)
@@ -40,7 +40,7 @@ namespace Doug.Commands
             _channelRepository.AddToRoster(userId);
             _userRepository.AddUser(userId);
 
-            string text = string.Format("{0} joined coffee break", Utils.UserMention(userId));
+            string text = string.Format("{0} joined the coffee break.", Utils.UserMention(userId));
             _slack.SendMessage(text, channelId);
         }
 
@@ -55,9 +55,19 @@ namespace Doug.Commands
             JoinUser(command.GetTargetUserId(), command.ChannelId);
         }
 
-        public void KickCoffee(Command command)
+        public async Task KickCoffee(Command command)
         {
-            throw new NotImplementedException();
+            bool isAdmin = await _userRepository.IsAdmin(command.UserId);
+            if (!isAdmin)
+            {
+                throw new Exception("you are not an admin");
+            }
+
+            var targetUser = command.GetTargetUserId();
+            _channelRepository.RemoveFromRoster(targetUser);
+
+            string text = string.Format("{0} was kicked from the coffee break.", Utils.UserMention(targetUser));
+            _slack.SendMessage(text, command.ChannelId);
         }
 
         public void Resolve(Command command)

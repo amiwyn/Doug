@@ -10,6 +10,7 @@ namespace Doug.Repositories
     {
         void AddToRoster(string userId);
         string GetAccessToken();
+        void RemoveFromRoster(string userId);
     }
 
     public class ChannelRepository : IChannelRepository
@@ -18,7 +19,7 @@ namespace Doug.Repositories
 
         public ChannelRepository(DougContext dougContext)
         {
-            this._db = dougContext;
+            _db = dougContext;
         }
 
         public void AddToRoster(string userId)
@@ -33,6 +34,16 @@ namespace Doug.Repositories
         public string GetAccessToken()
         {
             return _db.Channel.Single().Token;
+        }
+
+        public void RemoveFromRoster(string userId)
+        {
+            var user = _db.Roster.SingleOrDefault(usr => usr.Id == userId);
+            if (user != null)
+            {
+                _db.Roster.Remove(user);
+                _db.SaveChanges();
+            }
         }
     }
 }

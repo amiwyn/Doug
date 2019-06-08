@@ -17,7 +17,7 @@ namespace Doug.Controllers
 
         public EventsController(IEventService eventService)
         {
-            this._eventService = eventService;
+            _eventService = eventService;
         }
 
         [HttpGet]
