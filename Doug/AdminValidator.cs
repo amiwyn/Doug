@@ -15,6 +15,11 @@ namespace Doug
     {
         private IUserRepository _userRepository;
 
+        public AdminValidator(IUserRepository userRepository)
+        {
+            _userRepository = userRepository;
+        }
+
         public async Task ValidateUserIsAdmin(string userId)
         {
             bool isAdmin = await _userRepository.IsAdmin(userId);

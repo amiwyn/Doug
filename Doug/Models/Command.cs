@@ -14,9 +14,30 @@ namespace Doug.Models
 
         public string GetTargetUserId()
         {
-            var args = Text.Split(' ');
-            var parts = args[0].Split('|');
+            var parts = GetArgumentAt(0).Split('|');
             return parts[0].Substring(2);
+        }
+
+        public bool IsUserArgument()
+        {
+            var argument = GetArgumentAt(0);
+            return argument.StartsWith("<@");
+        }
+
+        public string GetArgumentAt(int index)
+        {
+            if (Text == null)
+            {
+                throw new Exception(DougMessages.InvalidArgumentCount);
+            }
+
+            var args = Text.Split(' ');
+            if (args.Length <= index)
+            {
+                throw new Exception(DougMessages.InvalidArgumentCount);
+            }
+
+            return args[index];
         }
     }
 }

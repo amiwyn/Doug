@@ -1,6 +1,7 @@
 ﻿using Doug.Controllers;
 using Doug.Models;
 using Doug.Repositories;
+using Doug.Services;
 using Doug.Slack;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,7 @@ namespace Doug.Commands
         Task JoinSomeone(Command command);
         Task KickCoffee(Command command);
         Task Resolve(Command command);
-        void Skip(Command command);
+        Task Skip(Command command);
     }
 
     public class CoffeeCommands : ICoffeeCommands
@@ -24,13 +25,15 @@ namespace Doug.Commands
         private readonly IUserRepository _userRepository;
         private readonly ISlackWebApi _slack;
         private readonly IAdminValidator _adminValidator;
+        private readonly ICoffeeBreakService _coffeeBreakService;
 
-        public CoffeeCommands(IChannelRepository channelRepository, IUserRepository userRepository, ISlackWebApi messageSender, IAdminValidator adminValidator)
+        public CoffeeCommands(IChannelRepository channelRepository, IUserRepository userRepository, ISlackWebApi messageSender, IAdminValidator adminValidator, ICoffeeBreakService coffeeBreakService)
         {
             _channelRepository = channelRepository;
             _userRepository = userRepository;
             _slack = messageSender;
             _adminValidator = adminValidator;
+            _coffeeBreakService = coffeeBreakService;
         }
 
         public void JoinCoffee(Command command)
@@ -69,13 +72,17 @@ namespace Doug.Commands
         {
             await _adminValidator.ValidateUserIsAdmin(command.UserId);
 
-            // TODO: call resolve in coffeeService or whatevs
-
-            _slack.SendMessage(DougMessages.CoffeeStart, command.ChannelId);
+            _coffeeBreakService.LaunchCoffeeBreak(command.ChannelId);
         }
 
-        public void Skip(Command command)
+        public async Task Skip(Command command)
         {
+            if (command.IsUserArgument())
+            {
+                await _adminValidator.ValidateUserIsAdmin(command.UserId);
+            }
+
+
             throw new NotImplementedException();
         }
     }

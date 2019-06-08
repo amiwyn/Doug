@@ -20,27 +20,15 @@ namespace Doug.Controllers
             _coffeeCommands = coffeeCommands;
         }
 
-        public class SlackCommand
-        {
-            public string channel_id { get; set; }
-            public string user_id { get; set; }
-            public string text { get; set; }
-
-            public Command ToCommand()
-            {
-                return new Command { ChannelId = channel_id, Text = text, UserId = user_id };
-            }
-        }
-
         [HttpPost("joincoffee")]
-        public ActionResult JoinCoffee([FromForm]SlackCommand slackCommand)
+        public ActionResult JoinCoffee([FromForm]SlackCommandDto slackCommand)
         {
             _coffeeCommands.JoinCoffee(slackCommand.ToCommand());
             return Ok();
         }
 
         [HttpPost("joinsomeone")]
-        public async Task<ActionResult> JoinCoffeeOther([FromForm]SlackCommand slackCommand)
+        public async Task<ActionResult> JoinCoffeeOther([FromForm]SlackCommandDto slackCommand)
         {
             try
             {
@@ -54,7 +42,7 @@ namespace Doug.Controllers
         }
 
         [HttpPost("kick")]
-        public async Task<ActionResult> Kick([FromForm]SlackCommand slackCommand)
+        public async Task<ActionResult> Kick([FromForm]SlackCommandDto slackCommand)
         {
             try
             {

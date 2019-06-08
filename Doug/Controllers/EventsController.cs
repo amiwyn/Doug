@@ -27,7 +27,7 @@ namespace Doug.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Event(SlackEvent slackEvent)
+        public ActionResult Event(SlackEvent slackEvent)
         {
             if (slackEvent.Type == "url_verification")
             {
@@ -37,7 +37,7 @@ namespace Doug.Controllers
             switch (slackEvent.Event.Type)
             {
                 case MessageType:
-                    await _eventService.MessageReceived(slackEvent.Event);
+                    _eventService.MessageReceived(slackEvent.Event);
                     return Ok();
                 default:
                     return Ok();
