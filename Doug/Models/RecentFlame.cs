@@ -5,11 +5,10 @@ using System.Threading.Tasks;
 
 namespace Doug.Models
 {
-    public class Slur
+    public class RecentFlame
     {
         public int Id { get; set; }
-        public string Text { get; set; }
-        public string CreatedBy { get; set; }
-        public bool Active { get; set; }
+        public string TimeStamp { get; set; }
+        public int SlurId { get; set; }
     }
 }

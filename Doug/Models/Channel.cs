@@ -10,5 +10,6 @@ namespace Doug.Models
         public int Id { get; set; }
         public string Token { get; set; }
         public string CoffeeRemindJobId { get; set; }
+        public int FatCounter { get; set; }
     }
 }

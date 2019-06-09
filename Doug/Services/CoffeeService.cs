@@ -81,7 +81,7 @@ namespace Doug.Services
         {
             _slack.SendMessage(DougMessages.CoffeeStart, channelId);
 
-            _backgroundJobClient.Schedule(() => EndCoffee(channelId), TimeSpan.FromMinutes(CoffeeBreakDurationMinutes)); // TODO : from minutes
+            _backgroundJobClient.Schedule(() => EndCoffee(channelId), TimeSpan.FromMinutes(CoffeeBreakDurationMinutes));
         }
 
         public void EndCoffee(string channelId)

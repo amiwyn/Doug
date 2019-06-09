@@ -18,6 +18,17 @@ namespace Doug.Models
             return parts[0].Substring(2);
         }
 
+        public int GetArgumentCount()
+        {
+            if (string.IsNullOrWhiteSpace(Text))
+            {
+                return 0;
+            }
+
+            var args = Text.Split(' ');
+            return args.Length;
+        }
+
         public bool IsUserArgument()
         {
             if (string.IsNullOrWhiteSpace(Text))
@@ -33,13 +44,13 @@ namespace Doug.Models
         {
             if (Text == null)
             {
-                throw new Exception(DougMessages.InvalidArgumentCount);
+                throw new ArgumentException(DougMessages.InvalidArgumentCount);
             }
 
             var args = Text.Split(' ');
             if (args.Length <= index)
             {
-                throw new Exception(DougMessages.InvalidArgumentCount);
+                throw new ArgumentException(DougMessages.InvalidArgumentCount);
             }
 
             return args[index];

@@ -13,6 +13,7 @@ namespace Doug.Models
         public DbSet<Secret> Secrets { get; set; }
         public DbSet<Channel> Channel { get; set; }
         public DbSet<Roster> Roster { get; set; }
+        public DbSet<RecentFlame> RecentSlurs { get; set; }
 
         public DougContext(DbContextOptions<DougContext> options) : base(options)
         {
