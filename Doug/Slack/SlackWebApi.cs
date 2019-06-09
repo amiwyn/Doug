@@ -17,6 +17,7 @@ namespace Doug.Slack
         Task<UserInfo> GetUserInfo(string userId);
         Task AddReaction(string reaction, string timestamp, string channel);
         Task<List<Reaction>> GetReactions(string timestamp, string channel);
+        Task SendAttachment(Attachment attachment, string channel);
     }
 
     public class SlackWebApi : ISlackWebApi
@@ -105,6 +106,22 @@ namespace Doug.Slack
 
             var response = await _client.GetStringAsync(url);
             return JsonConvert.DeserializeObject<ReactionInfoResponse>(response, _jsonSettings).Message.Reactions;
+        }
+
+        public async Task SendAttachment(Attachment attachment, string channel)
+        {
+            var attachmentString = JsonConvert.SerializeObject(new List<Attachment>() { attachment }, _jsonSettings);
+
+            var request = new HttpRequestMessage(HttpMethod.Post, PostMessageUrl);
+            var keyValues = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("token", _token),
+                new KeyValuePair<string, string>("channel", channel),
+                new KeyValuePair<string, string>("attachments", attachmentString)
+            };
+            request.Content = new FormUrlEncodedContent(keyValues);
+
+            await _client.SendAsync(request);
         }
     }
 }

@@ -14,6 +14,7 @@
         public const string BackToWork = "<!here> Go back to work, ya bunch o' lazy dogs!";
         public const string GainedCredit = "You gained {0} " + CreditEmoji;
         public const string SlurAdded = "The slur was added.";
+        public const string SlursCleaned = "The following slurs have been cleaned up";
 
         public const string DougError = "Beep boop, it's not working : {0}";
         public const string NotAnAdmin = "You are not an admin.";

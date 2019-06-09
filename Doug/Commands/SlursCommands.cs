@@ -81,12 +81,14 @@ namespace Doug.Commands
                 throw new Exception(DougMessages.SlursAreClean);
             }
 
-            //var slurs = slursToRemove.Select(slur => _slurRepository.GetSlur(slur));
-            // TODO: build a nice message to show removed slurs
+            var slurs = slursToRemove.Select(slur => _slurRepository.GetSlur(slur)).ToList();
+            var attachment = Attachment.DeletedSlursAttachment(slurs);
 
-            await _slack.SendMessage("slurs are removed", command.ChannelId);
+            _slack.SendAttachment(attachment, command.ChannelId);
 
             slursToRemove.ForEach(slur => _slurRepository.RemoveSlur(slur));
+
+            _slurRepository.ClearRecentSlurs();
         }
 
         public async Task Flame(Command command)

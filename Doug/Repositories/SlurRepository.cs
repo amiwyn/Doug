@@ -15,6 +15,7 @@ namespace Doug.Repositories
         void RemoveSlur(int slurId);
         ICollection<RecentFlame> GetRecentSlurs();
         void LogRecentSlur(int slurId, string timestamp);
+        void ClearRecentSlurs();
         void IncrementFat();
         int GetFat();
     }
@@ -31,6 +32,12 @@ namespace Doug.Repositories
         public void AddSlur(Slur slur)
         {
             _db.Slurs.Add(slur);
+        }
+
+        public void ClearRecentSlurs()
+        {
+            _db.RecentSlurs.RemoveRange(_db.RecentSlurs);
+            _db.SaveChanges();
         }
 
         public int GetFat()

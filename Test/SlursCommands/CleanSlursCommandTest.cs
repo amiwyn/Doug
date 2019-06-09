@@ -36,6 +36,8 @@ namespace Test
         {
             _slurRepository.Setup(repo => repo.GetRecentSlurs()).Returns(new List<RecentFlame>() { new RecentFlame() { TimeStamp = "6969.6969" } });
 
+            _slurRepository.Setup(repo => repo.GetSlur(It.IsAny<int>())).Returns(new Slur("ffff", "robee"));
+
             _slack.Setup(slack => slack.GetReactions("6969.6969", Channel)).Returns(Task.FromResult(new List<Reaction>()
             {
                 new Reaction() { Name = "+1", Count = 3 },
@@ -84,6 +86,20 @@ namespace Test
             _slurRepository.Verify(repo => repo.RemoveSlur(It.IsAny<int>()));
         }
 
+        [TestMethod]
+        public async Task WhenCleaning_RecentSlursAreCleared()
+        {
+            await _slursCommands.Clean(command);
 
+            _slurRepository.Verify(repo => repo.ClearRecentSlurs());
+        }
+
+        [TestMethod]
+        public async Task GivenBadRatedSlurs_WhenCleaning_AttachmentIsSent()
+        {
+            await _slursCommands.Clean(command);
+
+            _slack.Verify(slack => slack.SendAttachment(It.IsAny<Attachment>(), Channel));
+        }
     }
 }

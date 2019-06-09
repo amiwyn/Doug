@@ -65,7 +65,7 @@ namespace Doug.Commands
             _coffeeRepository.RemoveFromRoster(targetUser);
 
             string text = string.Format(DougMessages.KickedCoffee, Utils.UserMention(targetUser));
-            _slack.SendMessage(text, command.ChannelId);
+            await _slack.SendMessage(text, command.ChannelId);
         }
 
         public async Task Resolve(Command command)
@@ -77,7 +77,7 @@ namespace Doug.Commands
 
         public async Task Skip(Command command)
         {
-            var user = string.Empty;
+            string user;
 
             if (command.IsUserArgument())
             {
@@ -91,7 +91,7 @@ namespace Doug.Commands
             }
 
             _coffeeRepository.SkipUser(user);
-            _slack.SendMessage(string.Format(DougMessages.SkippedCoffee, Utils.UserMention(user)), command.ChannelId);
+            await _slack.SendMessage(string.Format(DougMessages.SkippedCoffee, Utils.UserMention(user)), command.ChannelId);
         }
     }
 }
