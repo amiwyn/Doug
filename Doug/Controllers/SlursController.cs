@@ -48,12 +48,12 @@ namespace Doug.Controllers
         }
 
         [HttpPost("clean")]
-        public ActionResult CleanSlurs([FromForm]SlackCommandDto slackCommand)
+        public async Task<ActionResult> CleanSlurs([FromForm]SlackCommandDto slackCommand)
         {
             try
             {
-                var message = _slursCommands.Clean(slackCommand.ToCommand());
-                return Ok(message);
+                await _slursCommands.Clean(slackCommand.ToCommand());
+                return Ok();
             }
             catch (Exception ex)
             {

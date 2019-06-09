@@ -104,8 +104,7 @@ namespace Doug.Slack
             string url = builder.ToString();
 
             var response = await _client.GetStringAsync(url);
-
-            return JsonConvert.DeserializeObject<ReactionInfoResponse>(response, _jsonSettings).Reactions;
+            return JsonConvert.DeserializeObject<ReactionInfoResponse>(response, _jsonSettings).Message.Reactions;
         }
     }
 }

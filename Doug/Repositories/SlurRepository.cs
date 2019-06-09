@@ -50,7 +50,7 @@ namespace Doug.Repositories
 
         public ICollection<Slur> GetSlurs()
         {
-            return _db.Slurs.ToList();
+            return _db.Slurs.Where(slur => slur.Active == true).ToList();
         }
 
         public ICollection<Slur> GetSlursFrom(string userId)
