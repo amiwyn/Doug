@@ -11,6 +11,7 @@ namespace Doug.Repositories
     {
         void AddUser(string userId);
         ICollection<User> GetUsers();
+        User GetUser(string userId);
         void RemoveCredits(string userId, int amount);
         void AddCredits(string userId, int amount);
     }
@@ -45,6 +46,11 @@ namespace Doug.Repositories
                 _db.Users.Add(user);
                 _db.SaveChanges();
             }
+        }
+
+        public User GetUser(string userId)
+        {
+            return _db.Users.Single(user => user.Id == userId);
         }
 
         public ICollection<User> GetUsers()
