@@ -19,12 +19,14 @@ namespace Doug.Commands
     public class CreditsCommands : ICreditsCommands
     {
         private readonly IUserRepository _userRepository;
+        private readonly ISlurRepository _slurRepository;
         private readonly ISlackWebApi _slack;
 
-        public CreditsCommands(IUserRepository userRepository, ISlackWebApi messageSender)
+        public CreditsCommands(IUserRepository userRepository, ISlackWebApi messageSender, ISlurRepository slurRepository)
         {
             _userRepository = userRepository;
             _slack = messageSender;
+            _slurRepository = slurRepository;
         }
         public string Balance(Command command)
         {
@@ -52,7 +54,19 @@ namespace Doug.Commands
 
         public void Stats(Command command)
         {
-            throw new NotImplementedException();
+            var userId = command.UserId;
+
+            if (command.IsUserArgument())
+            {
+                userId = command.GetTargetUserId();
+            }
+
+            var slurCount = _slurRepository.GetSlursFrom(userId).Count();
+            var user = _userRepository.GetUser(userId);
+
+            var attachment = Attachment.StatsAttachment(slurCount, user);
+
+            _slack.SendAttachment(attachment, command.ChannelId);
         }
     }
 }

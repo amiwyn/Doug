@@ -30,6 +30,24 @@ namespace Doug.Models
 
             return attachment;
         }
+
+        public static Attachment StatsAttachment(int slurCount, User user)
+        {
+            var title = string.Format(DougMessages.StatsOf, Utils.UserMention(user.Id));
+
+            var attachment = new Attachment()
+            {
+                Fallback = title,
+                Color = "#69FF69",
+                Pretext = title
+            };
+
+            attachment.Fields.Add(new Field(string.Format(DougMessages.UserIdStats, user.Id)));
+            attachment.Fields.Add(new Field(string.Format(DougMessages.CreditStats, user.Credits)));
+            attachment.Fields.Add(new Field(string.Format(DougMessages.SlursAddedStats, slurCount)));
+
+            return attachment;
+        }
     }
 
     public class Field

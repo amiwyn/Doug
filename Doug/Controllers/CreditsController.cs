@@ -12,7 +12,7 @@ namespace Doug.Controllers
     [ApiController]
     public class CreditsController : ControllerBase
     {
-        private ICreditsCommands _creditsCommands;
+        private readonly ICreditsCommands _creditsCommands;
 
         public CreditsController(ICreditsCommands creditsCommands)
         {

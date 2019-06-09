@@ -18,6 +18,10 @@
         public const string SlurCreatedBy = "{0} created that slur.";
         public const string Balance = "You have {0} " + CreditEmoji;
         public const string UserGaveCredits = "{0} gave {1} " + CreditEmoji + " to {2}";
+        public const string StatsOf = "Stats of {0}";
+        public const string CreditStats = CreditEmoji + " Money : {0}";
+        public const string UserIdStats = ":robot_face: User ID : {0}";
+        public const string SlursAddedStats = ":see_no_evil: Slurs added : {0}";
 
         public const string DougError = "Beep boop, it's not working : {0}";
         public const string NotAnAdmin = "You are not an admin.";
