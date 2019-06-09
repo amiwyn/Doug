@@ -15,6 +15,7 @@
         public const string GainedCredit = "You gained {0} " + CreditEmoji;
         public const string SlurAdded = "The slur was added.";
         public const string SlursCleaned = "The following slurs have been cleaned up";
+        public const string SlurCreatedBy = "{0} created that slur.";
 
         public const string DougError = "Beep boop, it's not working : {0}";
         public const string NotAnAdmin = "You are not an admin.";

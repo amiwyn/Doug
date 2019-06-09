@@ -74,5 +74,19 @@ namespace Doug.Controllers
                 return Ok(string.Format(DougMessages.DougError, ex.Message));
             }
         }
+
+        [HttpPost("wholast")]
+        public ActionResult Wholast([FromForm]SlackCommandDto slackCommand)
+        {
+            try
+            {
+                var result = _slursCommands.WhoLast(slackCommand.ToCommand());
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return Ok(string.Format(DougMessages.DougError, ex.Message));
+            }
+        }
     }
 }

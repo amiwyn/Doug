@@ -25,7 +25,7 @@ namespace Doug.Commands
 
         private const int SpecificFlameCost = 5;
         private const int AddSlurCreditAward = 2;
-
+        private const int WholastCost = 2;
         private readonly ISlurRepository _slurRepository;
         private readonly IUserRepository _userRepository;
         private readonly ISlackWebApi _slack;
@@ -157,7 +157,15 @@ namespace Doug.Commands
 
         public string WhoLast(Command command)
         {
-            throw new NotImplementedException();
+            _userRepository.RemoveCredits(command.UserId, WholastCost);
+            var recentSlurs = _slurRepository.GetRecentSlurs().ToList();
+            recentSlurs.Sort((e1, e2) => e1.Id.CompareTo(e2.Id));
+
+            var latestFlame = recentSlurs.Last();
+
+            var latestSlur = _slurRepository.GetSlur(latestFlame.SlurId);
+
+            return string.Format(DougMessages.SlurCreatedBy, Utils.UserMention(latestSlur.CreatedBy));
         }
     }
 }
