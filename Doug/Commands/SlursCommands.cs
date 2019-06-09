@@ -53,9 +53,28 @@ namespace Doug.Commands
         public async Task Clean(Command command)
         {
             await _adminValidator.ValidateUserIsAdmin(command.UserId);
-            var recentSlurs = _slurRepository.GetRecentSlurs();
 
-            var slursReactions = recentSlurs.Select(slur => Tuple.Create(slur.SlurId, _slack.GetReactions(slur.TimeStamp, command.ChannelId)));
+            var slursToRemove = await FilterSlursToRemove(command.ChannelId);
+
+            if (slursToRemove.Count == 0)
+            {
+                throw new Exception(DougMessages.SlursAreClean);
+            }
+
+            var slurs = slursToRemove.Select(slur => _slurRepository.GetSlur(slur)).ToList();
+            var attachment = Attachment.DeletedSlursAttachment(slurs);
+
+            await _slack.SendAttachment(attachment, command.ChannelId);
+
+            slursToRemove.ForEach(slur => _slurRepository.RemoveSlur(slur));
+
+            _slurRepository.ClearRecentSlurs();
+        }
+
+        private async Task<List<int>> FilterSlursToRemove(string channelId)
+        {
+            var recentSlurs = _slurRepository.GetRecentSlurs();
+            var slursReactions = recentSlurs.Select(slur => Tuple.Create(slur.SlurId, _slack.GetReactions(slur.TimeStamp, channelId)));
 
             var slursToRemove = new List<int>();
 
@@ -76,19 +95,7 @@ namespace Doug.Commands
                 }
             }
 
-            if (slursToRemove.Count == 0)
-            {
-                throw new Exception(DougMessages.SlursAreClean);
-            }
-
-            var slurs = slursToRemove.Select(slur => _slurRepository.GetSlur(slur)).ToList();
-            var attachment = Attachment.DeletedSlursAttachment(slurs);
-
-            _slack.SendAttachment(attachment, command.ChannelId);
-
-            slursToRemove.ForEach(slur => _slurRepository.RemoveSlur(slur));
-
-            _slurRepository.ClearRecentSlurs();
+            return slursToRemove;
         }
 
         public async Task Flame(Command command)
@@ -143,7 +150,9 @@ namespace Doug.Commands
 
         public string Slurs(Command command)
         {
-            throw new NotImplementedException();
+            var slurs = _slurRepository.GetSlursFrom(command.UserId);
+
+            return slurs.Aggregate(string.Empty, (acc, slur) => string.Format("{0}{1} = {2}\n", acc, slur.Id, slur.Text));
         }
 
         public string WhoLast(Command command)
