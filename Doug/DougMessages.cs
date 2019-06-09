@@ -22,6 +22,8 @@
         public const string CreditStats = CreditEmoji + " Money : {0}";
         public const string UserIdStats = ":robot_face: User ID : {0}";
         public const string SlursAddedStats = ":see_no_evil: Slurs added : {0}";
+        public const string WonGamble = "{0} flipped a coin and won {1} " + CreditEmoji;
+        public const string LostGamble = "{0} flipped a coin and lost {1} " + CreditEmoji;
 
         public const string DougError = "Beep boop, it's not working : {0}";
         public const string NotAnAdmin = "You are not an admin.";
@@ -29,5 +31,6 @@
         public const string InvalidAmount = "InvalidAmount";
         public const string NotEnoughCredits = "You need {0} " + CreditEmoji + " to do this and you have {1} " + CreditEmoji;
         public const string SlursAreClean = "There is nothing to cleanup.";
+        public const string YouAreTooRich = "You are too rich for this.";
     }
 }

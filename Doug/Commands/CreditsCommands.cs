@@ -13,11 +13,12 @@ namespace Doug.Commands
         string Balance(Command command);
         void Stats(Command command);
         void Give(Command command);
-        string Gamble(Command command);
+        void Gamble(Command command);
     }
 
     public class CreditsCommands : ICreditsCommands
     {
+        private const int GambleCreditLimit = 200;
         private readonly IUserRepository _userRepository;
         private readonly ISlurRepository _slurRepository;
         private readonly ISlackWebApi _slack;
@@ -35,9 +36,33 @@ namespace Doug.Commands
             return string.Format(DougMessages.Balance, user.Credits);
         }
 
-        public string Gamble(Command command)
+        public void Gamble(Command command)
         {
-            throw new NotImplementedException();
+            var user = _userRepository.GetUser(command.UserId);
+            var amount = int.Parse(command.Text);
+
+            if (user.Credits > GambleCreditLimit)
+            {
+                throw new InvalidOperationException(DougMessages.YouAreTooRich);
+            }
+
+            _userRepository.RemoveCredits(command.UserId, amount);
+            string baseMessage = DougMessages.LostGamble;
+
+            if (CoinflipWin())
+            {
+                baseMessage = DougMessages.WonGamble;
+                _userRepository.AddCredits(command.UserId, amount*2);
+            }
+
+            var message = string.Format(baseMessage, Utils.UserMention(command.UserId), amount);
+            _slack.SendMessage(message, command.ChannelId);
+        }
+
+        private bool CoinflipWin()
+        {
+            var random = new Random();
+            return random.Next(2) != 0;
         }
 
         public void Give(Command command)
