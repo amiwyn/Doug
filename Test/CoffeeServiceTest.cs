@@ -21,11 +21,12 @@ namespace Test
         private readonly Mock<ICoffeeRepository> _coffeeRepository = new Mock<ICoffeeRepository>();
         private readonly Mock<IChannelRepository> _channelRepository = new Mock<IChannelRepository>();
         private readonly Mock<IBackgroundJobClient> _backgrounJobClient = new Mock<IBackgroundJobClient>();
+        private readonly Mock<IUserRepository> _userRepository = new Mock<IUserRepository>();
 
         [TestInitialize]
         public void Setup()
         {
-            _coffeeService = new CoffeeService(_slack.Object, _coffeeRepository.Object, _channelRepository.Object, _backgrounJobClient.Object);
+            _coffeeService = new CoffeeService(_slack.Object, _coffeeRepository.Object, _channelRepository.Object, _backgrounJobClient.Object, _userRepository.Object);
         }
 
         [TestMethod]
@@ -86,6 +87,8 @@ namespace Test
         [TestMethod]
         public void WhenEndingBreak_RosterIsCleared()
         {
+            _coffeeRepository.Setup(repo => repo.GetReadyParticipants()).Returns(new List<string>());
+
             _coffeeService.EndCoffee(Channel);
 
             _coffeeRepository.Verify(repo => repo.ResetRoster());
@@ -94,9 +97,21 @@ namespace Test
         [TestMethod]
         public void WhenEndingBreak_BroadcastEnd()
         {
+            _coffeeRepository.Setup(repo => repo.GetReadyParticipants()).Returns(new List<string>());
+
             _coffeeService.EndCoffee(Channel);
 
             _slack.Verify(slack => slack.SendMessage("<!here> Go back to work, ya bunch o' lazy dogs!", Channel));
+        }
+
+        [TestMethod]
+        public void WhenEndingBreak_ParticipantsGet10Credits()
+        {
+            _coffeeRepository.Setup(repo => repo.GetReadyParticipants()).Returns(new List<string>() { "bob", "ginette", "lise" });
+
+            _coffeeService.EndCoffee(Channel);
+
+            _userRepository.Verify(repo => repo.AddCredits(It.IsAny<string>(), 10), Times.Exactly(3));
         }
 
     }

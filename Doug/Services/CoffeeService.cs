@@ -21,18 +21,21 @@ namespace Doug.Services
         private const int MorningBreak = 13;
         private const int AfternoonBreak = 18;
         private const int Tolerance = 30;
+        private const int CoffeeBreakAward = 10;
 
         private readonly ISlackWebApi _slack;
         private readonly ICoffeeRepository _coffeeRepository;
         private readonly IChannelRepository _channelRepository;
         private readonly IBackgroundJobClient _backgroundJobClient;
+        private readonly IUserRepository _userRepository;
 
-        public CoffeeService(ISlackWebApi slackWebApi, ICoffeeRepository coffeeRepository, IChannelRepository channelRepository, IBackgroundJobClient backgroundJobClient)
+        public CoffeeService(ISlackWebApi slackWebApi, ICoffeeRepository coffeeRepository, IChannelRepository channelRepository, IBackgroundJobClient backgroundJobClient, IUserRepository userRepository)
         {
             _slack = slackWebApi;
             _coffeeRepository = coffeeRepository;
             _channelRepository = channelRepository;
             _backgroundJobClient = backgroundJobClient;
+            _userRepository = userRepository;
         }
 
         public void CountParrot(string userId, string channelId, DateTime currentTime)
@@ -86,6 +89,13 @@ namespace Doug.Services
 
         public void EndCoffee(string channelId)
         {
+            var participants = _coffeeRepository.GetReadyParticipants();
+
+            foreach (var participant in participants)
+            {
+                _userRepository.AddCredits(participant, CoffeeBreakAward);
+            }
+
             _coffeeRepository.ResetRoster();
 
             _slack.SendMessage(DougMessages.BackToWork, channelId);
