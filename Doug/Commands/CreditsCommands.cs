@@ -40,7 +40,14 @@ namespace Doug.Commands
 
         public void Give(Command command)
         {
-            throw new NotImplementedException();
+            var amount = int.Parse(command.GetArgumentAt(1));
+            var target = command.GetTargetUserId();
+
+            _userRepository.RemoveCredits(command.UserId, amount);
+            _userRepository.AddCredits(target, amount);
+
+            var message = string.Format(DougMessages.UserGaveCredits, Utils.UserMention(command.UserId), amount, Utils.UserMention(target));
+            _slack.SendMessage(message, command.ChannelId);
         }
 
         public void Stats(Command command)

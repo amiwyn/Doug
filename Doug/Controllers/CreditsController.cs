@@ -52,8 +52,8 @@ namespace Doug.Controllers
         {
             try
             {
-                _creditsCommands.Balance(slackCommand.ToCommand());
-                return Ok();
+                var result = _creditsCommands.Balance(slackCommand.ToCommand());
+                return Ok(result);
             }
             catch (Exception ex)
             {

@@ -51,6 +51,7 @@ namespace Doug
 
             services.AddTransient<ICoffeeCommands, CoffeeCommands>();
             services.AddTransient<ISlursCommands, SlursCommands>();
+            services.AddTransient<ICreditsCommands, CreditsCommands>();
             services.AddTransient<ICoffeeService, CoffeeService>();
 
             services.AddTransient<IChannelRepository, ChannelRepository>();
