@@ -32,5 +32,19 @@ namespace Doug.Controllers
                 return Ok(string.Format(DougMessages.DougError, ex.Message));
             }
         }
+
+        [HttpPost("addslur")]
+        public ActionResult Addslur([FromForm]SlackCommandDto slackCommand)
+        {
+            try
+            {
+                var message = _slursCommands.AddSlur(slackCommand.ToCommand());
+                return Ok(message);
+            }
+            catch (Exception ex)
+            {
+                return Ok(string.Format(DougMessages.DougError, ex.Message));
+            }
+        }
     }
 }

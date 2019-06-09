@@ -34,7 +34,7 @@ namespace Test
         [TestInitialize]
         public void Setup()
         {
-            _slurRepository.Setup(repo => repo.GetSlurs()).Returns(new List<Slur>() { new Slur() { Text = "{user} is a {random} 350++ bitch", Id = 69 } });
+            _slurRepository.Setup(repo => repo.GetSlurs()).Returns(new List<Slur>() { new Slur("{user} is a {random} 350++ bitch", "asdf") });
             _userRepository.Setup(repo => repo.GetUsers()).Returns(new List<User>() { new User() { Id = "robert" } });
 
             _slursCommands = new SlursCommands(_slurRepository.Object, _userRepository.Object, _slack.Object, _adminValidator.Object);
@@ -76,7 +76,7 @@ namespace Test
         [TestMethod]
         public async Task GivenSpecificSlur_WhenFlaming_SlurIsSpecific()
         {
-            _slurRepository.Setup(repo => repo.GetSlur(It.IsAny<int>())).Returns(new Slur() { Text = "ha", Id = 69 });
+            _slurRepository.Setup(repo => repo.GetSlur(It.IsAny<int>())).Returns(new Slur("ha", "ho"));
 
             var command = new Command()
             {
@@ -93,7 +93,7 @@ namespace Test
         [TestMethod]
         public async Task GivenSpecificSlur_WhenFlaming_5CreditsAreRemoved()
         {
-            _slurRepository.Setup(repo => repo.GetSlur(It.IsAny<int>())).Returns(new Slur() { Text = "ha", Id = 69 });
+            _slurRepository.Setup(repo => repo.GetSlur(It.IsAny<int>())).Returns(new Slur("he", "he"));
 
             var command = new Command()
             {
@@ -114,7 +114,7 @@ namespace Test
 
             await _slursCommands.Flame(command);
 
-            _slurRepository.Verify(repo => repo.LogRecentSlur(69, "696969.696969"));
+            _slurRepository.Verify(repo => repo.LogRecentSlur(It.IsAny<int>(), "696969.696969"));
         }
     }
 }

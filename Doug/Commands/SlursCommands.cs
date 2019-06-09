@@ -24,6 +24,7 @@ namespace Doug.Commands
         private const string RandomUserMention = "{random}";
 
         private const int SpecificFlameCost = 5;
+        private const int AddSlurCreditAward = 2;
 
         private readonly ISlurRepository _slurRepository;
         private readonly IUserRepository _userRepository;
@@ -40,7 +41,13 @@ namespace Doug.Commands
 
         public string AddSlur(Command command)
         {
-            throw new NotImplementedException();
+            var slur = new Slur(command.Text, command.UserId);
+
+            _slurRepository.AddSlur(slur);
+
+            _userRepository.AddCredits(command.UserId, AddSlurCreditAward);
+
+            return string.Format(DougMessages.GainedCredit, AddSlurCreditAward);
         }
 
         public string Clean(Command command)
