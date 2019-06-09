@@ -3,6 +3,8 @@
     public static class DougMessages
     {
         public const string CreditEmoji = ":rupee:";
+        public const string UpVote = "+1";
+        public const string Downvote = "-1";
 
         public const string JoinedCoffee = "{0} joined the coffee break.";
         public const string KickedCoffee = "{0} was kicked from the coffee break.";
@@ -18,5 +20,6 @@
         public const string InvalidArgumentCount = "You provided an invalid argument count.";
         public const string InvalidAmount = "InvalidAmount";
         public const string NotEnoughCredits = "You need {0} " + CreditEmoji + " to do this and you have {1} " + CreditEmoji;
+        public const string SlursAreClean = "There is nothing to cleanup.";
     }
 }

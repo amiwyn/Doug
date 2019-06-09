@@ -13,7 +13,7 @@ namespace Doug.Commands
     {
         Task Flame(Command command);
         string AddSlur(Command command);
-        string Clean(Command command);
+        Task Clean(Command command);
         string WhoLast(Command command);
         string Slurs(Command command);
     }
@@ -50,9 +50,43 @@ namespace Doug.Commands
             return string.Format(DougMessages.GainedCredit, AddSlurCreditAward);
         }
 
-        public string Clean(Command command)
+        public async Task Clean(Command command)
         {
-            throw new NotImplementedException();
+            await _adminValidator.ValidateUserIsAdmin(command.UserId);
+            var recentSlurs = _slurRepository.GetRecentSlurs();
+
+            var slursReactions = recentSlurs.Select(slur => Tuple.Create(slur.SlurId, _slack.GetReactions(slur.TimeStamp, command.ChannelId)));
+
+            var slursToRemove = new List<int>();
+
+            foreach (var slurReaction in slursReactions)
+            {
+                var slurId = slurReaction.Item1;
+                var reactionTask = slurReaction.Item2;
+                int score = 0;
+
+                var reaction = await reactionTask;
+
+                score += reaction.Single(react => react.Name == DougMessages.UpVote).Count;
+                score -= reaction.Single(react => react.Name == DougMessages.Downvote).Count;
+
+                if (score < 0)
+                {
+                    slursToRemove.Add(slurId);
+                }
+            }
+
+            if (slursToRemove.Count == 0)
+            {
+                throw new Exception(DougMessages.SlursAreClean);
+            }
+
+            //var slurs = slursToRemove.Select(slur => _slurRepository.GetSlur(slur));
+            // TODO: build a nice message to show removed slurs
+
+            await _slack.SendMessage("slurs are removed", command.ChannelId);
+
+            slursToRemove.ForEach(slur => _slurRepository.RemoveSlur(slur));
         }
 
         public async Task Flame(Command command)
@@ -62,24 +96,15 @@ namespace Doug.Commands
 
             var rnd = new Random();
             var randomUser = users.ElementAt(rnd.Next(users.Count)).Id;
-            var message = slur.Text;
-
-            message = message.Replace(SlurUserMention, Utils.UserMention(command.GetTargetUserId()));
-            message = message.Replace(RandomUserMention, Utils.UserMention(randomUser));
-
-            if (message.Contains("350++"))
-            {
-                var fat = _slurRepository.GetFat().ToString();
-                message = message.Replace("350++", fat);
-                _slurRepository.IncrementFat();
-            }
+            
+            var message = BuildSlurMessage(slur.Text, randomUser, command.GetTargetUserId());
 
             var timestamp = await _slack.SendMessage(message, command.ChannelId);
 
             _slurRepository.LogRecentSlur(slur.Id, timestamp);
 
-            await _slack.AddReaction("+1", timestamp, command.ChannelId);
-            await _slack.AddReaction("-1", timestamp, command.ChannelId);
+            await _slack.AddReaction(DougMessages.UpVote, timestamp, command.ChannelId);
+            await _slack.AddReaction(DougMessages.Downvote, timestamp, command.ChannelId);
         }
 
         private Slur SpecificFlame(Command command)
@@ -97,6 +122,21 @@ namespace Doug.Commands
             
             var rnd = new Random();
             return slurs.ElementAt(rnd.Next(slurs.Count));
+        }
+
+        private string BuildSlurMessage(string message, string randomUserid, string targetUserId)
+        {
+            message = message.Replace(SlurUserMention, Utils.UserMention(targetUserId));
+            message = message.Replace(RandomUserMention, Utils.UserMention(randomUserid));
+
+            if (message.Contains("350++"))
+            {
+                var fat = _slurRepository.GetFat().ToString();
+                message = message.Replace("350++", fat);
+                _slurRepository.IncrementFat();
+            }
+
+            return message;
         }
 
         public string Slurs(Command command)
