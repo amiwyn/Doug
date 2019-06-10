@@ -15,6 +15,7 @@ namespace Doug.Repositories
         void RemoveCredits(string userId, int amount);
         void AddCredits(string userId, int amount);
     }
+
     public class UserRepository : IUserRepository
     {
         private readonly DougContext _db;

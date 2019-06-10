@@ -1,4 +1,5 @@
-﻿using Doug.Models;
+﻿using Doug.Commands;
+using Doug.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,9 @@ namespace Doug.Repositories
         string GetAccessToken();
         string GetRemindJob();
         void SetRemindJob(string jobId);
+        void SendGambleChallenge(GambleChallenge challenge);
+        GambleChallenge GetGambleChallenge(string target);
+        void RemoveGambleChallenge(string target);
     }
 
     public class ChannelRepository : IChannelRepository
@@ -46,6 +50,18 @@ namespace Doug.Repositories
             return _db.Channel.Single().Token;
         }
 
+        public GambleChallenge GetGambleChallenge(string target)
+        {
+            var challenge =  _db.GambleChallenges.SingleOrDefault(cha => cha.TargetId == target);
+
+            if (challenge == null)
+            {
+                throw new UserNotChallengedException();
+            }
+
+            return challenge;
+        }
+
         public string GetRemindJob()
         {
             return _db.Channel.Single().CoffeeRemindJobId;
@@ -59,6 +75,27 @@ namespace Doug.Repositories
                 _db.Roster.Remove(user);
                 _db.SaveChanges();
             }
+        }
+
+        public void RemoveGambleChallenge(string target)
+        {
+            var challenge = _db.GambleChallenges.SingleOrDefault(cha => cha.TargetId == target);
+            if (challenge != null)
+            {
+                _db.GambleChallenges.Remove(challenge);
+                _db.SaveChanges();
+            }
+        }
+
+        public void SendGambleChallenge(GambleChallenge challenge)
+        {
+            if (_db.GambleChallenges.Any(cha => cha.TargetId == challenge.TargetId))
+            {
+                throw new UserAlreadyChallengedException();
+            }
+
+            _db.GambleChallenges.Add(challenge);
+            _db.SaveChanges();
         }
 
         public void SetRemindJob(string jobId)

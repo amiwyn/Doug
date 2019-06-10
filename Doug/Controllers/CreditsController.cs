@@ -74,5 +74,19 @@ namespace Doug.Controllers
                 return Ok(string.Format(DougMessages.DougError, ex.Message));
             }
         }
+
+        [HttpPost("gamblechallenge")]
+        public ActionResult GambleChallenge([FromForm]SlackCommandDto slackCommand)
+        {
+            try
+            {
+                _creditsCommands.GambleChallenge(slackCommand.ToCommand());
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return Ok(string.Format(DougMessages.DougError, ex.Message));
+            }
+        }
     }
 }

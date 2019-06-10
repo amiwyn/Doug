@@ -18,6 +18,7 @@ namespace Doug.Slack
         Task AddReaction(string reaction, string timestamp, string channel);
         Task<List<Reaction>> GetReactions(string timestamp, string channel);
         Task SendAttachment(Attachment attachment, string channel);
+        Task SendEphemeralMessage(string text, string user, string channel);
     }
 
     public class SlackWebApi : ISlackWebApi
@@ -26,6 +27,7 @@ namespace Doug.Slack
         private const string UserInfoUrl = "https://slack.com/api/users.info";
         private const string ReactionAddUrl = "https://slack.com/api/reactions.add";
         private const string ReactionGetUrl = "https://slack.com/api/reactions.get";
+        private const string EphemeralUrl = "https://slack.com/api/chat.postEphemeral";
         private readonly HttpClient _client;
         private readonly string _token;
         private readonly JsonSerializerSettings _jsonSettings;
@@ -118,6 +120,21 @@ namespace Doug.Slack
                 new KeyValuePair<string, string>("token", _token),
                 new KeyValuePair<string, string>("channel", channel),
                 new KeyValuePair<string, string>("attachments", attachmentString)
+            };
+            request.Content = new FormUrlEncodedContent(keyValues);
+
+            await _client.SendAsync(request);
+        }
+
+        public async Task SendEphemeralMessage(string text, string user, string channel)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Post, EphemeralUrl);
+            var keyValues = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("token", _token),
+                new KeyValuePair<string, string>("channel", channel),
+                new KeyValuePair<string, string>("user", user),
+                new KeyValuePair<string, string>("text", text)
             };
             request.Content = new FormUrlEncodedContent(keyValues);
 

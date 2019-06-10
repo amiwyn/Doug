@@ -41,7 +41,7 @@ namespace Doug.Commands
 
         public string AddSlur(Command command)
         {
-            var slur = new Slur(command.Text, command.UserId);
+            var slur = new Slur(command.GetArgumentAt(0), command.UserId);
 
             _slurRepository.AddSlur(slur);
 
@@ -58,7 +58,7 @@ namespace Doug.Commands
 
             if (slursToRemove.Count == 0)
             {
-                throw new Exception(DougMessages.SlursAreClean);
+                throw new SlursAreCleanException();
             }
 
             var slurs = slursToRemove.Select(slur => _slurRepository.GetSlur(slur)).ToList();

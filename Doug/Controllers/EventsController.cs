@@ -13,6 +13,7 @@ namespace Doug.Controllers
     public class EventsController : ControllerBase
     {
         private const string MessageType = "message";
+        private const string UrlVerification = "url_verification";
         private readonly IEventService _eventService;
 
         public EventsController(IEventService eventService)
@@ -29,7 +30,7 @@ namespace Doug.Controllers
         [HttpPost]
         public ActionResult Event(SlackEvent slackEvent)
         {
-            if (slackEvent.Type == "url_verification")
+            if (slackEvent.Type == UrlVerification)
             {
                 return Ok(new { challenge = slackEvent.Challenge });
             }

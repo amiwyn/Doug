@@ -64,7 +64,7 @@ namespace Test
         }
 
         [TestMethod]
-        [ExpectedException(typeof(Exception))]
+        [ExpectedException(typeof(SlursAreCleanException))]
         public async Task GivenGoodRatedSlurs_WhenCleaning_SlursAreNotRemoved()
         {
             _slack.Setup(slack => slack.GetReactions("6969.6969", Channel)).Returns(Task.FromResult(new List<Reaction>()

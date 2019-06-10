@@ -14,6 +14,7 @@ namespace Doug.Models
         public DbSet<Channel> Channel { get; set; }
         public DbSet<Roster> Roster { get; set; }
         public DbSet<RecentFlame> RecentSlurs { get; set; }
+        public DbSet<GambleChallenge> GambleChallenges { get; set; }
 
         public DougContext(DbContextOptions<DougContext> options) : base(options)
         {

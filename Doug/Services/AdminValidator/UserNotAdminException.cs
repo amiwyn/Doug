@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Doug.Services
 {
-    public class UserNotAdminException : Exception
+    public class UserNotAdminException : ApplicationException
     {
         public UserNotAdminException() : base(DougMessages.NotAnAdmin)
         {
