@@ -99,3 +99,8 @@ Ruin your life.
 
 Usage : `/gamble amount`
 
+**/gamblechallenge**
+
+Gamble with a friend! Play a specified amount of rupees with a friend. Only one can win!
+
+Usage : `/gamblechallenge @user amount`, `/gamblechallenge accept` or `/gamblechallenge decline`
