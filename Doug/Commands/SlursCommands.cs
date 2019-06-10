@@ -41,7 +41,7 @@ namespace Doug.Commands
 
         public string AddSlur(Command command)
         {
-            var slur = new Slur(command.GetArgumentAt(0), command.UserId);
+            var slur = new Slur(command.Text, command.UserId);
 
             _slurRepository.AddSlur(slur);
 
