@@ -119,6 +119,7 @@ namespace Doug.Commands
                 {
                     var challenge = _channelRepository.GetGambleChallenge(command.UserId);
                     _slack.SendMessage(string.Format(DougMessages.GambleDeclined, Utils.UserMention(command.UserId), Utils.UserMention(challenge.RequesterId)), command.ChannelId);
+                    _channelRepository.RemoveGambleChallenge(challenge.TargetId);
                 }
             }
         }
@@ -176,7 +177,7 @@ namespace Doug.Commands
             _userRepository.RemoveCredits(loser.Id, challenge.Amount);
             _userRepository.AddCredits(winner.Id, challenge.Amount);
 
-            _channelRepository.RemoveGambleChallenge(command.UserId);
+            _channelRepository.RemoveGambleChallenge(challenge.TargetId);
 
             var message = string.Format(DougMessages.GambleChallenge, Utils.UserMention(winner.Id), challenge.Amount, Utils.UserMention(loser.Id));
             _slack.SendMessage(message, command.ChannelId);
