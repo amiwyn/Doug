@@ -15,6 +15,7 @@ namespace Doug.Repositories
         ICollection<string> GetReadyParticipants();
         ICollection<string> GetMissingParticipants();
         void ResetRoster();
+        bool IsCoffeeBreak();
     }
 
     public class CoffeeRepository : ICoffeeRepository
@@ -53,6 +54,11 @@ namespace Doug.Repositories
         public ICollection<string> GetReadyParticipants()
         {
             return _db.Roster.Where(user => !user.IsSkipping && user.IsReady).Select(user => user.Id).ToList();
+        }
+
+        public bool IsCoffeeBreak()
+        {
+            return _db.Channel.Single().IsCoffee;
         }
 
         public void RemoveFromRoster(string userId)

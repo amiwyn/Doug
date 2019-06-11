@@ -19,7 +19,7 @@ namespace Doug.Services
         private const int CoffeeRemindDelaySeconds = 25;
         private const int CoffeeBreakDurationMinutes = 15;
         private const int MorningBreak = 13;
-        private const int AfternoonBreak = 18;
+        private const int AfternoonBreak = 24;
         private const int Tolerance = 30;
         private const int CoffeeBreakAward = 10;
 
@@ -42,6 +42,11 @@ namespace Doug.Services
         {
             if (!Utils.IsInTimespan(currentTime, TimeSpan.FromHours(MorningBreak), Tolerance) &&
                 !Utils.IsInTimespan(currentTime, TimeSpan.FromHours(AfternoonBreak), Tolerance))
+            {
+                return;
+            }
+
+            if (_coffeeRepository.IsCoffeeBreak())
             {
                 return;
             }
@@ -82,6 +87,11 @@ namespace Doug.Services
 
         public void LaunchCoffeeBreak(string channelId)
         {
+            if (_coffeeRepository.IsCoffeeBreak())
+            {
+                return;
+            }
+
             _slack.SendMessage(DougMessages.CoffeeStart, channelId);
 
             _backgroundJobClient.Schedule(() => EndCoffee(channelId), TimeSpan.FromMinutes(CoffeeBreakDurationMinutes));
