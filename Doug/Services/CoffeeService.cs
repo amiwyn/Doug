@@ -18,8 +18,8 @@ namespace Doug.Services
     {
         private const int CoffeeRemindDelaySeconds = 25;
         private const int CoffeeBreakDurationMinutes = 15;
-        private const int MorningBreak = 13;
-        private const int AfternoonBreak = 23;
+        private const int MorningBreak = 9 + 4;
+        private const int AfternoonBreak = 14 + 4;
         private const int Tolerance = 30;
         private const int CoffeeBreakAward = 10;
 
