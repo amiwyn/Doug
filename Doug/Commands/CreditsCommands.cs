@@ -43,7 +43,8 @@ namespace Doug.Commands
         {
             var user = _userRepository.GetUser(command.UserId);
 
-            return new DougResponse(string.Format(DougMessages.Balance, user.Credits));
+            //return new DougResponse(string.Format(DougMessages.Balance, user.Credits));
+            return new DougResponse(DateTime.UtcNow.ToString());
         }
 
         public DougResponse Gamble(Command command)
