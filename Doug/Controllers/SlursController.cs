@@ -24,8 +24,8 @@ namespace Doug.Controllers
         {
             try
             {
-                await _slursCommands.Flame(slackCommand.ToCommand());
-                return Ok();
+                var result = await _slursCommands.Flame(slackCommand.ToCommand());
+                return Ok(result.Message);
             }
             catch (Exception ex)
             {
@@ -38,8 +38,8 @@ namespace Doug.Controllers
         {
             try
             {
-                var message = _slursCommands.AddSlur(slackCommand.ToCommand());
-                return Ok(message);
+                var result = _slursCommands.AddSlur(slackCommand.ToCommand());
+                return Ok(result.Message);
             }
             catch (Exception ex)
             {
@@ -52,8 +52,8 @@ namespace Doug.Controllers
         {
             try
             {
-                await _slursCommands.Clean(slackCommand.ToCommand());
-                return Ok();
+                var result = await _slursCommands.Clean(slackCommand.ToCommand());
+                return Ok(result.Message);
             }
             catch (Exception ex)
             {
@@ -67,7 +67,7 @@ namespace Doug.Controllers
             try
             {
                 var result = _slursCommands.Slurs(slackCommand.ToCommand());
-                return Ok(result);
+                return Ok(result.Message);
             }
             catch (Exception ex)
             {
@@ -81,7 +81,7 @@ namespace Doug.Controllers
             try
             {
                 var result = _slursCommands.WhoLast(slackCommand.ToCommand());
-                return Ok(result);
+                return Ok(result.Message);
             }
             catch (Exception ex)
             {

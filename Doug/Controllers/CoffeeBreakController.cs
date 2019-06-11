@@ -32,8 +32,8 @@ namespace Doug.Controllers
         {
             try
             {
-                await _coffeeCommands.JoinSomeone(slackCommand.ToCommand());
-                return Ok();
+                var result = await _coffeeCommands.JoinSomeone(slackCommand.ToCommand());
+                return Ok(result.Message);
             }
             catch (Exception ex)
             {
@@ -46,8 +46,8 @@ namespace Doug.Controllers
         {
             try
             {
-                await _coffeeCommands.KickCoffee(slackCommand.ToCommand());
-                return Ok();
+                var result = await _coffeeCommands.KickCoffee(slackCommand.ToCommand());
+                return Ok(result.Message);
             }
             catch (Exception ex)
             {
@@ -60,8 +60,8 @@ namespace Doug.Controllers
         {
             try
             {
-                await _coffeeCommands.Resolve(slackCommand.ToCommand());
-                return Ok();
+                var result = await _coffeeCommands.Resolve(slackCommand.ToCommand());
+                return Ok(result.Message);
             }
             catch (Exception ex)
             {
@@ -74,8 +74,8 @@ namespace Doug.Controllers
         {
             try
             {
-                await _coffeeCommands.Skip(slackCommand.ToCommand());
-                return Ok();
+                var result = await _coffeeCommands.Skip(slackCommand.ToCommand());
+                return Ok(result.Message);
             }
             catch (Exception ex)
             {

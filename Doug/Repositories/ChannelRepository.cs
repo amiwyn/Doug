@@ -52,14 +52,7 @@ namespace Doug.Repositories
 
         public GambleChallenge GetGambleChallenge(string target)
         {
-            var challenge =  _db.GambleChallenges.SingleOrDefault(cha => cha.TargetId == target);
-
-            if (challenge == null)
-            {
-                throw new UserNotChallengedException();
-            }
-
-            return challenge;
+            return _db.GambleChallenges.SingleOrDefault(cha => cha.TargetId == target);
         }
 
         public string GetRemindJob()
@@ -89,11 +82,6 @@ namespace Doug.Repositories
 
         public void SendGambleChallenge(GambleChallenge challenge)
         {
-            if (_db.GambleChallenges.Any(cha => cha.TargetId == challenge.TargetId))
-            {
-                throw new UserAlreadyChallengedException();
-            }
-
             _db.GambleChallenges.Add(challenge);
             _db.SaveChanges();
         }
