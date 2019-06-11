@@ -2,7 +2,7 @@
 {
     public static class DougMessages
     {
-        public const string CreditEmoji = ":rupred:";
+        public const string CreditEmoji = ":ruppurple:";
         public const string UpVote = "+1";
         public const string Downvote = "-1";
 
