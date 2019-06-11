@@ -53,8 +53,7 @@ namespace Test
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void GivenNegativeAmount_WhenSendingGambleChallenge_ExceptionIsThrown()
+        public void GivenNegativeAmount_WhenSendingGambleChallenge_ErrorMessageIsSent()
         {
             var command = new Command()
             {
@@ -63,7 +62,9 @@ namespace Test
                 UserId = User
             };
 
-            _creditsCommands.GambleChallenge(command);
+            var result = _creditsCommands.GambleChallenge(command);
+
+            Assert.AreEqual("You idiot.", result.Message);
         }
 
         [TestMethod]

@@ -19,7 +19,7 @@ namespace Doug.Services
         private const int CoffeeRemindDelaySeconds = 25;
         private const int CoffeeBreakDurationMinutes = 15;
         private const int MorningBreak = 13;
-        private const int AfternoonBreak = 24;
+        private const int AfternoonBreak = 18;
         private const int Tolerance = 30;
         private const int CoffeeBreakAward = 10;
 
@@ -46,7 +46,7 @@ namespace Doug.Services
                 return;
             }
 
-            if (_coffeeRepository.IsCoffeeBreak())
+            if (_coffeeRepository.IsCurrentlyCoffee())
             {
                 return;
             }
@@ -87,7 +87,7 @@ namespace Doug.Services
 
         public void LaunchCoffeeBreak(string channelId)
         {
-            if (_coffeeRepository.IsCoffeeBreak())
+            if (_coffeeRepository.IsCurrentlyCoffee())
             {
                 return;
             }

@@ -29,7 +29,7 @@ namespace Test
         private readonly Mock<ISlurRepository> _slurRepository = new Mock<ISlurRepository>();
         private readonly Mock<IUserRepository> _userRepository = new Mock<IUserRepository>();
         private readonly Mock<ISlackWebApi> _slack = new Mock<ISlackWebApi>();
-        private readonly Mock<IAdminValidator> _adminValidator = new Mock<IAdminValidator>();
+        private readonly Mock<IAuthorizationService> _adminValidator = new Mock<IAuthorizationService>();
 
         [TestInitialize]
         public void Setup()

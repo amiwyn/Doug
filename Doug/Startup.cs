@@ -47,7 +47,7 @@ namespace Doug
             services.AddTransient<IEventService, EventService>();
             services.AddTransient<ISlackWebApi, SlackWebApi>();
 
-            services.AddTransient<IAdminValidator, AdminValidator>();
+            services.AddTransient<IAuthorizationService, AuthorizationService>();
 
             services.AddTransient<ICoffeeCommands, CoffeeCommands>();
             services.AddTransient<ISlursCommands, SlursCommands>();
