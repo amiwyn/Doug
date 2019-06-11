@@ -24,8 +24,8 @@ namespace Doug.Controllers
         {
             try
             {
-                _creditsCommands.Give(slackCommand.ToCommand());
-                return Ok();
+                var result = _creditsCommands.Give(slackCommand.ToCommand());
+                return Ok(result.Message);
             }
             catch (Exception ex)
             {
@@ -38,8 +38,8 @@ namespace Doug.Controllers
         {
             try
             {
-                _creditsCommands.Stats(slackCommand.ToCommand());
-                return Ok();
+                var result = _creditsCommands.Stats(slackCommand.ToCommand());
+                return Ok(result.Message);
             }
             catch (Exception ex)
             {
@@ -53,7 +53,7 @@ namespace Doug.Controllers
             try
             {
                 var result = _creditsCommands.Balance(slackCommand.ToCommand());
-                return Ok(result);
+                return Ok(result.Message);
             }
             catch (Exception ex)
             {
@@ -66,8 +66,8 @@ namespace Doug.Controllers
         {
             try
             {
-                _creditsCommands.Gamble(slackCommand.ToCommand());
-                return Ok();
+                var result = _creditsCommands.Gamble(slackCommand.ToCommand());
+                return Ok(result.Message);
             }
             catch (Exception ex)
             {
@@ -80,8 +80,8 @@ namespace Doug.Controllers
         {
             try
             {
-                _creditsCommands.GambleChallenge(slackCommand.ToCommand());
-                return Ok();
+                var result = _creditsCommands.GambleChallenge(slackCommand.ToCommand());
+                return Ok(result.Message);
             }
             catch (Exception ex)
             {
