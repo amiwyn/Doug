@@ -11,11 +11,11 @@ namespace Doug.Commands
 {
     public interface ISlursCommands
     {
-        Task Flame(Command command);
-        string AddSlur(Command command);
-        Task Clean(Command command);
-        string WhoLast(Command command);
-        string Slurs(Command command);
+        Task<DougResponse> Flame(Command command);
+        DougResponse AddSlur(Command command);
+        Task<DougResponse> Clean(Command command);
+        DougResponse WhoLast(Command command);
+        DougResponse Slurs(Command command);
     }
 
     public class SlursCommands : ISlursCommands
@@ -29,9 +29,11 @@ namespace Doug.Commands
         private readonly ISlurRepository _slurRepository;
         private readonly IUserRepository _userRepository;
         private readonly ISlackWebApi _slack;
-        private readonly IAdminValidator _adminValidator;
+        private readonly IAuthorizationService _adminValidator;
 
-        public SlursCommands(ISlurRepository slursRepository, IUserRepository userRepository, ISlackWebApi messageSender, IAdminValidator adminValidator)
+        private static readonly DougResponse NoResponse = new DougResponse();
+
+        public SlursCommands(ISlurRepository slursRepository, IUserRepository userRepository, ISlackWebApi messageSender, IAuthorizationService adminValidator)
         {
             _slurRepository = slursRepository;
             _userRepository = userRepository;
@@ -39,7 +41,7 @@ namespace Doug.Commands
             _adminValidator = adminValidator;
         }
 
-        public string AddSlur(Command command)
+        public DougResponse AddSlur(Command command)
         {
             var slur = new Slur(command.Text, command.UserId);
 
@@ -47,18 +49,23 @@ namespace Doug.Commands
 
             _userRepository.AddCredits(command.UserId, AddSlurCreditAward);
 
-            return string.Format(DougMessages.GainedCredit, AddSlurCreditAward);
+            return new DougResponse(string.Format(DougMessages.GainedCredit, AddSlurCreditAward));
         }
 
-        public async Task Clean(Command command)
+        public async Task<DougResponse> Clean(Command command)
         {
-            await _adminValidator.ValidateUserIsAdmin(command.UserId);
+            if (!await _adminValidator.IsUserSlackAdmin(command.UserId))
+            {
+                return new DougResponse(DougMessages.NotAnAdmin);
+            }
+
+            await _adminValidator.IsUserSlackAdmin(command.UserId);
 
             var slursToRemove = await FilterSlursToRemove(command.ChannelId);
 
             if (slursToRemove.Count == 0)
             {
-                throw new SlursAreCleanException();
+                return new DougResponse(DougMessages.SlursAreClean);
             }
 
             var slurs = slursToRemove.Select(slur => _slurRepository.GetSlur(slur)).ToList();
@@ -69,6 +76,8 @@ namespace Doug.Commands
             slursToRemove.ForEach(slur => _slurRepository.RemoveSlur(slur));
 
             _slurRepository.ClearRecentSlurs();
+
+            return NoResponse;
         }
 
         private async Task<List<int>> FilterSlursToRemove(string channelId)
@@ -98,14 +107,57 @@ namespace Doug.Commands
             return slursToRemove;
         }
 
-        public async Task Flame(Command command)
+        public async Task<DougResponse> Flame(Command command)
         {
-            var slur = command.GetArgumentCount() > 1 ? SpecificFlame(command) : RandomFlame();
+            if (command.GetArgumentCount() > 1)
+            {
+                return await SpecificFlame(command);
+            }
+            else
+            {
+                return await RandomFlame(command);
+            }
+        }
+
+        private async Task<DougResponse> SpecificFlame(Command command)
+        {
+            int slurId = int.Parse(command.GetArgumentAt(1));
+
+            var user = _userRepository.GetUser(command.UserId);
+
+            if (!user.HasEnoughCreditsForAmount(SpecificFlameCost))
+            {
+                return user.NotEnoughCreditsForAmountResponse(SpecificFlameCost);
+            }
+
+            _userRepository.RemoveCredits(command.UserId, SpecificFlameCost);
+
+            var slur = _slurRepository.GetSlur(slurId);
+
+            await SendSlurToChannel(command, slur);
+
+            return NoResponse;
+        }
+
+        private async Task<DougResponse> RandomFlame(Command command)
+        {
+            var slurs = _slurRepository.GetSlurs();
+            
+            var rnd = new Random();
+            var slur = slurs.ElementAt(rnd.Next(slurs.Count));
+
+            await SendSlurToChannel(command, slur);
+
+            return NoResponse;
+        }
+
+        private async Task SendSlurToChannel(Command command, Slur slur)
+        {
             var users = _userRepository.GetUsers();
 
             var rnd = new Random();
             var randomUser = users.ElementAt(rnd.Next(users.Count)).Id;
-            
+
             var message = BuildSlurMessage(slur.Text, randomUser, command.GetTargetUserId());
 
             var timestamp = await _slack.SendMessage(message, command.ChannelId);
@@ -114,23 +166,6 @@ namespace Doug.Commands
 
             await _slack.AddReaction(DougMessages.UpVote, timestamp, command.ChannelId);
             await _slack.AddReaction(DougMessages.Downvote, timestamp, command.ChannelId);
-        }
-
-        private Slur SpecificFlame(Command command)
-        {
-            int slurId = int.Parse(command.GetArgumentAt(1));
-
-            _userRepository.RemoveCredits(command.UserId, SpecificFlameCost);
-
-            return _slurRepository.GetSlur(slurId);
-        }
-
-        private Slur RandomFlame()
-        {
-            var slurs = _slurRepository.GetSlurs();
-            
-            var rnd = new Random();
-            return slurs.ElementAt(rnd.Next(slurs.Count));
         }
 
         private string BuildSlurMessage(string message, string randomUserid, string targetUserId)
@@ -148,15 +183,22 @@ namespace Doug.Commands
             return message;
         }
 
-        public string Slurs(Command command)
+        public DougResponse Slurs(Command command)
         {
             var slurs = _slurRepository.GetSlursFrom(command.UserId);
 
-            return slurs.Aggregate(string.Empty, (acc, slur) => string.Format("{0}{1} = {2}\n", acc, slur.Id, slur.Text));
+            return new DougResponse(slurs.Aggregate(string.Empty, (acc, slur) => string.Format("{0}{1} = {2}\n", acc, slur.Id, slur.Text)));
         }
 
-        public string WhoLast(Command command)
+        public DougResponse WhoLast(Command command)
         {
+            var user = _userRepository.GetUser(command.UserId);
+
+            if (!user.HasEnoughCreditsForAmount(WholastCost))
+            {
+                return user.NotEnoughCreditsForAmountResponse(WholastCost);
+            }
+
             _userRepository.RemoveCredits(command.UserId, WholastCost);
             var recentSlurs = _slurRepository.GetRecentSlurs().ToList();
             recentSlurs.Sort((e1, e2) => e1.Id.CompareTo(e2.Id));
@@ -165,7 +207,7 @@ namespace Doug.Commands
 
             var latestSlur = _slurRepository.GetSlur(latestFlame.SlurId);
 
-            return string.Format(DougMessages.SlurCreatedBy, Utils.UserMention(latestSlur.CreatedBy));
+            return new DougResponse(string.Format(DougMessages.SlurCreatedBy, Utils.UserMention(latestSlur.CreatedBy)));
         }
     }
 }

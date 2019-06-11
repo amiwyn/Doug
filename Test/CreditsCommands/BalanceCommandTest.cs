@@ -54,7 +54,7 @@ namespace Test
         {
             var message = _creditsCommands.Balance(command);
 
-            Assert.AreEqual("You have 79 " + DougMessages.CreditEmoji, message);
+            Assert.AreEqual("You have 79 " + DougMessages.CreditEmoji, message.Message);
         }
     }
 }

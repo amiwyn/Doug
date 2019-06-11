@@ -63,16 +63,6 @@ namespace Doug.Repositories
         {
             var user = _db.Users.Single(usr => usr.Id == userId);
 
-            if (amount < 0)
-            {
-                throw new ArgumentException(DougMessages.InvalidAmount);
-            }
-
-            if (user.Credits - amount < 0)
-            {
-                throw new ArgumentException(string.Format(DougMessages.NotEnoughCredits, amount, user.Credits));
-            }
-
             user.Credits -= amount;
             _db.SaveChanges();
         }

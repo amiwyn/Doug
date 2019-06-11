@@ -30,12 +30,13 @@ namespace Test
         private readonly Mock<ICoffeeRepository> _coffeeRepository = new Mock<ICoffeeRepository>();
         private readonly Mock<IUserRepository> _userRepository = new Mock<IUserRepository>();
         private readonly Mock<ISlackWebApi> _slack = new Mock<ISlackWebApi>();
-        private readonly Mock<IAdminValidator> _adminValidator = new Mock<IAdminValidator>();
+        private readonly Mock<IAuthorizationService> _adminValidator = new Mock<IAuthorizationService>();
         private readonly Mock<ICoffeeService> _coffeeBreakService = new Mock<ICoffeeService>();
 
         [TestInitialize]
         public void Setup()
         {
+            _adminValidator.Setup(admin => admin.IsUserSlackAdmin(User)).Returns(Task.FromResult(true));
             _coffeeCommands = new CoffeeCommands(_coffeeRepository.Object, _userRepository.Object, _slack.Object, _adminValidator.Object, _coffeeBreakService.Object);
         }
 
@@ -64,10 +65,9 @@ namespace Test
         }
 
         [TestMethod]
-        [ExpectedException(typeof(UserNotAdminException))]
         public async Task GivenUserIsNotAdmin_WhenJoiningOtherInCoffee_DontAddUserToRoster()
         {
-            _adminValidator.Setup(validator => validator.ValidateUserIsAdmin(User)).Throws(new UserNotAdminException());
+            _adminValidator.Setup(admin => admin.IsUserSlackAdmin(User)).Returns(Task.FromResult(false));
 
             await _coffeeCommands.JoinSomeone(command);
 
@@ -75,10 +75,9 @@ namespace Test
         }
 
         [TestMethod]
-        [ExpectedException(typeof(UserNotAdminException))]
         public async Task GivenUserIsNotAdmin_WhenJoiningOtherInCoffee_DontAddUser()
         {
-            _adminValidator.Setup(validator => validator.ValidateUserIsAdmin(User)).Throws(new UserNotAdminException());
+            _adminValidator.Setup(admin => admin.IsUserSlackAdmin(User)).Returns(Task.FromResult(false));
 
             await _coffeeCommands.JoinSomeone(command);
 
@@ -86,10 +85,9 @@ namespace Test
         }
 
         [TestMethod]
-        [ExpectedException(typeof(UserNotAdminException))]
         public async Task GivenUserIsNotAdmin_WhenJoiningOtherInCoffee_DontBroadcastMessage()
         {
-            _adminValidator.Setup(validator => validator.ValidateUserIsAdmin(User)).Throws(new UserNotAdminException());
+            _adminValidator.Setup(admin => admin.IsUserSlackAdmin(User)).Returns(Task.FromResult(false));
 
             await _coffeeCommands.JoinSomeone(command);
 

@@ -39,21 +39,20 @@ namespace Test
             _creditsCommands = new CreditsCommands(_userRepository.Object, _slack.Object, _slurRepository.Object, _channelRepository.Object, _backgroundClient.Object);
         }
 
-        [TestMethod]
-        public void GivenLessThan200Credits_WhenGambling_UserCanGamble()
-        {
-            _creditsCommands.Gamble(command);
+        //[TestMethod]
+        //public void GivenLessThan200Credits_WhenGambling_UserCanGamble()
+        //{
+        //    _creditsCommands.Gamble(command);
 
-            _userRepository.Verify(repo => repo.RemoveCredits(User, 10));
-        }
+        //    _userRepository.Verify(repo => repo.RemoveCredits(User, 10));
+        //}
 
-        [TestMethod]
-        [ExpectedException(typeof(UserTooRichException))]
-        public void GivenMoreThan200Credits_WhenGambling_ExceptionIsThrown()
-        {
-            _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User() { Id = "testuser", Credits = 300 });
+        //[TestMethod]
+        //public void GivenMoreThan200Credits_WhenGambling_()
+        //{
+        //    _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User() { Id = "testuser", Credits = 300 });
 
-            _creditsCommands.Gamble(command);
-        }
+        //    _creditsCommands.Gamble(command);
+        //}
     }
 }

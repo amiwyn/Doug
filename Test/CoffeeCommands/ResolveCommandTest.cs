@@ -28,7 +28,7 @@ namespace Test
         private readonly Mock<ICoffeeRepository> _coffeeRepository = new Mock<ICoffeeRepository>();
         private readonly Mock<IUserRepository> _userRepository = new Mock<IUserRepository>();
         private readonly Mock<ISlackWebApi> _slack = new Mock<ISlackWebApi>();
-        private readonly Mock<IAdminValidator> _adminValidator = new Mock<IAdminValidator>();
+        private readonly Mock<IAuthorizationService> _adminValidator = new Mock<IAuthorizationService>();
         private readonly Mock<ICoffeeService> _coffeeBreakService = new Mock<ICoffeeService>();
 
         [TestInitialize]
@@ -40,16 +40,17 @@ namespace Test
         [TestMethod]
         public async Task GivenUserIsAdmin_WhenResolving_CoffeeIsLaunched()
         {
+            _adminValidator.Setup(admin => admin.IsUserSlackAdmin(User)).Returns(Task.FromResult(true));
+
             await _coffeeCommands.Resolve(command);
 
             _coffeeBreakService.Verify(coffeeService => coffeeService.LaunchCoffeeBreak(Channel));
         }
 
         [TestMethod]
-        [ExpectedException(typeof(UserNotAdminException))]
         public async Task GivenUserIsNotAdmin_WhenResolving_CoffeeIsNotLaunched()
         {
-            _adminValidator.Setup(validator => validator.ValidateUserIsAdmin(User)).Throws(new UserNotAdminException());
+            _adminValidator.Setup(admin => admin.IsUserSlackAdmin(User)).Returns(Task.FromResult(false));
 
             await _coffeeCommands.Resolve(command);
 

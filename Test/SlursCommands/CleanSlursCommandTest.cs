@@ -1,3 +1,4 @@
+using Doug;
 using Doug.Commands;
 using Doug.Models;
 using Doug.Repositories;
@@ -29,11 +30,13 @@ namespace Test
         private readonly Mock<ISlurRepository> _slurRepository = new Mock<ISlurRepository>();
         private readonly Mock<IUserRepository> _userRepository = new Mock<IUserRepository>();
         private readonly Mock<ISlackWebApi> _slack = new Mock<ISlackWebApi>();
-        private readonly Mock<IAdminValidator> _adminValidator = new Mock<IAdminValidator>();
+        private readonly Mock<IAuthorizationService> _adminValidator = new Mock<IAuthorizationService>();
 
         [TestInitialize]
         public void Setup()
         {
+            _adminValidator.Setup(admin => admin.IsUserSlackAdmin(User)).Returns(Task.FromResult(true));
+
             _slurRepository.Setup(repo => repo.GetRecentSlurs()).Returns(new List<RecentFlame>() { new RecentFlame() { TimeStamp = "6969.6969" } });
 
             _slurRepository.Setup(repo => repo.GetSlur(It.IsAny<int>())).Returns(new Slur("ffff", "robee"));
@@ -52,7 +55,7 @@ namespace Test
         {
             await _slursCommands.Clean(command);
 
-            _adminValidator.Verify(validator => validator.ValidateUserIsAdmin(User));
+            _adminValidator.Verify(validator => validator.IsUserSlackAdmin(User));
         }
 
         [TestMethod]
@@ -64,7 +67,18 @@ namespace Test
         }
 
         [TestMethod]
-        [ExpectedException(typeof(SlursAreCleanException))]
+        public async Task GivenUserIsNotAdmin_WhenCleaning_ThenItReturnErrorMessage()
+        {
+            _adminValidator.Setup(admin => admin.IsUserSlackAdmin(User)).Returns(Task.FromResult(false));
+
+            var response = await _slursCommands.Clean(command);
+
+            Assert.AreEqual(DougMessages.NotAnAdmin, response.Message);
+        }
+
+        
+
+        [TestMethod]
         public async Task GivenGoodRatedSlurs_WhenCleaning_SlursAreNotRemoved()
         {
             _slack.Setup(slack => slack.GetReactions("6969.6969", Channel)).Returns(Task.FromResult(new List<Reaction>()
