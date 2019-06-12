@@ -13,6 +13,7 @@ namespace Doug.Repositories
         ICollection<Slur> GetSlursFrom(string userId);
         void AddSlur(Slur slur);
         void RemoveSlur(int slurId);
+        Slur GetSlurByText(string text);
         ICollection<RecentFlame> GetRecentSlurs();
         void LogRecentSlur(int slurId, string timestamp);
         void ClearRecentSlurs();
@@ -53,6 +54,11 @@ namespace Doug.Repositories
         public Slur GetSlur(int slurId)
         {
             return _db.Slurs.Single(slur => slur.Id == slurId);
+        }
+
+        public Slur GetSlurByText(string text)
+        {
+            return _db.Slurs.FirstOrDefault(slur => slur.Text == text);
         }
 
         public ICollection<Slur> GetSlurs()

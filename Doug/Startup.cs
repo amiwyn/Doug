@@ -10,6 +10,7 @@ using Doug.Repositories;
 using Doug.Services;
 using Doug.Slack;
 using Hangfire;
+using Hangfire.SQLite;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -60,17 +61,29 @@ namespace Doug
             services.AddTransient<ISlurRepository, SlurRepository>();
 
 
-            var connectionString = string.Format(Configuration.GetConnectionString("DougDb"), Environment.GetEnvironmentVariable("DB_USER"), Environment.GetEnvironmentVariable("DB_PASS"));
+            var env = Environment.GetEnvironmentVariable("APP_ENV");
 
-            if (Environment.GetEnvironmentVariable("APP_ENV") == "production")
+            if (env == "production" || env == "staging-like")
             {
-                connectionString = Configuration.GetConnectionString("dougbotdb");
+                var connectionString = string.Format(Configuration.GetConnectionString("DougDb"), Environment.GetEnvironmentVariable("DB_USER"), Environment.GetEnvironmentVariable("DB_PASS"));
+
+                if (Environment.GetEnvironmentVariable("APP_ENV") == "production")
+                {
+                    connectionString = Configuration.GetConnectionString("dougbotdb");
+                }
+
+                services.AddHangfire(config => config.UseSqlServerStorage(connectionString));
+                services.AddHangfireServer();
+
+                services.AddDbContext<DougContext>(options => options.UseSqlServer(connectionString));
             }
+            else
+            {
+                services.AddHangfire(config => config.UseSQLiteStorage("Data Source=jobs.db;"));
+                services.AddHangfireServer();
 
-            services.AddHangfire(config => config.UseSqlServerStorage(connectionString));
-            services.AddHangfireServer();
-
-            services.AddDbContext<DougContext>(options => options.UseSqlServer(connectionString));
+                services.AddDbContext<DougContext>(options => options.UseSqlite("Data Source=doug.db"));
+            }
 
         }
 
@@ -84,11 +97,16 @@ namespace Doug
             {
                 //see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
+                
+            }
+
+            if (Environment.GetEnvironmentVariable("APP_ENV") == "production")
+            {
+                app.Use(RequestSigning);
             }
 
             app.UseHttpsRedirection();
             app.Use(EventLimiter);
-            app.Use(RequestSigning);
             app.UseMvc();
         }
 
@@ -117,7 +135,7 @@ namespace Doug
 
             context.Request.EnableRewind();
 
-            using (StreamReader reader = new StreamReader(context.Request.Body, Encoding.UTF8, true, 1024, true)) 
+            using (StreamReader reader = new StreamReader(context.Request.Body, Encoding.UTF8, true, 1024, true))
             {
                 content = await reader.ReadToEndAsync();
             }

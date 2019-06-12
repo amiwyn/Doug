@@ -43,6 +43,13 @@ namespace Doug.Commands
 
         public DougResponse AddSlur(Command command)
         {
+            var existingSlur = _slurRepository.GetSlurByText(command.Text);
+
+            if (existingSlur != null)
+            {
+                return new DougResponse(DougMessages.SlurAlreadyExists);
+            }
+
             var slur = new Slur(command.Text, command.UserId);
 
             _slurRepository.AddSlur(slur);

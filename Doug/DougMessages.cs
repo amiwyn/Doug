@@ -40,5 +40,6 @@
         public const string YouAreTooRich = "You are too rich for this.";
         public const string AlreadyChallenged = "This user is already challenged.";
         public const string NotChallenged = "You are not challenged.";
+        public const string SlurAlreadyExists = "That slur already exists.";
     }
 }
