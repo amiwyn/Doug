@@ -24,7 +24,7 @@ namespace Doug.Commands
         private const string RandomUserMention = "{random}";
 
         private const int SpecificFlameCost = 5;
-        private const int AddSlurCreditAward = 2;
+        private const int AddSlurCredit = 2;
         private const int WholastCost = 2;
         private readonly ISlurRepository _slurRepository;
         private readonly IUserRepository _userRepository;
@@ -54,9 +54,9 @@ namespace Doug.Commands
 
             _slurRepository.AddSlur(slur);
 
-            _userRepository.AddCredits(command.UserId, AddSlurCreditAward);
+            _userRepository.AddCredits(command.UserId, AddSlurCredit);
 
-            return new DougResponse(string.Format(DougMessages.GainedCredit, AddSlurCreditAward));
+            return new DougResponse(string.Format(DougMessages.GainedCredit, AddSlurCredit));
         }
 
         public async Task<DougResponse> Clean(Command command)
@@ -65,8 +65,6 @@ namespace Doug.Commands
             {
                 return new DougResponse(DougMessages.NotAnAdmin);
             }
-
-            await _adminValidator.IsUserSlackAdmin(command.UserId);
 
             var slursToRemove = await FilterSlursToRemove(command.ChannelId);
 
@@ -83,6 +81,8 @@ namespace Doug.Commands
             slursToRemove.ForEach(slur => _slurRepository.RemoveSlur(slur));
 
             _slurRepository.ClearRecentSlurs();
+
+            slurs.ForEach(slur => _userRepository.RemoveCredits(slur.CreatedBy, AddSlurCredit));
 
             return NoResponse;
         }
