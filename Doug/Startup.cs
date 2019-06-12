@@ -97,11 +97,6 @@ namespace Doug
             {
                 //see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
-                
-            }
-
-            if (Environment.GetEnvironmentVariable("APP_ENV") == "production")
-            {
                 app.Use(RequestSigning);
             }
 
