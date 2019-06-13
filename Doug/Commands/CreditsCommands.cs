@@ -20,7 +20,7 @@ namespace Doug.Commands
 
     public class CreditsCommands : ICreditsCommands
     {
-        private const int GambleCreditLimit = 200;
+        private const int GambleCreditLimit = 300;
         private const string AcceptChallengeWord = "accept";
         private const string DeclineChallengeWord = "decline";
         private readonly IUserRepository _userRepository;
@@ -50,6 +50,11 @@ namespace Doug.Commands
         {
             var user = _userRepository.GetUser(command.UserId);
             var amount = int.Parse(command.GetArgumentAt(0));
+
+            if (amount < 0)
+            {
+                return new DougResponse(DougMessages.InvalidAmount);
+            }
 
             if (user.Credits > GambleCreditLimit)
             {
