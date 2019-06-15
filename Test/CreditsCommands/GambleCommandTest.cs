@@ -6,6 +6,7 @@ using Hangfire;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
+using Doug;
 
 namespace Test
 {
@@ -39,20 +40,57 @@ namespace Test
             _creditsCommands = new CreditsCommands(_userRepository.Object, _slack.Object, _slurRepository.Object, _channelRepository.Object, _backgroundClient.Object);
         }
 
-        //[TestMethod]
-        //public void GivenLessThan200Credits_WhenGambling_UserCanGamble()
-        //{
-        //    _creditsCommands.Gamble(command);
+        [TestMethod]
+        public void GivenUserHasEnoughCredits_WhenGambling_UserCanGamble()
+        {
+            _creditsCommands.Gamble(command);
 
-        //    _userRepository.Verify(repo => repo.RemoveCredits(User, 10));
-        //}
+            _slack.Verify(slack => slack.SendMessage(It.IsAny<string>(), Channel));
+        }
 
-        //[TestMethod]
-        //public void GivenMoreThan200Credits_WhenGambling_()
-        //{
-        //    _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User() { Id = "testuser", Credits = 300 });
+        [TestMethod]
+        public void GivenUserHasNotEnoughCredits_WhenGambling_UserReceiveNotEnoughCreditsMessage()
+        {
+            _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User() { Id = "testuser", Credits = 9 });
 
-        //    _creditsCommands.Gamble(command);
-        //}
+            var result = _creditsCommands.Gamble(command);
+
+            Assert.AreEqual("You need 10 " + DougMessages.CreditEmoji + " to do this and you have 9 " + DougMessages.CreditEmoji, result.Message);
+        }
+
+        [TestMethod]
+        public void GivenNesgativeAmount_WhenGambling_UserReceiveInvalidAmountMessage()
+        {
+            var command = new Command()
+            {
+                ChannelId = Channel,
+                Text = "-153",
+                UserId = User
+            };
+
+            var result = _creditsCommands.Gamble(command);
+
+            Assert.AreEqual("Invalid amount", result.Message);
+        }
+
+        [TestMethod]
+        public void GivenUserIsTooRich_WhenGambling_UserReceiveUserTooRichMessage()
+        {
+            _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User() { Id = "testuser", Credits = 368 });
+
+            var result = _creditsCommands.Gamble(command);
+
+            Assert.AreEqual("You are too rich for this.", result.Message);
+        }
+
+        [TestMethod]
+        public void GivenUserIsRichEnough_WhenGambling_UserCanGamble()
+        {
+            _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User() { Id = "testuser", Credits = 268 });
+
+            var result = _creditsCommands.Gamble(command);
+
+            _slack.Verify(slack => slack.SendMessage(It.IsAny<string>(), Channel));
+        }
     }
 }

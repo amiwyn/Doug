@@ -26,8 +26,6 @@ namespace Test
         [TestInitialize]
         public void Setup()
         {
-            _coffeeRepository.Setup(repo => repo.IsCurrentlyCoffee()).Returns(false);
-
             _coffeeService = new CoffeeService(_slack.Object, _coffeeRepository.Object, _channelRepository.Object, _backgrounJobClient.Object, _userRepository.Object);
         }
 
