@@ -7,6 +7,12 @@ namespace Doug.Models
         public string Id { get; set; }
         public int Credits { get; set; }
         public List<InventoryItem> InventoryItems { get; set; }
+        public int Health { get; set; }
+        public int Energy { get; set; }
+
+        public int Luck { get; set; }
+        public int Agility { get; set; }
+        public int Charisma { get; set; }
 
         public User() {
             InventoryItems = new List<InventoryItem>();
@@ -15,6 +21,16 @@ namespace Doug.Models
         public double CalculateBaseGambleChance()
         {
             return 0.5;
+        }
+
+        public double CalculateTotalHealth()
+        {
+            return 100;
+        }
+
+        public double CalculateTotalEnergy()
+        {
+            return 25;
         }
 
         public bool HasEnoughCreditsForAmount(int amount)
