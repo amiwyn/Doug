@@ -25,10 +25,9 @@ namespace Test
             UserId = User
         };
 
-        private CreditsCommands _creditsCommands;
+        private CasinoCommands _casinoCommands;
 
         private readonly Mock<IUserRepository> _userRepository = new Mock<IUserRepository>();
-        private readonly Mock<ISlurRepository> _slurRepository = new Mock<ISlurRepository>();
         private readonly Mock<ISlackWebApi> _slack = new Mock<ISlackWebApi>();
         private readonly Mock<IChannelRepository> _channelRepository = new Mock<IChannelRepository>();
         private readonly Mock<IBackgroundJobClient> _backgroundClient = new Mock<IBackgroundJobClient>();
@@ -41,13 +40,13 @@ namespace Test
 
             _channelRepository.Setup(repo => repo.GetGambleChallenge(User)).Returns(new GambleChallenge("ginette", "testuser", 10));
 
-            _creditsCommands = new CreditsCommands(_userRepository.Object, _slack.Object, _slurRepository.Object, _channelRepository.Object, _backgroundClient.Object);
+            _casinoCommands = new CasinoCommands(_userRepository.Object, _slack.Object, _channelRepository.Object, _backgroundClient.Object);
         }
 
         [TestMethod]
         public void WhenSendingGambleChallenge_ChallengeIsSaved()
         {
-            _creditsCommands.GambleChallenge(command);
+            _casinoCommands.GambleChallenge(command);
 
             _channelRepository.Verify(repo => repo.SendGambleChallenge(It.IsAny<GambleChallenge>()));
         }
@@ -62,7 +61,7 @@ namespace Test
                 UserId = User
             };
 
-            var result = _creditsCommands.GambleChallenge(command);
+            var result = _casinoCommands.GambleChallenge(command);
 
             Assert.AreEqual("You idiot.", result.Message);
         }
@@ -70,7 +69,7 @@ namespace Test
         [TestMethod]
         public void WhenSendingGambleChallenge_ChallengeIsBroadcasted()
         {
-            _creditsCommands.GambleChallenge(command);
+            _casinoCommands.GambleChallenge(command);
 
             _slack.Verify(slack => slack.SendMessage(It.IsAny<string>(), Channel));
         }
@@ -87,7 +86,7 @@ namespace Test
                 UserId = User
             };
 
-            _creditsCommands.GambleChallenge(command);
+            _casinoCommands.GambleChallenge(command);
 
             _slack.Verify(slack => slack.SendMessage("<@ginette> need to have at least 10 " + DougMessages.CreditEmoji, Channel));
         }
@@ -104,7 +103,7 @@ namespace Test
                 UserId = User
             };
 
-            _creditsCommands.GambleChallenge(command);
+            _casinoCommands.GambleChallenge(command);
 
             _slack.Verify(slack => slack.SendMessage("<@testuser> need to have at least 10 " + DougMessages.CreditEmoji, Channel));
         }

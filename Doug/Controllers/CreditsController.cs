@@ -60,33 +60,5 @@ namespace Doug.Controllers
                 return Ok(string.Format(DougMessages.DougError, ex.Message));
             }
         }
-
-        [HttpPost("gamble")]
-        public ActionResult Gamble([FromForm]SlackCommandDto slackCommand)
-        {
-            try
-            {
-                var result = _creditsCommands.Gamble(slackCommand.ToCommand());
-                return Ok(result.Message);
-            }
-            catch (Exception ex)
-            {
-                return Ok(string.Format(DougMessages.DougError, ex.Message));
-            }
-        }
-
-        [HttpPost("gamblechallenge")]
-        public ActionResult GambleChallenge([FromForm]SlackCommandDto slackCommand)
-        {
-            try
-            {
-                var result = _creditsCommands.GambleChallenge(slackCommand.ToCommand());
-                return Ok(result.Message);
-            }
-            catch (Exception ex)
-            {
-                return Ok(string.Format(DougMessages.DougError, ex.Message));
-            }
-        }
     }
 }
