@@ -1,4 +1,4 @@
-using Doug;
+using System.Threading.Tasks;
 using Doug.Commands;
 using Doug.Models;
 using Doug.Repositories;
@@ -6,10 +6,8 @@ using Doug.Services;
 using Doug.Slack;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using System;
-using System.Threading.Tasks;
 
-namespace Test
+namespace Test.Coffee
 {
     [TestClass]
     public class JoinSomeoneCommandTest
@@ -18,7 +16,7 @@ namespace Test
         private const string Channel = "testchannel";
         private const string User = "testuser";
 
-        private readonly Command command = new Command()
+        private readonly Command _command = new Command()
         {
             ChannelId = Channel,
             Text = CommandText,
@@ -43,7 +41,7 @@ namespace Test
         [TestMethod]
         public async Task GivenUserIsAdmin_WhenJoiningOtherInCoffee_UserIsAddedToRoster()
         {
-            await _coffeeCommands.JoinSomeone(command);
+            await _coffeeCommands.JoinSomeone(_command);
 
             _coffeeRepository.Verify(repo => repo.AddToRoster("otherUserid"));
         }
@@ -51,7 +49,7 @@ namespace Test
         [TestMethod]
         public async Task GivenUserIsAdmin_WhenJoiningOtherInCoffee_UserIsAddedToDatabase()
         {
-            await _coffeeCommands.JoinSomeone(command);
+            await _coffeeCommands.JoinSomeone(_command);
 
             _userRepository.Verify(userRepo => userRepo.AddUser("otherUserid"));
         }
@@ -59,7 +57,7 @@ namespace Test
         [TestMethod]
         public async Task GivenUserIsAdmin_WhenJoiningOtherInCoffee_BroadcastIsSentToChannel()
         {
-            await _coffeeCommands.JoinSomeone(command);
+            await _coffeeCommands.JoinSomeone(_command);
 
             _slack.Verify(slack => slack.SendMessage(It.IsAny<string>(), Channel));
         }
@@ -69,7 +67,7 @@ namespace Test
         {
             _adminValidator.Setup(admin => admin.IsUserSlackAdmin(User)).Returns(Task.FromResult(false));
 
-            await _coffeeCommands.JoinSomeone(command);
+            await _coffeeCommands.JoinSomeone(_command);
 
             _coffeeRepository.Verify(repo => repo.AddToRoster(It.IsAny<string>()), Times.Never());
         }
@@ -79,7 +77,7 @@ namespace Test
         {
             _adminValidator.Setup(admin => admin.IsUserSlackAdmin(User)).Returns(Task.FromResult(false));
 
-            await _coffeeCommands.JoinSomeone(command);
+            await _coffeeCommands.JoinSomeone(_command);
 
             _userRepository.Verify(userRepo => userRepo.AddUser(It.IsAny<string>()), Times.Never());
         }
@@ -89,7 +87,7 @@ namespace Test
         {
             _adminValidator.Setup(admin => admin.IsUserSlackAdmin(User)).Returns(Task.FromResult(false));
 
-            await _coffeeCommands.JoinSomeone(command);
+            await _coffeeCommands.JoinSomeone(_command);
 
             _slack.Verify(slack => slack.SendMessage(It.IsAny<string>(), Channel), Times.Never());
         }

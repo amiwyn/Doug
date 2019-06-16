@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Doug.Commands;
 using Doug.Items;
 using Doug.Models;
@@ -7,16 +8,16 @@ using Doug.Slack;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
-namespace Test
+namespace Test.Slurs
 {
     [TestClass]
-    public class AddSlurCommandTest
+    public class SlursCommandTest
     {
-        private const string CommandText = "heheahahasod";
+        private const string CommandText = "<@otherUserid|username>";
         private const string Channel = "coco-channel";
         private const string User = "testuser";
 
-        private readonly Command command = new Command()
+        private readonly Command _command = new Command()
         {
             ChannelId = Channel,
             Text = CommandText,
@@ -33,24 +34,18 @@ namespace Test
 
         [TestInitialize]
         public void Setup()
-        { 
+        {
+            _slurRepository.Setup(repo => repo.GetSlursFrom(User)).Returns(new List<Slur>() { new Slur("slur", "asdf") });
+
             _slursCommands = new SlursCommands(_slurRepository.Object, _userRepository.Object, _slack.Object, _adminValidator.Object, _eventDispatcher.Object);
         }
 
         [TestMethod]
-        public void WhenAddingASlur_SlurIsAdded()
+        public void WhenViewingSlurs_SlursAreSpecificToUser()
         {
-            _slursCommands.AddSlur(command);
+            _slursCommands.Slurs(_command);
 
-            _slurRepository.Verify(repo => repo.AddSlur(It.IsAny<Slur>()));
-        }
-
-        [TestMethod]
-        public void WhenAddingASlur_UserGetTwoRupee()
-        {
-            _slursCommands.AddSlur(command);
-
-            _userRepository.Verify(repo => repo.AddCredits(User, 2));
+            _slurRepository.Verify(slur => slur.GetSlursFrom(User));
         }
     }
 }

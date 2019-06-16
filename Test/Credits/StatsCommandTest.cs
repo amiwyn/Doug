@@ -1,14 +1,12 @@
+using System.Collections.Generic;
 using Doug.Commands;
 using Doug.Models;
 using Doug.Repositories;
 using Doug.Slack;
-using Hangfire;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using System;
-using System.Collections.Generic;
 
-namespace Test
+namespace Test.Credits
 {
     [TestClass]
     public class StatsCommandTest

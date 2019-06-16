@@ -1,3 +1,4 @@
+using Doug;
 using Doug.Commands;
 using Doug.Models;
 using Doug.Repositories;
@@ -5,10 +6,8 @@ using Doug.Slack;
 using Hangfire;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using System;
-using Doug;
 
-namespace Test
+namespace Test.Casino
 {
     [TestClass]
     public class GambleCommandTest
@@ -17,7 +16,7 @@ namespace Test
         private const string Channel = "coco-channel";
         private const string User = "testuser";
 
-        private readonly Command command = new Command()
+        private readonly Command _command = new Command()
         {
             ChannelId = Channel,
             Text = CommandText,
@@ -42,7 +41,7 @@ namespace Test
         [TestMethod]
         public void GivenUserHasEnoughCredits_WhenGambling_UserCanGamble()
         {
-            _casinoCommands.Gamble(command);
+            _casinoCommands.Gamble(_command);
 
             _slack.Verify(slack => slack.SendMessage(It.IsAny<string>(), Channel));
         }
@@ -52,7 +51,7 @@ namespace Test
         {
             _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User() { Id = "testuser", Credits = 9 });
 
-            var result = _casinoCommands.Gamble(command);
+            var result = _casinoCommands.Gamble(_command);
 
             Assert.AreEqual("You need 10 " + DougMessages.CreditEmoji + " to do this and you have 9 " + DougMessages.CreditEmoji, result.Message);
         }
@@ -77,7 +76,7 @@ namespace Test
         {
             _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User() { Id = "testuser", Credits = 368 });
 
-            var result = _casinoCommands.Gamble(command);
+            var result = _casinoCommands.Gamble(_command);
 
             Assert.AreEqual("You are too rich for this.", result.Message);
         }
@@ -87,7 +86,7 @@ namespace Test
         {
             _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User() { Id = "testuser", Credits = 268 });
 
-            var result = _casinoCommands.Gamble(command);
+            var result = _casinoCommands.Gamble(_command);
 
             _slack.Verify(slack => slack.SendMessage(It.IsAny<string>(), Channel));
         }

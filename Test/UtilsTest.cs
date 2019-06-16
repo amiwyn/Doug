@@ -1,10 +1,6 @@
 ﻿using Doug;
-using Doug.Repositories;
-using Doug.Services;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
 using System;
-using System.Threading.Tasks;
 
 namespace Test
 {

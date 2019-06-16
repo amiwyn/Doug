@@ -6,10 +6,8 @@ using Doug.Slack;
 using Hangfire;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using System;
-using System.Linq.Expressions;
 
-namespace Test
+namespace Test.Casino
 {
     [TestClass]
     public class GambleChallengeCommandTest
@@ -18,7 +16,7 @@ namespace Test
         private const string Channel = "coco-channel";
         private const string User = "testuser";
 
-        private readonly Command command = new Command()
+        private readonly Command _command = new Command()
         {
             ChannelId = Channel,
             Text = CommandText,
@@ -46,7 +44,7 @@ namespace Test
         [TestMethod]
         public void WhenSendingGambleChallenge_ChallengeIsSaved()
         {
-            _casinoCommands.GambleChallenge(command);
+            _casinoCommands.GambleChallenge(_command);
 
             _channelRepository.Verify(repo => repo.SendGambleChallenge(It.IsAny<GambleChallenge>()));
         }
@@ -69,7 +67,7 @@ namespace Test
         [TestMethod]
         public void WhenSendingGambleChallenge_ChallengeIsBroadcasted()
         {
-            _casinoCommands.GambleChallenge(command);
+            _casinoCommands.GambleChallenge(_command);
 
             _slack.Verify(slack => slack.SendMessage(It.IsAny<string>(), Channel));
         }

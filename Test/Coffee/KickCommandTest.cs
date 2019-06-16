@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Doug.Commands;
 using Doug.Models;
 using Doug.Repositories;
@@ -5,18 +6,17 @@ using Doug.Services;
 using Doug.Slack;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using System.Threading.Tasks;
 
-namespace Test
+namespace Test.Coffee
 {
     [TestClass]
-    public class ResolveCommandTest
+    public class KickCommandTest
     {
         private const string CommandText = "<@otherUserid|username>";
         private const string Channel = "testchannel";
         private const string User = "testuser";
 
-        private readonly Command command = new Command()
+        private readonly Command _command = new Command()
         {
             ChannelId = Channel,
             Text = CommandText,
@@ -34,27 +34,45 @@ namespace Test
         [TestInitialize]
         public void Setup()
         {
+            _adminValidator.Setup(admin => admin.IsUserSlackAdmin(User)).Returns(Task.FromResult(true));
+
             _coffeeCommands = new CoffeeCommands(_coffeeRepository.Object, _userRepository.Object, _slack.Object, _adminValidator.Object, _coffeeBreakService.Object);
         }
 
         [TestMethod]
-        public async Task GivenUserIsAdmin_WhenResolving_CoffeeIsLaunched()
+        public async Task GivenUserIsAdmin_WhenKickingUser_UserIsRemovedFromRoster()
         {
-            _adminValidator.Setup(admin => admin.IsUserSlackAdmin(User)).Returns(Task.FromResult(true));
+            await _coffeeCommands.KickCoffee(_command);
 
-            await _coffeeCommands.Resolve(command);
-
-            _coffeeBreakService.Verify(coffeeService => coffeeService.LaunchCoffeeBreak(Channel));
+            _coffeeRepository.Verify(repo => repo.RemoveFromRoster("otherUserid"));
         }
 
         [TestMethod]
-        public async Task GivenUserIsNotAdmin_WhenResolving_CoffeeIsNotLaunched()
+        public async Task GivenUserIsAdmin_WhenKickingUser_BroadcastIsSentToChannel()
+        {
+            await _coffeeCommands.KickCoffee(_command);
+
+            _slack.Verify(slack => slack.SendMessage(It.IsAny<string>(), Channel));
+        }
+
+        [TestMethod]
+        public async Task GivenUserIsNotAdmin_WhenKickingUser_DontAddUserToRoster()
         {
             _adminValidator.Setup(admin => admin.IsUserSlackAdmin(User)).Returns(Task.FromResult(false));
 
-            await _coffeeCommands.Resolve(command);
+            await _coffeeCommands.KickCoffee(_command);
 
-            _coffeeBreakService.Verify(coffeeService => coffeeService.LaunchCoffeeBreak(Channel), Times.Never());
+            _coffeeRepository.Verify(repo => repo.RemoveFromRoster(It.IsAny<string>()), Times.Never());
+        }
+
+        [TestMethod]
+        public async Task GivenUserIsNotAdmin_WhenKickingUser_DontBroadcastMessage()
+        {
+            _adminValidator.Setup(admin => admin.IsUserSlackAdmin(User)).Returns(Task.FromResult(false));
+
+            await _coffeeCommands.KickCoffee(_command);
+
+            _slack.Verify(slack => slack.SendMessage(It.IsAny<string>(), Channel), Times.Never());
         }
     }
 }

@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Doug;
 using Doug.Commands;
 using Doug.Items;
@@ -7,10 +9,8 @@ using Doug.Services;
 using Doug.Slack;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
-namespace Test
+namespace Test.Slurs
 {
     [TestClass]
     public class CleanSlursCommandTest
@@ -18,7 +18,7 @@ namespace Test
         private const string Channel = "coco-channel";
         private const string User = "testuser";
 
-        private readonly Command command = new Command()
+        private readonly Command _command = new Command()
         {
             ChannelId = Channel,
             Text = string.Empty,
@@ -54,7 +54,7 @@ namespace Test
         [TestMethod]
         public async Task WhenCleaning_ConfirmUserIsadmin()
         {
-            await _slursCommands.Clean(command);
+            await _slursCommands.Clean(_command);
 
             _adminValidator.Verify(validator => validator.IsUserSlackAdmin(User));
         }
@@ -62,7 +62,7 @@ namespace Test
         [TestMethod]
         public async Task GivenUserIsAdmin_WhenCleaning_OnlyRecentSlursAreConsidered()
         {
-            await _slursCommands.Clean(command);
+            await _slursCommands.Clean(_command);
 
             _slurRepository.Verify(repo => repo.GetRecentSlurs());
         }
@@ -72,7 +72,7 @@ namespace Test
         {
             _adminValidator.Setup(admin => admin.IsUserSlackAdmin(User)).Returns(Task.FromResult(false));
 
-            var response = await _slursCommands.Clean(command);
+            var response = await _slursCommands.Clean(_command);
 
             Assert.AreEqual(DougMessages.NotAnAdmin, response.Message);
         }
@@ -88,7 +88,7 @@ namespace Test
                 new Reaction() { Name = "-1", Count = 3 }
             }));
 
-            await _slursCommands.Clean(command);
+            await _slursCommands.Clean(_command);
 
             _slurRepository.Verify(repo => repo.RemoveSlur(It.IsAny<int>()), Times.Never());
         }
@@ -96,7 +96,7 @@ namespace Test
         [TestMethod]
         public async Task GivenBadRatedSlurs_WhenCleaning_SlursAreRemoved()
         {
-            await _slursCommands.Clean(command);
+            await _slursCommands.Clean(_command);
 
             _slurRepository.Verify(repo => repo.RemoveSlur(It.IsAny<int>()));
         }
@@ -104,7 +104,7 @@ namespace Test
         [TestMethod]
         public async Task WhenCleaning_RecentSlursAreCleared()
         {
-            await _slursCommands.Clean(command);
+            await _slursCommands.Clean(_command);
 
             _slurRepository.Verify(repo => repo.ClearRecentSlurs());
         }
@@ -112,7 +112,7 @@ namespace Test
         [TestMethod]
         public async Task GivenBadRatedSlurs_WhenCleaning_AttachmentIsSent()
         {
-            await _slursCommands.Clean(command);
+            await _slursCommands.Clean(_command);
 
             _slack.Verify(slack => slack.SendAttachment(It.IsAny<Attachment>(), Channel));
         }
