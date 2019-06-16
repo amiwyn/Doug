@@ -1,4 +1,7 @@
-# Doug
+# Doug  
+
+![ci](https://travis-ci.org/FlyingJello/Doug.svg?branch=master) 
+
 This is Doug, he rules #RupeeEconomy
 
 ## Available commands : 
