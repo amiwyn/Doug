@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Doug.Items;
 using Doug.Models;
+using Doug.Repositories;
 using Doug.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,15 +18,12 @@ namespace Doug.Controllers
         private const string UrlVerification = "url_verification";
         private readonly IEventService _eventService;
 
-        public EventsController(IEventService eventService)
+        private IUserRepository _userRepository;
+
+        public EventsController(IEventService eventService, IUserRepository userRepository)
         {
             _eventService = eventService;
-        }
-
-        [HttpGet]
-        public ActionResult Test()
-        {
-            return Ok();
+            _userRepository = userRepository;
         }
 
         [HttpPost]

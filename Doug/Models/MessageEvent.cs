@@ -5,7 +5,6 @@ namespace Doug.Models
     public class MessageEvent
     {
         private const string GroupType = "channel";
-        private const string CoffeeParrotEmoji = ":coffeeparrot:";
 
         public string ClientMsgId { get; set; }
         public string Type { get; set; }
@@ -16,14 +15,14 @@ namespace Doug.Models
         public string EventTs { get; set; }
         public string ChannelType { get; set; }
 
-        public bool IsValid()
+        public bool IsValidChannel()
         {
             return ChannelType == GroupType;
         }
 
         public bool IsValidCoffeeParrot()
         {
-            return IsValid() && Text.StartsWith(CoffeeParrotEmoji);
+            return IsValidChannel() && Text.StartsWith(DougMessages.CoffeeParrotEmoji);
         }
     }
 }

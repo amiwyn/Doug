@@ -30,7 +30,7 @@ namespace Test
             _slurRepository.Setup(repo => repo.GetSlursFrom(It.IsAny<string>())).Returns(new List<Slur>());
             _userRepository.Setup(repo => repo.GetUser(It.IsAny<string>())).Returns(new User());
 
-            _creditsCommands = new CreditsCommands(_userRepository.Object, _slack.Object, _slurRepository.Object, _channelRepository.Object, _backgroundClient.Object);
+            _creditsCommands = new CreditsCommands(_userRepository.Object, _slack.Object, _slurRepository.Object);
         }
 
         [TestMethod]

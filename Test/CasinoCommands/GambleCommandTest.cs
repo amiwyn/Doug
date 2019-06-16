@@ -24,10 +24,9 @@ namespace Test
             UserId = User
         };
 
-        private CreditsCommands _creditsCommands;
+        private CasinoCommands _casinoCommands;
 
         private readonly Mock<IUserRepository> _userRepository = new Mock<IUserRepository>();
-        private readonly Mock<ISlurRepository> _slurRepository = new Mock<ISlurRepository>();
         private readonly Mock<ISlackWebApi> _slack = new Mock<ISlackWebApi>();
         private readonly Mock<IChannelRepository> _channelRepository = new Mock<IChannelRepository>();
         private readonly Mock<IBackgroundJobClient> _backgroundClient = new Mock<IBackgroundJobClient>();
@@ -37,13 +36,13 @@ namespace Test
         {
             _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User() { Id = "testuser", Credits = 68});
 
-            _creditsCommands = new CreditsCommands(_userRepository.Object, _slack.Object, _slurRepository.Object, _channelRepository.Object, _backgroundClient.Object);
+            _casinoCommands = new CasinoCommands(_userRepository.Object, _slack.Object, _channelRepository.Object, _backgroundClient.Object);
         }
 
         [TestMethod]
         public void GivenUserHasEnoughCredits_WhenGambling_UserCanGamble()
         {
-            _creditsCommands.Gamble(command);
+            _casinoCommands.Gamble(command);
 
             _slack.Verify(slack => slack.SendMessage(It.IsAny<string>(), Channel));
         }
@@ -53,7 +52,7 @@ namespace Test
         {
             _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User() { Id = "testuser", Credits = 9 });
 
-            var result = _creditsCommands.Gamble(command);
+            var result = _casinoCommands.Gamble(command);
 
             Assert.AreEqual("You need 10 " + DougMessages.CreditEmoji + " to do this and you have 9 " + DougMessages.CreditEmoji, result.Message);
         }
@@ -68,7 +67,7 @@ namespace Test
                 UserId = User
             };
 
-            var result = _creditsCommands.Gamble(command);
+            var result = _casinoCommands.Gamble(command);
 
             Assert.AreEqual("Invalid amount", result.Message);
         }
@@ -78,7 +77,7 @@ namespace Test
         {
             _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User() { Id = "testuser", Credits = 368 });
 
-            var result = _creditsCommands.Gamble(command);
+            var result = _casinoCommands.Gamble(command);
 
             Assert.AreEqual("You are too rich for this.", result.Message);
         }
@@ -88,7 +87,7 @@ namespace Test
         {
             _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User() { Id = "testuser", Credits = 268 });
 
-            var result = _creditsCommands.Gamble(command);
+            var result = _casinoCommands.Gamble(command);
 
             _slack.Verify(slack => slack.SendMessage(It.IsAny<string>(), Channel));
         }
