@@ -5,7 +5,6 @@ namespace Doug.Models
     public class MessageEvent
     {
         private const string GroupType = "channel";
-        
 
         public string ClientMsgId { get; set; }
         public string Type { get; set; }

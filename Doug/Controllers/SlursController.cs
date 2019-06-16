@@ -12,7 +12,7 @@ namespace Doug.Controllers
     [ApiController]
     public class SlursController : ControllerBase
     {
-        private ISlursCommands _slursCommands;
+        private readonly ISlursCommands _slursCommands;
 
         public SlursController(ISlursCommands slursCommands)
         {

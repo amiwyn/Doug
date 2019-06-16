@@ -5,6 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Doug.Commands;
+using Doug.Items;
 using Doug.Models;
 using Doug.Repositories;
 using Doug.Services;
@@ -50,6 +51,8 @@ namespace Doug
 
             services.AddTransient<IAuthorizationService, AuthorizationService>();
 
+            services.AddTransient<IItemEventDispatcher, ItemEventDispatcher>();
+
             services.AddTransient<ICoffeeCommands, CoffeeCommands>();
             services.AddTransient<ISlursCommands, SlursCommands>();
             services.AddTransient<ICreditsCommands, CreditsCommands>();
@@ -59,6 +62,7 @@ namespace Doug
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<ICoffeeRepository, CoffeeRepository>();
             services.AddTransient<ISlurRepository, SlurRepository>();
+            services.AddTransient<IItemRepository, ItemRepository>();
 
 
             var env = Environment.GetEnvironmentVariable("APP_ENV");

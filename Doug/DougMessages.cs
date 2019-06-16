@@ -23,6 +23,7 @@
         public const string CreditStats = CreditEmoji + " Money : {0}";
         public const string UserIdStats = ":robot_face: User ID : {0}";
         public const string SlursAddedStats = ":see_no_evil: Slurs added : {0}";
+        public const string ItemStats = ":briefcase: Items :";
         public const string WonGamble = "{0} flipped a coin and won {1} " + CreditEmoji;
         public const string LostGamble = "{0} flipped a coin and lost {1} " + CreditEmoji;
         public const string ChallengeSent = "{0} challenged {1} to a coinflip for {2} " + CreditEmoji;
@@ -30,7 +31,7 @@
         public const string GambleDeclined = "{0} declined {1}'s request, what a loser.";
         public const string InsufficientCredits = "{0} need to have at least {1} " + CreditEmoji;
         public const string GambleChallengeTip = "You were challenged to a coin flip, type in `/gamblechallenge accept` to accept or `/gamblechallenge decline` to decline";
-
+        public const string UserFlamedYou = "{0} flamed you.";
 
         public const string DougError = "Beep boop, it's not working : {0}";
         public const string NotAnAdmin = "You are not an admin.";

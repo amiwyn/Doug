@@ -1,4 +1,5 @@
-﻿using Doug.Models;
+﻿using Doug.Items;
+using Doug.Models;
 using Doug.Repositories;
 using Doug.Services;
 using Doug.Slack;
@@ -26,19 +27,22 @@ namespace Doug.Commands
         private const int SpecificFlameCost = 5;
         private const int AddSlurCredit = 2;
         private const int WholastCost = 2;
+        private const string Fatty = "350++";
         private readonly ISlurRepository _slurRepository;
         private readonly IUserRepository _userRepository;
         private readonly ISlackWebApi _slack;
         private readonly IAuthorizationService _adminValidator;
+        private readonly IItemEventDispatcher _itemEventDispatcher;
 
         private static readonly DougResponse NoResponse = new DougResponse();
 
-        public SlursCommands(ISlurRepository slursRepository, IUserRepository userRepository, ISlackWebApi messageSender, IAuthorizationService adminValidator)
+        public SlursCommands(ISlurRepository slursRepository, IUserRepository userRepository, ISlackWebApi messageSender, IAuthorizationService adminValidator, IItemEventDispatcher itemEventDispatcher)
         {
             _slurRepository = slursRepository;
             _userRepository = userRepository;
             _slack = messageSender;
             _adminValidator = adminValidator;
+            _itemEventDispatcher = itemEventDispatcher;
         }
 
         public DougResponse AddSlur(Command command)
@@ -167,6 +171,9 @@ namespace Doug.Commands
 
             var message = BuildSlurMessage(slur.Text, randomUser, command.GetTargetUserId());
 
+            //_itemEventDispatcher.OnFlaming(command, message);
+            message = _itemEventDispatcher.OnGettingFlamed(command, message);
+
             var timestamp = await _slack.SendMessage(message, command.ChannelId);
 
             _slurRepository.LogRecentSlur(slur.Id, timestamp);
@@ -180,10 +187,10 @@ namespace Doug.Commands
             message = message.Replace(SlurUserMention, Utils.UserMention(targetUserId));
             message = message.Replace(RandomUserMention, Utils.UserMention(randomUserid));
 
-            if (message.Contains("350++"))
+            if (message.Contains(Fatty))
             {
                 var fat = _slurRepository.GetFat().ToString();
-                message = message.Replace("350++", fat);
+                message = message.Replace(Fatty, fat);
                 _slurRepository.IncrementFat();
             }
 

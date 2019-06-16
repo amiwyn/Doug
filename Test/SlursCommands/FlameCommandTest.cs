@@ -1,4 +1,5 @@
 using Doug.Commands;
+using Doug.Items;
 using Doug.Models;
 using Doug.Repositories;
 using Doug.Services;
@@ -30,16 +31,17 @@ namespace Test
         private readonly Mock<IUserRepository> _userRepository = new Mock<IUserRepository>();
         private readonly Mock<ISlackWebApi> _slack = new Mock<ISlackWebApi>();
         private readonly Mock<IAuthorizationService> _adminValidator = new Mock<IAuthorizationService>();
+        private readonly Mock<IItemEventDispatcher> _eventDispatcher = new Mock<IItemEventDispatcher>();
 
         [TestInitialize]
         public void Setup()
         {
             _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User() { Id = "a", Credits = 69 });
-
+            _eventDispatcher.Setup(disp => disp.OnGettingFlamed(It.IsAny<Command>(), It.IsAny<string>())).Returns((Command cmd, string slur) => slur);
             _slurRepository.Setup(repo => repo.GetSlurs()).Returns(new List<Slur>() { new Slur("{user} is a {random} 350++ bitch", "asdf") });
             _userRepository.Setup(repo => repo.GetUsers()).Returns(new List<User>() { new User() { Id = "robert" } });
 
-            _slursCommands = new SlursCommands(_slurRepository.Object, _userRepository.Object, _slack.Object, _adminValidator.Object);
+            _slursCommands = new SlursCommands(_slurRepository.Object, _userRepository.Object, _slack.Object, _adminValidator.Object, _eventDispatcher.Object);
         }
 
         [TestMethod]
@@ -117,6 +119,14 @@ namespace Test
             await _slursCommands.Flame(command);
 
             _slurRepository.Verify(repo => repo.LogRecentSlur(It.IsAny<int>(), "696969.696969"));
+        }
+
+        [TestMethod]
+        public async Task WhenFlaming_OnFlamedEventIsTriggered()
+        {
+            await _slursCommands.Flame(command);
+
+            _eventDispatcher.Verify(disp => disp.OnGettingFlamed(command, It.IsAny<string>()));
         }
     }
 }
