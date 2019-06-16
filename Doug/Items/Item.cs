@@ -9,6 +9,7 @@ namespace Doug.Items
         public string Name { get; set; }
         public string Description { get; set; }
         public Rarity Rarity { get; set; }
+        public string Icon { get; set; }
 
         public virtual string OnGettingFlamed(Command command, string slur, ISlackWebApi slack)
         {
