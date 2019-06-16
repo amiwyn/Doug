@@ -1,5 +1,6 @@
 using Doug;
 using Doug.Commands;
+using Doug.Items;
 using Doug.Models;
 using Doug.Repositories;
 using Doug.Slack;
@@ -23,19 +24,23 @@ namespace Test.Casino
             UserId = User
         };
 
+        private readonly User _user = new User() {Id = "testuser", Credits = 68};
+
         private CasinoCommands _casinoCommands;
 
         private readonly Mock<IUserRepository> _userRepository = new Mock<IUserRepository>();
         private readonly Mock<ISlackWebApi> _slack = new Mock<ISlackWebApi>();
         private readonly Mock<IChannelRepository> _channelRepository = new Mock<IChannelRepository>();
         private readonly Mock<IBackgroundJobClient> _backgroundClient = new Mock<IBackgroundJobClient>();
+        private readonly Mock<IItemEventDispatcher> _itemEventDispatcher = new Mock<IItemEventDispatcher>();
+
 
         [TestInitialize]
         public void Setup()
         {
-            _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User() { Id = "testuser", Credits = 68});
+            _userRepository.Setup(repo => repo.GetUser(User)).Returns(_user);
 
-            _casinoCommands = new CasinoCommands(_userRepository.Object, _slack.Object, _channelRepository.Object, _backgroundClient.Object);
+            _casinoCommands = new CasinoCommands(_userRepository.Object, _slack.Object, _channelRepository.Object, _backgroundClient.Object, _itemEventDispatcher.Object);
         }
 
         [TestMethod]
@@ -89,6 +94,14 @@ namespace Test.Casino
             _casinoCommands.Gamble(_command);
 
             _slack.Verify(slack => slack.SendMessage(It.IsAny<string>(), Channel));
+        }
+
+        [TestMethod]
+        public void WhenGambling_GetUserChanceFromItems()
+        {
+            _casinoCommands.Gamble(_command);
+
+            _itemEventDispatcher.Verify(dispatcher => dispatcher.OnGambling(_user));
         }
     }
 }

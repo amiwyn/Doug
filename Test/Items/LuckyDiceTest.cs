@@ -1,0 +1,21 @@
+using Doug.Items;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+namespace Test.Items
+{
+    [TestClass]
+    public class LuckyDiceTest
+    {
+        private LuckyDice _luckyDice;
+
+        [TestMethod]
+        public void WhenGambling_ChancesIncreasesByFivePercent()
+        {
+            _luckyDice = new LuckyDice();
+
+            var result = _luckyDice.OnGambling(0.5);
+
+            Assert.AreEqual(0.55, result);
+        }
+    }
+}

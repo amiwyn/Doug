@@ -22,25 +22,6 @@ namespace Doug.Repositories
             _db = dougContext;
         }
 
-        public void AddToRoster(string userId)
-        {
-            if (!_db.Roster.Any(user => user.Id == userId))
-            {
-                _db.Roster.Add(new Roster() { Id = userId });
-                _db.SaveChanges();
-            }
-        }
-
-        public void ConfirmUserReady(string userId)
-        {
-            var user = _db.Roster.SingleOrDefault(usr => usr.Id == userId);
-            if (user != null)
-            {
-                user.IsReady = true;
-                _db.SaveChanges();
-            }
-        }
-
         public string GetAccessToken()
         {
             return _db.Channel.Single().Token;
@@ -54,16 +35,6 @@ namespace Doug.Repositories
         public string GetRemindJob()
         {
             return _db.Channel.Single().CoffeeRemindJobId;
-        }
-
-        public void RemoveFromRoster(string userId)
-        {
-            var user = _db.Roster.SingleOrDefault(usr => usr.Id == userId);
-            if (user != null)
-            {
-                _db.Roster.Remove(user);
-                _db.SaveChanges();
-            }
         }
 
         public void RemoveGambleChallenge(string target)
@@ -86,16 +57,6 @@ namespace Doug.Repositories
         {
             _db.Channel.Single().CoffeeRemindJobId = jobId;
             _db.SaveChanges();
-        }
-
-        public void SkipUser(string userId)
-        {
-            var user = _db.Roster.SingleOrDefault(usr => usr.Id == userId);
-            if (user != null)
-            {
-                user.IsSkipping = true;
-                _db.SaveChanges();
-            }
         }
     }
 }

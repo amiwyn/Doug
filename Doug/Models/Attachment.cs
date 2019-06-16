@@ -44,7 +44,7 @@ namespace Doug.Models
             attachment.Fields.Add(new Field(string.Format(DougMessages.SlursAddedStats, slurCount)));
 
             attachment.Fields.Add(new Field(DougMessages.ItemStats));
-            user.UserItems.ForEach(userItem => attachment.Fields.Add(new Field(userItem.InventoryId + " - " + userItem.Item.Name)));
+            user.InventoryItems.ForEach(inventoryItem => attachment.Fields.Add(new Field(string.Format("{0} - {1}", inventoryItem.InventoryPosition, inventoryItem.Item.Name))));
 
             return attachment;
         }

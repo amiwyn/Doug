@@ -6,10 +6,15 @@ namespace Doug.Models
     {
         public string Id { get; set; }
         public int Credits { get; set; }
-        public List<UserItem> UserItems { get; set; }
+        public List<InventoryItem> InventoryItems { get; set; }
 
         public User() {
-            UserItems = new List<UserItem>();
+            InventoryItems = new List<InventoryItem>();
+        }
+
+        public double CalculateBaseGambleChance()
+        {
+            return 0.5;
         }
 
         public bool HasEnoughCreditsForAmount(int amount)

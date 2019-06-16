@@ -12,7 +12,7 @@ namespace Doug.Repositories
         User GetUser(string userId);
         void RemoveCredits(string userId, int amount);
         void AddCredits(string userId, int amount);
-        void AddItem(string userid, int itemId);
+        void AddItem(string userid, string itemId);
     }
 
     public class UserRepository : IUserRepository
@@ -33,11 +33,10 @@ namespace Doug.Repositories
             _db.SaveChanges();
         }
 
-        public void AddItem(string userId, int itemId)
+        public void AddItem(string userId, string itemId)
         {
             var user = _db.Users.Single(usr => usr.Id == userId);
-            var item = _db.Items.Single(itm => itm.Id == itemId);
-            user.UserItems.Add(new UserItem { User = user, Item = item });
+            user.InventoryItems.Add(new InventoryItem(userId, itemId));
             _db.SaveChanges();
         }
 
@@ -59,8 +58,7 @@ namespace Doug.Repositories
         public User GetUser(string userId)
         {
             return _db.Users
-                .Include(user => user.UserItems)
-                .ThenInclude(userItem => userItem.Item)
+                .Include(user => user.InventoryItems)
                 .Single(user => user.Id == userId);
         }
 
