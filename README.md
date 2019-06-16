@@ -90,9 +90,20 @@ Usage : `/give @user amount`
 
 **/stats**
 
-Broadcast the rupees and the stats of a specified user.
+Broadcast the stats of a specified user.
 
 Usage : `/stats @user`
+
+
+**/forbes**
+
+Display the net worth of every user.
+
+Usage : `/forbes`
+
+___
+
+### Casino commands : 
 
 **/gamble**
 
@@ -102,6 +113,6 @@ Usage : `/gamble amount`
 
 **/gamblechallenge**
 
-Gamble with a friend! Play a specified amount of rupees with a friend. Only one can win!
+Gamble with a friend! Play a specified amount of rupees with someone. Only one can win!
 
 Usage : `/gamblechallenge @user amount`, `/gamblechallenge accept` or `/gamblechallenge decline`
