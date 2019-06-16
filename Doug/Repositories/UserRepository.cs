@@ -1,11 +1,7 @@
-﻿using Doug.Items;
-using Doug.Models;
-using Doug.Slack;
+﻿using Doug.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Doug.Repositories
 {

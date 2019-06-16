@@ -1,9 +1,5 @@
-﻿using Doug.Commands;
-using Doug.Models;
-using System;
-using System.Collections.Generic;
+﻿using Doug.Models;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Doug.Repositories
 {

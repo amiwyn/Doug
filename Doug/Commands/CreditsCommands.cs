@@ -1,11 +1,7 @@
 ﻿using Doug.Models;
 using Doug.Repositories;
 using Doug.Slack;
-using Hangfire;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Doug.Commands
 {

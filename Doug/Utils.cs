@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Doug
 {
@@ -9,7 +6,7 @@ namespace Doug
     {
         public static string UserMention(string userId)
         {
-            return string.Format("<@{0}>", userId);
+            return $"<@{userId}>";
         }
 
         public static bool IsInTimespan(DateTime currentTime, TimeSpan targetTime, int tolerance)

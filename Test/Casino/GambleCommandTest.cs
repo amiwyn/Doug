@@ -86,7 +86,7 @@ namespace Test.Casino
         {
             _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User() { Id = "testuser", Credits = 268 });
 
-            var result = _casinoCommands.Gamble(_command);
+            _casinoCommands.Gamble(_command);
 
             _slack.Verify(slack => slack.SendMessage(It.IsAny<string>(), Channel));
         }

@@ -1,10 +1,7 @@
-﻿using Doug.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using Doug.Models;
 
-namespace Doug.Slack
+namespace Doug.Slack.Dto
 {
     public class ReactionInfoResponse
     {

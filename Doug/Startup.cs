@@ -124,7 +124,7 @@ namespace Doug
             string slackSignature = context.Request.Headers["x-slack-signature"];
             long timestamp = long.Parse(context.Request.Headers["x-slack-request-timestamp"]);
             string signingSecret = Environment.GetEnvironmentVariable("SLACK_SIGNING_SECRET");
-            string content = null;
+            string content;
 
             if (slackSignature == null)
             {
@@ -159,7 +159,6 @@ namespace Doug
             {
                 context.Response.StatusCode = 400;
                 await context.Response.WriteAsync("Request signing failed");
-                return;
             }
         }
     }

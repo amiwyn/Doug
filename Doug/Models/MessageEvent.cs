@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-
-namespace Doug.Models
+﻿namespace Doug.Models
 {
     public class MessageEvent
     {

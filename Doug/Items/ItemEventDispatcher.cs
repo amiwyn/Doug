@@ -2,9 +2,7 @@
 using Doug.Repositories;
 using Doug.Slack;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Doug.Items
 {

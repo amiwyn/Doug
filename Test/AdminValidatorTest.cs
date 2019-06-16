@@ -3,6 +3,7 @@ using Doug.Slack;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System.Threading.Tasks;
+using Doug.Slack.Dto;
 
 namespace Test
 {

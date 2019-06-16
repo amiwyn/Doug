@@ -1,11 +1,7 @@
-﻿using Doug.Controllers;
-using Doug.Models;
+﻿using Doug.Models;
 using Doug.Repositories;
 using Doug.Services;
 using Doug.Slack;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Doug.Commands
@@ -45,15 +41,13 @@ namespace Doug.Commands
             return NoResponse;
         }
 
-        private DougResponse JoinUser(string userId, string channelId)
+        private void JoinUser(string userId, string channelId)
         {
             _coffeeRepository.AddToRoster(userId);
             _userRepository.AddUser(userId);
 
             string text = string.Format(DougMessages.JoinedCoffee, Utils.UserMention(userId));
             _slack.SendMessage(text, channelId);
-
-            return NoResponse;
         }
 
         public async Task<DougResponse> JoinSomeone(Command command)
