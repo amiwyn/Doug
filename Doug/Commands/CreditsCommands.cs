@@ -64,7 +64,7 @@ namespace Doug.Commands
         {
             var users = _userRepository.GetUsers();
 
-            return new DougResponse(users.Aggregate(string.Empty, (acc, user) => string.Format("{0}{1} = {2} {3}\n", acc, Utils.UserMention(user.Id), user.Credits, DougMessages.CreditEmoji)));
+            return new DougResponse(users.Aggregate(string.Empty, (acc, user) => string.Format("{0}{3}{2} = {1}\n", acc, Utils.UserMention(user.Id), user.Credits, DougMessages.CreditEmoji)));
         }
 
         public DougResponse Stats(Command command)
