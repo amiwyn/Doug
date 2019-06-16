@@ -1,4 +1,5 @@
 ﻿using System;
+using Doug.Items.Equipment;
 
 namespace Doug.Items
 {

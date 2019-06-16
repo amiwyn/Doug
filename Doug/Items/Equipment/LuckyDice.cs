@@ -1,4 +1,4 @@
-﻿namespace Doug.Items
+﻿namespace Doug.Items.Equipment
 {
     public class LuckyDice : Item
     {

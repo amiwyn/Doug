@@ -1,4 +1,4 @@
-﻿using Doug.Items;
+﻿using Doug.Items.Equipment;
 using Microsoft.EntityFrameworkCore;
 
 namespace Doug.Models

@@ -1,7 +1,7 @@
 ﻿using Doug.Models;
 using Doug.Slack;
 
-namespace Doug.Items
+namespace Doug.Items.Equipment
 {
     public class AwakeningOrb : Item
     {
