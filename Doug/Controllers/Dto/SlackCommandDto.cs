@@ -1,15 +1,14 @@
 ﻿using Doug.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace Doug.Controllers
+namespace Doug.Controllers.Dto
 {
     public class SlackCommandDto
     {
+        // ReSharper disable once InconsistentNaming
         public string channel_id { get; set; }
+        // ReSharper disable once InconsistentNaming
         public string user_id { get; set; }
+        // ReSharper disable once InconsistentNaming
         public string text { get; set; }
 
         public Command ToCommand()

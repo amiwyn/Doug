@@ -63,8 +63,6 @@ namespace Doug
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<ICoffeeRepository, CoffeeRepository>();
             services.AddTransient<ISlurRepository, SlurRepository>();
-            services.AddTransient<IItemRepository, ItemRepository>();
-
 
             var env = Environment.GetEnvironmentVariable("APP_ENV");
 
@@ -124,7 +122,7 @@ namespace Doug
             string slackSignature = context.Request.Headers["x-slack-signature"];
             long timestamp = long.Parse(context.Request.Headers["x-slack-request-timestamp"]);
             string signingSecret = Environment.GetEnvironmentVariable("SLACK_SIGNING_SECRET");
-            string content = null;
+            string content;
 
             if (slackSignature == null)
             {
@@ -159,7 +157,6 @@ namespace Doug
             {
                 context.Response.StatusCode = 400;
                 await context.Response.WriteAsync("Request signing failed");
-                return;
             }
         }
     }

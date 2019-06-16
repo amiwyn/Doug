@@ -20,13 +20,13 @@ namespace Test
         private readonly Mock<ISlackWebApi> _slack = new Mock<ISlackWebApi>();
         private readonly Mock<ICoffeeRepository> _coffeeRepository = new Mock<ICoffeeRepository>();
         private readonly Mock<IChannelRepository> _channelRepository = new Mock<IChannelRepository>();
-        private readonly Mock<IBackgroundJobClient> _backgrounJobClient = new Mock<IBackgroundJobClient>();
+        private readonly Mock<IBackgroundJobClient> _backgroundJobClient = new Mock<IBackgroundJobClient>();
         private readonly Mock<IUserRepository> _userRepository = new Mock<IUserRepository>();
 
         [TestInitialize]
         public void Setup()
         {
-            _coffeeService = new CoffeeService(_slack.Object, _coffeeRepository.Object, _channelRepository.Object, _backgrounJobClient.Object, _userRepository.Object);
+            _coffeeService = new CoffeeService(_slack.Object, _coffeeRepository.Object, _channelRepository.Object, _backgroundJobClient.Object, _userRepository.Object);
         }
 
         [TestMethod]
@@ -74,7 +74,7 @@ namespace Test
         }
 
         [TestMethod]
-        public void GivenOneReady_AndGivenOneNotready_WhenReminding_SendOneOverTwoRemind()
+        public void GivenOneReady_AndGivenOneNotReady_WhenReminding_SendOneOverTwoRemind()
         {
             _coffeeRepository.Setup(repo => repo.GetMissingParticipants()).Returns(new List<string>() { "bob" });
             _coffeeRepository.Setup(repo => repo.GetReadyParticipants()).Returns(new List<string>() { "robert" });

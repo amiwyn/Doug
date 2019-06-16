@@ -1,9 +1,9 @@
-﻿using Doug.Repositories;
-using Doug.Services;
+﻿using Doug.Services;
 using Doug.Slack;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System.Threading.Tasks;
+using Doug.Slack.Dto;
 
 namespace Test
 {
@@ -23,6 +23,26 @@ namespace Test
         }
 
         [TestMethod]
+        public async Task GivenUserIsNotAdmin_WhenValidatingUser_ReturnTrue()
+        {
+            _slack.Setup(repo => repo.GetUserInfo(User)).Returns(Task.FromResult(new UserInfo { IsAdmin = true }));
+
+            var result = await _adminValidator.IsUserSlackAdmin(User);
+
+            Assert.AreEqual(true, result);
+        }
+
+        [TestMethod]
+        public async Task GivenUserIsNotAdmin_WhenValidatingUser_ReturnFalse()
+        {
+            _slack.Setup(repo => repo.GetUserInfo(User)).Returns(Task.FromResult(new UserInfo { IsAdmin = false }));
+
+            var result = await _adminValidator.IsUserSlackAdmin(User);
+
+            Assert.AreEqual(false, result);
+        }
+
+        [TestMethod]
         public async Task GivenUserIsAdmin_WhenValidatingUser_GetInformationFromRepository()
         {
             _slack.Setup(slack => slack.GetUserInfo(User)).Returns(Task.FromResult(new UserInfo { IsAdmin = true }));
@@ -31,14 +51,5 @@ namespace Test
 
             _slack.Verify(slack => slack.GetUserInfo(User));
         }
-
-        [TestMethod]
-        public async Task GivenUserIsNotAdmin_WhenValidatingUser_ThrowException()
-        {
-            _slack.Setup(repo => repo.GetUserInfo(User)).Returns(Task.FromResult(new UserInfo { IsAdmin = false }));
-
-            //await Assert.ThrowsExceptionAsync<UserNotAdminException>(async () => await _adminValidator.IsUserSlackAdmin(User));
-        }
-
     }
 }

@@ -2,9 +2,7 @@
 using Doug.Repositories;
 using Doug.Slack;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Doug.Items
 {
@@ -12,6 +10,7 @@ namespace Doug.Items
     {
         string OnGettingFlamed(Command command, string slur);
         string OnFlaming(Command command, string slur);
+        double OnGambling(User user);
     }
 
     public class ItemEventDispatcher : IItemEventDispatcher
@@ -30,11 +29,16 @@ namespace Doug.Items
             throw new NotImplementedException();
         }
 
+        public double OnGambling(User user)
+        {
+            return user.InventoryItems.Aggregate(user.CalculateBaseGambleChance(), (chance, userItem) => userItem.Item.OnGambling(chance));
+        }
+
         public string OnGettingFlamed(Command command, string slur)
         {
             var user = _userRepository.GetUser(command.GetTargetUserId());
 
-            return user.UserItems.Aggregate(slur, (acc, userItem) => userItem.Item.OnGettingFlamed(command, acc, _slackWebApi));
+            return user.InventoryItems.Aggregate(slur, (acc, userItem) => userItem.Item.OnGettingFlamed(command, acc, _slackWebApi));
         }
     }
 }

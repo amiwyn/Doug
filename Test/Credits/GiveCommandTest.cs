@@ -1,13 +1,12 @@
+using System;
 using Doug.Commands;
 using Doug.Models;
 using Doug.Repositories;
 using Doug.Slack;
-using Hangfire;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using System;
 
-namespace Test
+namespace Test.Credits
 {
     [TestClass]
     public class GiveCommandTest
@@ -16,7 +15,7 @@ namespace Test
         private const string Channel = "coco-channel";
         private const string User = "testuser";
 
-        private readonly Command command = new Command()
+        private readonly Command _command = new Command()
         {
             ChannelId = Channel,
             Text = CommandText,
@@ -28,8 +27,6 @@ namespace Test
         private readonly Mock<IUserRepository> _userRepository = new Mock<IUserRepository>();
         private readonly Mock<ISlurRepository> _slurRepository = new Mock<ISlurRepository>();
         private readonly Mock<ISlackWebApi> _slack = new Mock<ISlackWebApi>();
-        private readonly Mock<IChannelRepository> _channelRepository = new Mock<IChannelRepository>();
-        private readonly Mock<IBackgroundJobClient> _backgroundClient = new Mock<IBackgroundJobClient>();
 
         [TestInitialize]
         public void Setup()
@@ -42,7 +39,7 @@ namespace Test
         [TestMethod]
         public void GivenEnoughCredits_WhenGivingCredits_CreditsAreRemovedFromGiver()
         {
-            _creditsCommands.Give(command);
+            _creditsCommands.Give(_command);
 
             _userRepository.Verify(repo => repo.RemoveCredits(User, 10));
         }
@@ -50,7 +47,7 @@ namespace Test
         [TestMethod]
         public void GivenEnoughCredits_WhenGivingCredits_CreditsAreAddedToReceiver()
         {
-            _creditsCommands.Give(command);
+            _creditsCommands.Give(_command);
 
             _userRepository.Verify(repo => repo.AddCredits("otherUserid", 10));
         }
@@ -60,7 +57,7 @@ namespace Test
         public void GivenNotEnoughCredits_WhenGivingCredits_CreditsAreNotAddedToReceiver()
         {
             _userRepository.Setup(repo => repo.RemoveCredits(User, 10)).Throws(new ArgumentException());
-            _creditsCommands.Give(command);
+            _creditsCommands.Give(_command);
 
             _userRepository.Verify(repo => repo.AddCredits(User, It.IsAny<int>()), Times.Never);
         }
@@ -68,9 +65,24 @@ namespace Test
         [TestMethod]
         public void GivenEnoughCredits_WhenGivingCredits_MessageIsBroadcasted()
         {
-            _creditsCommands.Give(command);
+            _creditsCommands.Give(_command);
 
             _slack.Verify(slack => slack.SendMessage(It.IsAny<string>(), Channel));
+        }
+
+        [TestMethod]
+        public void GivenNegativeAmount_WhenGivingCredits_()
+        {
+            var command = new Command()
+            {
+                ChannelId = Channel,
+                Text = "<@otherUserid|username> -10",
+                UserId = User
+            };
+
+            var result = _creditsCommands.Give(command);
+
+            Assert.AreEqual("Invalid amount", result.Message);
         }
     }
 }

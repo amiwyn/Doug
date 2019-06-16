@@ -1,14 +1,12 @@
+using System.Collections.Generic;
 using Doug.Commands;
 using Doug.Models;
 using Doug.Repositories;
 using Doug.Slack;
-using Hangfire;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using System;
-using System.Collections.Generic;
 
-namespace Test
+namespace Test.Credits
 {
     [TestClass]
     public class StatsCommandTest
@@ -21,8 +19,6 @@ namespace Test
         private readonly Mock<IUserRepository> _userRepository = new Mock<IUserRepository>();
         private readonly Mock<ISlurRepository> _slurRepository = new Mock<ISlurRepository>();
         private readonly Mock<ISlackWebApi> _slack = new Mock<ISlackWebApi>();
-        private readonly Mock<IChannelRepository> _channelRepository = new Mock<IChannelRepository>();
-        private readonly Mock<IBackgroundJobClient> _backgroundClient = new Mock<IBackgroundJobClient>();
 
         [TestInitialize]
         public void Setup()

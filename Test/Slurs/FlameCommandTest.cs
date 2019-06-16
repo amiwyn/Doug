@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Doug.Commands;
 using Doug.Items;
 using Doug.Models;
@@ -6,10 +8,8 @@ using Doug.Services;
 using Doug.Slack;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
-namespace Test
+namespace Test.Slurs
 {
     [TestClass]
     public class FlameCommandTest
@@ -18,7 +18,7 @@ namespace Test
         private const string Channel = "coco-channel";
         private const string User = "testuser";
 
-        private readonly Command command = new Command()
+        private readonly Command _command = new Command()
         {
             ChannelId = Channel,
             Text = CommandText,
@@ -45,17 +45,17 @@ namespace Test
         }
 
         [TestMethod]
-        public async Task GivenASlurWithUserMention_WhenFlaming_UserIsMentionned()
+        public async Task GivenASlurWithUserMention_WhenFlaming_UserIsMentioned()
         {
-            await _slursCommands.Flame(command);
+            await _slursCommands.Flame(_command);
 
             _slack.Verify(slack => slack.SendMessage(It.IsRegex("<@otherUserid>"), Channel));
         }
 
         [TestMethod]
-        public async Task GivenASlurWithRandom_WhenFlaming_RandomIsMentionned()
+        public async Task GivenASlurWithRandom_WhenFlaming_RandomIsMentioned()
         {
-            await _slursCommands.Flame(command);
+            await _slursCommands.Flame(_command);
 
             _slack.Verify(slack => slack.SendMessage(It.IsRegex("<@robert>"), Channel));
         }
@@ -64,7 +64,7 @@ namespace Test
         public async Task GivenASlurWith350_WhenFlaming_DynamicMassIsUsed()
         {
             _slurRepository.Setup(repo => repo.GetFat()).Returns(69);
-            await _slursCommands.Flame(command);
+            await _slursCommands.Flame(_command);
 
             _slack.Verify(slack => slack.SendMessage(It.IsRegex("69"), Channel));
         }
@@ -72,7 +72,7 @@ namespace Test
         [TestMethod]
         public async Task GivenASlurWith350_WhenFlaming_350GetsHeavier()
         {
-            await _slursCommands.Flame(command);
+            await _slursCommands.Flame(_command);
 
             _slurRepository.Verify(repo => repo.IncrementFat());
         }
@@ -116,7 +116,7 @@ namespace Test
         {
             _slack.Setup(slack => slack.SendMessage(It.IsAny<string>(), It.IsAny<string>())).Returns(Task.FromResult("696969.696969"));
 
-            await _slursCommands.Flame(command);
+            await _slursCommands.Flame(_command);
 
             _slurRepository.Verify(repo => repo.LogRecentSlur(It.IsAny<int>(), "696969.696969"));
         }
@@ -124,9 +124,9 @@ namespace Test
         [TestMethod]
         public async Task WhenFlaming_OnFlamedEventIsTriggered()
         {
-            await _slursCommands.Flame(command);
+            await _slursCommands.Flame(_command);
 
-            _eventDispatcher.Verify(disp => disp.OnGettingFlamed(command, It.IsAny<string>()));
+            _eventDispatcher.Verify(disp => disp.OnGettingFlamed(_command, It.IsAny<string>()));
         }
     }
 }

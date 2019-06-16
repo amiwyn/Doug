@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Doug.Commands;
 using Doug.Models;
 using Doug.Repositories;
@@ -5,9 +6,8 @@ using Doug.Services;
 using Doug.Slack;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using System.Threading.Tasks;
 
-namespace Test
+namespace Test.Coffee
 {
     [TestClass]
     public class SkipCommandTest

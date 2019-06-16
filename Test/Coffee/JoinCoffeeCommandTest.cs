@@ -1,4 +1,3 @@
-using Doug;
 using Doug.Commands;
 using Doug.Models;
 using Doug.Repositories;
@@ -6,10 +5,8 @@ using Doug.Services;
 using Doug.Slack;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using System;
-using System.Threading.Tasks;
 
-namespace Test
+namespace Test.Coffee
 {
     [TestClass]
     public class JoinCoffeeCommandTest
@@ -18,7 +15,7 @@ namespace Test
         private const string Channel = "testchannel";
         private const string User = "testuser";
 
-        private readonly Command command = new Command()
+        private readonly Command _command = new Command()
         {
             ChannelId = Channel,
             Text = CommandText,
@@ -42,7 +39,7 @@ namespace Test
         [TestMethod]
         public void WhenJoiningCoffee_UserIsAddedToRoster()
         {
-            _coffeeCommands.JoinCoffee(command);
+            _coffeeCommands.JoinCoffee(_command);
 
             _coffeeRepository.Verify(repo => repo.AddToRoster(User));
         }
@@ -50,7 +47,7 @@ namespace Test
         [TestMethod]
         public void WhenJoiningCoffee_UserIsAddedToDatabase()
         {
-            _coffeeCommands.JoinCoffee(command);
+            _coffeeCommands.JoinCoffee(_command);
 
             _userRepository.Verify(userRepo => userRepo.AddUser(User));
         }
@@ -58,7 +55,7 @@ namespace Test
         [TestMethod]
         public void WhenJoiningCoffee_BroadcastIsSentToChannel()
         {
-            _coffeeCommands.JoinCoffee(command);
+            _coffeeCommands.JoinCoffee(_command);
 
             _slack.Verify(slack => slack.SendMessage(It.IsAny<string>(), Channel));
         }

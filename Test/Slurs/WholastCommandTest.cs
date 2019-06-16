@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Doug;
 using Doug.Commands;
 using Doug.Items;
@@ -7,9 +8,8 @@ using Doug.Services;
 using Doug.Slack;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using System.Collections.Generic;
 
-namespace Test
+namespace Test.Slurs
 {
     [TestClass]
     public class WholastCommandTest
@@ -18,7 +18,7 @@ namespace Test
         private const string Channel = "coco-channel";
         private const string User = "testuser";
 
-        private readonly Command command = new Command()
+        private readonly Command _command = new Command()
         {
             ChannelId = Channel,
             Text = CommandText,
@@ -47,7 +47,7 @@ namespace Test
         [TestMethod]
         public void WhenCheckingLastSlurAuthor_Remove2CreditsToUser()
         {
-            _slursCommands.WhoLast(command);
+            _slursCommands.WhoLast(_command);
 
             _userRepository.Verify(repo => repo.RemoveCredits(User, 2));
         }
@@ -55,7 +55,7 @@ namespace Test
         [TestMethod]
         public void WhenCheckingLastSlurAuthor_LastSlurAuthorIsReturned()
         {
-            var result = _slursCommands.WhoLast(command);
+            var result = _slursCommands.WhoLast(_command);
 
             Assert.AreEqual("<@asdf> created that slur.", result.Message);
         }
@@ -65,7 +65,7 @@ namespace Test
         {
             _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User() { Id = "testuser", Credits = 0 });
 
-            var result = _slursCommands.WhoLast(command);
+            var result = _slursCommands.WhoLast(_command);
 
             Assert.AreEqual("You need 2 " + DougMessages.CreditEmoji + " to do this and you have 0 " + DougMessages.CreditEmoji, result.Message);
         }

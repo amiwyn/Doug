@@ -2,9 +2,7 @@
 using Doug.Slack;
 using Hangfire;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Doug.Services
 {
@@ -66,7 +64,7 @@ namespace Doug.Services
             _channelRepository.SetRemindJob(newRemindJob);
         }
 
-        public void CoffeeRemind(string ChannelId)
+        public void CoffeeRemind(string channelId)
         {
             var readyParticipants = _coffeeRepository.GetReadyParticipants();
             var missingParticipants = _coffeeRepository.GetMissingParticipants();
@@ -77,7 +75,7 @@ namespace Doug.Services
                 .Select(userId => Utils.UserMention(userId))
                 .Aggregate(string.Empty, (userId, acc) => acc + " " + userId);
 
-            _slack.SendMessage(string.Format(DougMessages.Remind, readyParticipants.Count, total, userMentionList), ChannelId);
+            _slack.SendMessage(string.Format(DougMessages.Remind, readyParticipants.Count, total, userMentionList), channelId);
         }
 
         public void LaunchCoffeeBreak(string channelId)

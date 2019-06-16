@@ -1,11 +1,7 @@
 ﻿using Doug.Models;
 using Doug.Repositories;
 using Doug.Slack;
-using Hangfire;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Doug.Commands
 {
@@ -14,6 +10,7 @@ namespace Doug.Commands
         DougResponse Balance(Command command);
         DougResponse Stats(Command command);
         DougResponse Give(Command command);
+        DougResponse Forbes(Command command);
     }
 
     public class CreditsCommands : ICreditsCommands
@@ -61,6 +58,13 @@ namespace Doug.Commands
             _slack.SendMessage(message, command.ChannelId);
 
             return NoResponse;
+        }
+
+        public DougResponse Forbes(Command command)
+        {
+            var users = _userRepository.GetUsers();
+
+            return new DougResponse(users.Aggregate(string.Empty, (acc, user) => string.Format("{0}{3}{2} = {1}\n", acc, Utils.UserMention(user.Id), user.Credits, DougMessages.CreditEmoji)));
         }
 
         public DougResponse Stats(Command command)

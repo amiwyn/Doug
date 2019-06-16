@@ -3,6 +3,7 @@ using Doug.Repositories;
 using Doug.Slack;
 using Hangfire;
 using System;
+using Doug.Items;
 
 namespace Doug.Commands
 {
@@ -21,15 +22,18 @@ namespace Doug.Commands
         private readonly IChannelRepository _channelRepository;
         private readonly ISlackWebApi _slack;
         private readonly IBackgroundJobClient _backgroundJobClient;
+        private readonly IItemEventDispatcher _itemEventDispatcher;
+
 
         private static readonly DougResponse NoResponse = new DougResponse();
 
-        public CasinoCommands(IUserRepository userRepository, ISlackWebApi messageSender, IChannelRepository channelRepository, IBackgroundJobClient backgroundJobClient)
+        public CasinoCommands(IUserRepository userRepository, ISlackWebApi messageSender, IChannelRepository channelRepository, IBackgroundJobClient backgroundJobClient, IItemEventDispatcher itemEventDispatcher)
         {
             _userRepository = userRepository;
             _slack = messageSender;
             _channelRepository = channelRepository;
             _backgroundJobClient = backgroundJobClient;
+            _itemEventDispatcher = itemEventDispatcher;
         }
 
         public DougResponse Gamble(Command command)
@@ -53,7 +57,7 @@ namespace Doug.Commands
             }
 
             string baseMessage;
-            if (CoinflipWin())
+            if (UserCoinFlipWin(user))
             {
                 baseMessage = DougMessages.WonGamble;
                 _userRepository.AddCredits(command.UserId, amount);
@@ -70,10 +74,12 @@ namespace Doug.Commands
             return NoResponse;
         }
 
-        private bool CoinflipWin()
+        private bool UserCoinFlipWin(User user)
         {
             var random = new Random();
-            return random.Next(2) != 0;
+            var flipResult = random.NextDouble();
+            var userChance = _itemEventDispatcher.OnGambling(user);
+            return flipResult < userChance;
         }
 
         public DougResponse GambleChallenge(Command command)
@@ -161,13 +167,13 @@ namespace Doug.Commands
                 return;
             }
 
-            var winner = requester;
-            var loser = target;
+            var winner = target;
+            var loser = requester;
 
-            if (CoinflipWin())
+            if (VersusCoinFlipWin(requester, target))
             {
-                winner = target;
-                loser = requester;
+                winner = requester;
+                loser = target;
             }
 
             _userRepository.RemoveCredits(loser.Id, challenge.Amount);
@@ -177,6 +183,16 @@ namespace Doug.Commands
 
             var message = string.Format(DougMessages.GambleChallenge, Utils.UserMention(winner.Id), challenge.Amount, Utils.UserMention(loser.Id));
             _slack.SendMessage(message, command.ChannelId);
+        }
+
+        private bool VersusCoinFlipWin(User caller, User target)
+        {
+            var random = new Random();
+            var flipResult = random.NextDouble();
+            var callerChance = _itemEventDispatcher.OnGambling(caller);
+            var targetChance = _itemEventDispatcher.OnGambling(target);
+            var winChance = 0.5 + callerChance - targetChance;
+            return flipResult < winChance;
         }
     }
 }

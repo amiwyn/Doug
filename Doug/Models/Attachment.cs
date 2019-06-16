@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Doug.Models
 {
@@ -45,9 +42,14 @@ namespace Doug.Models
             attachment.Fields.Add(new Field(string.Format(DougMessages.UserIdStats, user.Id)));
             attachment.Fields.Add(new Field(string.Format(DougMessages.CreditStats, user.Credits)));
             attachment.Fields.Add(new Field(string.Format(DougMessages.SlursAddedStats, slurCount)));
+            attachment.Fields.Add(new Field(string.Format(DougMessages.HealthStats, user.Health, user.CalculateTotalHealth())));
+            attachment.Fields.Add(new Field(string.Format(DougMessages.EnergyStats, user.Energy, user.CalculateTotalEnergy())));
+            attachment.Fields.Add(new Field(string.Format(DougMessages.CharismaStats, user.Charisma)));
+            attachment.Fields.Add(new Field(string.Format(DougMessages.AgilityStats, user.Agility)));
+            attachment.Fields.Add(new Field(string.Format(DougMessages.LuckStats, user.Luck)));
 
             attachment.Fields.Add(new Field(DougMessages.ItemStats));
-            user.UserItems.ForEach(userItem => attachment.Fields.Add(new Field(userItem.InventoryId + " - " + userItem.Item.Name)));
+            user.InventoryItems.ForEach(inventoryItem => attachment.Fields.Add(new Field(string.Format("{0} - {2} {1}", inventoryItem.InventoryPosition, inventoryItem.Item.Name, inventoryItem.Item.Icon))));
 
             return attachment;
         }

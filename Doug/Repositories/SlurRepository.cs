@@ -1,8 +1,6 @@
 ﻿using Doug.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Doug.Repositories
 {
@@ -63,7 +61,7 @@ namespace Doug.Repositories
 
         public ICollection<Slur> GetSlurs()
         {
-            return _db.Slurs.Where(slur => slur.Active == true).ToList();
+            return _db.Slurs.Where(slur => slur.Active).ToList();
         }
 
         public ICollection<Slur> GetSlursFrom(string userId)

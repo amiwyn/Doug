@@ -1,15 +1,14 @@
 using Doug;
 using Doug.Commands;
+using Doug.Items;
 using Doug.Models;
 using Doug.Repositories;
 using Doug.Slack;
 using Hangfire;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using System;
-using System.Linq.Expressions;
 
-namespace Test
+namespace Test.Casino
 {
     [TestClass]
     public class GambleChallengeCommandTest
@@ -18,12 +17,15 @@ namespace Test
         private const string Channel = "coco-channel";
         private const string User = "testuser";
 
-        private readonly Command command = new Command()
+        private readonly Command _command = new Command()
         {
             ChannelId = Channel,
             Text = CommandText,
             UserId = User
         };
+
+        private readonly User _caller = new User() { Id = "testuser", Credits = 68 };
+        private readonly User _target = new User() {Id = "ginette", Credits = 68};
 
         private CasinoCommands _casinoCommands;
 
@@ -31,22 +33,23 @@ namespace Test
         private readonly Mock<ISlackWebApi> _slack = new Mock<ISlackWebApi>();
         private readonly Mock<IChannelRepository> _channelRepository = new Mock<IChannelRepository>();
         private readonly Mock<IBackgroundJobClient> _backgroundClient = new Mock<IBackgroundJobClient>();
+        private readonly Mock<IItemEventDispatcher> _itemEventDispatcher = new Mock<IItemEventDispatcher>();
 
         [TestInitialize]
         public void Setup()
         {
-            _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User() { Id = "testuser", Credits = 68});
-            _userRepository.Setup(repo => repo.GetUser("ginette")).Returns(new User() {Id = "ginette", Credits = 68});
+            _userRepository.Setup(repo => repo.GetUser(User)).Returns(_caller);
+            _userRepository.Setup(repo => repo.GetUser("ginette")).Returns(_target);
 
-            _channelRepository.Setup(repo => repo.GetGambleChallenge(User)).Returns(new GambleChallenge("ginette", "testuser", 10));
+            _channelRepository.Setup(repo => repo.GetGambleChallenge(User)).Returns(new GambleChallenge("testuser", "ginette", 10));
 
-            _casinoCommands = new CasinoCommands(_userRepository.Object, _slack.Object, _channelRepository.Object, _backgroundClient.Object);
+            _casinoCommands = new CasinoCommands(_userRepository.Object, _slack.Object, _channelRepository.Object, _backgroundClient.Object, _itemEventDispatcher.Object);
         }
 
         [TestMethod]
         public void WhenSendingGambleChallenge_ChallengeIsSaved()
         {
-            _casinoCommands.GambleChallenge(command);
+            _casinoCommands.GambleChallenge(_command);
 
             _channelRepository.Verify(repo => repo.SendGambleChallenge(It.IsAny<GambleChallenge>()));
         }
@@ -69,7 +72,7 @@ namespace Test
         [TestMethod]
         public void WhenSendingGambleChallenge_ChallengeIsBroadcasted()
         {
-            _casinoCommands.GambleChallenge(command);
+            _casinoCommands.GambleChallenge(_command);
 
             _slack.Verify(slack => slack.SendMessage(It.IsAny<string>(), Channel));
         }
@@ -106,6 +109,36 @@ namespace Test
             _casinoCommands.GambleChallenge(command);
 
             _slack.Verify(slack => slack.SendMessage("<@testuser> need to have at least 10 " + DougMessages.CreditEmoji, Channel));
+        }
+
+        [TestMethod]
+        public void WhenGambling_GetCallerChanceFromItems()
+        {
+            var command = new Command()
+            {
+                ChannelId = Channel,
+                Text = "accept",
+                UserId = User
+            };
+
+            _casinoCommands.GambleChallenge(command);
+
+            _itemEventDispatcher.Verify(dispatcher => dispatcher.OnGambling(_caller));
+        }
+
+        [TestMethod]
+        public void WhenGambling_GetTargetChanceFromItems()
+        {
+            var command = new Command()
+            {
+                ChannelId = Channel,
+                Text = "accept",
+                UserId = User
+            };
+
+            _casinoCommands.GambleChallenge(command);
+
+            _itemEventDispatcher.Verify(dispatcher => dispatcher.OnGambling(_target));
         }
     }
 }
