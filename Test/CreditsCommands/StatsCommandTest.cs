@@ -21,8 +21,6 @@ namespace Test
         private readonly Mock<IUserRepository> _userRepository = new Mock<IUserRepository>();
         private readonly Mock<ISlurRepository> _slurRepository = new Mock<ISlurRepository>();
         private readonly Mock<ISlackWebApi> _slack = new Mock<ISlackWebApi>();
-        private readonly Mock<IChannelRepository> _channelRepository = new Mock<IChannelRepository>();
-        private readonly Mock<IBackgroundJobClient> _backgroundClient = new Mock<IBackgroundJobClient>();
 
         [TestInitialize]
         public void Setup()
