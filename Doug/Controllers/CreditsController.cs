@@ -57,5 +57,19 @@ namespace Doug.Controllers
                 return Ok(string.Format(DougMessages.DougError, ex.Message));
             }
         }
+
+        [HttpPost("forbes")]
+        public ActionResult Forbes([FromForm]SlackCommandDto slackCommand)
+        {
+            try
+            {
+                var result = _creditsCommands.Forbes(slackCommand.ToCommand());
+                return Ok(result.Message);
+            }
+            catch (Exception ex)
+            {
+                return Ok(string.Format(DougMessages.DougError, ex.Message));
+            }
+        }
     }
 }

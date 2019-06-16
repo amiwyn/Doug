@@ -10,6 +10,7 @@ namespace Doug.Commands
         DougResponse Balance(Command command);
         DougResponse Stats(Command command);
         DougResponse Give(Command command);
+        DougResponse Forbes(Command command);
     }
 
     public class CreditsCommands : ICreditsCommands
@@ -57,6 +58,13 @@ namespace Doug.Commands
             _slack.SendMessage(message, command.ChannelId);
 
             return NoResponse;
+        }
+
+        public DougResponse Forbes(Command command)
+        {
+            var users = _userRepository.GetUsers();
+
+            return new DougResponse(users.Aggregate(string.Empty, (acc, user) => string.Format("{0}{1} = {2}\n", acc, Utils.UserMention(user.Id), user.Credits)));
         }
 
         public DougResponse Stats(Command command)
