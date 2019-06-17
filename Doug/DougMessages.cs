@@ -27,7 +27,7 @@
         public const string EnergyStats = ":large_blue_circle: Energy : {0}/{1}";
         public const string CharismaStats = ":information_desk_person: Charisma : {0}";
         public const string AgilityStats = ":runner: Agility : {0}";
-        public const string LuckStats = ":crossed_fingers: Luck : {0}";
+        public const string LuckStats = ":four_leaf_clover: Luck : {0}";
         public const string ItemStats = ":briefcase: Items :";
         public const string WonGamble = "{0} flipped a coin and won {1} " + CreditEmoji;
         public const string LostGamble = "{0} flipped a coin and lost {1} " + CreditEmoji;
