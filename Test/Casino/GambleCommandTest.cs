@@ -44,6 +44,20 @@ namespace Test.Casino
         }
 
         [TestMethod]
+        public void WhenGambling_WinRateIsAroundHalf()
+        {
+            var winCount = 0;
+            _userRepository.Setup(repo => repo.AddCredits(User, 10)).Callback(() => winCount++);
+            _itemEventDispatcher.Setup(disp => disp.OnGambling(It.IsAny<User>())).Returns(0.5);
+            for (int i = 0; i < 5000; i++)
+            {
+                _casinoCommands.Gamble(_command);
+            }
+
+            Assert.IsTrue(winCount > 2450 && winCount < 2650);
+        }
+
+        [TestMethod]
         public void GivenUserHasEnoughCredits_WhenGambling_UserCanGamble()
         {
             _casinoCommands.Gamble(_command);
@@ -62,7 +76,7 @@ namespace Test.Casino
         }
 
         [TestMethod]
-        public void GivenNesgativeAmount_WhenGambling_UserReceiveInvalidAmountMessage()
+        public void GivenNegativeAmount_WhenGambling_UserReceiveInvalidAmountMessage()
         {
             var command = new Command()
             {
@@ -102,6 +116,20 @@ namespace Test.Casino
             _casinoCommands.Gamble(_command);
 
             _itemEventDispatcher.Verify(dispatcher => dispatcher.OnGambling(_user));
+        }
+
+        [TestMethod]
+        public void GivenChanceIs55_WhenGambling_WinRateIsAround55()
+        {
+            var winCount = 0;
+            _userRepository.Setup(repo => repo.AddCredits(User, 10)).Callback(() => winCount++);
+            _itemEventDispatcher.Setup(disp => disp.OnGambling(It.IsAny<User>())).Returns(0.55);
+            for (int i = 0; i < 5000; i++)
+            {
+                _casinoCommands.Gamble(_command);
+            }
+
+            Assert.IsTrue(winCount > 2700 && winCount < 2800);
         }
     }
 }
