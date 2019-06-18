@@ -7,7 +7,7 @@
             Name = "Burglar Boots";
             Description = "The boots of a notorious burglar. Indubitably the best tool for a burglary. Increases the chances of success when stealing rupees.";
             Rarity = Rarity.Unique;
-            Icon = ":burglar_boots:";
+            Icon = ":boot:";
         }
 
         public override double OnStealingChance(double chance)

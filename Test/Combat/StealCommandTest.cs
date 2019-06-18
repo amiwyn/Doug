@@ -51,7 +51,7 @@ namespace Test.Combat
                 _combatCommands.Steal(_command);
             }
 
-            Assert.IsTrue(winCount > 1200 && winCount < 1300);
+            Assert.IsTrue(winCount > 1150 && winCount < 1350);
         }
 
         [TestMethod]

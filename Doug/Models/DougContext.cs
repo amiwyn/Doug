@@ -28,6 +28,8 @@ namespace Doug.Models
 
             modelBuilder.Entity<AwakeningOrb>();
             modelBuilder.Entity<LuckyDice>();
+            modelBuilder.Entity<BurglarBoots>();
+            modelBuilder.Entity<GreedyGloves>();
 
             base.OnModelCreating(modelBuilder);
         }
