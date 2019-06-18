@@ -52,5 +52,6 @@
         public const string NotChallenged = "You are not challenged.";
         public const string SlurAlreadyExists = "That slur already exists.";
         public const string NotEnoughEnergy = "You don't have enough energy.";
+        public const string TargetNoMoney = "Your target don't have enough " + CreditEmoji;
     }
 }
