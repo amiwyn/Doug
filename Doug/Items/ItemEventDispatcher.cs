@@ -10,7 +10,9 @@ namespace Doug.Items
     {
         string OnGettingFlamed(Command command, string slur);
         string OnFlaming(Command command, string slur);
-        double OnGambling(User user);
+        double OnGambling(User user, double baseChance);
+        double OnStealingChance(User user, double baseChance);
+        int OnStealingAmount(User user, int baseAmount);
     }
 
     public class ItemEventDispatcher : IItemEventDispatcher
@@ -29,9 +31,19 @@ namespace Doug.Items
             throw new NotImplementedException();
         }
 
-        public double OnGambling(User user)
+        public double OnGambling(User user, double baseChance)
         {
-            return user.InventoryItems.Aggregate(user.CalculateBaseGambleChance(), (chance, userItem) => userItem.Item.OnGambling(chance));
+            return user.InventoryItems.Aggregate(baseChance, (chance, userItem) => userItem.Item.OnGambling(chance));
+        }
+
+        public double OnStealingChance(User user, double baseChance)
+        {
+            return user.InventoryItems.Aggregate(baseChance, (chance, userItem) => userItem.Item.OnStealingChance(chance));
+        }
+
+        public int OnStealingAmount(User user, int baseAmount)
+        {
+            return user.InventoryItems.Aggregate(baseAmount, (amount, userItem) => userItem.Item.OnStealingAmount(amount));
         }
 
         public string OnGettingFlamed(Command command, string slur)

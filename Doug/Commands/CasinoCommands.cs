@@ -78,7 +78,7 @@ namespace Doug.Commands
         {
             var random = new Random();
             var flipResult = random.NextDouble();
-            var userChance = _itemEventDispatcher.OnGambling(user);
+            var userChance = _itemEventDispatcher.OnGambling(user, user.CalculateBaseGambleChance());
             return flipResult < userChance;
         }
 
@@ -88,37 +88,35 @@ namespace Doug.Commands
             {
                 return SendChallenge(command);
             }
-            else
+
+            if (!IsUserChallenged(command.UserId))
             {
-                if (!IsUserChallenged(command.UserId))
-                {
-                    return new DougResponse(DougMessages.NotChallenged);
-                }
-
-                if (command.GetArgumentAt(0).ToLower() == AcceptChallengeWord)
-                {
-                    GambleVersus(command);
-                }
-
-                if (command.GetArgumentAt(0).ToLower() == DeclineChallengeWord)
-                {
-                    var challenge = _channelRepository.GetGambleChallenge(command.UserId);
-                    _slack.SendMessage(string.Format(DougMessages.GambleDeclined, Utils.UserMention(command.UserId), Utils.UserMention(challenge.RequesterId)), command.ChannelId);
-                    _channelRepository.RemoveGambleChallenge(challenge.TargetId);
-                }
-
-                return NoResponse;
+                return new DougResponse(DougMessages.NotChallenged);
             }
+
+            if (command.GetArgumentAt(0).ToLower() == AcceptChallengeWord)
+            {
+                GambleVersus(command);
+            }
+
+            if (command.GetArgumentAt(0).ToLower() == DeclineChallengeWord)
+            {
+                var challenge = _channelRepository.GetGambleChallenge(command.UserId);
+                _slack.SendMessage(string.Format(DougMessages.GambleDeclined, Utils.UserMention(command.UserId), Utils.UserMention(challenge.RequesterId)), command.ChannelId);
+                _channelRepository.RemoveGambleChallenge(challenge.TargetId);
+            }
+
+            return NoResponse;
         }
 
         private DougResponse SendChallenge(Command command)
         {
-            int amount = int.Parse(command.GetArgumentAt(1));
+            var amount = int.Parse(command.GetArgumentAt(1));
             var targetId = command.GetTargetUserId();
 
             if (amount <= 0 || command.UserId == targetId)
             {
-                return new DougResponse("You idiot.");
+                return new DougResponse(DougMessages.YouIdiot);
             }
 
             var challenge = _channelRepository.GetGambleChallenge(targetId);
@@ -189,8 +187,8 @@ namespace Doug.Commands
         {
             var random = new Random();
             var flipResult = random.NextDouble();
-            var callerChance = _itemEventDispatcher.OnGambling(caller);
-            var targetChance = _itemEventDispatcher.OnGambling(target);
+            var callerChance = _itemEventDispatcher.OnGambling(caller, caller.CalculateBaseGambleChance());
+            var targetChance = _itemEventDispatcher.OnGambling(target, target.CalculateBaseGambleChance());
             var winChance = 0.5 + callerChance - targetChance;
             return flipResult < winChance;
         }

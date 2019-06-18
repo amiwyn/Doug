@@ -123,7 +123,7 @@ namespace Test.Casino
 
             _casinoCommands.GambleChallenge(command);
 
-            _itemEventDispatcher.Verify(dispatcher => dispatcher.OnGambling(_caller));
+            _itemEventDispatcher.Verify(dispatcher => dispatcher.OnGambling(_caller, It.IsAny<double>()));
         }
 
         [TestMethod]
@@ -138,7 +138,7 @@ namespace Test.Casino
 
             _casinoCommands.GambleChallenge(command);
 
-            _itemEventDispatcher.Verify(dispatcher => dispatcher.OnGambling(_target));
+            _itemEventDispatcher.Verify(dispatcher => dispatcher.OnGambling(_target, It.IsAny<double>()));
         }
     }
 }

@@ -1,5 +1,5 @@
-﻿using System;
-using Doug.Items.Equipment;
+﻿using Doug.Items.Equipment;
+using Doug.Items.Misc;
 
 namespace Doug.Items
 {
@@ -13,8 +13,12 @@ namespace Doug.Items
                     return new AwakeningOrb();
                 case "lucky_dice":
                     return new LuckyDice();
+                case "burglar_boots":
+                    return new BurglarBoots();
+                case "greedy_gloves":
+                    return new GreedyGloves();
                 default:
-                    throw new ArgumentException("Invalid item id");
+                    return new Default();
             }
         }
     }
