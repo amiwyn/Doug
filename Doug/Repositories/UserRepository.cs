@@ -12,7 +12,8 @@ namespace Doug.Repositories
         User GetUser(string userId);
         void RemoveCredits(string userId, int amount);
         void AddCredits(string userId, int amount);
-        void AddItem(string userid, string itemId);
+        void AddItem(string userId, string itemId);
+        void DepleteEnergy(string userId, int energy); //TODO: move it to something like StatsRepository or CombatRepository
     }
 
     public class UserRepository : IUserRepository
@@ -35,8 +36,16 @@ namespace Doug.Repositories
 
         public void AddItem(string userId, string itemId)
         {
+            // TODO: set inventoryid to the lowest awailable
             var user = _db.Users.Single(usr => usr.Id == userId);
             user.InventoryItems.Add(new InventoryItem(userId, itemId));
+            _db.SaveChanges();
+        }
+
+        public void DepleteEnergy(string userId, int energy)
+        {
+            var user = _db.Users.Single(usr => usr.Id == userId);
+            user.Energy -= energy;
             _db.SaveChanges();
         }
 

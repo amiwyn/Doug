@@ -48,7 +48,7 @@ namespace Test.Casino
         {
             var winCount = 0;
             _userRepository.Setup(repo => repo.AddCredits(User, 10)).Callback(() => winCount++);
-            _itemEventDispatcher.Setup(disp => disp.OnGambling(It.IsAny<User>())).Returns(0.5);
+            _itemEventDispatcher.Setup(disp => disp.OnGambling(It.IsAny<User>(), It.IsAny<double>())).Returns(0.5);
             for (int i = 0; i < 5000; i++)
             {
                 _casinoCommands.Gamble(_command);
@@ -115,7 +115,7 @@ namespace Test.Casino
         {
             _casinoCommands.Gamble(_command);
 
-            _itemEventDispatcher.Verify(dispatcher => dispatcher.OnGambling(_user));
+            _itemEventDispatcher.Verify(dispatcher => dispatcher.OnGambling(_user, It.IsAny<double>()));
         }
 
         [TestMethod]
@@ -123,13 +123,13 @@ namespace Test.Casino
         {
             var winCount = 0;
             _userRepository.Setup(repo => repo.AddCredits(User, 10)).Callback(() => winCount++);
-            _itemEventDispatcher.Setup(disp => disp.OnGambling(It.IsAny<User>())).Returns(0.55);
+            _itemEventDispatcher.Setup(disp => disp.OnGambling(It.IsAny<User>(), It.IsAny<double>())).Returns(0.55);
             for (int i = 0; i < 5000; i++)
             {
                 _casinoCommands.Gamble(_command);
             }
 
-            Assert.IsTrue(winCount > 2700 && winCount < 2800);
+            Assert.IsTrue(winCount > 2650 && winCount < 2850);
         }
     }
 }

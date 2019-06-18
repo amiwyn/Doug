@@ -37,6 +37,9 @@
         public const string InsufficientCredits = "{0} need to have at least {1} " + CreditEmoji;
         public const string GambleChallengeTip = "You were challenged to a coin flip, type in `/gamblechallenge accept` to accept or `/gamblechallenge decline` to decline";
         public const string UserFlamedYou = "{0} flamed you.";
+        public const string YouIdiot = "You idiot.";
+        public const string StealCredits = "{0} stole {1} " + CreditEmoji + " from {2}!";
+        public const string StealFail = "{0} attempted to steal from {1} but failed!";
 
         public const string DougError = "Beep boop, it's not working : {0}";
         public const string NotAnAdmin = "You are not an admin.";
@@ -48,5 +51,6 @@
         public const string AlreadyChallenged = "This user is already challenged.";
         public const string NotChallenged = "You are not challenged.";
         public const string SlurAlreadyExists = "That slur already exists.";
+        public const string NotEnoughEnergy = "You don't have enough energy.";
     }
 }
