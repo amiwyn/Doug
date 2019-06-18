@@ -11,6 +11,11 @@ namespace Doug.Items
         public Rarity Rarity { get; set; }
         public string Icon { get; set; }
 
+        public virtual string Use(Command command)
+        {
+            return string.Format(DougMessages.ItemCantBeUsed, command.GetArgumentAt(0));
+        }
+
         public virtual string OnGettingFlamed(Command command, string slur, ISlackWebApi slack)
         {
             return slur;

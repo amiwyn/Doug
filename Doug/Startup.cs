@@ -58,6 +58,7 @@ namespace Doug
             services.AddTransient<ICreditsCommands, CreditsCommands>();
             services.AddTransient<ICasinoCommands, CasinoCommands>();
             services.AddTransient<ICombatCommands, CombatCommands>();
+            services.AddTransient<IInventoryCommands, InventoryCommands>();
             services.AddTransient<ICoffeeService, CoffeeService>();
 
             services.AddTransient<IChannelRepository, ChannelRepository>();
