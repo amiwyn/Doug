@@ -13,12 +13,10 @@ namespace Doug.Items
         double OnGambling(User user, double baseChance);
         double OnStealingChance(User user, double baseChance);
         int OnStealingAmount(User user, int baseAmount);
-        void OnConsuming(User user, int energy);
     }
 
     public class ItemEventDispatcher : IItemEventDispatcher
     {
-        private const int MaximumEnergy = 25;
         private readonly ISlackWebApi _slackWebApi;
         private readonly IUserRepository _userRepository;
 

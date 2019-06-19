@@ -41,10 +41,5 @@ namespace Doug.Items
         {
             return amount;
         }
-
-        public virtual int OnConsuming(int energy)
-        {
-            return energy;
-        }
     }
 }
