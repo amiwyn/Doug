@@ -1,4 +1,5 @@
 ﻿using Doug.Models;
+using Doug.Repositories;
 using Doug.Slack;
 
 namespace Doug.Items
@@ -10,6 +11,11 @@ namespace Doug.Items
         public string Description { get; set; }
         public Rarity Rarity { get; set; }
         public string Icon { get; set; }
+
+        public virtual string Use(int itemPos, User user, IUserRepository userRepository)
+        {
+            return string.Format(DougMessages.ItemCantBeUsed, itemPos);
+        }
 
         public virtual string OnGettingFlamed(Command command, string slur, ISlackWebApi slack)
         {

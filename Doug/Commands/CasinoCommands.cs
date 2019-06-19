@@ -4,7 +4,6 @@ using Doug.Slack;
 using Hangfire;
 using System;
 using Doug.Items;
-using System.Linq;
 
 namespace Doug.Commands
 {
@@ -16,8 +15,7 @@ namespace Doug.Commands
 
     public class CasinoCommands : ICasinoCommands
     {
-        private const int MinimumGambleAmount = 10;
-        private const int GambleCreditLimit = 300;
+        private const int GambleEnergyCost = 1;
         private const string AcceptChallengeWord = "accept";
         private const string DeclineChallengeWord = "decline";
         private readonly IUserRepository _userRepository;
@@ -48,15 +46,19 @@ namespace Doug.Commands
                 return new DougResponse(DougMessages.InvalidAmount);
             }
 
-            if (user.Credits > GambleCreditLimit)
-            {
-                return new DougResponse(DougMessages.YouAreTooRich);
-            }
-
             if (!user.HasEnoughCreditsForAmount(amount))
             {
                 return user.NotEnoughCreditsForAmountResponse(amount);
             }
+
+            var energy = user.Energy - GambleEnergyCost;
+
+            if (energy < 0)
+            {
+                return new DougResponse(DougMessages.NotEnoughEnergy);
+            }
+
+            _userRepository.UpdateEnergy(command.UserId, energy);
 
             string baseMessage;
             if (UserCoinFlipWin(user))
@@ -71,15 +73,7 @@ namespace Doug.Commands
             }
 
             var message = string.Format(baseMessage, Utils.UserMention(command.UserId), amount);
-
-            if (amount > MinimumGambleAmount)
-            {
-                _slack.SendMessage(message, command.ChannelId);
-            }
-            else
-            {
-                _slack.SendEphemeralMessage(message, command.UserId, command.ChannelId);
-            }
+            _slack.SendMessage(message, command.ChannelId);
 
             return NoResponse;
         }

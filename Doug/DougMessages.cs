@@ -16,7 +16,6 @@
         public const string CoffeeStart = "Alright, let's do this. <!here> GO!";
         public const string BackToWork = "<!here> Go back to work, ya bunch o' lazy dogs!";
         public const string GainedCredit = "You gained {0} " + CreditEmoji;
-        public const string SlurAdded = "The slur was added.";
         public const string SlursCleaned = "The following slurs have been cleaned up";
         public const string SlurCreatedBy = "{0} created that slur.";
         public const string Balance = "You have {0} " + CreditEmoji;
@@ -42,6 +41,7 @@
         public const string YouIdiot = "You idiot.";
         public const string StealCredits = "{0} stole {1} " + CreditEmoji + " from {2}!";
         public const string StealFail = "{0} attempted to steal from {1} but failed!";
+        public const string RecoverItem = "You used '{0}' and recovered {1} {2}.";
 
         public const string DougError = "Beep boop, it's not working : {0}";
         public const string NotAnAdmin = "You are not an admin.";
@@ -49,10 +49,12 @@
         public const string InvalidAmount = "Invalid amount";
         public const string NotEnoughCredits = "You need {0} " + CreditEmoji + " to do this and you have {1} " + CreditEmoji;
         public const string SlursAreClean = "There is nothing to cleanup.";
-        public const string YouAreTooRich = "You are too rich for this.";
         public const string AlreadyChallenged = "This user is already challenged.";
         public const string NotChallenged = "You are not challenged.";
         public const string SlurAlreadyExists = "That slur already exists.";
         public const string NotEnoughEnergy = "You don't have enough energy.";
+        public const string TargetNoMoney = "Your target don't have enough " + CreditEmoji;
+        public const string NoItemInSlot = "There is no item in slot {0}.";
+        public const string ItemCantBeUsed = "The item in slot {0} cannot be used.";
     }
 }
