@@ -20,5 +20,15 @@ namespace Doug.Items
         {
             return chance;
         }
+
+        public virtual double OnStealingChance(double chance)
+        {
+            return chance;
+        }
+
+        public virtual int OnStealingAmount(int amount)
+        {
+            return amount;
+        }
     }
 }

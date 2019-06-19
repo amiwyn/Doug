@@ -23,6 +23,16 @@ namespace Doug.Models
             return 0.5;
         }
 
+        public double CalculateBaseStealChance()
+        {
+            return 0.25;
+        }
+
+        public int CalculateBaseStealAmount()
+        {
+            return 1;
+        }
+
         public double CalculateTotalHealth()
         {
             return 100;
