@@ -38,7 +38,7 @@ namespace Doug.Models
             return 100;
         }
 
-        public double CalculateTotalEnergy()
+        public int CalculateTotalEnergy()
         {
             return 25;
         }

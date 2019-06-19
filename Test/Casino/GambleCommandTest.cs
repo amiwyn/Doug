@@ -24,7 +24,7 @@ namespace Test.Casino
             UserId = User
         };
 
-        private readonly User _user = new User() {Id = "testuser", Credits = 68};
+        private readonly User _user = new User {Id = "testuser", Credits = 68, Energy = 20};
 
         private CasinoCommands _casinoCommands;
 
@@ -91,19 +91,27 @@ namespace Test.Casino
         }
 
         [TestMethod]
-        public void GivenUserIsTooRich_WhenGambling_UserReceiveUserTooRichMessage()
+        public void WhenGambling_UserLoseOneEnergy()
         {
-            _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User() { Id = "testuser", Credits = 368 });
+            _casinoCommands.Gamble(_command);
 
-            var result = _casinoCommands.Gamble(_command);
-
-            Assert.AreEqual("You are too rich for this.", result.Message);
+            _userRepository.Verify(repo => repo.UpdateEnergy(User, 19));
         }
 
         [TestMethod]
-        public void GivenUserIsRichEnough_WhenGambling_UserCanGamble()
+        public void GivenUserHasNotEnoughEnergy_WhenGambling_UserReceiveNotEnoughEnergyMessage()
         {
-            _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User() { Id = "testuser", Credits = 268 });
+            _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User { Id = "testuser", Credits = 68, Energy = 0 });
+
+            var result = _casinoCommands.Gamble(_command);
+
+            Assert.AreEqual(DougMessages.NotEnoughEnergy, result.Message);
+        }
+
+        [TestMethod]
+        public void GivenUserIsRich_WhenGambling_UserCanGamble()
+        {
+            _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User() { Id = "testuser", Credits = 8912, Energy = 33});
 
             _casinoCommands.Gamble(_command);
 

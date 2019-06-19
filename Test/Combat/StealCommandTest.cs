@@ -34,6 +34,7 @@ namespace Test.Combat
         public void Setup()
         {
             _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User { Energy = 10 });
+            _userRepository.Setup(repo => repo.GetUser("robert")).Returns(new User { Id = "robert", Credits = 10 });
             _itemEventDispatcher.Setup(disp => disp.OnStealingAmount(It.IsAny<User>(), It.IsAny<int>())).Returns(1);
 
             _combatCommands = new CombatCommands(_itemEventDispatcher.Object, _userRepository.Object, _slack.Object);
@@ -82,6 +83,16 @@ namespace Test.Combat
             var result = _combatCommands.Steal(_command);
 
             Assert.AreEqual(DougMessages.NotEnoughEnergy, result.Message);
+        }
+
+        [TestMethod]
+        public void GivenTargetHasNotEnoughCredits_WhenStealing_NotEnougCreditsMessage()
+        {
+            _userRepository.Setup(repo => repo.GetUser("robert")).Returns(new User { Credits = 0 });
+
+            var result = _combatCommands.Steal(_command);
+
+            Assert.AreEqual(DougMessages.TargetNoMoney, result.Message);
         }
 
         [TestMethod]
