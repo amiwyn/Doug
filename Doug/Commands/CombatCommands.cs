@@ -32,12 +32,14 @@ namespace Doug.Commands
             var user = _userRepository.GetUser(command.UserId);
             var target = _userRepository.GetUser(command.GetTargetUserId());
 
-            if (user.Energy - StealEnergyCost < 0)
+            var energy = user.Energy - StealEnergyCost;
+
+            if (energy < 0)
             {
                 return new DougResponse(DougMessages.NotEnoughEnergy);
             }
 
-            _userRepository.DepleteEnergy(command.UserId, StealEnergyCost);
+            _userRepository.UpdateEnergy(command.UserId, energy);
 
             var stealRollResult = new Random().NextDouble();
             var userChance = _itemEventDispatcher.OnStealingChance(user, user.CalculateBaseStealChance());

@@ -40,6 +40,7 @@
         public const string YouIdiot = "You idiot.";
         public const string StealCredits = "{0} stole {1} " + CreditEmoji + " from {2}!";
         public const string StealFail = "{0} attempted to steal from {1} but failed!";
+        public const string RecoverItem = "You used '{0}' and recovered {1} {2}.";
 
         public const string DougError = "Beep boop, it's not working : {0}";
         public const string NotAnAdmin = "You are not an admin.";

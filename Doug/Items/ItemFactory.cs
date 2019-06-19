@@ -1,4 +1,5 @@
-﻿using Doug.Items.Equipment;
+﻿using Doug.Items.Consumables;
+using Doug.Items.Equipment;
 using Doug.Items.Misc;
 
 namespace Doug.Items
@@ -9,6 +10,7 @@ namespace Doug.Items
         private const string LuckyDice = "lucky_dice";
         private const string BurglarBoots = "burglar_boots";
         private const string GreedyGloves = "greedy_gloves";
+        private const string NormalEnergyDrink = "normal_energy_drink";
 
         public static Item CreateItem(string itemId)
         {
@@ -22,6 +24,8 @@ namespace Doug.Items
                     return new BurglarBoots();
                 case GreedyGloves:
                     return new GreedyGloves();
+                case NormalEnergyDrink:
+                    return new NormalEnergyDrink();
                 default:
                     return new Default();
             }
