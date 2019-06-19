@@ -52,10 +52,5 @@ namespace Doug.Items
 
             return user.InventoryItems.Aggregate(slur, (acc, userItem) => userItem.Item.OnGettingFlamed(command, acc, _slackWebApi));
         }
-
-        public void OnConsuming(User user, int energy)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
