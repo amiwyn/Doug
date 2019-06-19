@@ -17,7 +17,7 @@ namespace Doug.Services
         private readonly ISlackWebApi _slack;
         private readonly ISlursCommands _slurs;
 
-        private const string GAB_ID = "UFHH6CG3Z";
+        private const string GAB_ID = "UB619L16W";
 
         public EventService(ICoffeeService coffeeBreakService, ISlackWebApi slack, ISlursCommands slurs)
         {
@@ -38,7 +38,7 @@ namespace Doug.Services
 
             if (isMcdonald)
             {
-                Command command = new Command() { ChannelId = message.Channel, UserId = GAB_ID, Text = "<@UFHH6CG3Z|nathan.vezina>" };
+                Command command = new Command() { ChannelId = message.Channel, UserId = GAB_ID, Text = "<@UB619L16W|gabriel.fillit>" };
                 _slurs.Flame(command);
             }
         }
