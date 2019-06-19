@@ -16,8 +16,4 @@
     <PackageReference Include="sqlite-net-pcl" Version="1.5.231" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Items\Consumables\" />
-  </ItemGroup>
-
 </Project>
