@@ -13,10 +13,12 @@ namespace Doug.Items
         double OnGambling(User user, double baseChance);
         double OnStealingChance(User user, double baseChance);
         int OnStealingAmount(User user, int baseAmount);
+        void OnConsuming(User user, int energy);
     }
 
     public class ItemEventDispatcher : IItemEventDispatcher
     {
+        private const int MaximumEnergy = 25;
         private readonly ISlackWebApi _slackWebApi;
         private readonly IUserRepository _userRepository;
 
@@ -51,6 +53,11 @@ namespace Doug.Items
             var user = _userRepository.GetUser(command.GetTargetUserId());
 
             return user.InventoryItems.Aggregate(slur, (acc, userItem) => userItem.Item.OnGettingFlamed(command, acc, _slackWebApi));
+        }
+
+        public void OnConsuming(User user, int energy)
+        {
+            throw new NotImplementedException();
         }
     }
 }

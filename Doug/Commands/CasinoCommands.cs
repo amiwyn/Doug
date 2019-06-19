@@ -4,6 +4,7 @@ using Doug.Slack;
 using Hangfire;
 using System;
 using Doug.Items;
+using System.Linq;
 
 namespace Doug.Commands
 {
@@ -15,6 +16,7 @@ namespace Doug.Commands
 
     public class CasinoCommands : ICasinoCommands
     {
+        private const int MinimumGambleAmount = 10;
         private const int GambleCreditLimit = 300;
         private const string AcceptChallengeWord = "accept";
         private const string DeclineChallengeWord = "decline";
@@ -69,7 +71,15 @@ namespace Doug.Commands
             }
 
             var message = string.Format(baseMessage, Utils.UserMention(command.UserId), amount);
-            _slack.SendMessage(message, command.ChannelId);
+
+            if (amount > MinimumGambleAmount)
+            {
+                _slack.SendMessage(message, command.ChannelId);
+            }
+            else
+            {
+                _slack.SendEphemeralMessage(message, command.UserId, command.ChannelId);
+            }
 
             return NoResponse;
         }

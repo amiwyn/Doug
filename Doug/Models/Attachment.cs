@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Doug.Models.Dto;
+using System.Collections.Generic;
 
 namespace Doug.Models
 {
@@ -50,6 +51,25 @@ namespace Doug.Models
 
             attachment.Fields.Add(new Field(DougMessages.ItemStats));
             user.InventoryItems.ForEach(inventoryItem => attachment.Fields.Add(new Field(string.Format("{0} - {2} {1}", inventoryItem.InventoryPosition, inventoryItem.Item.Name, inventoryItem.Item.Icon))));
+
+            return attachment;
+        }
+
+        public static Attachment LeaderboardAttachment(List<UsersStatsDto> users)
+        {
+            var title = string.Format(DougMessages.Top5);
+
+            var attachment = new Attachment()
+            {
+                Fallback = title,
+                Color = "#69FF69",
+                Pretext = title
+            };
+
+            foreach (var user in users)
+            {
+                attachment.Fields.Add(new Field(string.Format("{0} : {1}", user.Username, user.Credits)));
+            }
 
             return attachment;
         }

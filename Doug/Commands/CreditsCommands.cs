@@ -1,6 +1,8 @@
 ﻿using Doug.Models;
+using Doug.Models.Dto;
 using Doug.Repositories;
 using Doug.Slack;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Doug.Commands
@@ -11,6 +13,7 @@ namespace Doug.Commands
         DougResponse Stats(Command command);
         DougResponse Give(Command command);
         DougResponse Forbes(Command command);
+        DougResponse Leaderboard(Command command);
     }
 
     public class CreditsCommands : ICreditsCommands
@@ -80,6 +83,35 @@ namespace Doug.Commands
             var user = _userRepository.GetUser(userId);
 
             var attachment = Attachment.StatsAttachment(slurCount, user);
+
+            _slack.SendAttachment(attachment, command.ChannelId);
+
+            return NoResponse;
+        }
+
+        public DougResponse Leaderboard(Command command)
+        {
+            var userId = command.UserId;
+
+            if (command.IsUserArgument())
+            {
+                userId = command.GetTargetUserId();
+            }
+
+            var users = _userRepository.GetUsers().ToList();
+
+            users.Sort((u1, u2) => u1.Credits.CompareTo(u2.Credits));
+            users.Reverse();
+            users = users.GetRange(0, 5);
+
+            List<UsersStatsDto> usersDto = new List<UsersStatsDto>();
+
+            foreach (var user in users)
+            {
+               usersDto.Add(new UsersStatsDto() { Id = user.Id, Credits = user.Credits, Username = _slack.GetUserInfo(user.Id).Result.Name });
+            }
+
+            var attachment = Attachment.LeaderboardAttachment(usersDto);
 
             _slack.SendAttachment(attachment, command.ChannelId);
 

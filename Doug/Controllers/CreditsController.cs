@@ -71,5 +71,19 @@ namespace Doug.Controllers
                 return Ok(string.Format(DougMessages.DougError, ex.Message));
             }
         }
+
+        [HttpPost("leaderboard")]
+        public ActionResult Leaderboard([FromForm]SlackCommandDto slackCommand)
+        {
+            try
+            {
+                var result = _creditsCommands.Leaderboard(slackCommand.ToCommand());
+                return Ok(result.Message);
+            }
+            catch (Exception ex)
+            {
+                return Ok(string.Format(DougMessages.DougError, ex.Message));
+            }
+        }
     }
 }
