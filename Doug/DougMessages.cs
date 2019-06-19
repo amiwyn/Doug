@@ -14,7 +14,6 @@
         public const string CoffeeStart = "Alright, let's do this. <!here> GO!";
         public const string BackToWork = "<!here> Go back to work, ya bunch o' lazy dogs!";
         public const string GainedCredit = "You gained {0} " + CreditEmoji;
-        public const string SlurAdded = "The slur was added.";
         public const string SlursCleaned = "The following slurs have been cleaned up";
         public const string SlurCreatedBy = "{0} created that slur.";
         public const string Balance = "You have {0} " + CreditEmoji;
@@ -48,7 +47,6 @@
         public const string InvalidAmount = "Invalid amount";
         public const string NotEnoughCredits = "You need {0} " + CreditEmoji + " to do this and you have {1} " + CreditEmoji;
         public const string SlursAreClean = "There is nothing to cleanup.";
-        public const string YouAreTooRich = "You are too rich for this.";
         public const string AlreadyChallenged = "This user is already challenged.";
         public const string NotChallenged = "You are not challenged.";
         public const string SlurAlreadyExists = "That slur already exists.";
