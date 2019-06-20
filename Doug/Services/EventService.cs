@@ -32,13 +32,10 @@ namespace Doug.Services
             {
                 _coffeeBreakService.CountParrot(message.User, message.Channel, DateTime.UtcNow);
             }
-
-            List<string> Words = new List<string>() { "mcd0", "mcdo", "mc d0", "mc do", "mcdonald", "mc donald", "mcd0nalds", "mcd0nald$", "mcd0n4lds", "mcd0n4ld$", "mc d0n4ld$", "mc d0nald$" };
-            bool isMcdonald = message.User == GAB_ID && Words.Contains(message.Text.ToLower());
-
-            if (isMcdonald)
+           
+            if (message.ContainsMcdonaldMention())
             {
-                Command command = new Command() { ChannelId = message.Channel, UserId = GAB_ID, Text = "<@UB619L16W|gabriel.fillit>" };
+                Command command = new Command() { ChannelId = message.Channel, UserId = GAB_ID, Text = $"<@{GAB_ID}|gabriel.fillit>" };
                 _slurs.Flame(command);
             }
         }

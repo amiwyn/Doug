@@ -1,9 +1,9 @@
 ﻿using Doug.Models;
-using Doug.Models.Dto;
 using Doug.Repositories;
 using Doug.Slack;
 using System.Collections.Generic;
 using System.Linq;
+using AutoMapper.Mappers;
 
 namespace Doug.Commands
 {
@@ -98,22 +98,18 @@ namespace Doug.Commands
                 userId = command.GetTargetUserId();
             }
 
-            var users = _userRepository.GetUsers().ToList();
+            var list = _userRepository.GetUsers().ToList();
 
-            users.Sort((u1, u2) => u1.Credits.CompareTo(u2.Credits));
-            users.Reverse();
-            users = users.GetRange(0, 5);
+            list.Sort((u1, u2) => u1.Credits.CompareTo(u2.Credits));
+            list.Reverse();
+            list = list.GetRange(0, 5);
 
-            List<UsersStatsDto> usersDto = new List<UsersStatsDto>();
+            var userList = list.Select(u => $"{Utils.UserMention(u.Id)} : {u.Credits}");
 
-            foreach (var user in users)
-            {
-               usersDto.Add(new UsersStatsDto() { Id = user.Id, Credits = user.Credits, Username = _slack.GetUserInfo(user.Id).Result.Name });
-            }
+            var users = userList.Aggregate((first, next) => first + "\n" + next);
+            var message = $"{DougMessages.Top5}\n{users}";
 
-            var attachment = Attachment.LeaderboardAttachment(usersDto);
-
-            _slack.SendAttachment(attachment, command.ChannelId);
+            _slack.SendMessage(message, command.ChannelId);
 
             return NoResponse;
         }

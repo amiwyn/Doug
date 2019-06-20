@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="8.1.1" />
     <PackageReference Include="Hangfire" Version="1.7.3" />
     <PackageReference Include="Hangfire.SQLite" Version="1.4.2" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
