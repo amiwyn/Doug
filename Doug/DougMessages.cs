@@ -5,7 +5,7 @@
         public const string CoffeeParrotEmoji = ":coffeeparrot:";
         public const string CreditEmoji = ":rupee:";
         public const string HpEmoji = ":red_circle:";
-        public const string EnergyEmoji = ":blue_circle:";
+        public const string EnergyEmoji = ":large_blue_circle:";
         public const string UpVote = "+1";
         public const string Downvote = "-1";
         public const string Top5 = "Leaderboard";
