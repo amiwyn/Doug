@@ -1,7 +1,5 @@
 ﻿using System;
 using Doug.Models;
-using Doug.Slack;
-using System.Collections.Generic;
 using Doug.Commands;
 
 namespace Doug.Services
@@ -14,15 +12,13 @@ namespace Doug.Services
     public class EventService : IEventService
     {
         private readonly ICoffeeService _coffeeBreakService;
-        private readonly ISlackWebApi _slack;
         private readonly ISlursCommands _slurs;
 
-        private const string GAB_ID = "UB619L16W";
+        private const string GabId = "UB619L16W";
 
-        public EventService(ICoffeeService coffeeBreakService, ISlackWebApi slack, ISlursCommands slurs)
+        public EventService(ICoffeeService coffeeBreakService, ISlursCommands slurs)
         {
             _coffeeBreakService = coffeeBreakService;
-            _slack = slack;
             _slurs = slurs;
         }
 
@@ -35,7 +31,7 @@ namespace Doug.Services
            
             if (message.ContainsMcdonaldMention())
             {
-                Command command = new Command() { ChannelId = message.Channel, UserId = GAB_ID, Text = $"<@{GAB_ID}|gabriel.fillit>" };
+                Command command = new Command() { ChannelId = message.Channel, UserId = GabId, Text = $"<@{GabId}|gabriel.fillit>" };
                 _slurs.Flame(command);
             }
         }
