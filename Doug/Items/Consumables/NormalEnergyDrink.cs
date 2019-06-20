@@ -15,13 +15,13 @@ namespace Doug.Items.Consumables
             Icon = ":coffee:";
         }
 
-        public override string Use(int itemPos, User user, IUserRepository userRepository)
+        public override string Use(int itemPos, User user, IUserRepository userRepository, IStatsRepository statsRepository)
         {
             var energy = user.Energy + RecoverAmount;
 
             energy = energy >= user.CalculateTotalEnergy() ? user.CalculateTotalEnergy() : energy;
 
-            userRepository.UpdateEnergy(user.Id, energy);
+            statsRepository.UpdateEnergy(user.Id, energy);
 
             userRepository.RemoveItem(user.Id, itemPos);
 

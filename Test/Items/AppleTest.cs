@@ -11,7 +11,8 @@ namespace Test.Items
     public class AppleTest
     {
         private readonly Mock<IUserRepository> _userRepository = new Mock<IUserRepository>();
-        private Apple apple = new Apple();
+        private readonly Mock<IStatsRepository> _statsRepository = new Mock<IStatsRepository>();
+        private readonly Apple _apple = new Apple();
 
         private readonly User _user = new User() { Id = "test", Health = 90 };
 
@@ -24,15 +25,15 @@ namespace Test.Items
         [TestMethod]
         public void WhenUsingRestore25Hitpoint()
         {
-            apple.Use(0, _user, _userRepository.Object);
+            _apple.Use(0, _user, _userRepository.Object, _statsRepository.Object);
 
-            _userRepository.Verify(repo => repo.UpdateHealth("test", 100));
+            _statsRepository.Verify(repo => repo.UpdateHealth("test", 100));
         }
 
         [TestMethod]
         public void HealthShouldNotBeAbove100()
         {
-            apple.Use(0, _user, _userRepository.Object);
+            _apple.Use(0, _user, _userRepository.Object, _statsRepository.Object);
 
             Assert.AreNotEqual(115, _user.Health);
         }
@@ -40,7 +41,7 @@ namespace Test.Items
         [TestMethod]
         public void ShouldRemoveFromInventory()
         {
-            apple.Use(0, _user, _userRepository.Object);
+            _apple.Use(0, _user, _userRepository.Object, _statsRepository.Object);
 
             _userRepository.Verify(repo => repo.RemoveItem("test", 0));
         }

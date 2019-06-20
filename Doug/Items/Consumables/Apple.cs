@@ -15,13 +15,13 @@ namespace Doug.Items.Consumables
             Icon = ":apple:";
         }
 
-        public override string Use(int itemPos, User user, IUserRepository userRepository)
+        public override string Use(int itemPos, User user, IUserRepository userRepository, IStatsRepository statsRepository)
         {
             var health = user.Health + RecoverAmount;
 
             health = health >= user.CalculateTotalHealth() ? user.CalculateTotalHealth() : health;
 
-            userRepository.UpdateHealth(user.Id, health);
+            statsRepository.UpdateHealth(user.Id, health);
 
             userRepository.RemoveItem(user.Id, itemPos);
 

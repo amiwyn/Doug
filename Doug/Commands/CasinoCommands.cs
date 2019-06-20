@@ -25,14 +25,16 @@ namespace Doug.Commands
 
 
         private static readonly DougResponse NoResponse = new DougResponse();
+        private readonly IStatsRepository _statsRepository;
 
-        public CasinoCommands(IUserRepository userRepository, ISlackWebApi messageSender, IChannelRepository channelRepository, IBackgroundJobClient backgroundJobClient, IItemEventDispatcher itemEventDispatcher)
+        public CasinoCommands(IUserRepository userRepository, ISlackWebApi messageSender, IChannelRepository channelRepository, IBackgroundJobClient backgroundJobClient, IItemEventDispatcher itemEventDispatcher, IStatsRepository statsRepository)
         {
             _userRepository = userRepository;
             _slack = messageSender;
             _channelRepository = channelRepository;
             _backgroundJobClient = backgroundJobClient;
             _itemEventDispatcher = itemEventDispatcher;
+            _statsRepository = statsRepository;
         }
 
         public DougResponse Gamble(Command command)
@@ -58,7 +60,7 @@ namespace Doug.Commands
                 return new DougResponse(DougMessages.NotEnoughEnergy);
             }
 
-            _userRepository.UpdateEnergy(command.UserId, energy);
+            _statsRepository.UpdateEnergy(command.UserId, energy);
 
             string baseMessage;
             if (UserCoinFlipWin(user))

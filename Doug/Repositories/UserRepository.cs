@@ -14,9 +14,6 @@ namespace Doug.Repositories
         void AddCredits(string userId, int amount);
         void AddItem(string userId, string itemId);
         void RemoveItem(string userId, int inventoryPosition);
-
-        void UpdateEnergy(string userId, int energy); //TODO: move it to something like StatsRepository or CombatRepository
-        void UpdateHealth(string userId, int health);
     }
 
     public class UserRepository : IUserRepository
@@ -63,20 +60,6 @@ namespace Doug.Repositories
             var user = _db.Users.Single(usr => usr.Id == userId);
             var item = user.InventoryItems.Single(itm => itm.InventoryPosition == inventoryPosition);
             user.InventoryItems.Remove(item);
-            _db.SaveChanges();
-        }
-
-        public void UpdateEnergy(string userId, int energy)
-        {
-            var user = _db.Users.Single(usr => usr.Id == userId);
-            user.Energy = energy;
-            _db.SaveChanges();
-        }
-
-        public void UpdateHealth(string userId, int health)
-        {
-            var user = _db.Users.Single(usr => usr.Id == userId);
-            user.Health = health;
             _db.SaveChanges();
         }
 

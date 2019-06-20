@@ -33,6 +33,7 @@ namespace Test.Casino
         private readonly Mock<IChannelRepository> _channelRepository = new Mock<IChannelRepository>();
         private readonly Mock<IBackgroundJobClient> _backgroundClient = new Mock<IBackgroundJobClient>();
         private readonly Mock<IItemEventDispatcher> _itemEventDispatcher = new Mock<IItemEventDispatcher>();
+        private readonly Mock<IStatsRepository> _statsRepository = new Mock<IStatsRepository>();
 
 
         [TestInitialize]
@@ -40,7 +41,7 @@ namespace Test.Casino
         {
             _userRepository.Setup(repo => repo.GetUser(User)).Returns(_user);
 
-            _casinoCommands = new CasinoCommands(_userRepository.Object, _slack.Object, _channelRepository.Object, _backgroundClient.Object, _itemEventDispatcher.Object);
+            _casinoCommands = new CasinoCommands(_userRepository.Object, _slack.Object, _channelRepository.Object, _backgroundClient.Object, _itemEventDispatcher.Object, _statsRepository.Object);
         }
 
         [TestMethod]
@@ -95,7 +96,7 @@ namespace Test.Casino
         {
             _casinoCommands.Gamble(_command);
 
-            _userRepository.Verify(repo => repo.UpdateEnergy(User, 19));
+            _statsRepository.Verify(repo => repo.UpdateEnergy(User, 19));
         }
 
         [TestMethod]

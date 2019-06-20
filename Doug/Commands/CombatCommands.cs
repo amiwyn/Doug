@@ -18,12 +18,14 @@ namespace Doug.Commands
         private readonly IItemEventDispatcher _itemEventDispatcher;
         private readonly IUserRepository _userRepository;
         private readonly ISlackWebApi _slack;
+        private readonly IStatsRepository _statsRepository;
 
-        public CombatCommands(IItemEventDispatcher itemEventDispatcher, IUserRepository userRepository, ISlackWebApi slack)
+        public CombatCommands(IItemEventDispatcher itemEventDispatcher, IUserRepository userRepository, ISlackWebApi slack, IStatsRepository statsRepository)
         {
             _itemEventDispatcher = itemEventDispatcher;
             _userRepository = userRepository;
             _slack = slack;
+            _statsRepository = statsRepository;
         }
 
         public DougResponse Steal(Command command)
@@ -38,7 +40,7 @@ namespace Doug.Commands
                 return new DougResponse(DougMessages.NotEnoughEnergy);
             }
 
-            _userRepository.UpdateEnergy(command.UserId, energy);
+            _statsRepository.UpdateEnergy(command.UserId, energy);
 
             var userChance = _itemEventDispatcher.OnStealingChance(user, user.CalculateBaseStealSuccessRate());
             var targetChance = _itemEventDispatcher.OnGettingStolenChance(target, target.CalculateBaseOpponentStealSuccessRate());
