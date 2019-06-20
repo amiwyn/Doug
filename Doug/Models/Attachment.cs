@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Doug.Models
 {
@@ -44,6 +45,7 @@ namespace Doug.Models
             attachment.Fields.Add(new Field(string.Format(DougMessages.SlursAddedStats, slurCount)));
             attachment.Fields.Add(new Field(string.Format(DougMessages.HealthStats, user.Health, user.CalculateTotalHealth())));
             attachment.Fields.Add(new Field(string.Format(DougMessages.EnergyStats, user.Energy, user.CalculateTotalEnergy())));
+            attachment.Fields.Add(new Field(string.Format(DougMessages.DefenceStats, user.Defence)));
             attachment.Fields.Add(new Field(string.Format(DougMessages.CharismaStats, user.Charisma)));
             attachment.Fields.Add(new Field(string.Format(DougMessages.AgilityStats, user.Agility)));
             attachment.Fields.Add(new Field(string.Format(DougMessages.LuckStats, user.Luck)));

@@ -22,6 +22,11 @@ namespace Doug.Items
             return slur;
         }
 
+        public virtual string OnFlaming(Command command, string slur, ISlackWebApi slack)
+        {
+            return slur;
+        }
+
         public virtual double OnGambling(double chance)
         {
             return chance;

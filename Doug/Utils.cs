@@ -1,7 +1,7 @@
 ﻿using System;
 
 namespace Doug
-{
+{ 
     public static class Utils
     {
         public static string UserMention(string userId)

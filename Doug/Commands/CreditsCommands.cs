@@ -9,6 +9,7 @@ namespace Doug.Commands
     {
         DougResponse Give(Command command);
         DougResponse Forbes(Command command);
+        DougResponse Leaderboard(Command command);
     }
 
     public class CreditsCommands : ICreditsCommands
@@ -55,6 +56,31 @@ namespace Doug.Commands
             var users = _userRepository.GetUsers();
 
             return new DougResponse(users.Aggregate(string.Empty, (acc, user) => string.Format("{0}{3}{2} = {1}\n", acc, Utils.UserMention(user.Id), user.Credits, DougMessages.CreditEmoji)));
+        }
+
+        public DougResponse Leaderboard(Command command)
+        {
+            var userId = command.UserId;
+
+            if (command.IsUserArgument())
+            {
+                userId = command.GetTargetUserId();
+            }
+
+            var list = _userRepository.GetUsers().ToList();
+
+            list.Sort((u1, u2) => u1.Credits.CompareTo(u2.Credits));
+            list.Reverse();
+            list = list.GetRange(0, 5);
+
+            var userList = list.Select(u => $"{Utils.UserMention(u.Id)} : {u.Credits}");
+
+            var users = userList.Aggregate((first, next) => first + "\n" + next);
+            var message = $"{DougMessages.Top5}\n{users}";
+
+            _slack.SendMessage(message, command.ChannelId);
+
+            return NoResponse;
         }
     }
 }
