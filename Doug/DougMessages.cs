@@ -62,5 +62,6 @@
         public const string TargetNoMoney = "Your target don't have enough " + CreditEmoji;
         public const string NoItemInSlot = "There is no item in slot {0}.";
         public const string ItemCantBeUsed = "The item in slot {0} cannot be used.";
+        public const string InvalidUserArgument = "You must pass a valid user in arguments";
     }
 }

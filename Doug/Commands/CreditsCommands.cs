@@ -35,6 +35,11 @@ namespace Doug.Commands
                 return new DougResponse(DougMessages.InvalidAmount);
             }
 
+            if (!command.IsUserArgument())
+            {
+                return new DougResponse(DougMessages.InvalidUserArgument);
+            }
+
             var user = _userRepository.GetUser(command.UserId);
 
             if (!user.HasEnoughCreditsForAmount(amount))

@@ -14,6 +14,7 @@ namespace Doug.Repositories
         void AddCredits(string userId, int amount);
         void AddItem(string userId, string itemId);
         void RemoveItem(string userId, int inventoryPosition);
+
         void UpdateEnergy(string userId, int energy); //TODO: move it to something like StatsRepository or CombatRepository
         void UpdateHealth(string userId, int health);
     }
