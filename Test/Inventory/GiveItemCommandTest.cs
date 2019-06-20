@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Doug;
 using Doug.Commands;
 using Doug.Models;
 using Doug.Repositories;

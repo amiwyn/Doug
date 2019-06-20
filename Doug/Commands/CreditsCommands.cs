@@ -14,7 +14,6 @@ namespace Doug.Commands
     public class CreditsCommands : ICreditsCommands
     {
         private readonly IUserRepository _userRepository;
-        private readonly ISlurRepository _slurRepository;
         private readonly ISlackWebApi _slack;
 
         private static readonly DougResponse NoResponse = new DougResponse();
@@ -23,7 +22,6 @@ namespace Doug.Commands
         {
             _userRepository = userRepository;
             _slack = messageSender;
-            _slurRepository = slurRepository;
         }
 
         public DougResponse Give(Command command)

@@ -6,7 +6,7 @@ using Doug.Slack;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
-namespace Test.Credits
+namespace Test.Stats
 {
     [TestClass]
     public class StatsCommandTest
@@ -14,7 +14,7 @@ namespace Test.Credits
         private const string Channel = "coco-channel";
         private const string User = "testuser";
 
-        private CreditsCommands _creditsCommands;
+        private StatsCommands _statsCommands;
 
         private readonly Mock<IUserRepository> _userRepository = new Mock<IUserRepository>();
         private readonly Mock<ISlurRepository> _slurRepository = new Mock<ISlurRepository>();
@@ -26,7 +26,7 @@ namespace Test.Credits
             _slurRepository.Setup(repo => repo.GetSlursFrom(It.IsAny<string>())).Returns(new List<Slur>());
             _userRepository.Setup(repo => repo.GetUser(It.IsAny<string>())).Returns(new User());
 
-            _creditsCommands = new CreditsCommands(_userRepository.Object, _slack.Object, _slurRepository.Object);
+            _statsCommands = new StatsCommands(_userRepository.Object, _slack.Object, _slurRepository.Object);
         }
 
         [TestMethod]
@@ -39,7 +39,7 @@ namespace Test.Credits
                 UserId = User
             };
 
-            _creditsCommands.Stats(command);
+            _statsCommands.Stats(command);
 
             _userRepository.Verify(repo => repo.GetUser(User));
         }
@@ -54,7 +54,7 @@ namespace Test.Credits
                 UserId = User
             };
 
-            _creditsCommands.Stats(command);
+            _statsCommands.Stats(command);
 
             _userRepository.Verify(repo => repo.GetUser("otherUserid"));
         }
