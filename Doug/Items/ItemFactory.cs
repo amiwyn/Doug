@@ -11,6 +11,7 @@ namespace Doug.Items
         private const string BurglarBoots = "burglar_boots";
         private const string GreedyGloves = "greedy_gloves";
         private const string NormalEnergyDrink = "normal_energy_drink";
+        private const string DevilsContract = "devil_contract";
 
         public static Item CreateItem(string itemId)
         {
@@ -26,6 +27,8 @@ namespace Doug.Items
                     return new GreedyGloves();
                 case NormalEnergyDrink:
                     return new NormalEnergyDrink();
+                case DevilsContract:
+                    return new DevilContract();
                 default:
                     return new Default();
             }

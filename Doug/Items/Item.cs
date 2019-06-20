@@ -27,6 +27,11 @@ namespace Doug.Items
             return chance;
         }
 
+        public virtual double OnGettingStolenChance(double chance)
+        {
+            return chance;
+        }
+
         public virtual double OnStealingChance(double chance)
         {
             return chance;

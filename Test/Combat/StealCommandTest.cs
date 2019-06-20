@@ -46,6 +46,7 @@ namespace Test.Combat
             var winCount = 0;
             _userRepository.Setup(repo => repo.AddCredits(User, It.IsAny<int>())).Callback(() => winCount++);
             _itemEventDispatcher.Setup(disp => disp.OnStealingChance(It.IsAny<User>(), It.IsAny<double>())).Returns(0.25);
+            _itemEventDispatcher.Setup(disp => disp.OnGettingStolenChance(It.IsAny<User>(), It.IsAny<double>())).Returns(0.75);
 
             for (int i = 0; i < 5000; i++)
             {

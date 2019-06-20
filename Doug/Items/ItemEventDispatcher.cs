@@ -12,6 +12,7 @@ namespace Doug.Items
         string OnFlaming(Command command, string slur);
         double OnGambling(User user, double baseChance);
         double OnStealingChance(User user, double baseChance);
+        double OnGettingStolenChance(User user, double baseChance);
         int OnStealingAmount(User user, int baseAmount);
     }
 
@@ -39,6 +40,11 @@ namespace Doug.Items
         public double OnStealingChance(User user, double baseChance)
         {
             return user.InventoryItems.Aggregate(baseChance, (chance, userItem) => userItem.Item.OnStealingChance(chance));
+        }
+
+        public double OnGettingStolenChance(User user, double baseChance)
+        {
+            return user.InventoryItems.Aggregate(baseChance, (chance, userItem) => userItem.Item.OnGettingStolenChance(chance));
         }
 
         public int OnStealingAmount(User user, int baseAmount)
