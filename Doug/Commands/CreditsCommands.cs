@@ -1,9 +1,7 @@
 ﻿using Doug.Models;
 using Doug.Repositories;
 using Doug.Slack;
-using System.Collections.Generic;
 using System.Linq;
-using AutoMapper.Mappers;
 
 namespace Doug.Commands
 {
