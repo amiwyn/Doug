@@ -9,7 +9,7 @@ using Moq;
 namespace Test.Stats
 {
     [TestClass]
-    public class StatsCommandTest
+    public class ProfileCommandTest
     {
         private const string Channel = "coco-channel";
         private const string User = "testuser";
@@ -39,7 +39,7 @@ namespace Test.Stats
                 UserId = User
             };
 
-            _statsCommands.Stats(command);
+            _statsCommands.Profile(command);
 
             _userRepository.Verify(repo => repo.GetUser(User));
         }
@@ -54,7 +54,7 @@ namespace Test.Stats
                 UserId = User
             };
 
-            _statsCommands.Stats(command);
+            _statsCommands.Profile(command);
 
             _userRepository.Verify(repo => repo.GetUser("otherUserid"));
         }

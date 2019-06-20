@@ -10,7 +10,7 @@ namespace Doug.Commands
         DougResponse Balance(Command command);
         DougResponse Health(Command command);
         DougResponse Energy(Command command);
-        DougResponse Stats(Command command);
+        DougResponse Profile(Command command);
     }
 
     public class StatsCommands : IStatsCommands
@@ -46,7 +46,7 @@ namespace Doug.Commands
             return new DougResponse(string.Format(DougMessages.Energy, user.Energy, 25)); // TODO: Add prop MaxEnergy to user, and display here.
         }
 
-        public DougResponse Stats(Command command)
+        public DougResponse Profile(Command command)
         {
             var userId = command.UserId;
 
