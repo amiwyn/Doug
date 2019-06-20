@@ -38,9 +38,20 @@ namespace Doug.Repositories
 
         public void AddItem(string userId, string itemId)
         {
-            // TODO: set inventoryid to the lowest awailable
             var user = _db.Users.Single(usr => usr.Id == userId);
-            user.InventoryItems.Add(new InventoryItem(userId, itemId));
+
+            var slots = user.InventoryItems.Select(itm => itm.InventoryPosition).ToList();
+
+            var slot = 0;
+            if (slots.Any())
+            {
+                var maxPos = slots.Any() ? slots.Max() : 0;
+                var freeSlots = Enumerable.Range(0, maxPos).Except(slots).ToList();
+
+                slot = freeSlots.Any() ? freeSlots.First() : maxPos + 1;
+            }
+
+            user.InventoryItems.Add(new InventoryItem(userId, itemId) { InventoryPosition = slot });
             _db.SaveChanges();
         }
 

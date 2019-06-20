@@ -1,5 +1,4 @@
-﻿using System;
-using Doug.Items;
+﻿using Doug.Items;
 using Doug.Models;
 using Doug.Repositories;
 using Doug.Slack;
@@ -41,8 +40,10 @@ namespace Doug.Commands
 
             _userRepository.UpdateEnergy(command.UserId, energy);
 
-            var stealRollResult = new Random().NextDouble();
-            var userChance = _itemEventDispatcher.OnStealingChance(user, user.CalculateBaseStealChance());
+            var userChance = _itemEventDispatcher.OnStealingChance(user, user.CalculateBaseStealSuccessRate());
+            var targetChance = _itemEventDispatcher.OnGettingStolenChance(target, target.CalculateBaseOpponentStealSuccessRate());
+
+            var rollSuccessful = Utils.RollAgainstOpponent(userChance, targetChance);
 
             var amount = _itemEventDispatcher.OnStealingAmount(user, user.CalculateBaseStealAmount());
 
@@ -51,9 +52,8 @@ namespace Doug.Commands
                 return new DougResponse(DougMessages.TargetNoMoney);
             }
 
-            if (stealRollResult < userChance)
+            if (rollSuccessful)
             {
-
                 _userRepository.RemoveCredits(target.Id, amount);
                 _userRepository.AddCredits(command.UserId, amount);
 

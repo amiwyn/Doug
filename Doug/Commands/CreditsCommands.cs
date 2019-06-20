@@ -7,8 +7,6 @@ namespace Doug.Commands
 {
     public interface ICreditsCommands
     {
-        DougResponse Balance(Command command);
-        DougResponse Stats(Command command);
         DougResponse Give(Command command);
         DougResponse Forbes(Command command);
         DougResponse Leaderboard(Command command);
@@ -17,22 +15,14 @@ namespace Doug.Commands
     public class CreditsCommands : ICreditsCommands
     {
         private readonly IUserRepository _userRepository;
-        private readonly ISlurRepository _slurRepository;
         private readonly ISlackWebApi _slack;
 
         private static readonly DougResponse NoResponse = new DougResponse();
 
-        public CreditsCommands(IUserRepository userRepository, ISlackWebApi messageSender, ISlurRepository slurRepository)
+        public CreditsCommands(IUserRepository userRepository, ISlackWebApi messageSender)
         {
             _userRepository = userRepository;
             _slack = messageSender;
-            _slurRepository = slurRepository;
-        }
-        public DougResponse Balance(Command command)
-        {
-            var user = _userRepository.GetUser(command.UserId);
-
-            return new DougResponse(string.Format(DougMessages.Balance, user.Credits));
         }
 
         public DougResponse Give(Command command)
@@ -66,25 +56,6 @@ namespace Doug.Commands
             var users = _userRepository.GetUsers();
 
             return new DougResponse(users.Aggregate(string.Empty, (acc, user) => string.Format("{0}{3}{2} = {1}\n", acc, Utils.UserMention(user.Id), user.Credits, DougMessages.CreditEmoji)));
-        }
-
-        public DougResponse Stats(Command command)
-        {
-            var userId = command.UserId;
-
-            if (command.IsUserArgument())
-            {
-                userId = command.GetTargetUserId();
-            }
-
-            var slurCount = _slurRepository.GetSlursFrom(userId).Count();
-            var user = _userRepository.GetUser(userId);
-
-            var attachment = Attachment.StatsAttachment(slurCount, user);
-
-            _slack.SendAttachment(attachment, command.ChannelId);
-
-            return NoResponse;
         }
 
         public DougResponse Leaderboard(Command command)

@@ -30,34 +30,6 @@ namespace Doug.Controllers
             }
         }
 
-        [HttpPost("stats")]
-        public ActionResult Stats([FromForm]SlackCommandDto slackCommand)
-        {
-            try
-            {
-                var result = _creditsCommands.Stats(slackCommand.ToCommand());
-                return Ok(result.Message);
-            }
-            catch (Exception ex)
-            {
-                return Ok(string.Format(DougMessages.DougError, ex.Message));
-            }
-        }
-
-        [HttpPost("balance")]
-        public ActionResult Balance([FromForm]SlackCommandDto slackCommand)
-        {
-            try
-            {
-                var result = _creditsCommands.Balance(slackCommand.ToCommand());
-                return Ok(result.Message);
-            }
-            catch (Exception ex)
-            {
-                return Ok(string.Format(DougMessages.DougError, ex.Message));
-            }
-        }
-
         [HttpPost("forbes")]
         public ActionResult Forbes([FromForm]SlackCommandDto slackCommand)
         {

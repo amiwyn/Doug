@@ -17,7 +17,6 @@ namespace Test.Credits
         private CreditsCommands _creditsCommands;
 
         private readonly Mock<IUserRepository> _userRepository = new Mock<IUserRepository>();
-        private readonly Mock<ISlurRepository> _slurRepository = new Mock<ISlurRepository>();
         private readonly Mock<ISlackWebApi> _slack = new Mock<ISlackWebApi>();
 
         [TestInitialize]
@@ -25,7 +24,7 @@ namespace Test.Credits
         {
             _userRepository.Setup(repo => repo.GetUsers()).Returns(new List<User>());
 
-            _creditsCommands = new CreditsCommands(_userRepository.Object, _slack.Object, _slurRepository.Object);
+            _creditsCommands = new CreditsCommands(_userRepository.Object, _slack.Object);
         }
 
         [TestMethod]

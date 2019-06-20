@@ -23,9 +23,14 @@ namespace Doug.Models
             return 0.5;
         }
 
-        public double CalculateBaseStealChance()
+        public double CalculateBaseStealSuccessRate()
         {
             return 0.25;
+        }
+
+        public double CalculateBaseOpponentStealSuccessRate()
+        {
+            return 0.75;
         }
 
         public int CalculateBaseStealAmount()

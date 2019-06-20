@@ -13,6 +13,7 @@ namespace Doug.Items
         private const string NormalEnergyDrink = "normal_energy_drink";
         private const string PimentSword = "piment_sword";
         private const string Apple = "apple";
+        private const string DevilsContract = "devil_contract";
 
         public static Item CreateItem(string itemId)
         {
@@ -32,6 +33,8 @@ namespace Doug.Items
                     return new PimentSword();
                 case Apple:
                     return new Apple();
+                case DevilsContract:
+                    return new DevilContract();
                 default:
                     return new Default();
             }

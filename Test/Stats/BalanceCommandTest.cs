@@ -6,7 +6,7 @@ using Doug.Slack;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
-namespace Test.Credits
+namespace Test.Stats
 {
     [TestClass]
     public class BalanceCommandTest
@@ -22,7 +22,7 @@ namespace Test.Credits
             UserId = User
         };
 
-        private CreditsCommands _creditsCommands;
+        private StatsCommands _statsCommands;
 
         private readonly Mock<IUserRepository> _userRepository = new Mock<IUserRepository>();
         private readonly Mock<ISlurRepository> _slurRepository = new Mock<ISlurRepository>();
@@ -33,13 +33,13 @@ namespace Test.Credits
         {
             _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User() { Id = "bobob", Credits = 79});
 
-            _creditsCommands = new CreditsCommands(_userRepository.Object, _slack.Object, _slurRepository.Object);
+            _statsCommands = new StatsCommands(_userRepository.Object, _slack.Object, _slurRepository.Object);
         }
 
         [TestMethod]
         public void WhenCheckingBalance_GetInformationFromUser()
         {
-            _creditsCommands.Balance(_command);
+            _statsCommands.Balance(_command);
 
             _userRepository.Verify(repo => repo.GetUser(User));
         }
@@ -47,7 +47,7 @@ namespace Test.Credits
         [TestMethod]
         public void WhenCheckingBalance_MessageIsSentPrivately()
         {
-            var message = _creditsCommands.Balance(_command);
+            var message = _statsCommands.Balance(_command);
 
             Assert.AreEqual("You have 79 " + DougMessages.CreditEmoji, message.Message);
         }
