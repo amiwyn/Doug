@@ -8,13 +8,13 @@
         public const string EnergyEmoji = ":blue_circle:";
         public const string UpVote = "+1";
         public const string Downvote = "-1";
-
         public const string Top5 = "Leaderboard";
 
         public const string JoinedCoffee = "{0} joined the coffee break.";
         public const string KickedCoffee = "{0} was kicked from the coffee break.";
         public const string SkippedCoffee = "{0} will skip the coffee break.";
         public const string Remind = "*{0}/{1}* - {2}";
+        public const string Remind69 = "*{0}/{1}* - YEAH - {2}";
         public const string CoffeeStart = "Alright, let's do this. <!here> GO!";
         public const string BackToWork = "<!here> Go back to work, ya bunch o' lazy dogs!";
         public const string GainedCredit = "You gained {0} " + CreditEmoji;
