@@ -91,7 +91,7 @@ namespace Test.Casino
         }
 
         [TestMethod]
-        public void WhenGambling_UserLoseOneEnergy()
+        public void WhenGambling_UserLoseTenPercentOfAmountInEnergy()
         {
             _casinoCommands.Gamble(_command);
 

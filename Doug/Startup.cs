@@ -49,9 +49,9 @@ namespace Doug
             services.AddTransient<IEventService, EventService>();
             services.AddTransient<ISlackWebApi, SlackWebApi>();
 
-            services.AddTransient<IAuthorizationService, AuthorizationService>();
-
             services.AddTransient<IItemEventDispatcher, ItemEventDispatcher>();
+            services.AddTransient<IAuthorizationService, AuthorizationService>();
+            services.AddTransient<ICoffeeService, CoffeeService>();
 
             services.AddTransient<ICoffeeCommands, CoffeeCommands>();
             services.AddTransient<ISlursCommands, SlursCommands>();
@@ -59,7 +59,7 @@ namespace Doug
             services.AddTransient<ICasinoCommands, CasinoCommands>();
             services.AddTransient<ICombatCommands, CombatCommands>();
             services.AddTransient<IInventoryCommands, InventoryCommands>();
-            services.AddTransient<ICoffeeService, CoffeeService>();
+            services.AddTransient<IStatsCommands, StatsCommands>();
 
             services.AddTransient<IChannelRepository, ChannelRepository>();
             services.AddTransient<IUserRepository, UserRepository>();

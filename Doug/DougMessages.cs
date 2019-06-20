@@ -4,7 +4,7 @@
     {
         public const string CoffeeParrotEmoji = ":coffeeparrot:";
         public const string CreditEmoji = ":rupee:";
-        public const string HPEmoji = ":red_circle:";
+        public const string HpEmoji = ":red_circle:";
         public const string EnergyEmoji = ":blue_circle:";
         public const string UpVote = "+1";
         public const string Downvote = "-1";
@@ -19,7 +19,7 @@
         public const string SlursCleaned = "The following slurs have been cleaned up";
         public const string SlurCreatedBy = "{0} created that slur.";
         public const string Balance = "You have {0} " + CreditEmoji;
-        public const string Health = "You have {0}/{1} " + HPEmoji + " health remaining.";
+        public const string Health = "You have {0}/{1} " + HpEmoji + " health remaining.";
         public const string Energy = "You have {0}/{1} " + EnergyEmoji + " energy remaining.";
         public const string UserGaveCredits = "{0} gave {1} " + CreditEmoji + " to {2}";
         public const string StatsOf = "Stats of {0}";
@@ -44,6 +44,7 @@
         public const string StealCredits = "{0} stole {1} " + CreditEmoji + " from {2}!";
         public const string StealFail = "{0} attempted to steal from {1} but failed!";
         public const string RecoverItem = "You used '{0}' and recovered {1} {2}.";
+        public const string UserGaveItem = "{0} gave '{1}' to {2}.";
 
         public const string DougError = "Beep boop, it's not working : {0}";
         public const string NotAnAdmin = "You are not an admin.";
