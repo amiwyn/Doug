@@ -4,6 +4,8 @@
     {
         public const string CoffeeParrotEmoji = ":coffeeparrot:";
         public const string CreditEmoji = ":rupee:";
+        public const string HPEmoji = ":red_circle:";
+        public const string EnergyEmoji = ":blue_circle:";
         public const string UpVote = "+1";
         public const string Downvote = "-1";
 
@@ -17,6 +19,8 @@
         public const string SlursCleaned = "The following slurs have been cleaned up";
         public const string SlurCreatedBy = "{0} created that slur.";
         public const string Balance = "You have {0} " + CreditEmoji;
+        public const string Health = "You have {0}/{1} " + HPEmoji + " health remaining.";
+        public const string Energy = "You have {0}/{1} " + EnergyEmoji + " energy remaining.";
         public const string UserGaveCredits = "{0} gave {1} " + CreditEmoji + " to {2}";
         public const string StatsOf = "Stats of {0}";
         public const string CreditStats = CreditEmoji + " Money : {0}";
