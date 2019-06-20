@@ -8,7 +8,7 @@ namespace Doug.Repositories
     public interface IUserRepository
     {
         void AddUser(string userId);
-        ICollection<User> GetUsers();
+        List<User> GetUsers();
         User GetUser(string userId);
         void RemoveCredits(string userId, int amount);
         void AddCredits(string userId, int amount);
@@ -39,7 +39,9 @@ namespace Doug.Repositories
 
         public void AddItem(string userId, string itemId)
         {
-            var user = _db.Users.Single(usr => usr.Id == userId);
+            var user = _db.Users
+                .Include(usr => usr.InventoryItems)
+                .Single(usr => usr.Id == userId);
 
             var slots = user.InventoryItems.Select(itm => itm.InventoryPosition).ToList();
 
@@ -100,7 +102,7 @@ namespace Doug.Repositories
                 .Single(user => user.Id == userId);
         }
 
-        public ICollection<User> GetUsers()
+        public List<User> GetUsers()
         {
             return _db.Users.ToList();
         }
