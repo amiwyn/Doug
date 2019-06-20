@@ -52,6 +52,7 @@ namespace Doug
             services.AddTransient<IItemEventDispatcher, ItemEventDispatcher>();
             services.AddTransient<IAuthorizationService, AuthorizationService>();
             services.AddTransient<ICoffeeService, CoffeeService>();
+            services.AddTransient<IRandomService, RandomService>();
 
             services.AddTransient<ICoffeeCommands, CoffeeCommands>();
             services.AddTransient<ISlursCommands, SlursCommands>();

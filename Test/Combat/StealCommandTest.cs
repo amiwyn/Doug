@@ -3,6 +3,7 @@ using Doug.Commands;
 using Doug.Items;
 using Doug.Models;
 using Doug.Repositories;
+using Doug.Services;
 using Doug.Slack;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -29,6 +30,7 @@ namespace Test.Combat
         private readonly Mock<ISlackWebApi> _slack = new Mock<ISlackWebApi>();
         private readonly Mock<IItemEventDispatcher> _itemEventDispatcher = new Mock<IItemEventDispatcher>();
         private readonly Mock<IStatsRepository> _statsRepository = new Mock<IStatsRepository>();
+        private readonly Mock<IRandomService> _randomService = new Mock<IRandomService>();
 
 
         [TestInitialize]
@@ -38,29 +40,13 @@ namespace Test.Combat
             _userRepository.Setup(repo => repo.GetUser("robert")).Returns(new User { Id = "robert", Credits = 10 });
             _itemEventDispatcher.Setup(disp => disp.OnStealingAmount(It.IsAny<User>(), It.IsAny<int>())).Returns(1);
 
-            _combatCommands = new CombatCommands(_itemEventDispatcher.Object, _userRepository.Object, _slack.Object, _statsRepository.Object);
-        }
-
-        [TestMethod]
-        public void WhenStealing_StealRateIsAroundAQuarter()
-        {
-            var winCount = 0;
-            _userRepository.Setup(repo => repo.AddCredits(User, It.IsAny<int>())).Callback(() => winCount++);
-            _itemEventDispatcher.Setup(disp => disp.OnStealingChance(It.IsAny<User>(), It.IsAny<double>())).Returns(0.25);
-            _itemEventDispatcher.Setup(disp => disp.OnGettingStolenChance(It.IsAny<User>(), It.IsAny<double>())).Returns(0.75);
-
-            for (int i = 0; i < 5000; i++)
-            {
-                _combatCommands.Steal(_command);
-            }
-
-            Assert.IsTrue(winCount > 1150 && winCount < 1350);
+            _combatCommands = new CombatCommands(_itemEventDispatcher.Object, _userRepository.Object, _slack.Object, _statsRepository.Object, _randomService.Object);
         }
 
         [TestMethod]
         public void WhenStealingSucceed_AmountIsRemovedFromTheTarget()
         {
-            _itemEventDispatcher.Setup(disp => disp.OnStealingChance(It.IsAny<User>(), It.IsAny<double>())).Returns(1);
+            _randomService.Setup(rnd => rnd.RollAgainstOpponent(It.IsAny<double>(), It.IsAny<double>())).Returns(true);
 
             _combatCommands.Steal(_command);
 
@@ -70,7 +56,7 @@ namespace Test.Combat
         [TestMethod]
         public void WhenStealingSucceed_AmountIsAddedToTheStealer()
         {
-            _itemEventDispatcher.Setup(disp => disp.OnStealingChance(It.IsAny<User>(), It.IsAny<double>())).Returns(1);
+            _randomService.Setup(rnd => rnd.RollAgainstOpponent(It.IsAny<double>(), It.IsAny<double>())).Returns(true);
 
             _combatCommands.Steal(_command);
 

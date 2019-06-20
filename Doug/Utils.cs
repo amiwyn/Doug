@@ -16,18 +16,5 @@ namespace Doug
 
             return (currentTime.TimeOfDay > start) && (currentTime.TimeOfDay < end);
         }
-
-        public static bool RollAgainstOpponent(double userChances, double opponentChances) //TODO: extract this into a service to inject && mock
-        {
-            var total = userChances + opponentChances;
-            var rollResult = new Random().NextDouble() * total;
-
-            if (rollResult < 0)
-            {
-                return false;
-            }
-
-            return rollResult < userChances;
-        }
     }
 }

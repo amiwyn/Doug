@@ -4,6 +4,7 @@ using Doug.Slack;
 using Hangfire;
 using System;
 using Doug.Items;
+using Doug.Services;
 
 namespace Doug.Commands
 {
@@ -22,12 +23,13 @@ namespace Doug.Commands
         private readonly ISlackWebApi _slack;
         private readonly IBackgroundJobClient _backgroundJobClient;
         private readonly IItemEventDispatcher _itemEventDispatcher;
+        private readonly IRandomService _randomService;
 
 
         private static readonly DougResponse NoResponse = new DougResponse();
         private readonly IStatsRepository _statsRepository;
 
-        public CasinoCommands(IUserRepository userRepository, ISlackWebApi messageSender, IChannelRepository channelRepository, IBackgroundJobClient backgroundJobClient, IItemEventDispatcher itemEventDispatcher, IStatsRepository statsRepository)
+        public CasinoCommands(IUserRepository userRepository, ISlackWebApi messageSender, IChannelRepository channelRepository, IBackgroundJobClient backgroundJobClient, IItemEventDispatcher itemEventDispatcher, IStatsRepository statsRepository, IRandomService randomService)
         {
             _userRepository = userRepository;
             _slack = messageSender;
@@ -35,6 +37,7 @@ namespace Doug.Commands
             _backgroundJobClient = backgroundJobClient;
             _itemEventDispatcher = itemEventDispatcher;
             _statsRepository = statsRepository;
+            _randomService = randomService;
         }
 
         public DougResponse Gamble(Command command)
@@ -82,10 +85,8 @@ namespace Doug.Commands
 
         private bool UserCoinFlipWin(User user)
         {
-            var random = new Random();
-            var flipResult = random.NextDouble();
             var userChance = _itemEventDispatcher.OnGambling(user, user.CalculateBaseGambleChance());
-            return flipResult < userChance;
+            return _randomService.RollAgainstOpponent(userChance, 0.5);
         }
 
         public DougResponse GambleChallenge(Command command)
@@ -191,12 +192,10 @@ namespace Doug.Commands
 
         private bool VersusCoinFlipWin(User caller, User target)
         {
-            var random = new Random();
-            var flipResult = random.NextDouble();
             var callerChance = _itemEventDispatcher.OnGambling(caller, caller.CalculateBaseGambleChance());
             var targetChance = _itemEventDispatcher.OnGambling(target, target.CalculateBaseGambleChance());
-            var winChance = 0.5 + callerChance - targetChance;
-            return flipResult < winChance;
+
+            return _randomService.RollAgainstOpponent(callerChance, targetChance);
         }
     }
 }
