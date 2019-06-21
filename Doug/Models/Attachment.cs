@@ -9,6 +9,8 @@ namespace Doug.Models
         public string Pretext { get; set; }
         public List<Field> Fields { get; set; }
 
+        private static readonly string[] RarityColor = { "#adadad", "#26cc3e", "#2669cc", "#e26b16", "#dbb313" };
+
         public Attachment()
         {
             Fields = new List<Field>();
@@ -50,9 +52,26 @@ namespace Doug.Models
 
             attachment.Fields.Add(new Field(DougMessages.ItemStats));
 
-            user.InventoryItems.ForEach(inventoryItem => attachment.Fields.Add(new Field(string.Format("{0} - {2} {1} {3}", inventoryItem.InventoryPosition, inventoryItem.Item.Name, inventoryItem.Item.Icon, inventoryItem.Quantity == 1 ? string.Empty : "(" + inventoryItem.Quantity + ")"))));
+            //user.InventoryItems.ForEach(inventoryItem => attachment.Fields.Add(new Field(string.Format("{0} - {2} {1} {3}", inventoryItem.InventoryPosition, inventoryItem.Item.Name, inventoryItem.Item.Icon, inventoryItem.Quantity == 1 ? string.Empty : "(" + inventoryItem.Quantity + ")"))));
 
             return attachment;
+        }
+
+        public static List<Attachment> InventoryAttachments(User user)
+        {
+            var attachments = new List<Attachment>();
+            foreach (var inventoryItem in user.InventoryItems)
+            {
+                var itemAttachment = new Attachment()
+                {
+                    Color = RarityColor[(int)inventoryItem.Item.Rarity],
+                };
+
+                itemAttachment.Fields.Add(new Field(string.Format("{0} - {2} {1} {3}", inventoryItem.InventoryPosition, inventoryItem.Item.Name, inventoryItem.Item.Icon, inventoryItem.Quantity == 1 ? string.Empty : "(" + inventoryItem.Quantity + ")")));
+                attachments.Add(itemAttachment);
+            }
+
+            return attachments;
         }
     }
 

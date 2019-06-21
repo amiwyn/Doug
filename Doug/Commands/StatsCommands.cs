@@ -1,4 +1,5 @@
-﻿using Doug.Models;
+﻿using System.Collections.Generic;
+using Doug.Models;
 using Doug.Repositories;
 using Doug.Slack;
 using System.Linq;
@@ -58,9 +59,11 @@ namespace Doug.Commands
             var slurCount = _slurRepository.GetSlursFrom(userId).Count();
             var user = _userRepository.GetUser(userId);
 
-            var attachment = Attachment.StatsAttachment(slurCount, user);
+            var attachments = new List<Attachment>();
+            attachments.Add(Attachment.StatsAttachment(slurCount, user));
+            attachments.AddRange(Attachment.InventoryAttachments(user));
 
-            _slack.SendAttachment(attachment, command.ChannelId);
+            _slack.SendAttachments(attachments, command.ChannelId);
 
             return NoResponse;
         }

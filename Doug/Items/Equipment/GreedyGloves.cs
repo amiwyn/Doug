@@ -6,7 +6,7 @@
         {
             Name = "Gloves of Greed";
             Description = "These gloves give you an unquenchable thirst for rupees. Increase the amount of rupees you can steal.";
-            Rarity = Rarity.Common;
+            Rarity = Rarity.Rare;
             Icon = ":gloves:";
         }
 

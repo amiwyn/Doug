@@ -80,7 +80,7 @@ namespace Doug.Commands
             var slurs = slursToRemove.Select(slur => _slurRepository.GetSlur(slur)).ToList();
             var attachment = Attachment.DeletedSlursAttachment(slurs);
 
-            await _slack.SendAttachment(attachment, command.ChannelId);
+            await _slack.SendAttachments(new List<Attachment>{ attachment } , command.ChannelId);
 
             slursToRemove.ForEach(slur => _slurRepository.RemoveSlur(slur));
 

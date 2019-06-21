@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
@@ -17,7 +18,7 @@ namespace Doug.Slack
         Task<UserInfo> GetUserInfo(string userId);
         Task AddReaction(string reaction, string timestamp, string channel);
         Task<List<Reaction>> GetReactions(string timestamp, string channel);
-        Task SendAttachment(Attachment attachment, string channel);
+        Task SendAttachments(IEnumerable<Attachment> attachments, string channel);
         Task SendEphemeralMessage(string text, string user, string channel);
     }
 
@@ -110,9 +111,9 @@ namespace Doug.Slack
             return JsonConvert.DeserializeObject<ReactionInfoResponse>(response, _jsonSettings).Message.Reactions;
         }
 
-        public async Task SendAttachment(Attachment attachment, string channel)
+        public async Task SendAttachments(IEnumerable<Attachment> attachments, string channel)
         {
-            var attachmentString = JsonConvert.SerializeObject(new List<Attachment>() { attachment }, _jsonSettings);
+            var attachmentString = JsonConvert.SerializeObject(attachments, _jsonSettings);
 
             var request = new HttpRequestMessage(HttpMethod.Post, PostMessageUrl);
             var keyValues = new List<KeyValuePair<string, string>>
