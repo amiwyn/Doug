@@ -11,10 +11,16 @@ namespace Doug.Items
         public string Description { get; set; }
         public Rarity Rarity { get; set; }
         public string Icon { get; set; }
+        public int MaxStack { get; set; }
         public int Price { get; set; }
         public int Luck { get; set; }
         public int Agility { get; set; }
         public int Charisma { get; set; }
+
+        protected Item()
+        {
+            MaxStack = 1;
+        }
 
         public virtual string Use(int itemPos, User user, IUserRepository userRepository, IStatsRepository statsRepository)
         {

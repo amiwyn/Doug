@@ -40,26 +40,50 @@ namespace Doug.Repositories
                 .Include(usr => usr.InventoryItems)
                 .Single(usr => usr.Id == userId);
 
-            var slots = user.InventoryItems.Select(itm => itm.InventoryPosition).ToList();
+            var item = user.InventoryItems.FirstOrDefault(itm => itm.ItemId == itemId);
 
-            var slot = 0;
-            if (slots.Any())
+            if (item != null && item.Quantity < item.Item.MaxStack)
             {
-                var maxPos = slots.Any() ? slots.Max() : 0;
-                var freeSlots = Enumerable.Range(0, maxPos).Except(slots).ToList();
-
-                slot = freeSlots.Any() ? freeSlots.First() : maxPos + 1;
+                item.Quantity++;
+            }
+            else
+            {
+                var slot = FindNextFreeSlot(user.InventoryItems);
+                user.InventoryItems.Add(new InventoryItem(userId, itemId) {InventoryPosition = slot, Quantity = 1});
             }
 
-            user.InventoryItems.Add(new InventoryItem(userId, itemId) { InventoryPosition = slot });
             _db.SaveChanges();
         }
+
+        private int FindNextFreeSlot(List<InventoryItem> items)
+        {
+            var slots = items.Select(itm => itm.InventoryPosition).ToList();
+
+            if (!slots.Any())
+            {
+                return 0;
+            }
+
+            var maxPos = slots.Any() ? slots.Max() : 0;
+            var freeSlots = Enumerable.Range(0, maxPos).Except(slots).ToList();
+
+            return freeSlots.Any() ? freeSlots.First() : maxPos + 1;
+        } 
 
         public void RemoveItem(string userId, int inventoryPosition)
         {
             var user = _db.Users.Single(usr => usr.Id == userId);
             var item = user.InventoryItems.Single(itm => itm.InventoryPosition == inventoryPosition);
-            user.InventoryItems.Remove(item);
+
+            if (item.Quantity <= 1)
+            {
+                user.InventoryItems.Remove(item);
+            }
+            else
+            {
+                item.Quantity--;
+            }
+
             _db.SaveChanges();
         }
 

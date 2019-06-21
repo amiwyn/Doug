@@ -11,6 +11,7 @@ namespace Doug.Models
         [NotMapped]
         public Item Item { get; set; }
         public int InventoryPosition { get; set; }
+        public int Quantity { get; set; }
 
         public InventoryItem(string userId, string itemId)
         {

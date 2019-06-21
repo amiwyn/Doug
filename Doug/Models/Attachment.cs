@@ -49,7 +49,8 @@ namespace Doug.Models
             attachment.Fields.Add(new Field(string.Format(DougMessages.LuckStats, user.Luck)));
 
             attachment.Fields.Add(new Field(DougMessages.ItemStats));
-            user.InventoryItems.ForEach(inventoryItem => attachment.Fields.Add(new Field(string.Format("{0} - {2} {1}", inventoryItem.InventoryPosition, inventoryItem.Item.Name, inventoryItem.Item.Icon))));
+
+            user.InventoryItems.ForEach(inventoryItem => attachment.Fields.Add(new Field(string.Format("{0} - {2} {1} {3}", inventoryItem.InventoryPosition, inventoryItem.Item.Name, inventoryItem.Item.Icon, inventoryItem.Quantity == 1 ? string.Empty : "(" + inventoryItem.Quantity + ")"))));
 
             return attachment;
         }
