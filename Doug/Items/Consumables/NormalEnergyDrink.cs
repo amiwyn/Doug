@@ -3,7 +3,7 @@ using Doug.Repositories;
 
 namespace Doug.Items.Consumables
 {
-    public class NormalEnergyDrink : Item
+    public class NormalEnergyDrink : ConsumableItem
     {
         private const int RecoverAmount = 25;
 
@@ -13,18 +13,16 @@ namespace Doug.Items.Consumables
             Description = "A good cuppa. Restore 25 energy.";
             Rarity = Rarity.Common;
             Icon = ":coffee:";
-            MaxStack = 99;
         }
 
         public override string Use(int itemPos, User user, IUserRepository userRepository, IStatsRepository statsRepository)
         {
-            var energy = user.Energy + RecoverAmount;
+            base.Use(itemPos, user, userRepository, statsRepository);
 
+            var energy = user.Energy + RecoverAmount;
             energy = energy >= user.CalculateTotalEnergy() ? user.CalculateTotalEnergy() : energy;
 
             statsRepository.UpdateEnergy(user.Id, energy);
-
-            userRepository.RemoveItem(user.Id, itemPos);
 
             return string.Format(DougMessages.RecoverItem, Name, RecoverAmount, "energy");
         }

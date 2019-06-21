@@ -48,6 +48,7 @@
         public const string StealFail = "{0} attempted to steal from {1} but failed!";
         public const string RecoverItem = "You used '{0}' and recovered {1} {2}.";
         public const string UserGaveItem = "{0} gave '{1}' to {2}.";
+        public const string ConsumedItem = "You consumed the item.";
 
         public const string DougError = "Beep boop, it's not working : {0}";
         public const string NotAnAdmin = "You are not an admin.";
