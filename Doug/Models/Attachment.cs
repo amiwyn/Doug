@@ -9,7 +9,7 @@ namespace Doug.Models
         public string Pretext { get; set; }
         public List<Field> Fields { get; set; }
 
-        private static readonly string[] RarityColor = { "#adadad", "#26cc3e", "#2669cc", "#e26b16", "#dbb313" };
+        private static readonly string[] RarityColor = { "#adadad", "#26cc3e", "#2669cc", "#e26b16", "#860daa" };
 
         public Attachment()
         {
