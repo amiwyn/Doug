@@ -13,6 +13,7 @@ namespace Test.Items
         private NormalEnergyDrink _normalEnergyDrink;
 
         private readonly Mock<IUserRepository> _userRepository = new Mock<IUserRepository>();
+        private readonly Mock<IStatsRepository> _statsRepository = new Mock<IStatsRepository>();
 
         private readonly User _user = new User() { Id = "ginette", Energy = 0 };
 
@@ -27,15 +28,15 @@ namespace Test.Items
         [TestMethod]
         public void WhenConsuming_IncreaseEnergyBy25()
         {
-            _normalEnergyDrink.Use(0, _user, _userRepository.Object);
+            _normalEnergyDrink.Use(0, _user, _userRepository.Object, _statsRepository.Object);
 
-            _userRepository.Verify(repo => repo.UpdateEnergy("ginette", 25));
+            _statsRepository.Verify(repo => repo.UpdateEnergy("ginette", 25));
         }
 
         [TestMethod]
         public void WhenConsuming_ItemIsRemoved()
         {
-            _normalEnergyDrink.Use(0, _user, _userRepository.Object);
+            _normalEnergyDrink.Use(0, _user, _userRepository.Object, _statsRepository.Object);
 
             _userRepository.Verify(repo => repo.RemoveItem("ginette", 0));
         }
@@ -45,9 +46,9 @@ namespace Test.Items
         {
             var user = new User() { Id = "ginette", Energy = 20 };
 
-            _normalEnergyDrink.Use(0, user, _userRepository.Object);
+            _normalEnergyDrink.Use(0, user, _userRepository.Object, _statsRepository.Object);
 
-            _userRepository.Verify(repo => repo.UpdateEnergy("ginette", 25));
+            _statsRepository.Verify(repo => repo.UpdateEnergy("ginette", 25));
         }
     }
 }

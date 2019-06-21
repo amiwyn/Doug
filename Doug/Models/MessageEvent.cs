@@ -1,12 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 
 namespace Doug.Models
 {
     public class MessageEvent
     {
         private const string GroupType = "channel";
-        private const string GAB_ID = "UB619L16W";
+        private const string GabId = "UB619L16W";
 
         private string[] Words = new string [] { "mcd0", "mcdo", "mc d0", "mc do", "mcdonald", "mc donald", "mcd0nalds", "mcd0nald$", "mcd0n4lds", "mcd0n4ld$", "mc d0n4ld$", "mc d0nald$" };
 
@@ -31,7 +30,7 @@ namespace Doug.Models
 
         public bool ContainsMcdonaldMention()
         {
-            return User == GAB_ID && Words.Any(Text.ToLower().Contains);
+            return User == GabId && Words.Any(Text.ToLower().Contains);
         }
     }
 }

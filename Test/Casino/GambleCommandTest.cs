@@ -3,6 +3,7 @@ using Doug.Commands;
 using Doug.Items;
 using Doug.Models;
 using Doug.Repositories;
+using Doug.Services;
 using Doug.Slack;
 using Hangfire;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -33,6 +34,8 @@ namespace Test.Casino
         private readonly Mock<IChannelRepository> _channelRepository = new Mock<IChannelRepository>();
         private readonly Mock<IBackgroundJobClient> _backgroundClient = new Mock<IBackgroundJobClient>();
         private readonly Mock<IItemEventDispatcher> _itemEventDispatcher = new Mock<IItemEventDispatcher>();
+        private readonly Mock<IStatsRepository> _statsRepository = new Mock<IStatsRepository>();
+        private readonly Mock<IRandomService> _randomService = new Mock<IRandomService>();
 
 
         [TestInitialize]
@@ -40,21 +43,27 @@ namespace Test.Casino
         {
             _userRepository.Setup(repo => repo.GetUser(User)).Returns(_user);
 
-            _casinoCommands = new CasinoCommands(_userRepository.Object, _slack.Object, _channelRepository.Object, _backgroundClient.Object, _itemEventDispatcher.Object);
+            _casinoCommands = new CasinoCommands(_userRepository.Object, _slack.Object, _channelRepository.Object, _backgroundClient.Object, _itemEventDispatcher.Object, _statsRepository.Object, _randomService.Object);
         }
 
         [TestMethod]
-        public void WhenGambling_WinRateIsAroundHalf()
+        public void GivenUserWins_WhenGambling_UserGainHisBet()
         {
-            var winCount = 0;
-            _userRepository.Setup(repo => repo.AddCredits(User, 10)).Callback(() => winCount++);
-            _itemEventDispatcher.Setup(disp => disp.OnGambling(It.IsAny<User>(), It.IsAny<double>())).Returns(0.5);
-            for (int i = 0; i < 5000; i++)
-            {
-                _casinoCommands.Gamble(_command);
-            }
+            _randomService.Setup(rnd => rnd.RollAgainstOpponent(It.IsAny<double>(), It.IsAny<double>())).Returns(true);
 
-            Assert.IsTrue(winCount > 2450 && winCount < 2650);
+            _casinoCommands.Gamble(_command);
+
+            _userRepository.Verify(repo => repo.AddCredits(User, 10));
+        }
+
+        [TestMethod]
+        public void GivenUserLose_WhenGambling_UserLoseHisBet()
+        {
+            _randomService.Setup(rnd => rnd.RollAgainstOpponent(It.IsAny<double>(), It.IsAny<double>())).Returns(false);
+
+            _casinoCommands.Gamble(_command);
+
+            _userRepository.Verify(repo => repo.RemoveCredits(User, 10));
         }
 
         [TestMethod]
@@ -95,7 +104,7 @@ namespace Test.Casino
         {
             _casinoCommands.Gamble(_command);
 
-            _userRepository.Verify(repo => repo.UpdateEnergy(User, 19));
+            _statsRepository.Verify(repo => repo.UpdateEnergy(User, 19));
         }
 
         [TestMethod]
@@ -124,20 +133,6 @@ namespace Test.Casino
             _casinoCommands.Gamble(_command);
 
             _itemEventDispatcher.Verify(dispatcher => dispatcher.OnGambling(_user, It.IsAny<double>()));
-        }
-
-        [TestMethod]
-        public void GivenChanceIs55_WhenGambling_WinRateIsAround55()
-        {
-            var winCount = 0;
-            _userRepository.Setup(repo => repo.AddCredits(User, 10)).Callback(() => winCount++);
-            _itemEventDispatcher.Setup(disp => disp.OnGambling(It.IsAny<User>(), It.IsAny<double>())).Returns(0.55);
-            for (int i = 0; i < 5000; i++)
-            {
-                _casinoCommands.Gamble(_command);
-            }
-
-            Assert.IsTrue(winCount > 2650 && winCount < 2850);
         }
     }
 }

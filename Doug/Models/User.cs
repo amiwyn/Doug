@@ -9,7 +9,6 @@ namespace Doug.Models
         public List<InventoryItem> InventoryItems { get; set; }
         public int Health { get; set; }
         public int Energy { get; set; }
-        public int Defence { get; set; }
         public int Luck { get; set; }
         public int Agility { get; set; }
         public int Charisma { get; set; }

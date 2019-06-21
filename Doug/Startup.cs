@@ -52,6 +52,7 @@ namespace Doug
             services.AddTransient<IItemEventDispatcher, ItemEventDispatcher>();
             services.AddTransient<IAuthorizationService, AuthorizationService>();
             services.AddTransient<ICoffeeService, CoffeeService>();
+            services.AddTransient<IRandomService, RandomService>();
 
             services.AddTransient<ICoffeeCommands, CoffeeCommands>();
             services.AddTransient<ISlursCommands, SlursCommands>();
@@ -65,6 +66,7 @@ namespace Doug
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<ICoffeeRepository, CoffeeRepository>();
             services.AddTransient<ISlurRepository, SlurRepository>();
+            services.AddTransient<IStatsRepository, StatsRepository>();
 
             var env = Environment.GetEnvironmentVariable("APP_ENV");
 

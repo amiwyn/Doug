@@ -35,6 +35,11 @@ namespace Doug.Commands
                 return new DougResponse(DougMessages.InvalidAmount);
             }
 
+            if (!command.IsUserArgument())
+            {
+                return new DougResponse(DougMessages.InvalidUserArgument);
+            }
+
             var user = _userRepository.GetUser(command.UserId);
 
             if (!user.HasEnoughCreditsForAmount(amount))
@@ -60,13 +65,6 @@ namespace Doug.Commands
 
         public DougResponse Leaderboard(Command command)
         {
-            var userId = command.UserId;
-
-            if (command.IsUserArgument())
-            {
-                userId = command.GetTargetUserId();
-            }
-
             var list = _userRepository.GetUsers().ToList();
 
             list.Sort((u1, u2) => u1.Credits.CompareTo(u2.Credits));

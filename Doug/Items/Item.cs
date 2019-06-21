@@ -12,7 +12,7 @@ namespace Doug.Items
         public Rarity Rarity { get; set; }
         public string Icon { get; set; }
 
-        public virtual string Use(int itemPos, User user, IUserRepository userRepository)
+        public virtual string Use(int itemPos, User user, IUserRepository userRepository, IStatsRepository statsRepository)
         {
             return string.Format(DougMessages.ItemCantBeUsed, itemPos);
         }

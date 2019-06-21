@@ -14,12 +14,14 @@ namespace Doug.Commands
     public class InventoryCommands : IInventoryCommands
     {
         private readonly IUserRepository _userRepository;
+        private readonly IStatsRepository _statsRepository;
         private readonly ISlackWebApi _slack;
 
-        public InventoryCommands(IUserRepository userRepository, ISlackWebApi slack)
+        public InventoryCommands(IUserRepository userRepository, ISlackWebApi slack, IStatsRepository statsRepository)
         {
             _userRepository = userRepository;
             _slack = slack;
+            _statsRepository = statsRepository;
         }
 
         public DougResponse Use(Command command)
@@ -33,7 +35,7 @@ namespace Doug.Commands
                 return new DougResponse(string.Format(DougMessages.NoItemInSlot, position));
             }
 
-            var response = item.Item.Use(position, user, _userRepository);
+            var response = item.Item.Use(position, user, _userRepository, _statsRepository);
 
             return new DougResponse(response);
         }

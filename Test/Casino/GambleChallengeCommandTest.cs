@@ -3,6 +3,7 @@ using Doug.Commands;
 using Doug.Items;
 using Doug.Models;
 using Doug.Repositories;
+using Doug.Services;
 using Doug.Slack;
 using Hangfire;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -24,6 +25,13 @@ namespace Test.Casino
             UserId = User
         };
 
+        private readonly Command _acceptCommand = new Command()
+        {
+            ChannelId = Channel,
+            Text = "accept",
+            UserId = User
+        };
+
         private readonly User _caller = new User() { Id = "testuser", Credits = 68 };
         private readonly User _target = new User() {Id = "ginette", Credits = 68};
 
@@ -34,6 +42,8 @@ namespace Test.Casino
         private readonly Mock<IChannelRepository> _channelRepository = new Mock<IChannelRepository>();
         private readonly Mock<IBackgroundJobClient> _backgroundClient = new Mock<IBackgroundJobClient>();
         private readonly Mock<IItemEventDispatcher> _itemEventDispatcher = new Mock<IItemEventDispatcher>();
+        private readonly Mock<IStatsRepository> _statsRepository = new Mock<IStatsRepository>();
+        private readonly Mock<IRandomService> _randomService = new Mock<IRandomService>();
 
         [TestInitialize]
         public void Setup()
@@ -43,7 +53,47 @@ namespace Test.Casino
 
             _channelRepository.Setup(repo => repo.GetGambleChallenge(User)).Returns(new GambleChallenge("testuser", "ginette", 10));
 
-            _casinoCommands = new CasinoCommands(_userRepository.Object, _slack.Object, _channelRepository.Object, _backgroundClient.Object, _itemEventDispatcher.Object);
+            _casinoCommands = new CasinoCommands(_userRepository.Object, _slack.Object, _channelRepository.Object, _backgroundClient.Object, _itemEventDispatcher.Object, _statsRepository.Object, _randomService.Object);
+        }
+
+        [TestMethod]
+        public void GivenCallerWins_WhenGambling_CallerGainHisBet()
+        {
+            _randomService.Setup(rnd => rnd.RollAgainstOpponent(It.IsAny<double>(), It.IsAny<double>())).Returns(true);
+
+            _casinoCommands.GambleChallenge(_acceptCommand);
+
+            _userRepository.Verify(repo => repo.AddCredits(User, 10));
+        }
+
+        [TestMethod]
+        public void GivenCallerLose_WhenGambling_CallerLoseHisBet()
+        {
+            _randomService.Setup(rnd => rnd.RollAgainstOpponent(It.IsAny<double>(), It.IsAny<double>())).Returns(false);
+
+            _casinoCommands.GambleChallenge(_acceptCommand);
+
+            _userRepository.Verify(repo => repo.RemoveCredits(User, 10));
+        }
+
+        [TestMethod]
+        public void GivenTargetWins_WhenGambling_TargetGainHisBet()
+        {
+            _randomService.Setup(rnd => rnd.RollAgainstOpponent(It.IsAny<double>(), It.IsAny<double>())).Returns(false);
+
+            _casinoCommands.GambleChallenge(_acceptCommand);
+
+            _userRepository.Verify(repo => repo.AddCredits("ginette", 10));
+        }
+
+        [TestMethod]
+        public void GivenTargetLose_WhenGambling_TargetLoseHisBet()
+        {
+            _randomService.Setup(rnd => rnd.RollAgainstOpponent(It.IsAny<double>(), It.IsAny<double>())).Returns(true);
+
+            _casinoCommands.GambleChallenge(_acceptCommand);
+
+            _userRepository.Verify(repo => repo.RemoveCredits("ginette", 10));
         }
 
         [TestMethod]

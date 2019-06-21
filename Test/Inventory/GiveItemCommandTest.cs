@@ -26,6 +26,7 @@ namespace Test.Inventory
 
         private readonly Mock<IUserRepository> _userRepository = new Mock<IUserRepository>();
         private readonly Mock<ISlackWebApi> _slack = new Mock<ISlackWebApi>();
+        private readonly Mock<IStatsRepository> _statsRepository = new Mock<IStatsRepository>();
 
         [TestInitialize]
         public void Setup()
@@ -33,7 +34,7 @@ namespace Test.Inventory
             var items = new List<InventoryItem>() {new InventoryItem("testuser", "testitem") {InventoryPosition = 2}};
             _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User() { Id = "testuser", InventoryItems = items });
 
-            _inventoryCommands = new InventoryCommands(_userRepository.Object, _slack.Object);
+            _inventoryCommands = new InventoryCommands(_userRepository.Object, _slack.Object, _statsRepository.Object);
         }
 
         [TestMethod]

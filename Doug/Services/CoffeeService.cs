@@ -72,10 +72,17 @@ namespace Doug.Services
             var total = missingParticipants.Count + readyParticipants.Count;
 
             var userMentionList = missingParticipants
-                .Select(userId => Utils.UserMention(userId))
+                .Select(Utils.UserMention)
                 .Aggregate(string.Empty, (userId, acc) => acc + " " + userId);
 
-            _slack.SendMessage(string.Format(DougMessages.Remind, readyParticipants.Count, total, userMentionList), channelId);
+
+            var message = DougMessages.Remind;
+            if (readyParticipants.Count == 6 && total == 9)
+            {
+                message = DougMessages.Remind69;
+            }
+
+            _slack.SendMessage(string.Format(message, readyParticipants.Count, total, userMentionList), channelId);
         }
 
         public void LaunchCoffeeBreak(string channelId)

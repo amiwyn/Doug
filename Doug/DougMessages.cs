@@ -5,16 +5,16 @@
         public const string CoffeeParrotEmoji = ":coffeeparrot:";
         public const string CreditEmoji = ":rupee:";
         public const string HpEmoji = ":red_circle:";
-        public const string EnergyEmoji = ":blue_circle:";
+        public const string EnergyEmoji = ":large_blue_circle:";
         public const string UpVote = "+1";
         public const string Downvote = "-1";
-
         public const string Top5 = "Leaderboard";
 
         public const string JoinedCoffee = "{0} joined the coffee break.";
         public const string KickedCoffee = "{0} was kicked from the coffee break.";
         public const string SkippedCoffee = "{0} will skip the coffee break.";
         public const string Remind = "*{0}/{1}* - {2}";
+        public const string Remind69 = "*{0}/{1}* - YEAH - {2}";
         public const string CoffeeStart = "Alright, let's do this. <!here> GO!";
         public const string BackToWork = "<!here> Go back to work, ya bunch o' lazy dogs!";
         public const string GainedCredit = "You gained {0} " + CreditEmoji;
@@ -32,7 +32,7 @@
         public const string EnergyStats = ":large_blue_circle: Energy : {0}/{1}";
         public const string CharismaStats = ":information_desk_person: Charisma : {0}";
         public const string AgilityStats = ":runner: Agility : {0}";
-        public const string DefenceStats = ":shield: Defence: {0}";
+        public const string DefenceStats = ":shield: Defense: {0}";
         public const string LuckStats = ":four_leaf_clover: Luck : {0}";
         public const string ItemStats = ":briefcase: Items :";
         public const string WonGamble = "{0} flipped a coin and won {1} " + CreditEmoji;
@@ -62,5 +62,6 @@
         public const string TargetNoMoney = "Your target don't have enough " + CreditEmoji;
         public const string NoItemInSlot = "There is no item in slot {0}.";
         public const string ItemCantBeUsed = "The item in slot {0} cannot be used.";
+        public const string InvalidUserArgument = "You must pass a valid user in arguments";
     }
 }

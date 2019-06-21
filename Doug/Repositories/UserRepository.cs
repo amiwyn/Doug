@@ -8,14 +8,12 @@ namespace Doug.Repositories
     public interface IUserRepository
     {
         void AddUser(string userId);
-        ICollection<User> GetUsers();
+        List<User> GetUsers();
         User GetUser(string userId);
         void RemoveCredits(string userId, int amount);
         void AddCredits(string userId, int amount);
         void AddItem(string userId, string itemId);
         void RemoveItem(string userId, int inventoryPosition);
-        void UpdateEnergy(string userId, int energy); //TODO: move it to something like StatsRepository or CombatRepository
-        void UpdateHealth(string userId, int health);
     }
 
     public class UserRepository : IUserRepository
@@ -38,7 +36,9 @@ namespace Doug.Repositories
 
         public void AddItem(string userId, string itemId)
         {
-            var user = _db.Users.Single(usr => usr.Id == userId);
+            var user = _db.Users
+                .Include(usr => usr.InventoryItems)
+                .Single(usr => usr.Id == userId);
 
             var slots = user.InventoryItems.Select(itm => itm.InventoryPosition).ToList();
 
@@ -60,20 +60,6 @@ namespace Doug.Repositories
             var user = _db.Users.Single(usr => usr.Id == userId);
             var item = user.InventoryItems.Single(itm => itm.InventoryPosition == inventoryPosition);
             user.InventoryItems.Remove(item);
-            _db.SaveChanges();
-        }
-
-        public void UpdateEnergy(string userId, int energy)
-        {
-            var user = _db.Users.Single(usr => usr.Id == userId);
-            user.Energy = energy;
-            _db.SaveChanges();
-        }
-
-        public void UpdateHealth(string userId, int health)
-        {
-            var user = _db.Users.Single(usr => usr.Id == userId);
-            user.Health = health;
             _db.SaveChanges();
         }
 
@@ -99,7 +85,7 @@ namespace Doug.Repositories
                 .Single(user => user.Id == userId);
         }
 
-        public ICollection<User> GetUsers()
+        public List<User> GetUsers()
         {
             return _db.Users.ToList();
         }

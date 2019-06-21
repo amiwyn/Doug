@@ -16,12 +16,12 @@ namespace Doug.Controllers
             _statsCommands = statsCommands;
         }
 
-        [HttpPost("stats")]
-        public ActionResult Stats([FromForm]SlackCommandDto slackCommand)
+        [HttpPost("profile")]
+        public ActionResult Profile([FromForm]SlackCommandDto slackCommand)
         {
             try
             {
-                var result = _statsCommands.Stats(slackCommand.ToCommand());
+                var result = _statsCommands.Profile(slackCommand.ToCommand());
                 return Ok(result.Message);
             }
             catch (Exception ex)
