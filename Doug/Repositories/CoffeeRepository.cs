@@ -14,7 +14,7 @@ namespace Doug.Repositories
         ICollection<string> GetMissingParticipants();
         void ResetRoster();
         bool IsCoffeeBreak();
-        void ResetCoffeeBreak();
+        void EndCoffeeBreak();
         void StartCoffeeBreak();
     }
 
@@ -82,7 +82,7 @@ namespace Doug.Repositories
             return _db.Channel.Single().IsCoffee;
         }
 
-        public void ResetCoffeeBreak()
+        public void EndCoffeeBreak()
         {
             _db.Channel.Single().IsCoffee = false;
             _db.SaveChanges();

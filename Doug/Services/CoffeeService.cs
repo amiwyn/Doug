@@ -116,7 +116,7 @@ namespace Doug.Services
             }
 
             _coffeeRepository.ResetRoster();
-            _coffeeRepository.ResetCoffeeBreak();
+            _coffeeRepository.EndCoffeeBreak();
 
             _slack.SendMessage(DougMessages.BackToWork, channelId);
         }
