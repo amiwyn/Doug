@@ -36,6 +36,9 @@
         public const string AgilityStats = ":runner: Agility : {0}";
         public const string DefenceStats = ":shield: Defense: {0}";
         public const string LuckStats = ":four_leaf_clover: Luck : {0}";
+        public const string ConstitutionStats = ":heart: Constitution : {0}";
+        public const string StaminaStats = ":male_mage: Stamina : {0}";
+        public const string FreeStatPoints = ":cherries: Free stat points : {0}";
         public const string ItemStats = ":briefcase: Items :";
         public const string WonGamble = "{0} flipped a coin and won {1} " + CreditEmoji;
         public const string LostGamble = "{0} flipped a coin and lost {1} " + CreditEmoji;

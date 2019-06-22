@@ -38,13 +38,13 @@ namespace Doug.Commands
         {
             var user = _userRepository.GetUser(command.UserId);
 
-            return new DougResponse(string.Format(DougMessages.Health, user.Health, user.CalculateTotalHealth()));
+            return new DougResponse(string.Format(DougMessages.Health, user.Health, user.TotalHealth));
         }
         public DougResponse Energy(Command command)
         {
             var user = _userRepository.GetUser(command.UserId);
 
-            return new DougResponse(string.Format(DougMessages.Energy, user.Energy, user.CalculateTotalEnergy()));
+            return new DougResponse(string.Format(DougMessages.Energy, user.Energy, user.TotalEnergy));
         }
 
         public DougResponse Profile(Command command)

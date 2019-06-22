@@ -3,6 +3,7 @@ using Doug.Slack;
 using Hangfire;
 using System;
 using System.Linq;
+using Doug.Items;
 
 namespace Doug.Services
 {
@@ -106,6 +107,7 @@ namespace Doug.Services
             foreach (var participant in participants)
             {
                 _userRepository.AddCredits(participant, CoffeeBreakAward);
+                _userRepository.AddItem(participant, ItemFactory.NormalEnergyDrink);
             }
 
             _coffeeRepository.ResetRoster();

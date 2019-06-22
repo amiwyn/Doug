@@ -20,7 +20,7 @@ namespace Doug.Items.Consumables
             base.Use(itemPos, user, userRepository, statsRepository);
 
             var energy = user.Energy + RecoverAmount;
-            energy = energy >= user.CalculateTotalEnergy() ? user.CalculateTotalEnergy() : energy;
+            energy = energy >= user.TotalEnergy ? user.TotalEnergy : energy;
 
             statsRepository.UpdateEnergy(user.Id, energy);
 

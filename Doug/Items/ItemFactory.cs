@@ -6,14 +6,14 @@ namespace Doug.Items
 {
     public static class ItemFactory
     {
-        private const string AwakeningOrb = "awakening_orb";
-        private const string LuckyDice = "lucky_dice";
-        private const string BurglarBoots = "burglar_boots";
-        private const string GreedyGloves = "greedy_gloves";
-        private const string NormalEnergyDrink = "normal_energy_drink";
-        private const string PimentSword = "piment_sword";
-        private const string Apple = "apple";
-        private const string DevilsContract = "devil_contract";
+        public const string AwakeningOrb = "awakening_orb";
+        public const string LuckyDice = "lucky_dice";
+        public const string BurglarBoots = "burglar_boots";
+        public const string GreedyGloves = "greedy_gloves";
+        public const string NormalEnergyDrink = "normal_energy_drink";
+        public const string PimentSword = "piment_sword";
+        public const string Apple = "apple";
+        public const string DevilsContract = "devil_contract";
 
         public static Item CreateItem(string itemId)
         {

@@ -14,7 +14,7 @@ namespace Test.Items
         private readonly Mock<IStatsRepository> _statsRepository = new Mock<IStatsRepository>();
         private readonly Apple _apple = new Apple();
 
-        private readonly User _user = new User() { Id = "test", Health = 90 };
+        private readonly User _user = new User() { Id = "test", Health = 90,  };
 
         [TestInitialize]
         public void Setup()

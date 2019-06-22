@@ -20,7 +20,7 @@ namespace Doug.Items.Consumables
             base.Use(itemPos, user, userRepository, statsRepository);
 
             var health = user.Health + RecoverAmount;
-            health = health >= user.CalculateTotalHealth() ? user.CalculateTotalHealth() : health;
+            health = health >= user.TotalHealth ? user.TotalHealth : health;
 
             statsRepository.UpdateHealth(user.Id, health);
 
