@@ -28,6 +28,8 @@
         public const string CreditStats = CreditEmoji + " Money : {0}";
         public const string UserIdStats = ":robot_face: User ID : {0}";
         public const string SlursAddedStats = ":see_no_evil: Slurs added : {0}";
+        public const string LevelStats = ":zap: Level : {0}";
+        public const string ExperienceStats = ":level_slider: Level Progress : {0:0.##}%";
         public const string HealthStats = ":red_circle: Health : {0}/{1}";
         public const string EnergyStats = ":large_blue_circle: Energy : {0}/{1}";
         public const string CharismaStats = ":information_desk_person: Charisma : {0}";

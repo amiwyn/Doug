@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Doug.Models
 {
@@ -12,19 +13,35 @@ namespace Doug.Models
         public int Luck { get; set; }
         public int Agility { get; set; }
         public int Charisma { get; set; }
+        public long Experience { get; set; }
 
         public User() {
             InventoryItems = new List<InventoryItem>();
         }
 
+        public int GetLevel()
+        {
+            return (int)Math.Floor(Math.Sqrt(Experience) * 0.1 + 1);
+        }
+
+        public double GetExperienceAdvancement()
+        {
+            var nextLevelExp = Math.Pow((GetLevel() + 1) * 10 - 10, 2);
+            var prevLevelExp = Math.Pow((GetLevel() - 1) * 10, 2);
+
+            return (Experience - prevLevelExp) / (nextLevelExp - prevLevelExp);
+        }
+
         public double CalculateBaseGambleChance()
         {
-            return 0.5;
+            var luckInfluence = Math.Log(Luck / 5.0) / (Math.Log(2) * 100);
+            return 0.5 + luckInfluence;
         }
 
         public double CalculateBaseStealSuccessRate()
         {
-            return 0.25;
+            var luckInfluence = (Math.Sqrt(Luck) - Math.Sqrt(5)) * 0.1;
+            return 0.25 + luckInfluence;
         }
 
         public double CalculateBaseOpponentStealSuccessRate()
@@ -34,17 +51,17 @@ namespace Doug.Models
 
         public int CalculateBaseStealAmount()
         {
-            return 1;
+            return (int)Math.Floor(6 * (Math.Sqrt(Agility) - Math.Sqrt(5)) + 1);
         }
 
         public int CalculateTotalHealth()
         {
-            return 100;
+            return (int)Math.Floor(15.0 * GetLevel() + 85);
         }
 
         public int CalculateTotalEnergy()
         {
-            return 25;
+            return (int)Math.Floor(5.0 * GetLevel() + 20);
         }
 
         public bool HasEnoughCreditsForAmount(int amount)

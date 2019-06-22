@@ -114,7 +114,7 @@ namespace Test.Slurs
         {
             await _slursCommands.Clean(_command);
 
-            _slack.Verify(slack => slack.SendAttachment(It.IsAny<Attachment>(), Channel));
+            _slack.Verify(slack => slack.SendAttachments(It.IsAny<List<Attachment>>(), Channel));
         }
     }
 }
