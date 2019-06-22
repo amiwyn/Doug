@@ -21,6 +21,7 @@ namespace Doug.Services
         private const int AfternoonBreak = 14 + 4;
         private const int Tolerance = 30;
         private const int CoffeeBreakAward = 10;
+        private const int CoffeeExperienceAward = 300;
 
         private readonly ISlackWebApi _slack;
         private readonly ICoffeeRepository _coffeeRepository;
@@ -108,6 +109,10 @@ namespace Doug.Services
             {
                 _userRepository.AddCredits(participant, CoffeeBreakAward);
                 _userRepository.AddItem(participant, ItemFactory.NormalEnergyDrink);
+
+                var user = _userRepository.GetUser(participant);
+                user.AddExperience(CoffeeExperienceAward, channelId, _slack);
+                _userRepository.SaveUser(user);
             }
 
             _coffeeRepository.ResetRoster();

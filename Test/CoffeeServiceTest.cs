@@ -6,6 +6,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
 using System.Collections.Generic;
+using Doug.Items;
+using Doug.Models;
 
 namespace Test
 {
@@ -26,6 +28,7 @@ namespace Test
         [TestInitialize]
         public void Setup()
         {
+            _userRepository.Setup(repo => repo.GetUser(It.IsAny<string>())).Returns(new User());
             _coffeeService = new CoffeeService(_slack.Object, _coffeeRepository.Object, _channelRepository.Object, _backgroundJobClient.Object, _userRepository.Object);
         }
 
@@ -114,5 +117,24 @@ namespace Test
             _userRepository.Verify(repo => repo.AddCredits(It.IsAny<string>(), 10), Times.Exactly(3));
         }
 
+        [TestMethod]
+        public void WhenEndingBreak_ParticipantsGetACoffee()
+        {
+            _coffeeRepository.Setup(repo => repo.GetReadyParticipants()).Returns(new List<string>() { "bob", "ginette", "lise" });
+
+            _coffeeService.EndCoffee(Channel);
+
+            _userRepository.Verify(repo => repo.AddItem(It.IsAny<string>(), ItemFactory.NormalEnergyDrink), Times.Exactly(3));
+        }
+
+        [TestMethod]
+        public void WhenEndingBreak_ParticipantsGet300Experience()
+        {
+            _coffeeRepository.Setup(repo => repo.GetReadyParticipants()).Returns(new List<string>() { "bob", "ginette", "lise" });
+
+            _coffeeService.EndCoffee(Channel);
+
+            _userRepository.Verify(repo => repo.SaveUser(It.IsAny<User>()), Times.Exactly(3));
+        }
     }
 }

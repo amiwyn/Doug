@@ -10,6 +10,7 @@ namespace Doug.Repositories
         void AddUser(string userId);
         List<User> GetUsers();
         User GetUser(string userId);
+        void SaveUser(User user);
         void RemoveCredits(string userId, int amount);
         void AddCredits(string userId, int amount);
         void AddItem(string userId, string itemId);
@@ -107,6 +108,12 @@ namespace Doug.Repositories
             return _db.Users
                 .Include(user => user.InventoryItems)
                 .Single(user => user.Id == userId);
+        }
+
+        public void SaveUser(User user)
+        {
+            _db.Users.Update(user);
+            _db.SaveChanges();
         }
 
         public List<User> GetUsers()

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Doug.Slack;
 
 namespace Doug.Models
 {
@@ -86,6 +87,19 @@ namespace Doug.Models
             _charisma = 5;
             _constitution = 5;
             _stamina = 5;
+        }
+
+        public void AddExperience(long experience, string channel, ISlackWebApi slack) // TODO: move this somewhere else
+        {
+            var previousLevel = Level;
+            Experience += experience;
+
+            slack.SendEphemeralMessage(string.Format(DougMessages.GainedExp, experience), Id, channel);
+
+            if (previousLevel < Level)
+            {
+                slack.SendMessage(string.Format(DougMessages.LevelUp, Utils.UserMention(Id), Level), channel);
+            }
         }
 
         public double CalculateBaseGambleChance()
