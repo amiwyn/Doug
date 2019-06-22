@@ -44,6 +44,11 @@ namespace Doug.Services
                 return;
             }
 
+            if (_coffeeRepository.IsCoffeeBreak())
+            {
+                return;
+            }
+
             _coffeeRepository.ConfirmUserReady(userId);
 
             if (_coffeeRepository.GetMissingParticipants().Count == 0)
@@ -87,6 +92,8 @@ namespace Doug.Services
 
         public void LaunchCoffeeBreak(string channelId)
         {
+            _coffeeRepository.StartCoffeeBreak();
+
             _slack.SendMessage(DougMessages.CoffeeStart, channelId);
 
             _backgroundJobClient.Schedule(() => EndCoffee(channelId), TimeSpan.FromMinutes(CoffeeBreakDurationMinutes));
@@ -102,6 +109,7 @@ namespace Doug.Services
             }
 
             _coffeeRepository.ResetRoster();
+            _coffeeRepository.ResetCoffeeBreak();
 
             _slack.SendMessage(DougMessages.BackToWork, channelId);
         }

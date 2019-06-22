@@ -13,6 +13,9 @@ namespace Doug.Repositories
         ICollection<string> GetReadyParticipants();
         ICollection<string> GetMissingParticipants();
         void ResetRoster();
+        bool IsCoffeeBreak();
+        void ResetCoffeeBreak();
+        void StartCoffeeBreak();
     }
 
     public class CoffeeRepository : ICoffeeRepository
@@ -71,6 +74,23 @@ namespace Doug.Repositories
                 participant.IsReady = false;
                 participant.IsSkipping = false;
             });
+            _db.SaveChanges();
+        }
+
+        public bool IsCoffeeBreak()
+        {
+            return _db.Channel.Single().IsCoffee;
+        }
+
+        public void ResetCoffeeBreak()
+        {
+            _db.Channel.Single().IsCoffee = false;
+            _db.SaveChanges();
+        }
+
+        public void StartCoffeeBreak()
+        {
+            _db.Channel.Single().IsCoffee = true;
             _db.SaveChanges();
         }
 
