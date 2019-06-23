@@ -13,10 +13,7 @@ namespace Doug.Items
         public int Stamina { get; set; }
         public EquipmentSlot Slot { get; set; }
 
-        protected EquipmentItem()
-        {
-
-        }
+        protected EquipmentItem() { }
 
         public override bool IsEquipable()
         {

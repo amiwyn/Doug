@@ -14,6 +14,7 @@ namespace Doug.Items
         public const string PimentSword = "piment_sword";
         public const string Apple = "apple";
         public const string DevilsContract = "devil_contract";
+        public const string CloakOfSpikes = "cloak_spikes";
 
         public static Item CreateItem(string itemId)
         {
