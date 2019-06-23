@@ -39,6 +39,7 @@ namespace Doug.Repositories
         {
             var user = _db.Users
                 .Include(usr => usr.InventoryItems)
+                .Include(usr => usr.Loadout)
                 .Single(usr => usr.Id == userId);
 
             var item = user.InventoryItems.FirstOrDefault(itm => itm.ItemId == itemId);
@@ -107,6 +108,7 @@ namespace Doug.Repositories
         {
             return _db.Users
                 .Include(user => user.InventoryItems)
+                .Include(usr => usr.Loadout)
                 .Single(user => user.Id == userId);
         }
 

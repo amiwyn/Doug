@@ -45,14 +45,14 @@ namespace Doug.Models
             attachment.Fields.Add(new Field(string.Format(DougMessages.CreditStats, user.Credits)));
             attachment.Fields.Add(new Field(string.Format(DougMessages.SlursAddedStats, slurCount)));
             attachment.Fields.Add(new Field(string.Format(DougMessages.LevelStats, user.Level)));
-            attachment.Fields.Add(new Field(string.Format(DougMessages.ExperienceStats, user.ExperienceAdvancement * 100)));
-            attachment.Fields.Add(new Field(string.Format(DougMessages.HealthStats, user.Health, user.TotalHealth)));
-            attachment.Fields.Add(new Field(string.Format(DougMessages.EnergyStats, user.Energy, user.TotalEnergy)));
-            attachment.Fields.Add(new Field(string.Format(DougMessages.LuckStats, user.Luck)));
-            attachment.Fields.Add(new Field(string.Format(DougMessages.AgilityStats, user.Agility)));
-            attachment.Fields.Add(new Field(string.Format(DougMessages.CharismaStats, user.Charisma)));
-            attachment.Fields.Add(new Field(string.Format(DougMessages.ConstitutionStats, user.Constitution)));
-            attachment.Fields.Add(new Field(string.Format(DougMessages.StaminaStats, user.Stamina)));
+            attachment.Fields.Add(new Field(string.Format(DougMessages.ExperienceStats, user.GetExperienceAdvancement() * 100)));
+            attachment.Fields.Add(new Field(string.Format(DougMessages.HealthStats, user.Health, user.TotalHealth())));
+            attachment.Fields.Add(new Field(string.Format(DougMessages.EnergyStats, user.Energy, user.TotalEnergy())));
+            attachment.Fields.Add(new Field(string.Format(DougMessages.LuckStats, user.TotalLuck())));
+            attachment.Fields.Add(new Field(string.Format(DougMessages.AgilityStats, user.TotalAgility())));
+            attachment.Fields.Add(new Field(string.Format(DougMessages.CharismaStats, user.TotalCharisma())));
+            attachment.Fields.Add(new Field(string.Format(DougMessages.ConstitutionStats, user.TotalConstitution())));
+            attachment.Fields.Add(new Field(string.Format(DougMessages.StaminaStats, user.TotalStamina())));
             attachment.Fields.Add(new Field(string.Format(DougMessages.FreeStatPoints, user.FreeStatsPoints)));
 
             attachment.Fields.Add(new Field(DougMessages.ItemStats));

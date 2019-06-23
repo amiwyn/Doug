@@ -45,12 +45,12 @@ namespace Doug.Commands
 
             _statsRepository.UpdateEnergy(command.UserId, energy);
 
-            var userChance = _itemEventDispatcher.OnStealingChance(user, user.CalculateBaseStealSuccessRate());
-            var targetChance = _itemEventDispatcher.OnGettingStolenChance(target, target.CalculateBaseOpponentStealSuccessRate());
+            var userChance = _itemEventDispatcher.OnStealingChance(user, user.BaseStealSuccessRate());
+            var targetChance = _itemEventDispatcher.OnGettingStolenChance(target, target.BaseOpponentStealSuccessRate());
 
             var rollSuccessful = _randomService.RollAgainstOpponent(userChance, targetChance);
 
-            var amount = _itemEventDispatcher.OnStealingAmount(user, user.CalculateBaseStealAmount());
+            var amount = _itemEventDispatcher.OnStealingAmount(user, user.BaseStealAmount());
 
             if (target.Credits - amount < 0)
             {

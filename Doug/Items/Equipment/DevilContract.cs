@@ -1,6 +1,6 @@
 ﻿namespace Doug.Items.Equipment
 {
-    public class DevilContract : Item
+    public class DevilContract : EquipmentItem
     {
         public DevilContract()
         {
@@ -8,6 +8,7 @@
             Description = "He told you no one could steal from you ever again... you should have read the small text. Block stealing. Cannot Steal.";
             Rarity = Rarity.Legendary;
             Icon = ":page_with_curl:";
+            Slot = EquipmentSlot.LeftHand;
         }
 
         public override double OnStealingChance(double chance)

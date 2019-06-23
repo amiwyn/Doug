@@ -1,7 +1,7 @@
 ﻿using Doug.Models;
 using Doug.Repositories;
 
-namespace Doug.Items.Consumables
+namespace Doug.Items
 {
     public abstract class ConsumableItem : Item
     {

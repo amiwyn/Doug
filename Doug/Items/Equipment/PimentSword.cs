@@ -3,7 +3,7 @@ using Doug.Slack;
 
 namespace Doug.Items.Equipment
 {
-    public class PimentSword : Item
+    public class PimentSword : EquipmentItem
     {
         public PimentSword()
         {
@@ -11,6 +11,7 @@ namespace Doug.Items.Equipment
             Description = "Well.. this sword is really spicy. Still useless, you're kinda dumb of owning it.";
             Rarity = Rarity.Uncommon;
             Icon = ":hot_pepper:";
+            Slot = EquipmentSlot.RightHand;
         }
 
         public override string OnFlaming(Command command, string slur, ISlackWebApi slack)

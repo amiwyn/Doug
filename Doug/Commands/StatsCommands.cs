@@ -38,13 +38,13 @@ namespace Doug.Commands
         {
             var user = _userRepository.GetUser(command.UserId);
 
-            return new DougResponse(string.Format(DougMessages.Health, user.Health, user.TotalHealth));
+            return new DougResponse(string.Format(DougMessages.Health, user.Health, user.TotalHealth()));
         }
         public DougResponse Energy(Command command)
         {
             var user = _userRepository.GetUser(command.UserId);
 
-            return new DougResponse(string.Format(DougMessages.Energy, user.Energy, user.TotalEnergy));
+            return new DougResponse(string.Format(DougMessages.Energy, user.Energy, user.TotalEnergy()));
         }
 
         public DougResponse Profile(Command command)
@@ -59,8 +59,7 @@ namespace Doug.Commands
             var slurCount = _slurRepository.GetSlursFrom(userId).Count();
             var user = _userRepository.GetUser(userId);
 
-            var attachments = new List<Attachment>();
-            attachments.Add(Attachment.StatsAttachment(slurCount, user));
+            var attachments = new List<Attachment> {Attachment.StatsAttachment(slurCount, user)};
             attachments.AddRange(Attachment.InventoryAttachments(user));
 
             _slack.SendAttachments(attachments, command.ChannelId);

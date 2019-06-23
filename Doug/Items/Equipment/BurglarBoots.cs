@@ -1,6 +1,6 @@
 ﻿namespace Doug.Items.Equipment
 {
-    public class BurglarBoots : Item
+    public class BurglarBoots : EquipmentItem
     {
         public BurglarBoots()
         {
@@ -8,6 +8,7 @@
             Description = "The boots of a notorious burglar. Indubitably the best tool for a burglary. Increases the chances of success when stealing rupees.";
             Rarity = Rarity.Unique;
             Icon = ":boot:";
+            Slot = EquipmentSlot.Boots;
         }
 
         public override double OnStealingChance(double chance)

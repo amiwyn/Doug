@@ -85,7 +85,7 @@ namespace Doug.Commands
 
         private bool UserCoinFlipWin(User user)
         {
-            var userChance = _itemEventDispatcher.OnGambling(user, user.CalculateBaseGambleChance());
+            var userChance = _itemEventDispatcher.OnGambling(user, user.BaseGambleChance());
             return _randomService.RollAgainstOpponent(userChance, 0.5);
         }
 
@@ -192,8 +192,8 @@ namespace Doug.Commands
 
         private bool VersusCoinFlipWin(User caller, User target)
         {
-            var callerChance = _itemEventDispatcher.OnGambling(caller, caller.CalculateBaseGambleChance());
-            var targetChance = _itemEventDispatcher.OnGambling(target, target.CalculateBaseGambleChance());
+            var callerChance = _itemEventDispatcher.OnGambling(caller, caller.BaseGambleChance());
+            var targetChance = _itemEventDispatcher.OnGambling(target, target.BaseGambleChance());
 
             return _randomService.RollAgainstOpponent(callerChance, targetChance);
         }

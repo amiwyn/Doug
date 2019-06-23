@@ -26,6 +26,15 @@ namespace Doug.Models
                 .WithMany(u => u.InventoryItems)
                 .HasForeignKey(u => u.UserId);
 
+            modelBuilder.Entity<Loadout>()
+                .ToTable("Users")
+                .HasBaseType((string)null);
+
+            modelBuilder.Entity<User>()
+                .ToTable("Users")
+                .HasOne(o => o.Loadout).WithOne()
+                .HasForeignKey<User>(o => o.Id);
+
             modelBuilder.Entity<AwakeningOrb>();
             modelBuilder.Entity<LuckyDice>();
             modelBuilder.Entity<BurglarBoots>();

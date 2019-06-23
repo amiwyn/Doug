@@ -1,6 +1,6 @@
 ﻿namespace Doug.Items.Equipment
 {
-    public class GreedyGloves : Item
+    public class GreedyGloves : EquipmentItem
     {
         public GreedyGloves()
         {
@@ -8,6 +8,7 @@
             Description = "These gloves give you an unquenchable thirst for rupees. Increase the amount of rupees you can steal.";
             Rarity = Rarity.Rare;
             Icon = ":gloves:";
+            Slot = EquipmentSlot.Gloves;
         }
 
         public override int OnStealingAmount(int amount)
