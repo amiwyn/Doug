@@ -50,6 +50,7 @@ namespace Doug.Models
         public void Equip(EquipmentItem item)
         {
             Equipment.Add(item.Slot, item);
+            SetLoadoutStrings();
         }
 
         public void UnEquip(EquipmentSlot slot)
@@ -62,6 +63,19 @@ namespace Doug.Models
             }
 
             Equipment.Remove(slot);
+            SetLoadoutStrings();
+        }
+
+        private void SetLoadoutStrings()
+        {
+            Head = GetEquipmentAt(EquipmentSlot.Head)?.Id;
+            Body = GetEquipmentAt(EquipmentSlot.Body)?.Id;
+            Legs = GetEquipmentAt(EquipmentSlot.Legs)?.Id;
+            Boots = GetEquipmentAt(EquipmentSlot.Boots)?.Id;
+            Gloves = GetEquipmentAt(EquipmentSlot.Gloves)?.Id;
+            LeftHand = GetEquipmentAt(EquipmentSlot.LeftHand)?.Id;
+            RightHand = GetEquipmentAt(EquipmentSlot.RightHand)?.Id;
+            Neck = GetEquipmentAt(EquipmentSlot.Neck)?.Id;
         }
 
         public EquipmentItem GetEquipmentAt(EquipmentSlot slot)

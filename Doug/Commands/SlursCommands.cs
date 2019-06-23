@@ -169,7 +169,6 @@ namespace Doug.Commands
 
             var message = BuildSlurMessage(slur.Text, randomUser, command.GetTargetUserId());
 
-            message = _itemEventDispatcher.OnGettingFlamed(command, message);
             message = _itemEventDispatcher.OnFlaming(command, message);
 
             var timestamp = await _slack.SendMessage(message, command.ChannelId);

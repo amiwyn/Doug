@@ -8,7 +8,6 @@ namespace Doug.Items
 {
     public interface IItemEventDispatcher
     {
-        string OnGettingFlamed(Command command, string slur);
         string OnFlaming(Command command, string slur);
         double OnGambling(User user, double baseChance);
         double OnStealingChance(User user, double baseChance);
@@ -29,9 +28,12 @@ namespace Doug.Items
 
         public string OnFlaming(Command command, string slur)
         {
-            var user = _userRepository.GetUser(command.GetTargetUserId());
+            var caller = _userRepository.GetUser(command.UserId);
+            var target = _userRepository.GetUser(command.GetTargetUserId());
 
-            return user.Loadout.Equipment.Aggregate(slur, (acc, item) => item.Value.OnFlaming(command, acc, _slackWebApi));
+            slur = target.Loadout.Equipment.Aggregate(slur, (acc, item) => item.Value.OnGettingFlamed(command, acc, _slackWebApi));
+
+            return caller.Loadout.Equipment.Aggregate(slur, (acc, item) => item.Value.OnFlaming(command, acc, _slackWebApi));
         }
 
         public double OnGambling(User user, double baseChance)
@@ -52,13 +54,6 @@ namespace Doug.Items
         public int OnStealingAmount(User user, int baseAmount)
         {
             return user.Loadout.Equipment.Aggregate(baseAmount, (amount, item) => item.Value.OnStealingAmount(amount));
-        }
-
-        public string OnGettingFlamed(Command command, string slur)
-        {
-            var user = _userRepository.GetUser(command.GetTargetUserId());
-
-            return user.Loadout.Equipment.Aggregate(slur, (acc, item) => item.Value.OnGettingFlamed(command, acc, _slackWebApi));
         }
     }
 }

@@ -7,6 +7,7 @@ namespace Doug.Items.Equipment
     {
         public AwakeningOrb()
         {
+            Id = ItemFactory.AwakeningOrb;
             Name = "Orb of Awakening";
             Description = "When equipped, this strange orb will notify you privately who flamed you. You must be active to receive the notification.";
             Rarity = Rarity.Rare;

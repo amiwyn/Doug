@@ -9,6 +9,7 @@ namespace Doug.Items.Consumables
 
         public Apple()
         {
+            Id = ItemFactory.Apple;
             Name = "Apple";
             Description = "Ahhh, a fresh apple. So healthy. Restore 25 health.";
             Rarity = Rarity.Common;

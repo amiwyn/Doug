@@ -9,6 +9,6 @@
         Gloves,
         LeftHand,
         RightHand,
-        Necklace
+        Neck
     }
 }

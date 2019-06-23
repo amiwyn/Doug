@@ -4,6 +4,7 @@
     {
         public DevilContract()
         {
+            Id = ItemFactory.DevilsContract;
             Name = "Deal with the Devil";
             Description = "He told you no one could steal from you ever again... you should have read the small text. Block stealing. Cannot Steal.";
             Rarity = Rarity.Legendary;

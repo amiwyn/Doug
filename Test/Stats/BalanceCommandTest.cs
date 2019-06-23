@@ -25,7 +25,6 @@ namespace Test.Stats
         private StatsCommands _statsCommands;
 
         private readonly Mock<IUserRepository> _userRepository = new Mock<IUserRepository>();
-        private readonly Mock<ISlurRepository> _slurRepository = new Mock<ISlurRepository>();
         private readonly Mock<ISlackWebApi> _slack = new Mock<ISlackWebApi>();
 
         [TestInitialize]
@@ -33,7 +32,7 @@ namespace Test.Stats
         {
             _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User() { Id = "bobob", Credits = 79});
 
-            _statsCommands = new StatsCommands(_userRepository.Object, _slack.Object, _slurRepository.Object);
+            _statsCommands = new StatsCommands(_userRepository.Object, _slack.Object);
         }
 
         [TestMethod]

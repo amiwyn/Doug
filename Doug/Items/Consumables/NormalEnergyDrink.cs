@@ -9,6 +9,7 @@ namespace Doug.Items.Consumables
 
         public NormalEnergyDrink()
         {
+            Id = ItemFactory.NormalEnergyDrink;
             Name = "Coffee";
             Description = "A good cuppa. Restore 25 energy.";
             Rarity = Rarity.Common;

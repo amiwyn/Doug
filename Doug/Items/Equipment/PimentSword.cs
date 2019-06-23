@@ -7,6 +7,7 @@ namespace Doug.Items.Equipment
     {
         public PimentSword()
         {
+            Id = ItemFactory.PimentSword;
             Name = "Fucking Sword of Piment";
             Description = "Well.. this sword is really spicy. Still useless, you're kinda dumb of owning it.";
             Rarity = Rarity.Uncommon;
