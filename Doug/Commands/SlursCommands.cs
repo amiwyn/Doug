@@ -124,15 +124,13 @@ namespace Doug.Commands
             {
                 return await SpecificFlame(command);
             }
-            else
-            {
-                return await RandomFlame(command);
-            }
+
+            return await RandomFlame(command);
         }
 
         private async Task<DougResponse> SpecificFlame(Command command)
         {
-            int slurId = int.Parse(command.GetArgumentAt(1));
+            var slurId = int.Parse(command.GetArgumentAt(1));
 
             var user = _userRepository.GetUser(command.UserId);
 
@@ -172,6 +170,7 @@ namespace Doug.Commands
             var message = BuildSlurMessage(slur.Text, randomUser, command.GetTargetUserId());
 
             message = _itemEventDispatcher.OnGettingFlamed(command, message);
+            message = _itemEventDispatcher.OnFlaming(command, message);
 
             var timestamp = await _slack.SendMessage(message, command.ChannelId);
 

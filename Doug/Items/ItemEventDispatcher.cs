@@ -29,7 +29,9 @@ namespace Doug.Items
 
         public string OnFlaming(Command command, string slur)
         {
-            throw new NotImplementedException();
+            var user = _userRepository.GetUser(command.GetTargetUserId());
+
+            return user.Loadout.Equipment.Aggregate(slur, (acc, item) => item.Value.OnFlaming(command, acc, _slackWebApi));
         }
 
         public double OnGambling(User user, double baseChance)
