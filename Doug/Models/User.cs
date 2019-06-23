@@ -6,14 +6,27 @@ namespace Doug.Models
 {
     public class User
     {
+        private int _health;
+        private int _energy;
+
         public string Id { get; set; }
         public int Credits { get; set; }
         public List<InventoryItem> InventoryItems { get; set; }
         public Loadout Loadout { get; set; }
         public long Experience { get; set; }
 
-        public int Health { get; set; }
-        public int Energy { get; set; }
+        public int Health
+        {
+            get => _health;
+            set => _health = _health + value >= TotalHealth() ? TotalHealth() : _health + value;
+        }
+
+        public int Energy
+        {
+            get => _energy;
+            set => _energy = _energy + value >= TotalEnergy() ? TotalEnergy() : _energy + value;
+        }
+
         public int Luck { get; set; }
         public int Agility { get; set; }
         public int Charisma { get; set; }

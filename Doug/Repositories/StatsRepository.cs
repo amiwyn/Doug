@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Doug.Models;
 
 namespace Doug.Repositories
@@ -7,6 +8,8 @@ namespace Doug.Repositories
     {
         void UpdateEnergy(string userId, int energy);
         void UpdateHealth(string userId, int health);
+        void AddExperience(string userId, long experience);
+        void AddExperienceToUsers(List<string> users, long experience);
     }
 
     public class StatsRepository : IStatsRepository
@@ -30,6 +33,16 @@ namespace Doug.Repositories
             var user = _db.Users.Single(usr => usr.Id == userId);
             user.Health = health;
             _db.SaveChanges();
+        }
+
+        public void AddExperience(string userId, long experience)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void AddExperienceToUsers(List<string> users, long experience)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

@@ -2,7 +2,7 @@
 {
     public enum EquipmentSlot
     {
-        Helmet,
+        Head,
         Body,
         Legs,
         Boots,

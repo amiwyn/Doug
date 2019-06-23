@@ -13,6 +13,16 @@ namespace Doug.Items
         public int Stamina { get; set; }
         public EquipmentSlot Slot { get; set; }
 
+        protected EquipmentItem()
+        {
+
+        }
+
+        public override bool IsEquipable()
+        {
+            return true;
+        }
+
         public virtual string OnGettingFlamed(Command command, string slur, ISlackWebApi slack)
         {
             return slur;

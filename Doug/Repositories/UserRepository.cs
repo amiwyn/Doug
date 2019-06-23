@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
+using Doug.Items;
 
 namespace Doug.Repositories
 {
@@ -10,11 +11,9 @@ namespace Doug.Repositories
         void AddUser(string userId);
         List<User> GetUsers();
         User GetUser(string userId);
-        void SaveUser(User user);
         void RemoveCredits(string userId, int amount);
         void AddCredits(string userId, int amount);
-        void AddItem(string userId, string itemId);
-        void RemoveItem(string userId, int inventoryPosition);
+        void AddCreditsToUsers(List<string> users, int amount);
     }
 
     public class UserRepository : IUserRepository
@@ -35,56 +34,11 @@ namespace Doug.Repositories
             _db.SaveChanges();
         }
 
-        public void AddItem(string userId, string itemId)
+        public void AddCreditsToUsers(List<string> userIds, int amount)
         {
-            var user = _db.Users
-                .Include(usr => usr.InventoryItems)
-                .Include(usr => usr.Loadout)
-                .Single(usr => usr.Id == userId);
+            var users = _db.Users.Where(usr => userIds.Contains(usr.Id)).ToList();
 
-            var item = user.InventoryItems.FirstOrDefault(itm => itm.ItemId == itemId);
-
-            if (item != null && item.Quantity < item.Item.MaxStack)
-            {
-                item.Quantity++;
-            }
-            else
-            {
-                var slot = FindNextFreeSlot(user.InventoryItems);
-                user.InventoryItems.Add(new InventoryItem(userId, itemId) {InventoryPosition = slot, Quantity = 1});
-            }
-
-            _db.SaveChanges();
-        }
-
-        private int FindNextFreeSlot(List<InventoryItem> items)
-        {
-            var slots = items.Select(itm => itm.InventoryPosition).ToList();
-
-            if (!slots.Any())
-            {
-                return 0;
-            }
-
-            var maxPos = slots.Any() ? slots.Max() : 0;
-            var freeSlots = Enumerable.Range(0, maxPos).Except(slots).ToList();
-
-            return freeSlots.Any() ? freeSlots.First() : maxPos + 1;
-        } 
-
-        public void RemoveItem(string userId, int inventoryPosition)
-        {
-            var user = _db.Users.Single(usr => usr.Id == userId);
-            var item = user.InventoryItems.Single(itm => itm.InventoryPosition == inventoryPosition);
-
-            if (item.Quantity <= 1)
-            {
-                user.InventoryItems.Remove(item);
-            }
-            else
-            {
-                item.Quantity--;
-            }
+            users.ForEach(usr => usr.Credits += amount);
 
             _db.SaveChanges();
         }
@@ -110,12 +64,6 @@ namespace Doug.Repositories
                 .Include(user => user.InventoryItems)
                 .Include(usr => usr.Loadout)
                 .Single(user => user.Id == userId);
-        }
-
-        public void SaveUser(User user)
-        {
-            _db.Users.Update(user);
-            _db.SaveChanges();
         }
 
         public List<User> GetUsers()

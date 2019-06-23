@@ -10,22 +10,22 @@ namespace Test.Items
     [TestClass]
     public class AppleTest
     {
-        private readonly Mock<IUserRepository> _userRepository = new Mock<IUserRepository>();
+        private readonly Mock<IInventoryRepository> _inventoryRepository = new Mock<IInventoryRepository>();
         private readonly Mock<IStatsRepository> _statsRepository = new Mock<IStatsRepository>();
-        private readonly Apple _apple = new Apple();
+        private Apple _apple;
 
         private readonly User _user = new User() { Id = "test", Health = 90,  };
 
         [TestInitialize]
         public void Setup()
         {
-            _userRepository.Setup(repo => repo.GetUsers()).Returns(new List<User>());
+            _apple = new Apple();
         }
 
         [TestMethod]
         public void WhenUsingRestore25Hitpoint()
         {
-            _apple.Use(0, _user, _userRepository.Object, _statsRepository.Object);
+            _apple.Use(0, _user, _inventoryRepository.Object, _statsRepository.Object);
 
             _statsRepository.Verify(repo => repo.UpdateHealth("test", 100));
         }
@@ -33,7 +33,7 @@ namespace Test.Items
         [TestMethod]
         public void HealthShouldNotBeAbove100()
         {
-            _apple.Use(0, _user, _userRepository.Object, _statsRepository.Object);
+            _apple.Use(0, _user, _inventoryRepository.Object, _statsRepository.Object);
 
             Assert.AreNotEqual(115, _user.Health);
         }
@@ -41,9 +41,9 @@ namespace Test.Items
         [TestMethod]
         public void ShouldRemoveFromInventory()
         {
-            _apple.Use(0, _user, _userRepository.Object, _statsRepository.Object);
+            _apple.Use(0, _user, _inventoryRepository.Object, _statsRepository.Object);
 
-            _userRepository.Verify(repo => repo.RemoveItem("test", 0));
+            _inventoryRepository.Verify(repo => repo.RemoveItem("test", 0));
         }
     }
 }

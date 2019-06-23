@@ -28,14 +28,18 @@ namespace Doug.Services
         private readonly IChannelRepository _channelRepository;
         private readonly IBackgroundJobClient _backgroundJobClient;
         private readonly IUserRepository _userRepository;
+        private readonly IInventoryRepository _inventoryRepository;
+        private readonly IStatsRepository _statsRepository;
 
-        public CoffeeService(ISlackWebApi slackWebApi, ICoffeeRepository coffeeRepository, IChannelRepository channelRepository, IBackgroundJobClient backgroundJobClient, IUserRepository userRepository)
+        public CoffeeService(ISlackWebApi slackWebApi, ICoffeeRepository coffeeRepository, IChannelRepository channelRepository, IBackgroundJobClient backgroundJobClient, IUserRepository userRepository, IInventoryRepository inventoryRepository, IStatsRepository statsRepository)
         {
             _slack = slackWebApi;
             _coffeeRepository = coffeeRepository;
             _channelRepository = channelRepository;
             _backgroundJobClient = backgroundJobClient;
             _userRepository = userRepository;
+            _inventoryRepository = inventoryRepository;
+            _statsRepository = statsRepository;
         }
 
         public void CountParrot(string userId, string channelId, DateTime currentTime)
@@ -103,17 +107,14 @@ namespace Doug.Services
 
         public void EndCoffee(string channelId)
         {
-            var participants = _coffeeRepository.GetReadyParticipants();
+            var participants = _coffeeRepository.GetReadyParticipants().ToList();
+            var participantsId = participants.Select(user => user.Id).ToList();
 
-            foreach (var participant in participants)
-            {
-                _userRepository.AddCredits(participant, CoffeeBreakAward);
-                _userRepository.AddItem(participant, ItemFactory.NormalEnergyDrink);
+            _userRepository.AddCreditsToUsers(participantsId, CoffeeBreakAward);
+            _inventoryRepository.AddItemToUsers(participantsId, ItemFactory.NormalEnergyDrink);
+            _statsRepository.AddExperienceToUsers(participantsId, CoffeeExperienceAward);
 
-                var user = _userRepository.GetUser(participant);
-                user.AddExperience(CoffeeExperienceAward, channelId, _slack);
-                _userRepository.SaveUser(user);
-            }
+            participants.ForEach(user => user.AddExperience(CoffeeExperienceAward, channelId, _slack)); // TODO fix this shit. Only used to broadcast when a user level up.
 
             _coffeeRepository.ResetRoster();
             _coffeeRepository.EndCoffeeBreak();

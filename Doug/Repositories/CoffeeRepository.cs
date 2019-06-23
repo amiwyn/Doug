@@ -10,7 +10,7 @@ namespace Doug.Repositories
         void RemoveFromRoster(string userId);
         void SkipUser(string userId);
         void ConfirmUserReady(string userId);
-        ICollection<string> GetReadyParticipants();
+        ICollection<User> GetReadyParticipants();
         ICollection<string> GetMissingParticipants();
         void ResetRoster();
         bool IsCoffeeBreak();
@@ -51,9 +51,11 @@ namespace Doug.Repositories
             return _db.Roster.Where(user => !user.IsSkipping && !user.IsReady).Select(user => user.Id).ToList();
         }
 
-        public ICollection<string> GetReadyParticipants()
+        public ICollection<User> GetReadyParticipants()
         {
-            return _db.Roster.Where(user => !user.IsSkipping && user.IsReady).Select(user => user.Id).ToList();
+            var userIds = _db.Roster.Where(user => !user.IsSkipping && user.IsReady).Select(user => user.Id).ToList();
+
+            return _db.Users.Where(usr => userIds.Contains(usr.Id)).ToList();
         }
 
         public void RemoveFromRoster(string userId)

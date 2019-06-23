@@ -27,6 +27,7 @@ namespace Test.Inventory
 
         private readonly Mock<IUserRepository> _userRepository = new Mock<IUserRepository>();
         private readonly Mock<IStatsRepository> _statsRepository = new Mock<IStatsRepository>();
+        private readonly Mock<IInventoryRepository> _inventoryRepository = new Mock<IInventoryRepository>();
         private readonly Mock<ISlackWebApi> _slack = new Mock<ISlackWebApi>();
         private readonly Mock<Item> _item = new Mock<Item>();
 
@@ -36,7 +37,7 @@ namespace Test.Inventory
             var items = new List<InventoryItem>() {new InventoryItem("testuser", "testitem") {InventoryPosition = 2, Item = _item.Object } };
             _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User() { Id = "testuser", InventoryItems = items });
 
-            _inventoryCommands = new InventoryCommands(_userRepository.Object, _slack.Object, _statsRepository.Object);
+            _inventoryCommands = new InventoryCommands(_userRepository.Object, _slack.Object, _statsRepository.Object, _inventoryRepository.Object);
         }
 
         [TestMethod]
@@ -44,7 +45,7 @@ namespace Test.Inventory
         {
             _inventoryCommands.Use(_command);
 
-            _item.Verify(item => item.Use(2, It.IsAny<User>(), _userRepository.Object, _statsRepository.Object));
+            _item.Verify(item => item.Use(2, It.IsAny<User>(), _inventoryRepository.Object, _statsRepository.Object));
         }
 
         [TestMethod]

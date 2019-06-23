@@ -18,9 +18,14 @@ namespace Doug.Items
             MaxStack = 1;
         }
 
-        public virtual string Use(int itemPos, User user, IUserRepository userRepository, IStatsRepository statsRepository)
+        public virtual string Use(int itemPos, User user, IInventoryRepository inventoryRepository, IStatsRepository statsRepository)
         {
             return string.Format(DougMessages.ItemCantBeUsed, itemPos);
+        }
+
+        public virtual bool IsEquipable()
+        {
+            return false;
         }
     }
 }

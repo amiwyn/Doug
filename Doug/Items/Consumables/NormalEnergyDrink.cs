@@ -15,14 +15,13 @@ namespace Doug.Items.Consumables
             Icon = ":coffee:";
         }
 
-        public override string Use(int itemPos, User user, IUserRepository userRepository, IStatsRepository statsRepository)
+        public override string Use(int itemPos, User user, IInventoryRepository inventoryRepository, IStatsRepository statsRepository)
         {
-            base.Use(itemPos, user, userRepository, statsRepository);
+            base.Use(itemPos, user, inventoryRepository, statsRepository);
 
-            var energy = user.Energy + RecoverAmount;
-            energy = energy >= user.TotalEnergy() ? user.TotalEnergy() : energy;
+            user.Energy += RecoverAmount;
 
-            statsRepository.UpdateEnergy(user.Id, energy);
+            statsRepository.UpdateEnergy(user.Id, user.Energy);
 
             return string.Format(DougMessages.RecoverItem, Name, RecoverAmount, "energy");
         }

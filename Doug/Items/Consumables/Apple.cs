@@ -15,14 +15,13 @@ namespace Doug.Items.Consumables
             Icon = ":apple:";
         }
 
-        public override string Use(int itemPos, User user, IUserRepository userRepository, IStatsRepository statsRepository)
+        public override string Use(int itemPos, User user, IInventoryRepository inventoryRepository, IStatsRepository statsRepository)
         {
-            base.Use(itemPos, user, userRepository, statsRepository);
+            base.Use(itemPos, user, inventoryRepository, statsRepository);
 
-            var health = user.Health + RecoverAmount;
-            health = health >= user.TotalHealth() ? user.TotalHealth() : health;
+            user.Health += RecoverAmount;
 
-            statsRepository.UpdateHealth(user.Id, health);
+            statsRepository.UpdateHealth(user.Id, user.Health);
 
             return string.Format(DougMessages.RecoverItem, Name, RecoverAmount, "health");
         }

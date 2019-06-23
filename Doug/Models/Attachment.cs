@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Doug.Models
 {
@@ -62,8 +63,7 @@ namespace Doug.Models
 
         public static List<Attachment> InventoryAttachments(User user)
         {
-            var attachments = new List<Attachment>();
-            foreach (var inventoryItem in user.InventoryItems)
+            return user.InventoryItems.Select(inventoryItem =>
             {
                 var itemAttachment = new Attachment()
                 {
@@ -71,10 +71,9 @@ namespace Doug.Models
                 };
 
                 itemAttachment.Fields.Add(new Field(string.Format("{0} - {2} {1} {3}", inventoryItem.InventoryPosition, inventoryItem.Item.Name, inventoryItem.Item.Icon, inventoryItem.Quantity == 1 ? string.Empty : "(" + inventoryItem.Quantity + ")")));
-                attachments.Add(itemAttachment);
-            }
 
-            return attachments;
+                return itemAttachment;
+            }).ToList();
         }
     }
 

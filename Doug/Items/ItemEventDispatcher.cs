@@ -34,29 +34,29 @@ namespace Doug.Items
 
         public double OnGambling(User user, double baseChance)
         {
-            return user.Loadout.Equipment.Aggregate(baseChance, (chance, item) => item.OnGambling(chance));
+            return user.Loadout.Equipment.Aggregate(baseChance, (chance, item) => item.Value.OnGambling(chance));
         }
 
         public double OnStealingChance(User user, double baseChance)
         {
-            return user.Loadout.Equipment.Aggregate(baseChance, (chance, item) => item.OnStealingChance(chance));
+            return user.Loadout.Equipment.Aggregate(baseChance, (chance, item) => item.Value.OnStealingChance(chance));
         }
 
         public double OnGettingStolenChance(User user, double baseChance)
         {
-            return user.Loadout.Equipment.Aggregate(baseChance, (chance, item) => item.OnGettingStolenChance(chance));
+            return user.Loadout.Equipment.Aggregate(baseChance, (chance, item) => item.Value.OnGettingStolenChance(chance));
         }
 
         public int OnStealingAmount(User user, int baseAmount)
         {
-            return user.Loadout.Equipment.Aggregate(baseAmount, (amount, item) => item.OnStealingAmount(amount));
+            return user.Loadout.Equipment.Aggregate(baseAmount, (amount, item) => item.Value.OnStealingAmount(amount));
         }
 
         public string OnGettingFlamed(Command command, string slur)
         {
             var user = _userRepository.GetUser(command.GetTargetUserId());
 
-            return user.Loadout.Equipment.Aggregate(slur, (acc, item) => item.OnGettingFlamed(command, acc, _slackWebApi));
+            return user.Loadout.Equipment.Aggregate(slur, (acc, item) => item.Value.OnGettingFlamed(command, acc, _slackWebApi));
         }
     }
 }

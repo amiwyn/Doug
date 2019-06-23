@@ -56,6 +56,7 @@
         public const string ConsumedItem = "You consumed the item.";
         public const string LevelUp = ":confetti_ball: {0} is now level *{1}*!";
         public const string GainedExp = "You gained {0} experience points.";
+        public const string EquippedItem = "You Equipped *{0}*.";
 
         public const string DougError = "Beep boop, it's not working : {0}";
         public const string NotAnAdmin = "You are not an admin.";
@@ -71,5 +72,6 @@
         public const string NoItemInSlot = "There is no item in slot {0}.";
         public const string ItemCantBeUsed = "The item in slot {0} cannot be used.";
         public const string InvalidUserArgument = "You must pass a valid user in arguments";
+        public const string ItemNotEquipAble = "This item is not equipable.";
     }
 }

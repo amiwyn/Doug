@@ -67,6 +67,7 @@ namespace Doug
             services.AddTransient<ICoffeeRepository, CoffeeRepository>();
             services.AddTransient<ISlurRepository, SlurRepository>();
             services.AddTransient<IStatsRepository, StatsRepository>();
+            services.AddTransient<IInventoryRepository, InventoryRepository>();
 
             var env = Environment.GetEnvironmentVariable("APP_ENV");
 

@@ -10,9 +10,9 @@ namespace Doug.Items
             MaxStack = 99;
         }
 
-        public override string Use(int itemPos, User user, IUserRepository userRepository, IStatsRepository statsRepository)
+        public override string Use(int itemPos, User user, IInventoryRepository inventoryRepository, IStatsRepository statsRepository)
         {
-            userRepository.RemoveItem(user.Id, itemPos);
+            inventoryRepository.RemoveItem(user.Id, itemPos);
             return DougMessages.ConsumedItem;
         }
     }
