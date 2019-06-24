@@ -14,6 +14,7 @@ namespace Doug.Items.Consumables
             Description = "A good cuppa. Restore 25 energy.";
             Rarity = Rarity.Common;
             Icon = ":coffee:";
+            Price = 50;
         }
 
         public override string Use(int itemPos, User user, IInventoryRepository inventoryRepository, IStatsRepository statsRepository)

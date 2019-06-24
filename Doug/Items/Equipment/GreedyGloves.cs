@@ -10,6 +10,7 @@
             Rarity = Rarity.Rare;
             Icon = ":gloves:";
             Slot = EquipmentSlot.Gloves;
+            Price = 3000;
         }
 
         public override int OnStealingAmount(int amount)

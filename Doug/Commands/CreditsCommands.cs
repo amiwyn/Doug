@@ -1,7 +1,12 @@
-﻿using Doug.Models;
+﻿using System.Collections.Generic;
+using Doug.Models;
 using Doug.Repositories;
 using Doug.Slack;
 using System.Linq;
+using System.Threading.Tasks;
+using Doug.Items;
+using Doug.Items.Consumables;
+using Doug.Items.Equipment;
 
 namespace Doug.Commands
 {
@@ -10,6 +15,7 @@ namespace Doug.Commands
         DougResponse Give(Command command);
         DougResponse Forbes(Command command);
         DougResponse Leaderboard(Command command);
+        Task<DougResponse> Shop(Command command);
     }
 
     public class CreditsCommands : ICreditsCommands
@@ -44,7 +50,7 @@ namespace Doug.Commands
 
             if (!user.HasEnoughCreditsForAmount(amount))
             {
-                return user.NotEnoughCreditsForAmountResponse(amount);
+                return new DougResponse(user.NotEnoughCreditsForAmountResponse(amount));
             }
 
             _userRepository.RemoveCredits(command.UserId, amount);
@@ -79,6 +85,21 @@ namespace Doug.Commands
             _slack.SendMessage(message, command.ChannelId);
 
             return NoResponse;
+        }
+
+        public async Task<DougResponse> Shop(Command command)
+        {
+            var items = new List<Item>
+            {
+                new NormalEnergyDrink(),
+                new Apple(),
+                new GreedyGloves(),
+                new AwakeningOrb()
+            };
+
+            await _slack.SendEphemeralBlocks(BlockMessage.ShopMessage(items), command.UserId, command.ChannelId);
+
+            return NoResponse; 
         }
     }
 }

@@ -10,6 +10,7 @@
             Rarity = Rarity.Unique;
             Icon = ":boot:";
             Slot = EquipmentSlot.Boots;
+            Price = 3000;
         }
 
         public override double OnStealingChance(double chance)

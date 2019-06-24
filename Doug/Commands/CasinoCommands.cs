@@ -52,7 +52,7 @@ namespace Doug.Commands
 
             if (!user.HasEnoughCreditsForAmount(amount))
             {
-                return user.NotEnoughCreditsForAmountResponse(amount);
+                return new DougResponse(user.NotEnoughCreditsForAmountResponse(amount));
             }
 
             var cost = (int)Math.Ceiling(amount / 10.0);

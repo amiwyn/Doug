@@ -13,6 +13,9 @@ namespace Doug.Items.Equipment
             Rarity = Rarity.Uncommon;
             Icon = ":hot_pepper:";
             Slot = EquipmentSlot.RightHand;
+            Price = 224;
+
+            Attack = 24;
         }
 
         public override string OnFlaming(Command command, string slur, ISlackWebApi slack)

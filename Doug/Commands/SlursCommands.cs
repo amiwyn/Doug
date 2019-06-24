@@ -136,7 +136,7 @@ namespace Doug.Commands
 
             if (!user.HasEnoughCreditsForAmount(SpecificFlameCost))
             {
-                return user.NotEnoughCreditsForAmountResponse(SpecificFlameCost);
+                return new DougResponse(user.NotEnoughCreditsForAmountResponse(SpecificFlameCost));
             }
 
             _userRepository.RemoveCredits(command.UserId, SpecificFlameCost);
@@ -207,7 +207,7 @@ namespace Doug.Commands
 
             if (!user.HasEnoughCreditsForAmount(WholastCost))
             {
-                return user.NotEnoughCreditsForAmountResponse(WholastCost);
+                return new DougResponse(user.NotEnoughCreditsForAmountResponse(WholastCost));
             }
 
             _userRepository.RemoveCredits(command.UserId, WholastCost);

@@ -135,9 +135,9 @@ namespace Doug.Models
             return Credits - amount >= 0;
         }
 
-        public DougResponse NotEnoughCreditsForAmountResponse(int amount)
+        public string NotEnoughCreditsForAmountResponse(int amount)
         {
-            return new DougResponse(string.Format(DougMessages.NotEnoughCredits, amount, Credits));
+            return string.Format(DougMessages.NotEnoughCredits, amount, Credits);
         }
     }
 }

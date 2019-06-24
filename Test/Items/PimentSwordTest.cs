@@ -1,6 +1,4 @@
-﻿using Doug.Items.Consumables;
-using Doug.Models;
-using Doug.Repositories;
+﻿using Doug.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Doug.Items.Equipment;
@@ -22,12 +20,8 @@ namespace Test.Items
             UserId = User
         };
 
-        private readonly Mock<IInventoryRepository> _inventoryRepository = new Mock<IInventoryRepository>();
         private readonly Mock<ISlackWebApi> _slack = new Mock<ISlackWebApi>();
         private PimentSword _pimentSword;
-
-
-        private readonly User _user = new User() { Id = "test", Health = 90,  };
 
         [TestInitialize]
         public void Setup()

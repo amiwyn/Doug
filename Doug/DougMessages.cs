@@ -57,6 +57,8 @@
         public const string LevelUp = ":confetti_ball: {0} is now level *{1}*!";
         public const string GainedExp = "You gained {0} experience points.";
         public const string EquippedItem = "You Equipped *{0}*.";
+        public const string ShopSpeech = "*Oi!* Welcome to my shop! I sell various stuff from all around the continent.\n\n *Come in, have a look:*";
+        public const string BuyFor = "Buy for {0} " + CreditEmoji;
 
         public const string DougError = "Beep boop, it's not working : {0}";
         public const string NotAnAdmin = "You are not an admin.";

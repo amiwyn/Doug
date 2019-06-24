@@ -2,7 +2,6 @@
 using Doug.Models;
 using Doug.Repositories;
 using Doug.Slack;
-using System.Linq;
 
 namespace Doug.Commands
 {

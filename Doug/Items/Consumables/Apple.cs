@@ -14,6 +14,7 @@ namespace Doug.Items.Consumables
             Description = "Ahhh, a fresh apple. So healthy. Restore 25 health.";
             Rarity = Rarity.Common;
             Icon = ":apple:";
+            Price = 25;
         }
 
         public override string Use(int itemPos, User user, IInventoryRepository inventoryRepository, IStatsRepository statsRepository)

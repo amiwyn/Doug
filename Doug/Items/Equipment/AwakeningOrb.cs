@@ -13,6 +13,7 @@ namespace Doug.Items.Equipment
             Rarity = Rarity.Rare;
             Icon = ":crystal_ball:";
             Slot = EquipmentSlot.LeftHand;
+            Price = 2100;
         }
 
         public override string OnGettingFlamed(Command command, string slur, ISlackWebApi slack)

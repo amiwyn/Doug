@@ -52,10 +52,8 @@ namespace Test.Credits
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void GivenNotEnoughCredits_WhenGivingCredits_CreditsAreNotAddedToReceiver()
+        public void GivenNotEnoughCredits_WhenGivingCredits_NotEnoughCreditsMessageIsSent()
         {
-            _userRepository.Setup(repo => repo.RemoveCredits(User, 10)).Throws(new ArgumentException());
             _creditsCommands.Give(_command);
 
             _userRepository.Verify(repo => repo.AddCredits(User, It.IsAny<int>()), Times.Never);

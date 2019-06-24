@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Doug.Items.Consumables;
 using Doug.Models;
 using Doug.Repositories;

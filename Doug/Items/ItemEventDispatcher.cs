@@ -1,7 +1,6 @@
 ﻿using Doug.Models;
 using Doug.Repositories;
 using Doug.Slack;
-using System;
 using System.Linq;
 
 namespace Doug.Items

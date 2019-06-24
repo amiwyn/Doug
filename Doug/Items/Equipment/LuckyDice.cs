@@ -10,6 +10,7 @@
             Rarity = Rarity.Unique;
             Icon = ":game_die:";
             Slot = EquipmentSlot.LeftHand;
+            Price = 2674;
         }
 
         public override double OnGambling(double chance)
