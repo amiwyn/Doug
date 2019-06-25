@@ -93,8 +93,8 @@ namespace Doug.Commands
             {
                 _itemFactory.CreateItem(ItemFactory.CoffeeCup),
                 _itemFactory.CreateItem(ItemFactory.Apple),
-                _itemFactory.CreateItem(ItemFactory.GreedyGloves),
-                _itemFactory.CreateItem(ItemFactory.AwakeningOrb)
+                _itemFactory.CreateItem(ItemFactory.Bread),
+                _itemFactory.CreateItem(ItemFactory.McdoFries)
             };
 
             await _slack.SendEphemeralBlocks(BlockMessage.ShopMessage(items), command.UserId, command.ChannelId);
