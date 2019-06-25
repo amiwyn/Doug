@@ -23,19 +23,27 @@ namespace Test.Inventory
             UserId = User
         };
 
+        private User _user;
+        private User _target;
+
         private InventoryCommands _inventoryCommands;
 
         private readonly Mock<IUserRepository> _userRepository = new Mock<IUserRepository>();
         private readonly Mock<ISlackWebApi> _slack = new Mock<ISlackWebApi>();
         private readonly Mock<IInventoryRepository> _inventoryRepository = new Mock<IInventoryRepository>();
+        private readonly Mock<IEquipmentRepository> _equipmentRepository = new Mock<IEquipmentRepository>();
 
         [TestInitialize]
         public void Setup()
         {
             var items = new List<InventoryItem>() {new InventoryItem("testuser", "testitem") {InventoryPosition = 2, Item = new Default()}};
-            _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User() { Id = "testuser", InventoryItems = items });
+            _user = new User() { Id = "testuser", InventoryItems = items };
+            _target = new User() { Id = "ginette", InventoryItems = items };
 
-            _inventoryCommands = new InventoryCommands(_userRepository.Object, _slack.Object, _inventoryRepository.Object);
+            _userRepository.Setup(repo => repo.GetUser(User)).Returns(_user);
+            _userRepository.Setup(repo => repo.GetUser("ginette")).Returns(_target);
+
+            _inventoryCommands = new InventoryCommands(_userRepository.Object, _slack.Object, _inventoryRepository.Object, _equipmentRepository.Object);
         }
 
         [TestMethod]
@@ -43,7 +51,7 @@ namespace Test.Inventory
         {
             _inventoryCommands.Give(_command);
 
-            _inventoryRepository.Verify(repo => repo.RemoveItem(User, 2));
+            _inventoryRepository.Verify(repo => repo.RemoveItem(_user, 2));
         }
 
         [TestMethod]
@@ -51,7 +59,7 @@ namespace Test.Inventory
         {
             _inventoryCommands.Give(_command);
 
-            _inventoryRepository.Verify(repo => repo.AddItem("ginette", "testitem"));
+            _inventoryRepository.Verify(repo => repo.AddItem(_target, "testitem"));
         }
 
         [TestMethod]

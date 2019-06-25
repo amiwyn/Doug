@@ -1,5 +1,4 @@
-﻿using Doug.Items.Equipment;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace Doug.Models
 {
@@ -34,11 +33,6 @@ namespace Doug.Models
                 .ToTable("Users")
                 .HasOne(o => o.Loadout).WithOne()
                 .HasForeignKey<User>(o => o.Id);
-
-            modelBuilder.Entity<AwakeningOrb>();
-            modelBuilder.Entity<LuckyDice>();
-            modelBuilder.Entity<BurglarBoots>();
-            modelBuilder.Entity<GreedyGloves>();
 
             base.OnModelCreating(modelBuilder);
         }

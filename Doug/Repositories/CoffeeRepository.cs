@@ -1,6 +1,8 @@
 ﻿using Doug.Models;
 using System.Collections.Generic;
 using System.Linq;
+using Doug.Items;
+using Microsoft.EntityFrameworkCore;
 
 namespace Doug.Repositories
 {
@@ -21,10 +23,12 @@ namespace Doug.Repositories
     public class CoffeeRepository : ICoffeeRepository
     {
         private readonly DougContext _db;
+        private readonly IItemFactory _itemFactory;
 
-        public CoffeeRepository(DougContext dougContext)
+        public CoffeeRepository(DougContext dougContext, IItemFactory itemFactory)
         {
             _db = dougContext;
+            _itemFactory = itemFactory;
         }
 
         public void AddToRoster(string userId)
@@ -55,7 +59,13 @@ namespace Doug.Repositories
         {
             var userIds = _db.Roster.Where(user => !user.IsSkipping && user.IsReady).Select(user => user.Id).ToList();
 
-            return _db.Users.Where(usr => userIds.Contains(usr.Id)).ToList();
+            var users = _db.Users.Where(usr => userIds.Contains(usr.Id))
+                .Include(usr => usr.InventoryItems)
+                .Include(usr => usr.Loadout)
+                .ToList();
+
+            users.ForEach(user => user.LoadItems(_itemFactory));
+            return users;
         }
 
         public void RemoveFromRoster(string userId)
@@ -86,13 +96,17 @@ namespace Doug.Repositories
 
         public void EndCoffeeBreak()
         {
-            _db.Channel.Single().IsCoffee = false;
+            var channel = _db.Channel.Single();
+            channel.IsCoffee = false;
+
             _db.SaveChanges();
         }
 
         public void StartCoffeeBreak()
         {
-            _db.Channel.Single().IsCoffee = true;
+            var channel = _db.Channel.Single();
+            channel.IsCoffee = true;
+
             _db.SaveChanges();
         }
 

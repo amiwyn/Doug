@@ -39,7 +39,7 @@ namespace Doug.Services
 
             _userRepository.RemoveCredits(user.Id, item.Price);
 
-            _inventoryRepository.AddItem(user.Id, item.Id);
+            _inventoryRepository.AddItem(user, item.Id);
         }
     }
 }

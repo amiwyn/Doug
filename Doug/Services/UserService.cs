@@ -39,16 +39,15 @@ namespace Doug.Services
 
         public async Task AddExperience(User user, long experience, string channel)
         {
-            await AddExperienceToUser(user, experience, channel);
+            var level = user.Level;
 
             _statsRepository.AddExperience(user.Id, experience);
+
+            await BroadcastExperienceGain(user, level, experience, channel);
         }
 
-        private async Task AddExperienceToUser(User user, long experience, string channel)
+        private async Task BroadcastExperienceGain(User user, int previousLevel, long experience, string channel)
         {
-            var previousLevel = user.Level;
-            user.Experience += experience;
-
             await _slack.SendEphemeralMessage(string.Format(DougMessages.GainedExp, experience), user.Id, channel);
 
             if (previousLevel < user.Level)
@@ -59,11 +58,12 @@ namespace Doug.Services
 
         public async Task AddBulkExperience(List<User> users, long experience, string channel)
         {
-            var tasks = users.Select(user => AddExperienceToUser(user, experience, channel));
+            var levels = users.ToDictionary(user => user.Id, user => user.Level);
 
             var userIds = users.Select(user => user.Id).ToList();
-
             _statsRepository.AddExperienceToUsers(userIds, experience);
+
+            var tasks = users.Select(user => BroadcastExperienceGain(user, levels.GetValueOrDefault(user.Id), experience, channel));
 
             await Task.WhenAll(tasks);
         }

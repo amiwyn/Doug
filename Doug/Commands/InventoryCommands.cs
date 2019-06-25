@@ -18,12 +18,14 @@ namespace Doug.Commands
         private readonly IUserRepository _userRepository;
         private readonly ISlackWebApi _slack;
         private readonly IInventoryRepository _inventoryRepository;
+        private readonly IEquipmentRepository _equipmentRepository;
 
-        public InventoryCommands(IUserRepository userRepository, ISlackWebApi slack, IInventoryRepository inventoryRepository)
+        public InventoryCommands(IUserRepository userRepository, ISlackWebApi slack, IInventoryRepository inventoryRepository, IEquipmentRepository equipmentRepository)
         {
             _userRepository = userRepository;
             _slack = slack;
             _inventoryRepository = inventoryRepository;
+            _equipmentRepository = equipmentRepository;
         }
 
         public DougResponse Use(Command command)
@@ -44,7 +46,7 @@ namespace Doug.Commands
 
         public DougResponse Give(Command command)
         {
-            var target = command.GetTargetUserId();
+            var target = _userRepository.GetUser(command.GetTargetUserId());
             var user = _userRepository.GetUser(command.UserId);
             var position = int.Parse(command.GetArgumentAt(1));
             var inventoryItem = user.InventoryItems.SingleOrDefault(itm => itm.InventoryPosition == position);
@@ -54,11 +56,11 @@ namespace Doug.Commands
                 return new DougResponse(string.Format(DougMessages.NoItemInSlot, position));
             }
 
-            _inventoryRepository.RemoveItem(user.Id, position);
+            _inventoryRepository.RemoveItem(user, position);
 
             _inventoryRepository.AddItem(target, inventoryItem.ItemId);
 
-            var message = string.Format(DougMessages.UserGaveItem, Utils.UserMention(user.Id), inventoryItem.Item.Name, Utils.UserMention(target));
+            var message = string.Format(DougMessages.UserGaveItem, Utils.UserMention(user.Id), inventoryItem.Item.Name, Utils.UserMention(target.Id));
             _slack.BroadcastMessage(message, command.ChannelId);
 
             return new DougResponse();
@@ -85,12 +87,12 @@ namespace Doug.Commands
 
             if (equipment != null)
             {
-                var item = _inventoryRepository.UnequipItem(user.Id, equipmentItem.Slot);
-                _inventoryRepository.AddItem(user.Id, item.Id);
+                var item = _equipmentRepository.UnequipItem(user.Id, equipmentItem.Slot);
+                _inventoryRepository.AddItem(user, item.Id);
             }
 
-            _inventoryRepository.EquipItem(user.Id, equipmentItem);
-            _inventoryRepository.RemoveItem(user.Id, position);
+            _equipmentRepository.EquipItem(user.Id, equipmentItem);
+            _inventoryRepository.RemoveItem(user, position);
 
             return new DougResponse(string.Format(DougMessages.EquippedItem, inventoryItem.Item.Name));
         }

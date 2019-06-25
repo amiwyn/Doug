@@ -15,7 +15,7 @@ namespace Doug.Items
 
         public override string Use(int itemPos, User user)
         {
-            _inventoryRepository.RemoveItem(user.Id, itemPos);
+            _inventoryRepository.RemoveItem(user, itemPos);
             return DougMessages.ConsumedItem;
         }
     }

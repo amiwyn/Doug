@@ -111,7 +111,7 @@ namespace Doug.Services
             var participantsId = participants.Select(user => user.Id).ToList();
 
             _userRepository.AddCreditsToUsers(participantsId, CoffeeBreakAward);
-            _inventoryRepository.AddItemToUsers(participantsId, ItemFactory.CoffeeCup);
+            _inventoryRepository.AddItemToUsers(participants, ItemFactory.CoffeeCup);
 
             _userService.AddBulkExperience(participants, CoffeeExperienceAward, channelId).Wait();
 

@@ -29,12 +29,14 @@ namespace Test.Shop
         private readonly Mock<ISlackWebApi> _slack = new Mock<ISlackWebApi>();
         private readonly Mock<IInventoryRepository>  _inventoryRepository = new Mock<IInventoryRepository>();
         private readonly Mock<IItemFactory> _itemFactory = new Mock<IItemFactory>();
+        private User _user;
 
         [TestInitialize]
         public void Setup()
         {
             _itemFactory.Setup(factory => factory.CreateItem("lucky_dice")).Returns(new LuckyDice());
-            _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User() { Id = "testuser", Credits = 431279});
+            _user = new User() {Id = "testuser", Credits = 431279};
+            _userRepository.Setup(repo => repo.GetUser(User)).Returns(_user);
 
             _shopService = new ShopService(_userRepository.Object, _slack.Object, _inventoryRepository.Object, _itemFactory.Object);
         }
@@ -44,7 +46,7 @@ namespace Test.Shop
         {
             _shopService.Buy(_interaction);
 
-            _inventoryRepository.Verify(repo => repo.AddItem(User, "lucky_dice"));
+            _inventoryRepository.Verify(repo => repo.AddItem(_user, "lucky_dice"));
         }
 
         [TestMethod]

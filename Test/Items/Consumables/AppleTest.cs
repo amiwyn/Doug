@@ -42,7 +42,7 @@ namespace Test.Items.Consumables
         {
             _apple.Use(0, _user);
 
-            _inventoryRepository.Verify(repo => repo.RemoveItem("test", 0));
+            _inventoryRepository.Verify(repo => repo.RemoveItem(_user, 0));
         }
     }
 }

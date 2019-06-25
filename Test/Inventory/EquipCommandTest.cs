@@ -31,6 +31,7 @@ namespace Test.Inventory
         private readonly Mock<ISlackWebApi> _slack = new Mock<ISlackWebApi>();
         private readonly Mock<IStatsRepository> _statsRepository = new Mock<IStatsRepository>();
         private readonly Mock<IInventoryRepository> _inventoryRepository = new Mock<IInventoryRepository>();
+        private readonly Mock<IEquipmentRepository> _equipmentRepository = new Mock<IEquipmentRepository>();
 
         private EquipmentItem _item;
 
@@ -42,7 +43,7 @@ namespace Test.Inventory
             var items = new List<InventoryItem>() {new InventoryItem("testuser", "testitem") {InventoryPosition = 6, Item = _item } };
             _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User() { Id = "testuser", InventoryItems = items, Loadout = loadout });
 
-            _inventoryCommands = new InventoryCommands(_userRepository.Object, _slack.Object, _inventoryRepository.Object);
+            _inventoryCommands = new InventoryCommands(_userRepository.Object, _slack.Object, _inventoryRepository.Object, _equipmentRepository.Object);
         }
 
         [TestMethod]
@@ -50,7 +51,7 @@ namespace Test.Inventory
         {
             _inventoryCommands.Equip(_command);
 
-            _inventoryRepository.Verify(repo => repo.EquipItem(User, _item));
+            _equipmentRepository.Verify(repo => repo.EquipItem(User, _item));
         }
 
         [TestMethod]
@@ -58,7 +59,7 @@ namespace Test.Inventory
         {
             _inventoryCommands.Equip(_command);
 
-            _inventoryRepository.Verify(repo => repo.RemoveItem(User, 6));
+            _inventoryRepository.Verify(repo => repo.RemoveItem(It.IsAny<User>(), 6));
         }
 
         [TestMethod]
