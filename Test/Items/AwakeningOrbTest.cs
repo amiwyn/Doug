@@ -27,9 +27,9 @@ namespace Test.Items
         [TestMethod]
         public void WhenGettingFlamed_TargetIsNotifiedWithTheCallersName()
         {
-            _awakeningOrb = new AwakeningOrb();
+            _awakeningOrb = new AwakeningOrb(_slack.Object);
 
-            _awakeningOrb.OnGettingFlamed(_command, "hehehee", _slack.Object);
+            _awakeningOrb.OnGettingFlamed(_command, "hehehee");
 
             _slack.Verify(slack => slack.SendEphemeralMessage(It.IsRegex("testuser"), "otherUserid", Channel));
         }
@@ -37,9 +37,9 @@ namespace Test.Items
         [TestMethod]
         public void WhenGettingFlamed_SlurDoesNotChange()
         {
-            _awakeningOrb = new AwakeningOrb();
+            _awakeningOrb = new AwakeningOrb(_slack.Object);
 
-            var result = _awakeningOrb.OnGettingFlamed(_command, "hehehee", _slack.Object);
+            var result = _awakeningOrb.OnGettingFlamed(_command, "hehehee");
 
             Assert.AreEqual("hehehee", result);
         }

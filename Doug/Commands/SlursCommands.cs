@@ -80,7 +80,7 @@ namespace Doug.Commands
             var slurs = slursToRemove.Select(slur => _slurRepository.GetSlur(slur)).ToList();
             var attachment = Attachment.DeletedSlursAttachment(slurs);
 
-            await _slack.SendAttachment(attachment, command.ChannelId);
+            await _slack.SendAttachments(new List<Attachment>{ attachment } , command.ChannelId);
 
             slursToRemove.ForEach(slur => _slurRepository.RemoveSlur(slur));
 
@@ -124,21 +124,19 @@ namespace Doug.Commands
             {
                 return await SpecificFlame(command);
             }
-            else
-            {
-                return await RandomFlame(command);
-            }
+
+            return await RandomFlame(command);
         }
 
         private async Task<DougResponse> SpecificFlame(Command command)
         {
-            int slurId = int.Parse(command.GetArgumentAt(1));
+            var slurId = int.Parse(command.GetArgumentAt(1));
 
             var user = _userRepository.GetUser(command.UserId);
 
             if (!user.HasEnoughCreditsForAmount(SpecificFlameCost))
             {
-                return user.NotEnoughCreditsForAmountResponse(SpecificFlameCost);
+                return new DougResponse(user.NotEnoughCreditsForAmountResponse(SpecificFlameCost));
             }
 
             _userRepository.RemoveCredits(command.UserId, SpecificFlameCost);
@@ -171,9 +169,9 @@ namespace Doug.Commands
 
             var message = BuildSlurMessage(slur.Text, randomUser, command.GetTargetUserId());
 
-            message = _itemEventDispatcher.OnGettingFlamed(command, message);
+            message = _itemEventDispatcher.OnFlaming(command, message);
 
-            var timestamp = await _slack.SendMessage(message, command.ChannelId);
+            var timestamp = await _slack.BroadcastMessage(message, command.ChannelId);
 
             _slurRepository.LogRecentSlur(slur.Id, timestamp);
 
@@ -209,7 +207,7 @@ namespace Doug.Commands
 
             if (!user.HasEnoughCreditsForAmount(WholastCost))
             {
-                return user.NotEnoughCreditsForAmountResponse(WholastCost);
+                return new DougResponse(user.NotEnoughCreditsForAmountResponse(WholastCost));
             }
 
             _userRepository.RemoveCredits(command.UserId, WholastCost);

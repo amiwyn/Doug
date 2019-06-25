@@ -1,13 +1,16 @@
 ﻿namespace Doug.Items.Equipment
 {
-    public class DevilContract : Item
+    public class DevilContract : EquipmentItem
     {
         public DevilContract()
         {
+            Id = ItemFactory.DevilsContract;
             Name = "Deal with the Devil";
             Description = "He told you no one could steal from you ever again... you should have read the small text. Block stealing. Cannot Steal.";
-            Rarity = Rarity.Unique;
+            Rarity = Rarity.Legendary;
             Icon = ":page_with_curl:";
+            Slot = EquipmentSlot.LeftHand;
+            Price = 4;
         }
 
         public override double OnStealingChance(double chance)

@@ -13,12 +13,13 @@ namespace Doug.Slack
 {
     public interface ISlackWebApi
     {
-        Task<string> SendMessage(string text, string channelId);
+        Task<string> BroadcastMessage(string text, string channelId);
         Task<UserInfo> GetUserInfo(string userId);
         Task AddReaction(string reaction, string timestamp, string channel);
         Task<List<Reaction>> GetReactions(string timestamp, string channel);
-        Task SendAttachment(Attachment attachment, string channel);
+        Task SendAttachments(IEnumerable<Attachment> attachments, string channel);
         Task SendEphemeralMessage(string text, string user, string channel);
+        Task SendEphemeralBlocks(IEnumerable<BlockMessage> blocks, string user, string channel);
     }
 
     public class SlackWebApi : ISlackWebApi
@@ -45,11 +46,12 @@ namespace Doug.Slack
             _jsonSettings = new JsonSerializerSettings
             {
                 ContractResolver = contractResolver,
-                Formatting = Formatting.Indented
+                Formatting = Formatting.Indented,
+                NullValueHandling = NullValueHandling.Ignore
             };
         }
 
-        public async Task<string> SendMessage(string text, string channelId)
+        public async Task<string> BroadcastMessage(string text, string channelId)
         {
             var request = new HttpRequestMessage(HttpMethod.Post, PostMessageUrl);
             var keyValues = new List<KeyValuePair<string, string>>
@@ -110,9 +112,9 @@ namespace Doug.Slack
             return JsonConvert.DeserializeObject<ReactionInfoResponse>(response, _jsonSettings).Message.Reactions;
         }
 
-        public async Task SendAttachment(Attachment attachment, string channel)
+        public async Task SendAttachments(IEnumerable<Attachment> attachments, string channel)
         {
-            var attachmentString = JsonConvert.SerializeObject(new List<Attachment>() { attachment }, _jsonSettings);
+            var attachmentString = JsonConvert.SerializeObject(attachments, _jsonSettings);
 
             var request = new HttpRequestMessage(HttpMethod.Post, PostMessageUrl);
             var keyValues = new List<KeyValuePair<string, string>>
@@ -135,6 +137,23 @@ namespace Doug.Slack
                 new KeyValuePair<string, string>("channel", channel),
                 new KeyValuePair<string, string>("user", user),
                 new KeyValuePair<string, string>("text", text)
+            };
+            request.Content = new FormUrlEncodedContent(keyValues);
+
+            await _client.SendAsync(request);
+        }
+
+        public async Task SendEphemeralBlocks(IEnumerable<BlockMessage> blocks, string user, string channel)
+        {
+            var attachmentString = JsonConvert.SerializeObject(blocks, _jsonSettings);
+
+            var request = new HttpRequestMessage(HttpMethod.Post, EphemeralUrl);
+            var keyValues = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("token", _token),
+                new KeyValuePair<string, string>("channel", channel),
+                new KeyValuePair<string, string>("user", user),
+                new KeyValuePair<string, string>("blocks", attachmentString)
             };
             request.Content = new FormUrlEncodedContent(keyValues);
 

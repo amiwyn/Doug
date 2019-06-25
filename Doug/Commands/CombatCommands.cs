@@ -45,12 +45,12 @@ namespace Doug.Commands
 
             _statsRepository.UpdateEnergy(command.UserId, energy);
 
-            var userChance = _itemEventDispatcher.OnStealingChance(user, user.CalculateBaseStealSuccessRate());
-            var targetChance = _itemEventDispatcher.OnGettingStolenChance(target, target.CalculateBaseOpponentStealSuccessRate());
+            var userChance = _itemEventDispatcher.OnStealingChance(user, user.BaseStealSuccessRate());
+            var targetChance = _itemEventDispatcher.OnGettingStolenChance(target, target.BaseOpponentStealSuccessRate());
 
             var rollSuccessful = _randomService.RollAgainstOpponent(userChance, targetChance);
 
-            var amount = _itemEventDispatcher.OnStealingAmount(user, user.CalculateBaseStealAmount());
+            var amount = _itemEventDispatcher.OnStealingAmount(user, user.BaseStealAmount());
 
             if (target.Credits - amount < 0)
             {
@@ -63,12 +63,12 @@ namespace Doug.Commands
                 _userRepository.AddCredits(command.UserId, amount);
 
                 var message = string.Format(DougMessages.StealCredits, Utils.UserMention(command.UserId), amount, Utils.UserMention(target.Id));
-                _slack.SendMessage(message, command.ChannelId);
+                _slack.BroadcastMessage(message, command.ChannelId);
             }
             else
             {
                 var message = string.Format(DougMessages.StealFail, Utils.UserMention(command.UserId), Utils.UserMention(target.Id));
-                _slack.SendMessage(message, command.ChannelId);
+                _slack.BroadcastMessage(message, command.ChannelId);
             }
 
             return NoResponse;

@@ -1,5 +1,4 @@
-﻿using Doug.Items.Equipment;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace Doug.Models
 {
@@ -26,10 +25,14 @@ namespace Doug.Models
                 .WithMany(u => u.InventoryItems)
                 .HasForeignKey(u => u.UserId);
 
-            modelBuilder.Entity<AwakeningOrb>();
-            modelBuilder.Entity<LuckyDice>();
-            modelBuilder.Entity<BurglarBoots>();
-            modelBuilder.Entity<GreedyGloves>();
+            modelBuilder.Entity<Loadout>()
+                .ToTable("Users")
+                .HasBaseType((string)null);
+
+            modelBuilder.Entity<User>()
+                .ToTable("Users")
+                .HasOne(o => o.Loadout).WithOne()
+                .HasForeignKey<User>(o => o.Id);
 
             base.OnModelCreating(modelBuilder);
         }

@@ -46,13 +46,17 @@ namespace Doug
 
             services.AddSingleton(new HttpClient(new HttpClientHandler(), false));
 
-            services.AddTransient<IEventService, EventService>();
+            
             services.AddTransient<ISlackWebApi, SlackWebApi>();
-
             services.AddTransient<IItemEventDispatcher, ItemEventDispatcher>();
+            services.AddTransient<IItemFactory, ItemFactory>();
+
+            services.AddTransient<IEventService, EventService>();
             services.AddTransient<IAuthorizationService, AuthorizationService>();
             services.AddTransient<ICoffeeService, CoffeeService>();
             services.AddTransient<IRandomService, RandomService>();
+            services.AddTransient<IShopService, ShopService>();
+            services.AddTransient<IUserService, UserService>();
 
             services.AddTransient<ICoffeeCommands, CoffeeCommands>();
             services.AddTransient<ISlursCommands, SlursCommands>();
@@ -67,6 +71,8 @@ namespace Doug
             services.AddTransient<ICoffeeRepository, CoffeeRepository>();
             services.AddTransient<ISlurRepository, SlurRepository>();
             services.AddTransient<IStatsRepository, StatsRepository>();
+            services.AddTransient<IInventoryRepository, InventoryRepository>();
+            services.AddTransient<IEquipmentRepository, EquipmentRepository>();
 
             var env = Environment.GetEnvironmentVariable("APP_ENV");
 

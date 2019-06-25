@@ -3,6 +3,7 @@ using Doug.Slack;
 using Hangfire;
 using System;
 using System.Linq;
+using Doug.Items;
 
 namespace Doug.Services
 {
@@ -20,26 +21,36 @@ namespace Doug.Services
         private const int AfternoonBreak = 14 + 4;
         private const int Tolerance = 30;
         private const int CoffeeBreakAward = 10;
+        private const int CoffeeExperienceAward = 300;
 
         private readonly ISlackWebApi _slack;
         private readonly ICoffeeRepository _coffeeRepository;
         private readonly IChannelRepository _channelRepository;
         private readonly IBackgroundJobClient _backgroundJobClient;
         private readonly IUserRepository _userRepository;
+        private readonly IInventoryRepository _inventoryRepository;
+        private readonly IUserService _userService;
 
-        public CoffeeService(ISlackWebApi slackWebApi, ICoffeeRepository coffeeRepository, IChannelRepository channelRepository, IBackgroundJobClient backgroundJobClient, IUserRepository userRepository)
+        public CoffeeService(ISlackWebApi slackWebApi, ICoffeeRepository coffeeRepository, IChannelRepository channelRepository, IBackgroundJobClient backgroundJobClient, IUserRepository userRepository, IInventoryRepository inventoryRepository, IUserService userService)
         {
             _slack = slackWebApi;
             _coffeeRepository = coffeeRepository;
             _channelRepository = channelRepository;
             _backgroundJobClient = backgroundJobClient;
             _userRepository = userRepository;
+            _inventoryRepository = inventoryRepository;
+            _userService = userService;
         }
 
         public void CountParrot(string userId, string channelId, DateTime currentTime)
         {
             if (!Utils.IsInTimespan(currentTime, TimeSpan.FromHours(MorningBreak), Tolerance) &&
                 !Utils.IsInTimespan(currentTime, TimeSpan.FromHours(AfternoonBreak), Tolerance))
+            {
+                return;
+            }
+
+            if (_coffeeRepository.IsCoffeeBreak())
             {
                 return;
             }
@@ -82,28 +93,32 @@ namespace Doug.Services
                 message = DougMessages.Remind69;
             }
 
-            _slack.SendMessage(string.Format(message, readyParticipants.Count, total, userMentionList), channelId);
+            _slack.BroadcastMessage(string.Format(message, readyParticipants.Count, total, userMentionList), channelId);
         }
 
         public void LaunchCoffeeBreak(string channelId)
         {
-            _slack.SendMessage(DougMessages.CoffeeStart, channelId);
+            _coffeeRepository.StartCoffeeBreak();
+
+            _slack.BroadcastMessage(DougMessages.CoffeeStart, channelId);
 
             _backgroundJobClient.Schedule(() => EndCoffee(channelId), TimeSpan.FromMinutes(CoffeeBreakDurationMinutes));
         }
 
         public void EndCoffee(string channelId)
         {
-            var participants = _coffeeRepository.GetReadyParticipants();
+            var participants = _coffeeRepository.GetReadyParticipants().ToList();
+            var participantsId = participants.Select(user => user.Id).ToList();
 
-            foreach (var participant in participants)
-            {
-                _userRepository.AddCredits(participant, CoffeeBreakAward);
-            }
+            _userRepository.AddCreditsToUsers(participantsId, CoffeeBreakAward);
+            _inventoryRepository.AddItemToUsers(participants, ItemFactory.CoffeeCup);
+
+            _userService.AddBulkExperience(participants, CoffeeExperienceAward, channelId).Wait();
 
             _coffeeRepository.ResetRoster();
+            _coffeeRepository.EndCoffeeBreak();
 
-            _slack.SendMessage(DougMessages.BackToWork, channelId);
+            _slack.BroadcastMessage(DougMessages.BackToWork, channelId);
         }
     }
 }

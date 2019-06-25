@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Doug.Models
 {
@@ -8,6 +9,8 @@ namespace Doug.Models
         public string Color { get; set; }
         public string Pretext { get; set; }
         public List<Field> Fields { get; set; }
+
+        private static readonly string[] RarityColor = { "#adadad", "#26cc3e", "#2669cc", "#e26b16", "#860daa" };
 
         public Attachment()
         {
@@ -28,7 +31,7 @@ namespace Doug.Models
             return attachment;
         }
 
-        public static Attachment StatsAttachment(int slurCount, User user)
+        public static Attachment StatsAttachment(User user)
         {
             var title = string.Format(DougMessages.StatsOf, Utils.UserMention(user.Id));
 
@@ -41,17 +44,50 @@ namespace Doug.Models
 
             attachment.Fields.Add(new Field(string.Format(DougMessages.UserIdStats, user.Id)));
             attachment.Fields.Add(new Field(string.Format(DougMessages.CreditStats, user.Credits)));
-            attachment.Fields.Add(new Field(string.Format(DougMessages.SlursAddedStats, slurCount)));
-            attachment.Fields.Add(new Field(string.Format(DougMessages.HealthStats, user.Health, user.CalculateTotalHealth())));
-            attachment.Fields.Add(new Field(string.Format(DougMessages.EnergyStats, user.Energy, user.CalculateTotalEnergy())));
-            attachment.Fields.Add(new Field(string.Format(DougMessages.CharismaStats, user.Charisma)));
-            attachment.Fields.Add(new Field(string.Format(DougMessages.AgilityStats, user.Agility)));
-            attachment.Fields.Add(new Field(string.Format(DougMessages.LuckStats, user.Luck)));
-
-            attachment.Fields.Add(new Field(DougMessages.ItemStats));
-            user.InventoryItems.ForEach(inventoryItem => attachment.Fields.Add(new Field(string.Format("{0} - {2} {1}", inventoryItem.InventoryPosition, inventoryItem.Item.Name, inventoryItem.Item.Icon))));
+            attachment.Fields.Add(new Field(string.Format(DougMessages.LevelStats, user.Level)));
+            attachment.Fields.Add(new Field(string.Format(DougMessages.ExperienceStats, user.GetExperienceAdvancement() * 100)));
+            attachment.Fields.Add(new Field(string.Format(DougMessages.HealthStats, user.Health, user.TotalHealth())));
+            attachment.Fields.Add(new Field(string.Format(DougMessages.EnergyStats, user.Energy, user.TotalEnergy())));
+            attachment.Fields.Add(new Field(string.Format(DougMessages.LuckStats, user.TotalLuck())));
+            attachment.Fields.Add(new Field(string.Format(DougMessages.AgilityStats, user.TotalAgility())));
+            attachment.Fields.Add(new Field(string.Format(DougMessages.CharismaStats, user.TotalCharisma())));
+            attachment.Fields.Add(new Field(string.Format(DougMessages.ConstitutionStats, user.TotalConstitution())));
+            attachment.Fields.Add(new Field(string.Format(DougMessages.StaminaStats, user.TotalStamina())));
+            attachment.Fields.Add(new Field(string.Format(DougMessages.FreeStatPoints, user.FreeStatsPoints)));
 
             return attachment;
+        }
+
+        public static List<Attachment> InventoryAttachments(User user)
+        {
+            return user.InventoryItems.Select(inventoryItem =>
+            {
+                var itemAttachment = new Attachment()
+                {
+                    Color = RarityColor[(int)inventoryItem.Item.Rarity],
+                };
+
+                //TODO : make tostring methods or w/e
+                itemAttachment.Fields.Add(new Field(string.Format("{0} - {2} {1} {3}", inventoryItem.InventoryPosition, inventoryItem.Item.Name, inventoryItem.Item.Icon, inventoryItem.Quantity == 1 ? string.Empty : "(" + inventoryItem.Quantity + ")")));
+
+                return itemAttachment;
+            }).ToList();
+        }
+
+        public static List<Attachment> EquipmentAttachments(Loadout loadout)
+        {
+            return loadout.Equipment.Select(entry =>
+            {
+                var item = entry.Value;
+                var itemAttachment = new Attachment()
+                {
+                    Color = RarityColor[(int)item.Rarity],
+                };
+
+                itemAttachment.Fields.Add(new Field($"{item.Slot.ToString()} - {item.Icon} {item.Name}"));
+
+                return itemAttachment;
+            }).ToList();
         }
     }
 

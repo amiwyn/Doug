@@ -1,13 +1,16 @@
 ﻿namespace Doug.Items.Equipment
 {
-    public class GreedyGloves : Item
+    public class GreedyGloves : EquipmentItem
     {
         public GreedyGloves()
         {
+            Id = ItemFactory.GreedyGloves;
             Name = "Gloves of Greed";
             Description = "These gloves give you an unquenchable thirst for rupees. Increase the amount of rupees you can steal.";
-            Rarity = Rarity.Common;
+            Rarity = Rarity.Rare;
             Icon = ":gloves:";
+            Slot = EquipmentSlot.Gloves;
+            Price = 3000;
         }
 
         public override int OnStealingAmount(int amount)

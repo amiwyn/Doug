@@ -3,27 +3,29 @@ using Doug.Repositories;
 
 namespace Doug.Items.Consumables
 {
-    public class Apple : Item
+    public class Apple : ConsumableItem
     {
+        private readonly IStatsRepository _statsRepository;
         private const int RecoverAmount = 25;
 
-        public Apple()
+        public Apple(IStatsRepository statsRepository, IInventoryRepository inventoryRepository) : base(inventoryRepository)
         {
+            _statsRepository = statsRepository;
+            Id = ItemFactory.Apple;
             Name = "Apple";
-            Description = "Ahhh, fresh apple so healthy. Restore 25 health.";
+            Description = "Ahhh, a fresh apple. So healthy. Restores 25 health.";
             Rarity = Rarity.Common;
             Icon = ":apple:";
+            Price = 25;
         }
 
-        public override string Use(int itemPos, User user, IUserRepository userRepository, IStatsRepository statsRepository)
+        public override string Use(int itemPos, User user)
         {
-            var health = user.Health + RecoverAmount;
+            base.Use(itemPos, user);
 
-            health = health >= user.CalculateTotalHealth() ? user.CalculateTotalHealth() : health;
+            user.Health += RecoverAmount;
 
-            statsRepository.UpdateHealth(user.Id, health);
-
-            userRepository.RemoveItem(user.Id, itemPos);
+            _statsRepository.UpdateHealth(user.Id, user.Health);
 
             return string.Format(DougMessages.RecoverItem, Name, RecoverAmount, "health");
         }

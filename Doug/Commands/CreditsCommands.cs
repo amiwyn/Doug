@@ -1,7 +1,10 @@
-﻿using Doug.Models;
+﻿using System.Collections.Generic;
+using Doug.Models;
 using Doug.Repositories;
 using Doug.Slack;
 using System.Linq;
+using System.Threading.Tasks;
+using Doug.Items;
 
 namespace Doug.Commands
 {
@@ -10,6 +13,7 @@ namespace Doug.Commands
         DougResponse Give(Command command);
         DougResponse Forbes(Command command);
         DougResponse Leaderboard(Command command);
+        Task<DougResponse> Shop(Command command);
     }
 
     public class CreditsCommands : ICreditsCommands
@@ -18,11 +22,13 @@ namespace Doug.Commands
         private readonly ISlackWebApi _slack;
 
         private static readonly DougResponse NoResponse = new DougResponse();
+        private readonly IItemFactory _itemFactory;
 
-        public CreditsCommands(IUserRepository userRepository, ISlackWebApi messageSender)
+        public CreditsCommands(IUserRepository userRepository, ISlackWebApi messageSender, IItemFactory itemFactory)
         {
             _userRepository = userRepository;
             _slack = messageSender;
+            _itemFactory = itemFactory;
         }
 
         public DougResponse Give(Command command)
@@ -44,14 +50,14 @@ namespace Doug.Commands
 
             if (!user.HasEnoughCreditsForAmount(amount))
             {
-                return user.NotEnoughCreditsForAmountResponse(amount);
+                return new DougResponse(user.NotEnoughCreditsForAmountResponse(amount));
             }
 
             _userRepository.RemoveCredits(command.UserId, amount);
             _userRepository.AddCredits(target, amount);
 
             var message = string.Format(DougMessages.UserGaveCredits, Utils.UserMention(command.UserId), amount, Utils.UserMention(target));
-            _slack.SendMessage(message, command.ChannelId);
+            _slack.BroadcastMessage(message, command.ChannelId);
 
             return NoResponse;
         }
@@ -76,9 +82,24 @@ namespace Doug.Commands
             var users = userList.Aggregate((first, next) => first + "\n" + next);
             var message = $"{DougMessages.Top5}\n{users}";
 
-            _slack.SendMessage(message, command.ChannelId);
+            _slack.BroadcastMessage(message, command.ChannelId);
 
             return NoResponse;
+        }
+
+        public async Task<DougResponse> Shop(Command command)
+        {
+            var items = new List<Item>
+            {
+                _itemFactory.CreateItem(ItemFactory.CoffeeCup),
+                _itemFactory.CreateItem(ItemFactory.Apple),
+                _itemFactory.CreateItem(ItemFactory.GreedyGloves),
+                _itemFactory.CreateItem(ItemFactory.AwakeningOrb)
+            };
+
+            await _slack.SendEphemeralBlocks(BlockMessage.ShopMessage(items), command.UserId, command.ChannelId);
+
+            return NoResponse; 
         }
     }
 }

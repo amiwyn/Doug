@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
+using Doug.Items;
 
 namespace Doug.Repositories
 {
@@ -12,17 +13,18 @@ namespace Doug.Repositories
         User GetUser(string userId);
         void RemoveCredits(string userId, int amount);
         void AddCredits(string userId, int amount);
-        void AddItem(string userId, string itemId);
-        void RemoveItem(string userId, int inventoryPosition);
+        void AddCreditsToUsers(List<string> users, int amount);
     }
 
     public class UserRepository : IUserRepository
     {
         private readonly DougContext _db;
+        private readonly IItemFactory _itemFactory;
 
-        public UserRepository(DougContext dougContext)
+        public UserRepository(DougContext dougContext, IItemFactory itemFactory)
         {
             _db = dougContext;
+            _itemFactory = itemFactory;
         }
 
         public void AddCredits(string userId, int amount)
@@ -34,32 +36,12 @@ namespace Doug.Repositories
             _db.SaveChanges();
         }
 
-        public void AddItem(string userId, string itemId)
+        public void AddCreditsToUsers(List<string> userIds, int amount)
         {
-            var user = _db.Users
-                .Include(usr => usr.InventoryItems)
-                .Single(usr => usr.Id == userId);
+            var users = _db.Users.Where(usr => userIds.Contains(usr.Id)).ToList();
 
-            var slots = user.InventoryItems.Select(itm => itm.InventoryPosition).ToList();
+            users.ForEach(usr => usr.Credits += amount);
 
-            var slot = 0;
-            if (slots.Any())
-            {
-                var maxPos = slots.Any() ? slots.Max() : 0;
-                var freeSlots = Enumerable.Range(0, maxPos).Except(slots).ToList();
-
-                slot = freeSlots.Any() ? freeSlots.First() : maxPos + 1;
-            }
-
-            user.InventoryItems.Add(new InventoryItem(userId, itemId) { InventoryPosition = slot });
-            _db.SaveChanges();
-        }
-
-        public void RemoveItem(string userId, int inventoryPosition)
-        {
-            var user = _db.Users.Single(usr => usr.Id == userId);
-            var item = user.InventoryItems.Single(itm => itm.InventoryPosition == inventoryPosition);
-            user.InventoryItems.Remove(item);
             _db.SaveChanges();
         }
 
@@ -80,9 +62,14 @@ namespace Doug.Repositories
 
         public User GetUser(string userId)
         {
-            return _db.Users
-                .Include(user => user.InventoryItems)
-                .Single(user => user.Id == userId);
+            var user = _db.Users
+                .Include(usr => usr.InventoryItems)
+                .Include(usr => usr.Loadout)
+                .Single(usr => usr.Id == userId);
+
+            user.LoadItems(_itemFactory);
+
+            return user;
         }
 
         public List<User> GetUsers()

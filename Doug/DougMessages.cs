@@ -28,12 +28,17 @@
         public const string CreditStats = CreditEmoji + " Money : {0}";
         public const string UserIdStats = ":robot_face: User ID : {0}";
         public const string SlursAddedStats = ":see_no_evil: Slurs added : {0}";
+        public const string LevelStats = ":zap: Level : {0}";
+        public const string ExperienceStats = ":level_slider: Level Progress : {0:0.##}%";
         public const string HealthStats = ":red_circle: Health : {0}/{1}";
         public const string EnergyStats = ":large_blue_circle: Energy : {0}/{1}";
         public const string CharismaStats = ":information_desk_person: Charisma : {0}";
         public const string AgilityStats = ":runner: Agility : {0}";
         public const string DefenceStats = ":shield: Defense: {0}";
         public const string LuckStats = ":four_leaf_clover: Luck : {0}";
+        public const string ConstitutionStats = ":heart: Constitution : {0}";
+        public const string StaminaStats = ":male_mage: Stamina : {0}";
+        public const string FreeStatPoints = ":cherries: Free stat points : {0}";
         public const string ItemStats = ":briefcase: Items :";
         public const string WonGamble = "{0} flipped a coin and won {1} " + CreditEmoji;
         public const string LostGamble = "{0} flipped a coin and lost {1} " + CreditEmoji;
@@ -46,8 +51,15 @@
         public const string YouIdiot = "You idiot.";
         public const string StealCredits = "{0} stole {1} " + CreditEmoji + " from {2}!";
         public const string StealFail = "{0} attempted to steal from {1} but failed!";
-        public const string RecoverItem = "You used '{0}' and recovered {1} {2}.";
-        public const string UserGaveItem = "{0} gave '{1}' to {2}.";
+        public const string RecoverItem = "You used *{0}* and recovered {1} {2}.";
+        public const string UserGaveItem = "{0} gave *{1}* to {2}.";
+        public const string ConsumedItem = "You consumed the item.";
+        public const string LevelUp = ":confetti_ball: {0} is now level *{1}*!";
+        public const string GainedExp = "You gained {0} experience points.";
+        public const string EquippedItem = "You Equipped *{0}*.";
+        public const string ShopSpeech = "*Oi!* Welcome to my shop! I sell various stuff from all around the continent.\n\n *Come in, have a look:*";
+        public const string BuyFor = "Buy for {0} " + CreditEmoji;
+        public const string UserDied = "Oh dear, {0} died!";
 
         public const string DougError = "Beep boop, it's not working : {0}";
         public const string NotAnAdmin = "You are not an admin.";
@@ -63,5 +75,6 @@
         public const string NoItemInSlot = "There is no item in slot {0}.";
         public const string ItemCantBeUsed = "The item in slot {0} cannot be used.";
         public const string InvalidUserArgument = "You must pass a valid user in arguments";
+        public const string ItemNotEquipAble = "This item is not equipable.";
     }
 }

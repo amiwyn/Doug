@@ -52,7 +52,7 @@ namespace Doug.Commands
 
             if (!user.HasEnoughCreditsForAmount(amount))
             {
-                return user.NotEnoughCreditsForAmountResponse(amount);
+                return new DougResponse(user.NotEnoughCreditsForAmountResponse(amount));
             }
 
             var cost = (int)Math.Ceiling(amount / 10.0);
@@ -78,14 +78,14 @@ namespace Doug.Commands
             }
 
             var message = string.Format(baseMessage, Utils.UserMention(command.UserId), amount);
-            _slack.SendMessage(message, command.ChannelId);
+            _slack.BroadcastMessage(message, command.ChannelId);
 
             return NoResponse;
         }
 
         private bool UserCoinFlipWin(User user)
         {
-            var userChance = _itemEventDispatcher.OnGambling(user, user.CalculateBaseGambleChance());
+            var userChance = _itemEventDispatcher.OnGambling(user, user.BaseGambleChance());
             return _randomService.RollAgainstOpponent(userChance, 0.5);
         }
 
@@ -109,7 +109,7 @@ namespace Doug.Commands
             if (command.GetArgumentAt(0).ToLower() == DeclineChallengeWord)
             {
                 var challenge = _channelRepository.GetGambleChallenge(command.UserId);
-                _slack.SendMessage(string.Format(DougMessages.GambleDeclined, Utils.UserMention(command.UserId), Utils.UserMention(challenge.RequesterId)), command.ChannelId);
+                _slack.BroadcastMessage(string.Format(DougMessages.GambleDeclined, Utils.UserMention(command.UserId), Utils.UserMention(challenge.RequesterId)), command.ChannelId);
                 _channelRepository.RemoveGambleChallenge(challenge.TargetId);
             }
 
@@ -137,7 +137,7 @@ namespace Doug.Commands
 
             _backgroundJobClient.Schedule(() => ChallengeTimeout(targetId), TimeSpan.FromMinutes(3));
 
-            _slack.SendMessage(string.Format(DougMessages.ChallengeSent, Utils.UserMention(command.UserId), Utils.UserMention(targetId), amount), command.ChannelId);
+            _slack.BroadcastMessage(string.Format(DougMessages.ChallengeSent, Utils.UserMention(command.UserId), Utils.UserMention(targetId), amount), command.ChannelId);
             _slack.SendEphemeralMessage(DougMessages.GambleChallengeTip, targetId, command.ChannelId);
 
             return NoResponse;
@@ -162,13 +162,13 @@ namespace Doug.Commands
 
             if (!requester.HasEnoughCreditsForAmount(challenge.Amount))
             {
-                _slack.SendMessage(string.Format(DougMessages.InsufficientCredits, Utils.UserMention(requester.Id), challenge.Amount), command.ChannelId);
+                _slack.BroadcastMessage(string.Format(DougMessages.InsufficientCredits, Utils.UserMention(requester.Id), challenge.Amount), command.ChannelId);
                 return;
             }
 
             if (!target.HasEnoughCreditsForAmount(challenge.Amount))
             {
-                _slack.SendMessage(string.Format(DougMessages.InsufficientCredits, Utils.UserMention(target.Id), challenge.Amount), command.ChannelId);
+                _slack.BroadcastMessage(string.Format(DougMessages.InsufficientCredits, Utils.UserMention(target.Id), challenge.Amount), command.ChannelId);
                 return;
             }
 
@@ -187,13 +187,13 @@ namespace Doug.Commands
             _channelRepository.RemoveGambleChallenge(challenge.TargetId);
 
             var message = string.Format(DougMessages.GambleChallenge, Utils.UserMention(winner.Id), challenge.Amount, Utils.UserMention(loser.Id));
-            _slack.SendMessage(message, command.ChannelId);
+            _slack.BroadcastMessage(message, command.ChannelId);
         }
 
         private bool VersusCoinFlipWin(User caller, User target)
         {
-            var callerChance = _itemEventDispatcher.OnGambling(caller, caller.CalculateBaseGambleChance());
-            var targetChance = _itemEventDispatcher.OnGambling(target, target.CalculateBaseGambleChance());
+            var callerChance = _itemEventDispatcher.OnGambling(caller, caller.BaseGambleChance());
+            var targetChance = _itemEventDispatcher.OnGambling(target, target.BaseGambleChance());
 
             return _randomService.RollAgainstOpponent(callerChance, targetChance);
         }

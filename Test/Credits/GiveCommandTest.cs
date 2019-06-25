@@ -1,5 +1,5 @@
-using System;
 using Doug.Commands;
+using Doug.Items;
 using Doug.Models;
 using Doug.Repositories;
 using Doug.Slack;
@@ -26,13 +26,14 @@ namespace Test.Credits
 
         private readonly Mock<IUserRepository> _userRepository = new Mock<IUserRepository>();
         private readonly Mock<ISlackWebApi> _slack = new Mock<ISlackWebApi>();
+        private readonly Mock<IItemFactory> _itemFactory = new Mock<IItemFactory>();
 
         [TestInitialize]
         public void Setup()
         {
             _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User() { Id = "testuser", Credits = 79});
 
-            _creditsCommands = new CreditsCommands(_userRepository.Object, _slack.Object);
+            _creditsCommands = new CreditsCommands(_userRepository.Object, _slack.Object, _itemFactory.Object);
         }
 
         [TestMethod]
@@ -52,10 +53,8 @@ namespace Test.Credits
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void GivenNotEnoughCredits_WhenGivingCredits_CreditsAreNotAddedToReceiver()
+        public void GivenNotEnoughCredits_WhenGivingCredits_NotEnoughCreditsMessageIsSent()
         {
-            _userRepository.Setup(repo => repo.RemoveCredits(User, 10)).Throws(new ArgumentException());
             _creditsCommands.Give(_command);
 
             _userRepository.Verify(repo => repo.AddCredits(User, It.IsAny<int>()), Times.Never);
@@ -66,7 +65,7 @@ namespace Test.Credits
         {
             _creditsCommands.Give(_command);
 
-            _slack.Verify(slack => slack.SendMessage(It.IsAny<string>(), Channel));
+            _slack.Verify(slack => slack.BroadcastMessage(It.IsAny<string>(), Channel));
         }
 
         [TestMethod]

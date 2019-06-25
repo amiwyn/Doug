@@ -3,23 +3,30 @@ using Doug.Slack;
 
 namespace Doug.Items.Equipment
 {
-    public class AwakeningOrb : Item
+    public class AwakeningOrb : EquipmentItem
     {
-        public AwakeningOrb()
+        private readonly ISlackWebApi _slack;
+
+        public AwakeningOrb(ISlackWebApi slack)
         {
+            _slack = slack;
+
+            Id = ItemFactory.AwakeningOrb;
             Name = "Orb of Awakening";
             Description = "When equipped, this strange orb will notify you privately who flamed you. You must be active to receive the notification.";
             Rarity = Rarity.Rare;
             Icon = ":crystal_ball:";
+            Slot = EquipmentSlot.LeftHand;
+            Price = 2100;
         }
 
-        public override string OnGettingFlamed(Command command, string slur, ISlackWebApi slack)
+        public override string OnGettingFlamed(Command command, string slur)
         {
             var message = string.Format(DougMessages.UserFlamedYou, Utils.UserMention(command.UserId));
 
-            slack.SendEphemeralMessage(message, command.GetTargetUserId(), command.ChannelId);
+            _slack.SendEphemeralMessage(message, command.GetTargetUserId(), command.ChannelId);
 
-            return base.OnGettingFlamed(command, slur, slack);
+            return base.OnGettingFlamed(command, slur);
         }
     }
 }

@@ -1,18 +1,17 @@
-using System.Collections.Generic;
 using Doug.Items.Consumables;
 using Doug.Models;
 using Doug.Repositories;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
-namespace Test.Items
+namespace Test.Items.Consumables
 {
     [TestClass]
-    public class NormalEnergyDrinkTest
+    public class CoffeeCupTest
     {
-        private NormalEnergyDrink _normalEnergyDrink;
+        private CoffeeCup _coffeeCup;
 
-        private readonly Mock<IUserRepository> _userRepository = new Mock<IUserRepository>();
+        private readonly Mock<IInventoryRepository> _inventoryRepository = new Mock<IInventoryRepository>();
         private readonly Mock<IStatsRepository> _statsRepository = new Mock<IStatsRepository>();
 
         private readonly User _user = new User() { Id = "ginette", Energy = 0 };
@@ -20,15 +19,13 @@ namespace Test.Items
         [TestInitialize]
         public void Setup()
         {
-            _userRepository.Setup(repo => repo.GetUsers()).Returns(new List<User>());
-
-            _normalEnergyDrink = new NormalEnergyDrink();
+            _coffeeCup = new CoffeeCup(_statsRepository.Object, _inventoryRepository.Object);
         }
 
         [TestMethod]
         public void WhenConsuming_IncreaseEnergyBy25()
         {
-            _normalEnergyDrink.Use(0, _user, _userRepository.Object, _statsRepository.Object);
+            _coffeeCup.Use(0, _user);
 
             _statsRepository.Verify(repo => repo.UpdateEnergy("ginette", 25));
         }
@@ -36,9 +33,9 @@ namespace Test.Items
         [TestMethod]
         public void WhenConsuming_ItemIsRemoved()
         {
-            _normalEnergyDrink.Use(0, _user, _userRepository.Object, _statsRepository.Object);
+            _coffeeCup.Use(0, _user);
 
-            _userRepository.Verify(repo => repo.RemoveItem("ginette", 0));
+            _inventoryRepository.Verify(repo => repo.RemoveItem(_user, 0));
         }
 
         [TestMethod]
@@ -46,7 +43,7 @@ namespace Test.Items
         {
             var user = new User() { Id = "ginette", Energy = 20 };
 
-            _normalEnergyDrink.Use(0, user, _userRepository.Object, _statsRepository.Object);
+            _coffeeCup.Use(0, user);
 
             _statsRepository.Verify(repo => repo.UpdateEnergy("ginette", 25));
         }

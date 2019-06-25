@@ -124,7 +124,7 @@ namespace Test.Casino
         {
             _casinoCommands.GambleChallenge(_command);
 
-            _slack.Verify(slack => slack.SendMessage(It.IsAny<string>(), Channel));
+            _slack.Verify(slack => slack.BroadcastMessage(It.IsAny<string>(), Channel));
         }
 
         [TestMethod]
@@ -141,7 +141,7 @@ namespace Test.Casino
 
             _casinoCommands.GambleChallenge(command);
 
-            _slack.Verify(slack => slack.SendMessage("<@ginette> need to have at least 10 " + DougMessages.CreditEmoji, Channel));
+            _slack.Verify(slack => slack.BroadcastMessage("<@ginette> need to have at least 10 " + DougMessages.CreditEmoji, Channel));
         }
 
         [TestMethod]
@@ -158,7 +158,7 @@ namespace Test.Casino
 
             _casinoCommands.GambleChallenge(command);
 
-            _slack.Verify(slack => slack.SendMessage("<@testuser> need to have at least 10 " + DougMessages.CreditEmoji, Channel));
+            _slack.Verify(slack => slack.BroadcastMessage("<@testuser> need to have at least 10 " + DougMessages.CreditEmoji, Channel));
         }
 
         [TestMethod]

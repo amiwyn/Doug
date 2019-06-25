@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Doug.Commands;
+using Doug.Items;
 using Doug.Models;
 using Doug.Repositories;
 using Doug.Slack;
@@ -18,13 +19,14 @@ namespace Test.Credits
 
         private readonly Mock<IUserRepository> _userRepository = new Mock<IUserRepository>();
         private readonly Mock<ISlackWebApi> _slack = new Mock<ISlackWebApi>();
+        private readonly Mock<IItemFactory> _itemFactory = new Mock<IItemFactory>();
 
         [TestInitialize]
         public void Setup()
         {
             _userRepository.Setup(repo => repo.GetUsers()).Returns(new List<User>());
 
-            _creditsCommands = new CreditsCommands(_userRepository.Object, _slack.Object);
+            _creditsCommands = new CreditsCommands(_userRepository.Object, _slack.Object, _itemFactory.Object);
         }
 
         [TestMethod]
