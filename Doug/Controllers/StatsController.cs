@@ -85,19 +85,5 @@ namespace Doug.Controllers
                 return Ok(string.Format(DougMessages.DougError, ex.Message));
             }
         }
-
-        [HttpPost("inventory")]
-        public ActionResult Inventory([FromForm]SlackCommandDto slackCommand)
-        {
-            try
-            {
-                var result = _statsCommands.Inventory(slackCommand.ToCommand());
-                return Ok(result.Message);
-            }
-            catch (Exception ex)
-            {
-                return Ok(string.Format(DougMessages.DougError, ex.Message));
-            }
-        }
     }
 }

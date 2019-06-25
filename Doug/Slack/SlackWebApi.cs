@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
+using Doug.Menus;
 using Doug.Models;
 using Doug.Repositories;
 using Doug.Slack.Dto;

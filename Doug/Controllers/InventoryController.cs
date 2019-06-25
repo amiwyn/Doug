@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Doug.Commands;
 using Doug.Controllers.Dto;
 using Microsoft.AspNetCore.Mvc;
@@ -50,6 +51,20 @@ namespace Doug.Controllers
             try
             {
                 var result = _inventoryCommands.Equip(slackCommand.ToCommand());
+                return Ok(result.Message);
+            }
+            catch (Exception ex)
+            {
+                return Ok(string.Format(DougMessages.DougError, ex.Message));
+            }
+        }
+
+        [HttpPost("inventory")]
+        public async Task<ActionResult> Inventory([FromForm]SlackCommandDto slackCommand)
+        {
+            try
+            {
+                var result = await _inventoryCommands.Inventory(slackCommand.ToCommand());
                 return Ok(result.Message);
             }
             catch (Exception ex)

@@ -5,6 +5,7 @@ using Doug.Slack;
 using System.Linq;
 using System.Threading.Tasks;
 using Doug.Items;
+using Doug.Menus;
 
 namespace Doug.Commands
 {
@@ -97,7 +98,7 @@ namespace Doug.Commands
                 _itemFactory.CreateItem(ItemFactory.McdoFries)
             };
 
-            await _slack.SendEphemeralBlocks(BlockMessage.ShopMessage(items), command.UserId, command.ChannelId);
+            await _slack.SendEphemeralBlocks(new ShopMenu(items).Blocks, command.UserId, command.ChannelId);
 
             return NoResponse; 
         }
