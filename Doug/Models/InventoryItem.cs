@@ -17,8 +17,11 @@ namespace Doug.Models
         {
             UserId = userId;
             ItemId = itemId;
+        }
 
-            Item = ItemFactory.CreateItem(itemId);
+        public void CreateItem(IItemFactory itemFactory)
+        {
+            Item = itemFactory.CreateItem(ItemId);
         }
     }
 }

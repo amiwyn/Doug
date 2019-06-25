@@ -49,7 +49,7 @@ namespace Test.Slurs
         {
             await _slursCommands.Flame(_command);
 
-            _slack.Verify(slack => slack.SendMessage(It.IsRegex("<@otherUserid>"), Channel));
+            _slack.Verify(slack => slack.BroadcastMessage(It.IsRegex("<@otherUserid>"), Channel));
         }
 
         [TestMethod]
@@ -57,7 +57,7 @@ namespace Test.Slurs
         {
             await _slursCommands.Flame(_command);
 
-            _slack.Verify(slack => slack.SendMessage(It.IsRegex("<@robert>"), Channel));
+            _slack.Verify(slack => slack.BroadcastMessage(It.IsRegex("<@robert>"), Channel));
         }
 
         [TestMethod]
@@ -66,7 +66,7 @@ namespace Test.Slurs
             _slurRepository.Setup(repo => repo.GetFat()).Returns(69);
             await _slursCommands.Flame(_command);
 
-            _slack.Verify(slack => slack.SendMessage(It.IsRegex("69"), Channel));
+            _slack.Verify(slack => slack.BroadcastMessage(It.IsRegex("69"), Channel));
         }
 
         [TestMethod]
@@ -114,7 +114,7 @@ namespace Test.Slurs
         [TestMethod]
         public async Task WhenFlaming_SlurIsLogged()
         {
-            _slack.Setup(slack => slack.SendMessage(It.IsAny<string>(), It.IsAny<string>())).Returns(Task.FromResult("696969.696969"));
+            _slack.Setup(slack => slack.BroadcastMessage(It.IsAny<string>(), It.IsAny<string>())).Returns(Task.FromResult("696969.696969"));
 
             await _slursCommands.Flame(_command);
 

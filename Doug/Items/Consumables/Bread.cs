@@ -3,20 +3,20 @@ using Doug.Repositories;
 
 namespace Doug.Items.Consumables
 {
-    public class Apple : ConsumableItem
+    public class Bread : ConsumableItem
     {
         private readonly IStatsRepository _statsRepository;
-        private const int RecoverAmount = 25;
+        private const int RecoverAmount = 50;
 
-        public Apple(IStatsRepository statsRepository, IInventoryRepository inventoryRepository) : base(inventoryRepository)
+        public Bread(IStatsRepository statsRepository, IInventoryRepository inventoryRepository) : base(inventoryRepository)
         {
             _statsRepository = statsRepository;
-            Id = ItemFactory.Apple;
-            Name = "Apple";
-            Description = "Ahhh, a fresh apple. So healthy. Restores 25 health.";
+            Id = ItemFactory.Bread;
+            Name = "Bread";
+            Description = "A nice steamy loaf of bread. It's fresh from the bakery. Restores 25 health.";
             Rarity = Rarity.Common;
-            Icon = ":apple:";
-            Price = 25;
+            Icon = ":bread:";
+            Price = 50;
         }
 
         public override string Use(int itemPos, User user)

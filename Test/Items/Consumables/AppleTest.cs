@@ -4,7 +4,7 @@ using Doug.Repositories;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
-namespace Test.Items
+namespace Test.Items.Consumables
 {
     [TestClass]
     public class AppleTest
@@ -18,13 +18,13 @@ namespace Test.Items
         [TestInitialize]
         public void Setup()
         {
-            _apple = new Apple();
+            _apple = new Apple(_statsRepository.Object, _inventoryRepository.Object);
         }
 
         [TestMethod]
         public void WhenUsingRestore25Hitpoint()
         {
-            _apple.Use(0, _user, _inventoryRepository.Object, _statsRepository.Object);
+            _apple.Use(0, _user);
 
             _statsRepository.Verify(repo => repo.UpdateHealth("test", 100));
         }
@@ -32,7 +32,7 @@ namespace Test.Items
         [TestMethod]
         public void HealthShouldNotBeAbove100()
         {
-            _apple.Use(0, _user, _inventoryRepository.Object, _statsRepository.Object);
+            _apple.Use(0, _user);
 
             Assert.AreNotEqual(115, _user.Health);
         }
@@ -40,7 +40,7 @@ namespace Test.Items
         [TestMethod]
         public void ShouldRemoveFromInventory()
         {
-            _apple.Use(0, _user, _inventoryRepository.Object, _statsRepository.Object);
+            _apple.Use(0, _user);
 
             _inventoryRepository.Verify(repo => repo.RemoveItem("test", 0));
         }

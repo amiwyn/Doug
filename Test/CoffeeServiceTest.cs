@@ -25,13 +25,13 @@ namespace Test
         private readonly Mock<IBackgroundJobClient> _backgroundJobClient = new Mock<IBackgroundJobClient>();
         private readonly Mock<IUserRepository> _userRepository = new Mock<IUserRepository>();
         private readonly Mock<IInventoryRepository> _inventoryRepository = new Mock<IInventoryRepository>();
-        private readonly Mock<IStatsRepository> _statsRepository = new Mock<IStatsRepository>();
+        private readonly Mock<IUserService> _userService = new Mock<IUserService>();
 
         [TestInitialize]
         public void Setup()
         {
             _userRepository.Setup(repo => repo.GetUser(It.IsAny<string>())).Returns(new User());
-            _coffeeService = new CoffeeService(_slack.Object, _coffeeRepository.Object, _channelRepository.Object, _backgroundJobClient.Object, _userRepository.Object, _inventoryRepository.Object, _statsRepository.Object);
+            _coffeeService = new CoffeeService(_slack.Object, _coffeeRepository.Object, _channelRepository.Object, _backgroundJobClient.Object, _userRepository.Object, _inventoryRepository.Object, _userService.Object);
         }
 
         [TestMethod]
@@ -64,7 +64,7 @@ namespace Test
 
             _coffeeService.CountParrot(User, Channel, time);
 
-            _slack.Verify(slack => slack.SendMessage("Alright, let's do this. <!here> GO!", Channel));
+            _slack.Verify(slack => slack.BroadcastMessage("Alright, let's do this. <!here> GO!", Channel));
         }
 
         [TestMethod]
@@ -75,7 +75,7 @@ namespace Test
 
             _coffeeService.CountParrot(User, Channel, time);
 
-            _slack.Verify(slack => slack.SendMessage(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            _slack.Verify(slack => slack.BroadcastMessage(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
         }
 
         [TestMethod]
@@ -86,7 +86,7 @@ namespace Test
 
             _coffeeService.CoffeeRemind(Channel);
 
-            _slack.Verify(slack => slack.SendMessage("*1/2* - <@bob> ", Channel));
+            _slack.Verify(slack => slack.BroadcastMessage("*1/2* - <@bob> ", Channel));
         }
 
         [TestMethod]
@@ -106,7 +106,7 @@ namespace Test
 
             _coffeeService.EndCoffee(Channel);
 
-            _slack.Verify(slack => slack.SendMessage("<!here> Go back to work, ya bunch o' lazy dogs!", Channel));
+            _slack.Verify(slack => slack.BroadcastMessage("<!here> Go back to work, ya bunch o' lazy dogs!", Channel));
         }
 
         [TestMethod]
@@ -126,7 +126,7 @@ namespace Test
 
             _coffeeService.EndCoffee(Channel);
 
-            _inventoryRepository.Verify(repo => repo.AddItemToUsers(It.IsAny<List<string>>(), ItemFactory.NormalEnergyDrink));
+            _inventoryRepository.Verify(repo => repo.AddItemToUsers(It.IsAny<List<string>>(), ItemFactory.CoffeeCup));
         }
 
         [TestMethod]
@@ -136,7 +136,7 @@ namespace Test
 
             _coffeeService.EndCoffee(Channel);
 
-            _statsRepository.Verify(repo => repo.AddExperienceToUsers(It.IsAny<List<string>>(), 300));
+            _userService.Verify(service => service.AddBulkExperience(It.IsAny<List<User>>(), 300, Channel));
         }
     }
 }

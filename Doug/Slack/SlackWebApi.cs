@@ -13,7 +13,7 @@ namespace Doug.Slack
 {
     public interface ISlackWebApi
     {
-        Task<string> SendMessage(string text, string channelId);
+        Task<string> BroadcastMessage(string text, string channelId);
         Task<UserInfo> GetUserInfo(string userId);
         Task AddReaction(string reaction, string timestamp, string channel);
         Task<List<Reaction>> GetReactions(string timestamp, string channel);
@@ -51,7 +51,7 @@ namespace Doug.Slack
             };
         }
 
-        public async Task<string> SendMessage(string text, string channelId)
+        public async Task<string> BroadcastMessage(string text, string channelId)
         {
             var request = new HttpRequestMessage(HttpMethod.Post, PostMessageUrl);
             var keyValues = new List<KeyValuePair<string, string>>

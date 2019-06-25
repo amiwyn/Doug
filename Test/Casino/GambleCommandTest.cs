@@ -71,7 +71,7 @@ namespace Test.Casino
         {
             _casinoCommands.Gamble(_command);
 
-            _slack.Verify(slack => slack.SendMessage(It.IsAny<string>(), Channel));
+            _slack.Verify(slack => slack.BroadcastMessage(It.IsAny<string>(), Channel));
         }
 
         [TestMethod]
@@ -124,7 +124,7 @@ namespace Test.Casino
 
             _casinoCommands.Gamble(_command);
 
-            _slack.Verify(slack => slack.SendMessage(It.IsAny<string>(), Channel));
+            _slack.Verify(slack => slack.BroadcastMessage(It.IsAny<string>(), Channel));
         }
 
         [TestMethod]

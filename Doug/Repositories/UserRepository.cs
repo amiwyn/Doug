@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
+using Doug.Items;
 
 namespace Doug.Repositories
 {
@@ -18,10 +19,12 @@ namespace Doug.Repositories
     public class UserRepository : IUserRepository
     {
         private readonly DougContext _db;
+        private readonly IItemFactory _itemFactory;
 
-        public UserRepository(DougContext dougContext)
+        public UserRepository(DougContext dougContext, IItemFactory itemFactory)
         {
             _db = dougContext;
+            _itemFactory = itemFactory;
         }
 
         public void AddCredits(string userId, int amount)
@@ -59,10 +62,14 @@ namespace Doug.Repositories
 
         public User GetUser(string userId)
         {
-            return _db.Users
-                .Include(user => user.InventoryItems)
+            var user = _db.Users
+                .Include(usr => usr.InventoryItems)
                 .Include(usr => usr.Loadout)
-                .Single(user => user.Id == userId);
+                .Single(usr => usr.Id == userId);
+
+            user.LoadItems(_itemFactory);
+
+            return user;
         }
 
         public List<User> GetUsers()

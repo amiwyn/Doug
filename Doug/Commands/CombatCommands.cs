@@ -63,12 +63,12 @@ namespace Doug.Commands
                 _userRepository.AddCredits(command.UserId, amount);
 
                 var message = string.Format(DougMessages.StealCredits, Utils.UserMention(command.UserId), amount, Utils.UserMention(target.Id));
-                _slack.SendMessage(message, command.ChannelId);
+                _slack.BroadcastMessage(message, command.ChannelId);
             }
             else
             {
                 var message = string.Format(DougMessages.StealFail, Utils.UserMention(command.UserId), Utils.UserMention(target.Id));
-                _slack.SendMessage(message, command.ChannelId);
+                _slack.BroadcastMessage(message, command.ChannelId);
             }
 
             return NoResponse;

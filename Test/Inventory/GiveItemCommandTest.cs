@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Doug.Commands;
+using Doug.Items.Misc;
 using Doug.Models;
 using Doug.Repositories;
 using Doug.Slack;
@@ -26,16 +27,15 @@ namespace Test.Inventory
 
         private readonly Mock<IUserRepository> _userRepository = new Mock<IUserRepository>();
         private readonly Mock<ISlackWebApi> _slack = new Mock<ISlackWebApi>();
-        private readonly Mock<IStatsRepository> _statsRepository = new Mock<IStatsRepository>();
         private readonly Mock<IInventoryRepository> _inventoryRepository = new Mock<IInventoryRepository>();
 
         [TestInitialize]
         public void Setup()
         {
-            var items = new List<InventoryItem>() {new InventoryItem("testuser", "testitem") {InventoryPosition = 2}};
+            var items = new List<InventoryItem>() {new InventoryItem("testuser", "testitem") {InventoryPosition = 2, Item = new Default()}};
             _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User() { Id = "testuser", InventoryItems = items });
 
-            _inventoryCommands = new InventoryCommands(_userRepository.Object, _slack.Object, _statsRepository.Object, _inventoryRepository.Object);
+            _inventoryCommands = new InventoryCommands(_userRepository.Object, _slack.Object, _inventoryRepository.Object);
         }
 
         [TestMethod]

@@ -1,6 +1,5 @@
 ﻿using System;
 using Doug.Models;
-using Doug.Slack;
 
 namespace Doug.Items.Equipment
 {
@@ -17,7 +16,7 @@ namespace Doug.Items.Equipment
             Price = 1150;
         }
 
-        public override string OnGettingFlamed(Command command, string slur, ISlackWebApi slack)
+        public override string OnGettingFlamed(Command command, string slur)
         {
             if (new Random().Next(2) == 0)
             {

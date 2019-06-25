@@ -4,12 +4,12 @@ using Doug.Repositories;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
-namespace Test.Items
+namespace Test.Items.Consumables
 {
     [TestClass]
-    public class NormalEnergyDrinkTest
+    public class CoffeeCupTest
     {
-        private NormalEnergyDrink _normalEnergyDrink;
+        private CoffeeCup _coffeeCup;
 
         private readonly Mock<IInventoryRepository> _inventoryRepository = new Mock<IInventoryRepository>();
         private readonly Mock<IStatsRepository> _statsRepository = new Mock<IStatsRepository>();
@@ -19,13 +19,13 @@ namespace Test.Items
         [TestInitialize]
         public void Setup()
         {
-            _normalEnergyDrink = new NormalEnergyDrink();
+            _coffeeCup = new CoffeeCup(_statsRepository.Object, _inventoryRepository.Object);
         }
 
         [TestMethod]
         public void WhenConsuming_IncreaseEnergyBy25()
         {
-            _normalEnergyDrink.Use(0, _user, _inventoryRepository.Object, _statsRepository.Object);
+            _coffeeCup.Use(0, _user);
 
             _statsRepository.Verify(repo => repo.UpdateEnergy("ginette", 25));
         }
@@ -33,7 +33,7 @@ namespace Test.Items
         [TestMethod]
         public void WhenConsuming_ItemIsRemoved()
         {
-            _normalEnergyDrink.Use(0, _user, _inventoryRepository.Object, _statsRepository.Object);
+            _coffeeCup.Use(0, _user);
 
             _inventoryRepository.Verify(repo => repo.RemoveItem("ginette", 0));
         }
@@ -43,7 +43,7 @@ namespace Test.Items
         {
             var user = new User() { Id = "ginette", Energy = 20 };
 
-            _normalEnergyDrink.Use(0, user, _inventoryRepository.Object, _statsRepository.Object);
+            _coffeeCup.Use(0, user);
 
             _statsRepository.Verify(repo => repo.UpdateEnergy("ginette", 25));
         }

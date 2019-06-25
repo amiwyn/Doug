@@ -24,7 +24,7 @@ namespace Test.Stats
         public void Setup()
         {
             _slurRepository.Setup(repo => repo.GetSlursFrom(It.IsAny<string>())).Returns(new List<Slur>());
-            _userRepository.Setup(repo => repo.GetUser(It.IsAny<string>())).Returns(new User() { Loadout = new Loadout(null, null, null, null, null, null, null, null)});
+            _userRepository.Setup(repo => repo.GetUser(It.IsAny<string>())).Returns(new User() { Loadout = new Loadout()});
 
             _statsCommands = new StatsCommands(_userRepository.Object, _slack.Object);
         }

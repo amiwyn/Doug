@@ -171,7 +171,7 @@ namespace Doug.Commands
 
             message = _itemEventDispatcher.OnFlaming(command, message);
 
-            var timestamp = await _slack.SendMessage(message, command.ChannelId);
+            var timestamp = await _slack.BroadcastMessage(message, command.ChannelId);
 
             _slurRepository.LogRecentSlur(slur.Id, timestamp);
 

@@ -25,8 +25,6 @@ namespace Test.Inventory
             UserId = User
         };
 
-        private readonly EquipmentItem _item = new AwakeningOrb();
-
         private InventoryCommands _inventoryCommands;
 
         private readonly Mock<IUserRepository> _userRepository = new Mock<IUserRepository>();
@@ -34,14 +32,17 @@ namespace Test.Inventory
         private readonly Mock<IStatsRepository> _statsRepository = new Mock<IStatsRepository>();
         private readonly Mock<IInventoryRepository> _inventoryRepository = new Mock<IInventoryRepository>();
 
+        private EquipmentItem _item;
+
         [TestInitialize]
         public void Setup()
         {
-            var loadout = new Loadout(null, null, null, null, null, null, null, null);
+            _item = new AwakeningOrb(_slack.Object);
+            var loadout = new Loadout();
             var items = new List<InventoryItem>() {new InventoryItem("testuser", "testitem") {InventoryPosition = 6, Item = _item } };
             _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User() { Id = "testuser", InventoryItems = items, Loadout = loadout });
 
-            _inventoryCommands = new InventoryCommands(_userRepository.Object, _slack.Object, _statsRepository.Object, _inventoryRepository.Object);
+            _inventoryCommands = new InventoryCommands(_userRepository.Object, _slack.Object, _inventoryRepository.Object);
         }
 
         [TestMethod]
@@ -73,7 +74,7 @@ namespace Test.Inventory
         [TestMethod]
         public void GivenItemIsNotEquipAble_WhenEquipping_NotEquipAbleMessageSent()
         {
-            var items = new List<InventoryItem>() { new InventoryItem("testuser", "testitem") { InventoryPosition = 6, Item = new Apple() } };
+            var items = new List<InventoryItem>() { new InventoryItem("testuser", "testitem") { InventoryPosition = 6, Item = new Apple(_statsRepository.Object, _inventoryRepository.Object) } };
             _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User() { Id = "testuser", InventoryItems = items });
 
             var result = _inventoryCommands.Equip(_command);

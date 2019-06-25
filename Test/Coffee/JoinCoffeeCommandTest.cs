@@ -57,7 +57,7 @@ namespace Test.Coffee
         {
             _coffeeCommands.JoinCoffee(_command);
 
-            _slack.Verify(slack => slack.SendMessage(It.IsAny<string>(), Channel));
+            _slack.Verify(slack => slack.BroadcastMessage(It.IsAny<string>(), Channel));
         }
     }
 }

@@ -29,9 +29,9 @@ namespace Doug.Services
         private readonly IBackgroundJobClient _backgroundJobClient;
         private readonly IUserRepository _userRepository;
         private readonly IInventoryRepository _inventoryRepository;
-        private readonly IStatsRepository _statsRepository;
+        private readonly IUserService _userService;
 
-        public CoffeeService(ISlackWebApi slackWebApi, ICoffeeRepository coffeeRepository, IChannelRepository channelRepository, IBackgroundJobClient backgroundJobClient, IUserRepository userRepository, IInventoryRepository inventoryRepository, IStatsRepository statsRepository)
+        public CoffeeService(ISlackWebApi slackWebApi, ICoffeeRepository coffeeRepository, IChannelRepository channelRepository, IBackgroundJobClient backgroundJobClient, IUserRepository userRepository, IInventoryRepository inventoryRepository, IUserService userService)
         {
             _slack = slackWebApi;
             _coffeeRepository = coffeeRepository;
@@ -39,7 +39,7 @@ namespace Doug.Services
             _backgroundJobClient = backgroundJobClient;
             _userRepository = userRepository;
             _inventoryRepository = inventoryRepository;
-            _statsRepository = statsRepository;
+            _userService = userService;
         }
 
         public void CountParrot(string userId, string channelId, DateTime currentTime)
@@ -93,14 +93,14 @@ namespace Doug.Services
                 message = DougMessages.Remind69;
             }
 
-            _slack.SendMessage(string.Format(message, readyParticipants.Count, total, userMentionList), channelId);
+            _slack.BroadcastMessage(string.Format(message, readyParticipants.Count, total, userMentionList), channelId);
         }
 
         public void LaunchCoffeeBreak(string channelId)
         {
             _coffeeRepository.StartCoffeeBreak();
 
-            _slack.SendMessage(DougMessages.CoffeeStart, channelId);
+            _slack.BroadcastMessage(DougMessages.CoffeeStart, channelId);
 
             _backgroundJobClient.Schedule(() => EndCoffee(channelId), TimeSpan.FromMinutes(CoffeeBreakDurationMinutes));
         }
@@ -111,15 +111,14 @@ namespace Doug.Services
             var participantsId = participants.Select(user => user.Id).ToList();
 
             _userRepository.AddCreditsToUsers(participantsId, CoffeeBreakAward);
-            _inventoryRepository.AddItemToUsers(participantsId, ItemFactory.NormalEnergyDrink);
-            _statsRepository.AddExperienceToUsers(participantsId, CoffeeExperienceAward);
+            _inventoryRepository.AddItemToUsers(participantsId, ItemFactory.CoffeeCup);
 
-            participants.ForEach(user => user.AddExperience(CoffeeExperienceAward, channelId, _slack)); // TODO fix this shit. Only used to broadcast when a user level up.
+            _userService.AddBulkExperience(participants, CoffeeExperienceAward, channelId).Wait();
 
             _coffeeRepository.ResetRoster();
             _coffeeRepository.EndCoffeeBreak();
 
-            _slack.SendMessage(DougMessages.BackToWork, channelId);
+            _slack.BroadcastMessage(DougMessages.BackToWork, channelId);
         }
     }
 }

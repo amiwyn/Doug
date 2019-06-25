@@ -15,18 +15,20 @@ namespace Doug.Services
         private readonly IUserRepository _userRepository;
         private readonly ISlackWebApi _slack;
         private readonly IInventoryRepository _inventoryRepository;
+        private readonly IItemFactory _itemFactory;
 
-        public ShopService(IUserRepository userRepository, ISlackWebApi slack, IInventoryRepository inventoryRepository)
+        public ShopService(IUserRepository userRepository, ISlackWebApi slack, IInventoryRepository inventoryRepository, IItemFactory itemFactory)
         {
             _userRepository = userRepository;
             _slack = slack;
             _inventoryRepository = inventoryRepository;
+            _itemFactory = itemFactory;
         }
 
         public void Buy(Interaction interaction)
         {
             var user = _userRepository.GetUser(interaction.UserId);
-            var item = ItemFactory.CreateItem(interaction.Value);
+            var item = _itemFactory.CreateItem(interaction.Value);
 
             if (!user.HasEnoughCreditsForAmount(item.Price))
             {

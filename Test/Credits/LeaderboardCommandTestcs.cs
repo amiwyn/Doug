@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Doug.Commands;
+using Doug.Items;
 using Doug.Models;
 using Doug.Repositories;
 using Doug.Slack;
@@ -18,13 +19,14 @@ namespace Test.Credits
 
         private readonly Mock<IUserRepository> _userRepository = new Mock<IUserRepository>();
         private readonly Mock<ISlackWebApi> _slack = new Mock<ISlackWebApi>();
+        private readonly Mock<IItemFactory> _itemFactory = new Mock<IItemFactory>();
 
         [TestInitialize]
         public void Setup()
         {
             _userRepository.Setup(repo => repo.GetUsers()).Returns(new List<User>() { new User { Id = "test1", Credits = 23 }, new User { Id = "test2", Credits = 19 }, new User { Id = "test3", Credits = 69 }, new User { Id = "test4", Credits = 43 }, new User { Id = "DESS", Credits = 0 } });
 
-            _creditsCommands = new CreditsCommands(_userRepository.Object, _slack.Object);
+            _creditsCommands = new CreditsCommands(_userRepository.Object, _slack.Object, _itemFactory.Object);
         }
 
         [TestMethod]
@@ -39,7 +41,7 @@ namespace Test.Credits
 
              _creditsCommands.Leaderboard(command);
 
-            _slack.Verify(slack => slack.SendMessage(It.IsAny<string>(), command.ChannelId));
+            _slack.Verify(slack => slack.BroadcastMessage(It.IsAny<string>(), command.ChannelId));
         }
     }
 }

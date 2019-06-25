@@ -1,5 +1,4 @@
 ﻿using Doug.Models;
-using Doug.Slack;
 
 namespace Doug.Items.Equipment
 {
@@ -18,7 +17,7 @@ namespace Doug.Items.Equipment
             Attack = 24;
         }
 
-        public override string OnFlaming(Command command, string slur, ISlackWebApi slack)
+        public override string OnFlaming(Command command, string slur)
         {
             return slur.Replace($"<@{command.GetTargetUserId()}>", $"<@{command.UserId}>");
         }

@@ -9,7 +9,7 @@ namespace Doug.Repositories
         void UpdateEnergy(string userId, int energy);
         void UpdateHealth(string userId, int health);
         void AddExperience(string userId, long experience);
-        void AddExperienceToUsers(List<string> users, long experience);
+        void AddExperienceToUsers(List<string> userIds, long experience);
     }
 
     public class StatsRepository : IStatsRepository
@@ -37,12 +37,18 @@ namespace Doug.Repositories
 
         public void AddExperience(string userId, long experience)
         {
-            throw new System.NotImplementedException();
+            var user = _db.Users.Single(usr => usr.Id == userId);
+            user.Experience += experience;
+            _db.SaveChanges();
         }
 
-        public void AddExperienceToUsers(List<string> users, long experience)
+        public void AddExperienceToUsers(List<string> userIds, long experience)
         {
-            throw new System.NotImplementedException();
+            var users = _db.Users.Where(usr => userIds.Contains(usr.Id)).ToList();
+
+            users.ForEach(usr => usr.Experience += experience);
+
+            _db.SaveChanges();
         }
     }
 }

@@ -1,8 +1,6 @@
 ﻿using Doug.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
 using Doug.Items.Equipment;
-using Doug.Slack;
 
 namespace Test.Items
 {
@@ -20,7 +18,6 @@ namespace Test.Items
             UserId = User
         };
 
-        private readonly Mock<ISlackWebApi> _slack = new Mock<ISlackWebApi>();
         private PimentSword _pimentSword;
 
         [TestInitialize]
@@ -32,7 +29,7 @@ namespace Test.Items
         [TestMethod]
         public void WhenFlaming_ReflectSlursBack()
         {
-            var result = _pimentSword.OnFlaming(_command, "<@otherUserid> is a bitch", _slack.Object);
+            var result = _pimentSword.OnFlaming(_command, "<@otherUserid> is a bitch");
 
             Assert.AreEqual("<@testuser> is a bitch", result);
         }

@@ -59,7 +59,7 @@ namespace Test.Coffee
         {
             await _coffeeCommands.JoinSomeone(_command);
 
-            _slack.Verify(slack => slack.SendMessage(It.IsAny<string>(), Channel));
+            _slack.Verify(slack => slack.BroadcastMessage(It.IsAny<string>(), Channel));
         }
 
         [TestMethod]
@@ -89,7 +89,7 @@ namespace Test.Coffee
 
             await _coffeeCommands.JoinSomeone(_command);
 
-            _slack.Verify(slack => slack.SendMessage(It.IsAny<string>(), Channel), Times.Never());
+            _slack.Verify(slack => slack.BroadcastMessage(It.IsAny<string>(), Channel), Times.Never());
         }
     }
 }

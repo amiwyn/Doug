@@ -1,6 +1,5 @@
 ﻿using Doug.Models;
 using Doug.Repositories;
-using Doug.Slack;
 using System.Linq;
 
 namespace Doug.Items
@@ -16,12 +15,10 @@ namespace Doug.Items
 
     public class ItemEventDispatcher : IItemEventDispatcher
     {
-        private readonly ISlackWebApi _slackWebApi;
         private readonly IUserRepository _userRepository;
 
-        public ItemEventDispatcher(ISlackWebApi slackWebApi, IUserRepository userRepository)
+        public ItemEventDispatcher(IUserRepository userRepository)
         {
-            _slackWebApi = slackWebApi;
             _userRepository = userRepository;
         }
 
@@ -30,9 +27,9 @@ namespace Doug.Items
             var caller = _userRepository.GetUser(command.UserId);
             var target = _userRepository.GetUser(command.GetTargetUserId());
 
-            slur = target.Loadout.Equipment.Aggregate(slur, (acc, item) => item.Value.OnGettingFlamed(command, acc, _slackWebApi));
+            slur = target.Loadout.Equipment.Aggregate(slur, (acc, item) => item.Value.OnGettingFlamed(command, acc));
 
-            return caller.Loadout.Equipment.Aggregate(slur, (acc, item) => item.Value.OnFlaming(command, acc, _slackWebApi));
+            return caller.Loadout.Equipment.Aggregate(slur, (acc, item) => item.Value.OnFlaming(command, acc));
         }
 
         public double OnGambling(User user, double baseChance)

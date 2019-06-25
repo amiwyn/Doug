@@ -1,5 +1,4 @@
 ﻿using Doug.Models;
-using Doug.Slack;
 
 namespace Doug.Items
 {
@@ -20,12 +19,12 @@ namespace Doug.Items
             return true;
         }
 
-        public virtual string OnGettingFlamed(Command command, string slur, ISlackWebApi slack)
+        public virtual string OnGettingFlamed(Command command, string slur)
         {
             return slur;
         }
 
-        public virtual string OnFlaming(Command command, string slur, ISlackWebApi slack)
+        public virtual string OnFlaming(Command command, string slur)
         {
             return slur;
         }

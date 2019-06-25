@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Doug.Slack;
+using Doug.Items;
 
 namespace Doug.Models
 {
@@ -18,13 +18,43 @@ namespace Doug.Models
         public int Health
         {
             get => _health;
-            set => _health = _health + value >= TotalHealth() ? TotalHealth() : _health + value;
+            set
+            {
+                if (value <= 0)
+                {
+                    _health = 0;
+                    return;
+                }
+
+                if (value >= TotalHealth())
+                {
+                    _health = TotalHealth();
+                    return;
+                }
+
+                _health = value;
+            }
         }
 
         public int Energy
         {
             get => _energy;
-            set => _energy = _energy + value >= TotalEnergy() ? TotalEnergy() : _energy + value;
+            set
+            {
+                if (value <= 0)
+                {
+                    _energy = 0;
+                    return;
+                }
+
+                if (value >= TotalEnergy())
+                {
+                    _energy = TotalEnergy();
+                    return;
+                }
+
+                _energy = value;
+            }
         }
 
         public int Luck { get; set; }
@@ -46,6 +76,12 @@ namespace Doug.Models
             Charisma = 5;
             Constitution = 5;
             Stamina = 5;
+        }
+
+        public void LoadItems(IItemFactory itemFactory)
+        {
+            InventoryItems.ForEach(item => item.CreateItem(itemFactory));
+            Loadout.CreateEquipment(itemFactory);
         }
 
         public double GetExperienceAdvancement()
@@ -93,19 +129,6 @@ namespace Doug.Models
         public int TotalStamina()
         {
             return Loadout.Stamina + Stamina;
-        }
-
-        public void AddExperience(long experience, string channel, ISlackWebApi slack) // TODO: move this somewhere else
-        {
-            var previousLevel = Level;
-            Experience += experience;
-
-            slack.SendEphemeralMessage(string.Format(DougMessages.GainedExp, experience), Id, channel);
-
-            if (previousLevel < Level)
-            {
-                slack.SendMessage(string.Format(DougMessages.LevelUp, Utils.UserMention(Id), Level), channel);
-            }
         }
 
         public double BaseGambleChance()

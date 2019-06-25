@@ -5,8 +5,6 @@ using Doug.Slack;
 using System.Linq;
 using System.Threading.Tasks;
 using Doug.Items;
-using Doug.Items.Consumables;
-using Doug.Items.Equipment;
 
 namespace Doug.Commands
 {
@@ -24,11 +22,13 @@ namespace Doug.Commands
         private readonly ISlackWebApi _slack;
 
         private static readonly DougResponse NoResponse = new DougResponse();
+        private readonly IItemFactory _itemFactory;
 
-        public CreditsCommands(IUserRepository userRepository, ISlackWebApi messageSender)
+        public CreditsCommands(IUserRepository userRepository, ISlackWebApi messageSender, IItemFactory itemFactory)
         {
             _userRepository = userRepository;
             _slack = messageSender;
+            _itemFactory = itemFactory;
         }
 
         public DougResponse Give(Command command)
@@ -57,7 +57,7 @@ namespace Doug.Commands
             _userRepository.AddCredits(target, amount);
 
             var message = string.Format(DougMessages.UserGaveCredits, Utils.UserMention(command.UserId), amount, Utils.UserMention(target));
-            _slack.SendMessage(message, command.ChannelId);
+            _slack.BroadcastMessage(message, command.ChannelId);
 
             return NoResponse;
         }
@@ -82,7 +82,7 @@ namespace Doug.Commands
             var users = userList.Aggregate((first, next) => first + "\n" + next);
             var message = $"{DougMessages.Top5}\n{users}";
 
-            _slack.SendMessage(message, command.ChannelId);
+            _slack.BroadcastMessage(message, command.ChannelId);
 
             return NoResponse;
         }
@@ -91,10 +91,10 @@ namespace Doug.Commands
         {
             var items = new List<Item>
             {
-                new NormalEnergyDrink(),
-                new Apple(),
-                new GreedyGloves(),
-                new AwakeningOrb()
+                _itemFactory.CreateItem(ItemFactory.CoffeeCup),
+                _itemFactory.CreateItem(ItemFactory.Apple),
+                _itemFactory.CreateItem(ItemFactory.GreedyGloves),
+                _itemFactory.CreateItem(ItemFactory.AwakeningOrb)
             };
 
             await _slack.SendEphemeralBlocks(BlockMessage.ShopMessage(items), command.UserId, command.ChannelId);

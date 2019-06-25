@@ -59,6 +59,7 @@
         public const string EquippedItem = "You Equipped *{0}*.";
         public const string ShopSpeech = "*Oi!* Welcome to my shop! I sell various stuff from all around the continent.\n\n *Come in, have a look:*";
         public const string BuyFor = "Buy for {0} " + CreditEmoji;
+        public const string UserDied = "Oh dear, {0} died!";
 
         public const string DougError = "Beep boop, it's not working : {0}";
         public const string NotAnAdmin = "You are not an admin.";

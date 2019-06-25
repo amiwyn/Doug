@@ -16,15 +16,13 @@ namespace Doug.Commands
     public class InventoryCommands : IInventoryCommands
     {
         private readonly IUserRepository _userRepository;
-        private readonly IStatsRepository _statsRepository;
         private readonly ISlackWebApi _slack;
         private readonly IInventoryRepository _inventoryRepository;
 
-        public InventoryCommands(IUserRepository userRepository, ISlackWebApi slack, IStatsRepository statsRepository, IInventoryRepository inventoryRepository)
+        public InventoryCommands(IUserRepository userRepository, ISlackWebApi slack, IInventoryRepository inventoryRepository)
         {
             _userRepository = userRepository;
             _slack = slack;
-            _statsRepository = statsRepository;
             _inventoryRepository = inventoryRepository;
         }
 
@@ -39,7 +37,7 @@ namespace Doug.Commands
                 return new DougResponse(string.Format(DougMessages.NoItemInSlot, position));
             }
 
-            var response = inventoryItem.Item.Use(position, user, _inventoryRepository, _statsRepository);
+            var response = inventoryItem.Item.Use(position, user);
 
             return new DougResponse(response);
         }
@@ -61,7 +59,7 @@ namespace Doug.Commands
             _inventoryRepository.AddItem(target, inventoryItem.ItemId);
 
             var message = string.Format(DougMessages.UserGaveItem, Utils.UserMention(user.Id), inventoryItem.Item.Name, Utils.UserMention(target));
-            _slack.SendMessage(message, command.ChannelId);
+            _slack.BroadcastMessage(message, command.ChannelId);
 
             return new DougResponse();
         }

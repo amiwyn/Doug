@@ -1,5 +1,5 @@
-using System;
-using Doug.Commands;
+using Doug.Items;
+using Doug.Items.Equipment;
 using Doug.Models;
 using Doug.Repositories;
 using Doug.Services;
@@ -20,7 +20,7 @@ namespace Test.Shop
             ChannelId = Channel,
             UserId = User,
             Action = "buy",
-            Value = "apple"
+            Value = "lucky_dice"
         };
 
         private ShopService _shopService;
@@ -28,13 +28,15 @@ namespace Test.Shop
         private readonly Mock<IUserRepository> _userRepository = new Mock<IUserRepository>();
         private readonly Mock<ISlackWebApi> _slack = new Mock<ISlackWebApi>();
         private readonly Mock<IInventoryRepository>  _inventoryRepository = new Mock<IInventoryRepository>();
+        private readonly Mock<IItemFactory> _itemFactory = new Mock<IItemFactory>();
 
         [TestInitialize]
         public void Setup()
         {
-            _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User() { Id = "testuser", Credits = 79});
+            _itemFactory.Setup(factory => factory.CreateItem("lucky_dice")).Returns(new LuckyDice());
+            _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User() { Id = "testuser", Credits = 431279});
 
-            _shopService = new ShopService(_userRepository.Object, _slack.Object, _inventoryRepository.Object);
+            _shopService = new ShopService(_userRepository.Object, _slack.Object, _inventoryRepository.Object, _itemFactory.Object);
         }
 
         [TestMethod]
@@ -42,7 +44,7 @@ namespace Test.Shop
         {
             _shopService.Buy(_interaction);
 
-            _inventoryRepository.Verify(repo => repo.AddItem(User, "apple"));
+            _inventoryRepository.Verify(repo => repo.AddItem(User, "lucky_dice"));
         }
 
         [TestMethod]
@@ -50,7 +52,7 @@ namespace Test.Shop
         {
             _shopService.Buy(_interaction);
 
-            _userRepository.Verify(repo => repo.RemoveCredits(User, 25));
+            _userRepository.Verify(repo => repo.RemoveCredits(User, 2674));
         }
 
         [TestMethod]

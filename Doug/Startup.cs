@@ -46,14 +46,17 @@ namespace Doug
 
             services.AddSingleton(new HttpClient(new HttpClientHandler(), false));
 
-            services.AddTransient<IEventService, EventService>();
+            
             services.AddTransient<ISlackWebApi, SlackWebApi>();
-
             services.AddTransient<IItemEventDispatcher, ItemEventDispatcher>();
+            services.AddTransient<IItemFactory, ItemFactory>();
+
+            services.AddTransient<IEventService, EventService>();
             services.AddTransient<IAuthorizationService, AuthorizationService>();
             services.AddTransient<ICoffeeService, CoffeeService>();
             services.AddTransient<IRandomService, RandomService>();
             services.AddTransient<IShopService, ShopService>();
+            services.AddTransient<IUserService, UserService>();
 
             services.AddTransient<ICoffeeCommands, CoffeeCommands>();
             services.AddTransient<ISlursCommands, SlursCommands>();

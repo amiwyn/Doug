@@ -47,7 +47,7 @@ namespace Doug.Commands
             _userRepository.AddUser(userId);
 
             string text = string.Format(DougMessages.JoinedCoffee, Utils.UserMention(userId));
-            _slack.SendMessage(text, channelId);
+            _slack.BroadcastMessage(text, channelId);
         }
 
         public async Task<DougResponse> JoinSomeone(Command command)
@@ -73,7 +73,7 @@ namespace Doug.Commands
             _coffeeRepository.RemoveFromRoster(targetUser);
 
             string text = string.Format(DougMessages.KickedCoffee, Utils.UserMention(targetUser));
-            await _slack.SendMessage(text, command.ChannelId);
+            await _slack.BroadcastMessage(text, command.ChannelId);
 
             return NoResponse;
         }
@@ -109,7 +109,7 @@ namespace Doug.Commands
             }
 
             _coffeeRepository.SkipUser(user);
-            await _slack.SendMessage(string.Format(DougMessages.SkippedCoffee, Utils.UserMention(user)), command.ChannelId);
+            await _slack.BroadcastMessage(string.Format(DougMessages.SkippedCoffee, Utils.UserMention(user)), command.ChannelId);
 
             return NoResponse;
         }

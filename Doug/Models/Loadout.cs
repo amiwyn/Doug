@@ -18,26 +18,29 @@ namespace Doug.Models
 
         public Dictionary<EquipmentSlot, EquipmentItem> Equipment { get; }
 
-        public Loadout(string head, string body, string legs, string boots, string gloves, string leftHand, string rightHand, string neck)
+        public Loadout()
         {
             Equipment = new Dictionary<EquipmentSlot, EquipmentItem>();
-
-            AddEquipment(head);
-            AddEquipment(body);
-            AddEquipment(legs);
-            AddEquipment(boots);
-            AddEquipment(gloves);
-            AddEquipment(leftHand);
-            AddEquipment(rightHand);
-            AddEquipment(neck);
         }
 
-        private void AddEquipment(string itemId)
+        public void CreateEquipment(IItemFactory itemFactory)
+        {
+            AddEquipment(Head, itemFactory);
+            AddEquipment(Body, itemFactory);
+            AddEquipment(Legs, itemFactory);
+            AddEquipment(Boots, itemFactory);
+            AddEquipment(Gloves, itemFactory);
+            AddEquipment(LeftHand, itemFactory);
+            AddEquipment(RightHand, itemFactory);
+            AddEquipment(Neck, itemFactory);
+        }
+
+        private void AddEquipment(string itemId, IItemFactory itemFactory)
         {
             if (!string.IsNullOrEmpty(itemId))
             {
-                var item = (EquipmentItem) ItemFactory.CreateItem(itemId);
-                Equipment.Add(item.Slot, item);
+                var item = (EquipmentItem) itemFactory.CreateItem(itemId);
+                Equipment.TryAdd(item.Slot, item);
             }
         }
 

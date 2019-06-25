@@ -1,5 +1,4 @@
 ﻿using Doug.Models;
-using Doug.Repositories;
 
 namespace Doug.Items
 {
@@ -18,7 +17,7 @@ namespace Doug.Items
             MaxStack = 1;
         }
 
-        public virtual string Use(int itemPos, User user, IInventoryRepository inventoryRepository, IStatsRepository statsRepository)
+        public virtual string Use(int itemPos, User user)
         {
             return string.Format(DougMessages.ItemCantBeUsed, itemPos);
         }
