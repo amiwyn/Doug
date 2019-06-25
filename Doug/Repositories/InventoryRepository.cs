@@ -29,7 +29,10 @@ namespace Doug.Repositories
 
         private void AddItemToUser(User user, string itemId)
         {
-            var item = user.InventoryItems.FirstOrDefault(itm => itm.ItemId == itemId);
+            var itemStack = new Stack<InventoryItem>(user.InventoryItems.Where(itm => itm.ItemId == itemId).Reverse());
+
+            InventoryItem item;
+            while (itemStack.TryPop(out item) && item.Quantity >= item.Item.MaxStack) { }
 
             if (item != null && item.Quantity < item.Item.MaxStack)
             {
