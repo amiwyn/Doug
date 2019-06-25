@@ -7,7 +7,7 @@ namespace Doug.Models
         private const string GroupType = "channel";
         private const string GabId = "UB619L16W";
 
-        private string[] Words = new string [] { "mcd0", "mcdo", "mc d0", "mc do", "mcdonald", "mc donald", "mcd0nalds", "mcd0nald$", "mcd0n4lds", "mcd0n4ld$", "mc d0n4ld$", "mc d0nald$" };
+        private string[] Words = new string [] { "mcd0", "mcdo", "mc d0", "mc do", "mcdonald", "mc donald", "mcd0nalds", "mcd0nald$", "mc", "do", "donald", "mcd0n4lds", "mcd0n4ld$", "mc d0n4ld$", "mc d0nald$" };
 
         public string ClientMsgId { get; set; }
         public string Type { get; set; }
