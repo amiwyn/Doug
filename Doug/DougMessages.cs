@@ -64,6 +64,7 @@
         public const string Equip = "Equip";
         public const string Sell = "Sell for {0} " + CreditEmoji;
         public const string Quantity = "*Quantity:* {0} ";
+        public const string SoldItem = "You sold *{0}* for {1} " + CreditEmoji;
 
         public const string DougError = "Beep boop, it's not working : {0}";
         public const string NotAnAdmin = "You are not an admin.";

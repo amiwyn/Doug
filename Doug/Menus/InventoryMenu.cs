@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Doug.Items;
 using Doug.Models;
 
 namespace Doug.Menus

@@ -1,4 +1,5 @@
-﻿using Doug.Items;
+﻿using System.Linq;
+using Doug.Items;
 using Doug.Models;
 using Doug.Repositories;
 using Doug.Slack;
@@ -8,6 +9,7 @@ namespace Doug.Services
     public interface IShopService
     {
         void Buy(Interaction interaction);
+        void Sell(Interaction interaction);
     }
 
     public class ShopService : IShopService
@@ -40,6 +42,25 @@ namespace Doug.Services
             _userRepository.RemoveCredits(user.Id, item.Price);
 
             _inventoryRepository.AddItem(user, item.Id);
+        }
+
+        public void Sell(Interaction interaction)
+        {
+            var user = _userRepository.GetUser(interaction.UserId);
+            var position = int.Parse(interaction.Value.Split(":").Last());
+            var item = user.InventoryItems.SingleOrDefault(itm => itm.InventoryPosition == position)?.Item;
+
+            if (item == null)
+            {
+                _slack.SendEphemeralMessage(string.Format(DougMessages.NoItemInSlot, position), user.Id, interaction.ChannelId);
+                return;
+            }
+
+            _inventoryRepository.RemoveItem(user, position);
+
+            _userRepository.AddCredits(user.Id, item.Price / 2);
+
+            _slack.SendEphemeralMessage(string.Format(DougMessages.SoldItem, item.Name, item.Price / 2), user.Id, interaction.ChannelId);
         }
     }
 }
