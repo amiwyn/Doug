@@ -42,7 +42,7 @@ namespace Doug.Commands
                 return new DougResponse(string.Format(DougMessages.NoItemInSlot, position));
             }
 
-            var response = inventoryItem.Item.Use(position, user);
+            var response = inventoryItem.Item.Use(position, user, command.ChannelId);
 
             return new DougResponse(response);
         }

@@ -9,6 +9,8 @@ namespace Test.Items.Consumables
     [TestClass]
     public class AppleTest
     {
+        private const string Channel = "coco-channel";
+
         private readonly Mock<IInventoryRepository> _inventoryRepository = new Mock<IInventoryRepository>();
         private readonly Mock<IStatsRepository> _statsRepository = new Mock<IStatsRepository>();
         private Apple _apple;
@@ -24,7 +26,7 @@ namespace Test.Items.Consumables
         [TestMethod]
         public void WhenUsingRestore25Hitpoint()
         {
-            _apple.Use(0, _user);
+            _apple.Use(0, _user, Channel);
 
             _statsRepository.Verify(repo => repo.UpdateHealth("test", 100));
         }
@@ -32,7 +34,7 @@ namespace Test.Items.Consumables
         [TestMethod]
         public void HealthShouldNotBeAbove100()
         {
-            _apple.Use(0, _user);
+            _apple.Use(0, _user, Channel);
 
             Assert.AreNotEqual(115, _user.Health);
         }
@@ -40,7 +42,7 @@ namespace Test.Items.Consumables
         [TestMethod]
         public void ShouldRemoveFromInventory()
         {
-            _apple.Use(0, _user);
+            _apple.Use(0, _user, Channel);
 
             _inventoryRepository.Verify(repo => repo.RemoveItem(_user, 0));
         }

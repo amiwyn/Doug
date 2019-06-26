@@ -10,6 +10,7 @@ namespace Test.Items.Consumables
     public class CoffeeCupTest
     {
         private CoffeeCup _coffeeCup;
+        private const string Channel = "coco-channel";
 
         private readonly Mock<IInventoryRepository> _inventoryRepository = new Mock<IInventoryRepository>();
         private readonly Mock<IStatsRepository> _statsRepository = new Mock<IStatsRepository>();
@@ -25,7 +26,7 @@ namespace Test.Items.Consumables
         [TestMethod]
         public void WhenConsuming_IncreaseEnergyBy25()
         {
-            _coffeeCup.Use(0, _user);
+            _coffeeCup.Use(0, _user, Channel);
 
             _statsRepository.Verify(repo => repo.UpdateEnergy("ginette", 25));
         }
@@ -33,7 +34,7 @@ namespace Test.Items.Consumables
         [TestMethod]
         public void WhenConsuming_ItemIsRemoved()
         {
-            _coffeeCup.Use(0, _user);
+            _coffeeCup.Use(0, _user, Channel);
 
             _inventoryRepository.Verify(repo => repo.RemoveItem(_user, 0));
         }
@@ -43,7 +44,7 @@ namespace Test.Items.Consumables
         {
             var user = new User() { Id = "ginette", Energy = 20 };
 
-            _coffeeCup.Use(0, user);
+            _coffeeCup.Use(0, user, Channel);
 
             _statsRepository.Verify(repo => repo.UpdateEnergy("ginette", 25));
         }

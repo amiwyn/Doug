@@ -19,9 +19,9 @@ namespace Doug.Items.Consumables
             Price = 50;
         }
 
-        public override string Use(int itemPos, User user)
+        public override string Use(int itemPos, User user, string channel)
         {
-            base.Use(itemPos, user);
+            base.Use(itemPos, user, channel);
 
             user.Health += RecoverAmount;
 
