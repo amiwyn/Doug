@@ -1,5 +1,7 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using Doug.Items;
+using Doug.Menus;
 using Doug.Models;
 using Doug.Repositories;
 using Doug.Slack;
@@ -11,6 +13,7 @@ namespace Doug.Commands
         DougResponse Use(Command command);
         DougResponse Give(Command command);
         DougResponse Equip(Command command);
+        Task<DougResponse> Inventory(Command command);
     }
 
     public class InventoryCommands : IInventoryCommands
@@ -39,7 +42,7 @@ namespace Doug.Commands
                 return new DougResponse(string.Format(DougMessages.NoItemInSlot, position));
             }
 
-            var response = inventoryItem.Item.Use(position, user);
+            var response = inventoryItem.Item.Use(position, user, command.ChannelId);
 
             return new DougResponse(response);
         }
@@ -96,5 +99,15 @@ namespace Doug.Commands
 
             return new DougResponse(string.Format(DougMessages.EquippedItem, inventoryItem.Item.Name));
         }
+
+        public async Task<DougResponse> Inventory(Command command)
+        {
+            var user = _userRepository.GetUser(command.UserId);
+
+            await _slack.SendEphemeralBlocks(new InventoryMenu(user.InventoryItems).Blocks, command.UserId, command.ChannelId);
+
+            return new DougResponse();
+        }
+        
     }
 }

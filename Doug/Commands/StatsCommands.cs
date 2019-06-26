@@ -12,7 +12,6 @@ namespace Doug.Commands
         DougResponse Energy(Command command);
         DougResponse Profile(Command command);
         DougResponse Equipment(Command command);
-        DougResponse Inventory(Command command);
     }
 
     public class StatsCommands : IStatsCommands
@@ -76,24 +75,6 @@ namespace Doug.Commands
             var user = _userRepository.GetUser(userId);
 
             var attachments = Attachment.EquipmentAttachments(user.Loadout);
-
-            _slack.SendAttachments(attachments, command.ChannelId);
-
-            return NoResponse;
-        }
-
-        public DougResponse Inventory(Command command)
-        {
-            var userId = command.UserId;
-
-            if (command.IsUserArgument())
-            {
-                userId = command.GetTargetUserId();
-            }
-
-            var user = _userRepository.GetUser(userId);
-
-            var attachments = Attachment.InventoryAttachments(user);
 
             _slack.SendAttachments(attachments, command.ChannelId);
 

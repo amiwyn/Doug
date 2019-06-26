@@ -9,6 +9,8 @@ namespace Test.Items.Consumables
     [TestClass]
     public class BreadTest
     {
+        private const string Channel = "coco-channel";
+
         private readonly Mock<IInventoryRepository> _inventoryRepository = new Mock<IInventoryRepository>();
         private readonly Mock<IStatsRepository> _statsRepository = new Mock<IStatsRepository>();
         private Bread _bread;
@@ -24,7 +26,7 @@ namespace Test.Items.Consumables
         [TestMethod]
         public void WhenConsuming_IncreaseHealthBy50()
         {
-            _bread.Use(0, _user);
+            _bread.Use(0, _user, Channel);
 
             _statsRepository.Verify(repo => repo.UpdateHealth("ginette", 75));
         }
@@ -32,7 +34,7 @@ namespace Test.Items.Consumables
         [TestMethod]
         public void WhenConsuming_ItemIsRemoved()
         {
-            _bread.Use(0, _user);
+            _bread.Use(0, _user, Channel);
 
             _inventoryRepository.Verify(repo => repo.RemoveItem(_user, 0));
         }
@@ -42,7 +44,7 @@ namespace Test.Items.Consumables
         {
             var user = new User { Id = "ginette", Health = 77 };
 
-            _bread.Use(0, user);
+            _bread.Use(0, user, Channel);
 
             _statsRepository.Verify(repo => repo.UpdateHealth("ginette", 100));
         }

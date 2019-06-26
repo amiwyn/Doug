@@ -27,10 +27,17 @@ namespace Doug.Controllers.Dto
 
             var slackInteraction = JsonConvert.DeserializeObject<SlackInteraction>(payload, jsonSettings);
 
+            var value = slackInteraction.Actions.SingleOrDefault()?.Value;
+
+            if (slackInteraction.Actions.SingleOrDefault()?.Type == "overflow")
+            {
+                value = slackInteraction.Actions.SingleOrDefault()?.SelectedOption.Value;
+            }
+
             return new Interaction
             {
                 Action = slackInteraction.Actions.SingleOrDefault()?.ActionId,
-                Value = slackInteraction.Actions.SingleOrDefault()?.Value,
+                Value = value,
                 ChannelId = slackInteraction.Channel.Id,
                 UserId = slackInteraction.User.Id
             };
@@ -56,7 +63,14 @@ namespace Doug.Controllers.Dto
 
     public class SlackInteractionAction
     {
+        public string Type { get; set; }
         public string ActionId { get; set; }
+        public string Value { get; set; }
+        public SlackInteractionOption SelectedOption { get; set; }
+    }
+
+    public class SlackInteractionOption
+    {
         public string Value { get; set; }
     }
 }

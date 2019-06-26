@@ -17,7 +17,7 @@ namespace Doug.Items
             MaxStack = 1;
         }
 
-        public virtual string Use(int itemPos, User user)
+        public virtual string Use(int itemPos, User user, string channel)
         {
             return string.Format(DougMessages.ItemCantBeUsed, itemPos);
         }

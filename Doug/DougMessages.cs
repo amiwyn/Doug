@@ -60,6 +60,11 @@
         public const string ShopSpeech = "*Oi!* Welcome to my shop! I sell various stuff from all around the continent.\n\n *Come in, have a look:*";
         public const string BuyFor = "Buy for {0} " + CreditEmoji;
         public const string UserDied = "Oh dear, {0} died!";
+        public const string Use = "Use";
+        public const string Equip = "Equip";
+        public const string Sell = "Sell for {0} " + CreditEmoji;
+        public const string Quantity = "*Quantity:* {0} ";
+        public const string SoldItem = "You sold *{0}* for {1} " + CreditEmoji;
 
         public const string DougError = "Beep boop, it's not working : {0}";
         public const string NotAnAdmin = "You are not an admin.";

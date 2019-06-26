@@ -13,7 +13,7 @@ namespace Doug.Items
             MaxStack = 99;
         }
 
-        public override string Use(int itemPos, User user)
+        public override string Use(int itemPos, User user, string channel)
         {
             _inventoryRepository.RemoveItem(user, itemPos);
             return DougMessages.ConsumedItem;

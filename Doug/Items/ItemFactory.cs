@@ -2,6 +2,7 @@
 using Doug.Items.Equipment;
 using Doug.Items.Misc;
 using Doug.Repositories;
+using Doug.Services;
 using Doug.Slack;
 
 namespace Doug.Items
@@ -27,12 +28,14 @@ namespace Doug.Items
         private readonly ISlackWebApi _slack;
         private readonly IStatsRepository _statsRepository;
         private readonly IInventoryRepository _inventoryRepository;
+        private readonly IUserService _userService;
 
-        public ItemFactory(ISlackWebApi slack, IStatsRepository statsRepository, IInventoryRepository inventoryRepository)
+        public ItemFactory(ISlackWebApi slack, IStatsRepository statsRepository, IInventoryRepository inventoryRepository, IUserService userService)
         {
             _slack = slack;
             _statsRepository = statsRepository;
             _inventoryRepository = inventoryRepository;
+            _userService = userService;
         }
 
         public Item CreateItem(string itemId)
@@ -60,7 +63,7 @@ namespace Doug.Items
                 case Bread:
                     return new Bread(_statsRepository, _inventoryRepository);
                 case McdoFries:
-                    return new McdoFries(_statsRepository, _inventoryRepository);
+                    return new McdoFries(_statsRepository, _inventoryRepository, _userService);
                 default:
                     return new Default();
             }

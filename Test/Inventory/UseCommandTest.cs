@@ -45,7 +45,7 @@ namespace Test.Inventory
         {
             _inventoryCommands.Use(_command);
 
-            _item.Verify(item => item.Use(2, It.IsAny<User>()));
+            _item.Verify(item => item.Use(2, It.IsAny<User>(), Channel));
         }
 
         [TestMethod]
