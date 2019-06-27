@@ -58,20 +58,19 @@ namespace Doug.Repositories
 
             switch (stat)
             {
-                // TODO magic strings
-                case "luck":
+                case Stats.Luck:
                     user.Luck++;
                     break;
-                case "agility":
+                case Stats.Agility:
                     user.Agility++;
                     break;
-                case "charisma":
+                case Stats.Charisma:
                     user.Charisma++;
                     break;
-                case "constitution":
+                case Stats.Constitution:
                     user.Constitution++;
                     break;
-                case "stamina":
+                case Stats.Stamina:
                     user.Stamina++;
                     break;
             }

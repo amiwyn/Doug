@@ -25,7 +25,7 @@ namespace Doug.Services
 
             if (user.FreeStatsPoints <= 0)
             {
-                return; //TODO error message
+                return; //TODO error message, send user feedback
             }
 
             _statsRepository.AttributeStatPoint(user.Id, interaction.Value);

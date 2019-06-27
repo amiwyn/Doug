@@ -69,11 +69,11 @@ namespace Doug.Menus
 
             var blocks = new List<BlockMessage>
             {
-                StatSection(DougMessages.LuckStats, user.Luck, "luck", buttonDisplayed), // TODO: put this magic away
-                StatSection(DougMessages.AgilityStats, user.Agility, "agility", buttonDisplayed),
-                StatSection(DougMessages.CharismaStats, user.Charisma, "charisma", buttonDisplayed),
-                StatSection(DougMessages.ConstitutionStats, user.Constitution, "constitution", buttonDisplayed),
-                StatSection(DougMessages.StaminaStats, user.Stamina, "stamina", buttonDisplayed)
+                StatSection(DougMessages.LuckStats, user.Luck, Stats.Luck, buttonDisplayed),
+                StatSection(DougMessages.AgilityStats, user.Agility, Stats.Agility, buttonDisplayed),
+                StatSection(DougMessages.CharismaStats, user.Charisma, Stats.Charisma, buttonDisplayed),
+                StatSection(DougMessages.ConstitutionStats, user.Constitution, Stats.Constitution, buttonDisplayed),
+                StatSection(DougMessages.StaminaStats, user.Stamina, Stats.Stamina, buttonDisplayed)
             };
 
             return blocks;
