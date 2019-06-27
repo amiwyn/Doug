@@ -39,7 +39,9 @@ namespace Doug.Controllers.Dto
                 Action = slackInteraction.Actions.SingleOrDefault()?.ActionId,
                 Value = value,
                 ChannelId = slackInteraction.Channel.Id,
-                UserId = slackInteraction.User.Id
+                UserId = slackInteraction.User.Id,
+                Timestamp = slackInteraction.Container.MessageTs,
+                ResponseUrl = slackInteraction.ResponseUrl
             };
         }
     }
@@ -49,6 +51,8 @@ namespace Doug.Controllers.Dto
         public SlackInteractionUser User { get; set; }
         public SlackInteractionChannel Channel { get; set; }
         public List<SlackInteractionAction> Actions { get; set; }
+        public SlackInteractionContainer Container { get; set; }
+        public string ResponseUrl { get; set; }
     }
 
     public class SlackInteractionUser
@@ -59,6 +63,11 @@ namespace Doug.Controllers.Dto
     public class SlackInteractionChannel
     {
         public string Id { get; set; }
+    }
+
+    public class SlackInteractionContainer
+    {
+        public string MessageTs { get; set; }
     }
 
     public class SlackInteractionAction

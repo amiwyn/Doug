@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using Doug.Menus;
@@ -21,6 +22,7 @@ namespace Doug.Slack
         Task SendAttachments(IEnumerable<Attachment> attachments, string channel);
         Task SendEphemeralMessage(string text, string user, string channel);
         Task SendEphemeralBlocks(IEnumerable<BlockMessage> blocks, string user, string channel);
+        Task UpdateInteractionMessage(IEnumerable<BlockMessage> blocks, string url);
     }
 
     public class SlackWebApi : ISlackWebApi
@@ -30,6 +32,7 @@ namespace Doug.Slack
         private const string ReactionAddUrl = "https://slack.com/api/reactions.add";
         private const string ReactionGetUrl = "https://slack.com/api/reactions.get";
         private const string EphemeralUrl = "https://slack.com/api/chat.postEphemeral";
+
         private readonly HttpClient _client;
         private readonly string _token;
         private readonly JsonSerializerSettings _jsonSettings;
@@ -54,20 +57,35 @@ namespace Doug.Slack
 
         public async Task<string> BroadcastMessage(string text, string channelId)
         {
-            var request = new HttpRequestMessage(HttpMethod.Post, PostMessageUrl);
-            var keyValues = new List<KeyValuePair<string, string>>
-            {
-                new KeyValuePair<string, string>("token", _token),
-                new KeyValuePair<string, string>("text", text),
-                new KeyValuePair<string, string>("channel", channelId)
-            };
-            request.Content = new FormUrlEncodedContent(keyValues);
+            var keyValues = CreateBaseRequestPayload(channelId);
+            keyValues.Add(new KeyValuePair<string, string>("text", text));
 
-            var response = await _client.SendAsync(request);
-
-            var body = await response.Content.ReadAsStringAsync();
+            var body = await PostToUrl(PostMessageUrl, keyValues);
 
             return JsonConvert.DeserializeObject<MessageResponse>(body, _jsonSettings).Ts;
+        }
+
+        private List<KeyValuePair<string, string>> CreateBaseRequestPayload(string channel)
+        {
+            return new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("token", _token),
+                new KeyValuePair<string, string>("channel", channel)
+            };
+        }
+
+        private async Task PostToUrlWithoutResponse(string url, List<KeyValuePair<string, string>> payload)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Post, url) {Content = new FormUrlEncodedContent(payload)};
+            await _client.SendAsync(request);
+        }
+
+        private async Task<string> PostToUrl(string url, List<KeyValuePair<string, string>> payload)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Post, url) {Content = new FormUrlEncodedContent(payload)};
+            var response = await _client.SendAsync(request);
+
+            return await response.Content.ReadAsStringAsync();
         }
 
         public async Task<UserInfo> GetUserInfo(string userId)
@@ -86,17 +104,11 @@ namespace Doug.Slack
 
         public async Task AddReaction(string name, string timestamp, string channel)
         {
-            var request = new HttpRequestMessage(HttpMethod.Post, ReactionAddUrl);
-            var keyValues = new List<KeyValuePair<string, string>>
-            {
-                new KeyValuePair<string, string>("token", _token),
-                new KeyValuePair<string, string>("name", name),
-                new KeyValuePair<string, string>("channel", channel),
-                new KeyValuePair<string, string>("timestamp", timestamp)
-            };
-            request.Content = new FormUrlEncodedContent(keyValues);
+            var keyValues = CreateBaseRequestPayload(channel);
+            keyValues.Add(new KeyValuePair<string, string>("name", name));
+            keyValues.Add(new KeyValuePair<string, string>("timestamp", timestamp));
 
-            await _client.SendAsync(request);
+            await PostToUrlWithoutResponse(ReactionAddUrl, keyValues);
         }
 
         public async Task<List<Reaction>> GetReactions(string timestamp, string channel)
@@ -117,48 +129,44 @@ namespace Doug.Slack
         {
             var attachmentString = JsonConvert.SerializeObject(attachments, _jsonSettings);
 
-            var request = new HttpRequestMessage(HttpMethod.Post, PostMessageUrl);
-            var keyValues = new List<KeyValuePair<string, string>>
-            {
-                new KeyValuePair<string, string>("token", _token),
-                new KeyValuePair<string, string>("channel", channel),
-                new KeyValuePair<string, string>("attachments", attachmentString)
-            };
-            request.Content = new FormUrlEncodedContent(keyValues);
+            var keyValues = CreateBaseRequestPayload(channel);
+            keyValues.Add(new KeyValuePair<string, string>("attachments", attachmentString));
 
-            await _client.SendAsync(request);
+            await PostToUrlWithoutResponse(PostMessageUrl, keyValues);
         }
 
         public async Task SendEphemeralMessage(string text, string user, string channel)
         {
-            var request = new HttpRequestMessage(HttpMethod.Post, EphemeralUrl);
-            var keyValues = new List<KeyValuePair<string, string>>
-            {
-                new KeyValuePair<string, string>("token", _token),
-                new KeyValuePair<string, string>("channel", channel),
-                new KeyValuePair<string, string>("user", user),
-                new KeyValuePair<string, string>("text", text)
-            };
-            request.Content = new FormUrlEncodedContent(keyValues);
+            var keyValues = CreateBaseRequestPayload(channel);
+            keyValues.Add(new KeyValuePair<string, string>("user", user));
+            keyValues.Add(new KeyValuePair<string, string>("text", text));
 
-            await _client.SendAsync(request);
+            await PostToUrlWithoutResponse(EphemeralUrl, keyValues);
         }
 
         public async Task SendEphemeralBlocks(IEnumerable<BlockMessage> blocks, string user, string channel)
         {
-            var attachmentString = JsonConvert.SerializeObject(blocks, _jsonSettings);
+            var blocksString = JsonConvert.SerializeObject(blocks, _jsonSettings);
 
-            var request = new HttpRequestMessage(HttpMethod.Post, EphemeralUrl);
-            var keyValues = new List<KeyValuePair<string, string>>
+            var keyValues = CreateBaseRequestPayload(channel);
+            keyValues.Add(new KeyValuePair<string, string>("user", user));
+            keyValues.Add(new KeyValuePair<string, string>("blocks", blocksString));
+
+            await PostToUrlWithoutResponse(EphemeralUrl, keyValues);
+        }
+
+        public async Task UpdateInteractionMessage(IEnumerable<BlockMessage> blocks, string url)
+        {
+            var updatedMessage = new
             {
-                new KeyValuePair<string, string>("token", _token),
-                new KeyValuePair<string, string>("channel", channel),
-                new KeyValuePair<string, string>("user", user),
-                new KeyValuePair<string, string>("blocks", attachmentString)
+                ReplaceOriginal = "true",
+                Blocks = blocks
             };
-            request.Content = new FormUrlEncodedContent(keyValues);
 
-            await _client.SendAsync(request);
+            var content = new StringContent(JsonConvert.SerializeObject(updatedMessage, _jsonSettings), Encoding.UTF8, "application/json");
+            var res = await _client.PostAsync(url, content);
+            var asda = await res.Content.ReadAsStringAsync();
+            var asd1 = 0;
         }
     }
 }

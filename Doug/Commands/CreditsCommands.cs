@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Doug.Items;
 using Doug.Menus;
+using Doug.Services;
 
 namespace Doug.Commands
 {
@@ -90,15 +91,11 @@ namespace Doug.Commands
 
         public async Task<DougResponse> Shop(Command command)
         {
-            var items = new List<Item>
-            {
-                _itemFactory.CreateItem(ItemFactory.CoffeeCup),
-                _itemFactory.CreateItem(ItemFactory.Apple),
-                _itemFactory.CreateItem(ItemFactory.Bread),
-                _itemFactory.CreateItem(ItemFactory.McdoFries)
-            };
+            var user = _userRepository.GetUser(command.UserId);
 
-            await _slack.SendEphemeralBlocks(new ShopMenu(items).Blocks, command.UserId, command.ChannelId);
+            var items = ShopService.ShopItems.Select(itm => _itemFactory.CreateItem(itm));
+
+            await _slack.SendEphemeralBlocks(new ShopMenu(items, user).Blocks, command.UserId, command.ChannelId);
 
             return NoResponse; 
         }
