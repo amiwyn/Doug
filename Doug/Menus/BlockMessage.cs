@@ -8,6 +8,7 @@ namespace Doug.Menus
         public TextBlock Text { get; set; }
         public Accessory Accessory { get; set; }
         public List<TextBlock> Elements { get; set; }
+        public List<TextBlock> Fields { get; set; }
 
         public static BlockMessage TextSection(string text)
         {
@@ -20,10 +21,14 @@ namespace Doug.Menus
             return new BlockMessage {Type = "divider"};
         }
 
-        public static BlockMessage Context(string text)
+        public static BlockMessage Context(List<TextBlock> textList)
         {
-            var elements = new List<TextBlock> {TextBlock.MarkdownTextBlock(text)};
-            return new BlockMessage { Type = "context", Elements = elements };
+            return new BlockMessage { Type = "context", Elements = textList };
+        }
+
+        public static BlockMessage FieldsSection(List<TextBlock> fields)
+        {
+            return new BlockMessage { Type = "section", Fields = fields };
         }
     }
 }

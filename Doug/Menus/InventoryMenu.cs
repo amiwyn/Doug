@@ -26,7 +26,7 @@ namespace Doug.Menus
             var itemOptions = ItemActionsAccessory(item.InventoryPosition, item.Item.Price / 2);
 
             blocks.Add(new BlockMessage { Type = "section", Text = textBlock, Accessory = itemOptions });
-            blocks.Add( BlockMessage.Context(string.Format(DougMessages.Quantity, item.Quantity)));
+            blocks.Add(BlockMessage.Context(new List<TextBlock> { TextBlock.MarkdownTextBlock(string.Format(DougMessages.Quantity, item.Quantity)) }));
             blocks.Add(BlockMessage.Divider());
 
             return blocks;

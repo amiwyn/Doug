@@ -13,11 +13,13 @@ namespace Doug.Controllers
     {
         private readonly IShopService _shopService;
         private readonly IInventoryCommands _inventoryCommands;
+        private readonly IStatsService _statsService;
 
-        public InteractionsController(IShopService shopService, IInventoryCommands inventoryCommands)
+        public InteractionsController(IShopService shopService, IInventoryCommands inventoryCommands, IStatsService statsService)
         {
             _shopService = shopService;
             _inventoryCommands = inventoryCommands;
+            _statsService = statsService;
         }
 
         [HttpPost]
@@ -25,18 +27,19 @@ namespace Doug.Controllers
         {
             var interaction = slackInteraction.ToInteraction();
 
-            if (interaction.Action == "buy")
+            switch (interaction.Action)
             {
-                _shopService.Buy(interaction);
-                return Ok();
+                case "buy":
+                    _shopService.Buy(interaction);
+                    return Ok();
+                case "inventory":
+                    return Ok(InventoryInteractions(interaction));
+                case "attribution":
+                    _statsService.AttributeStatPoint(interaction);
+                    return Ok();
+                default:
+                    return Ok();
             }
-
-            if (interaction.Action == "inventory")
-            {
-                return Ok(InventoryInteractions(interaction));
-            }
-
-            return Ok();
         }
 
         private string InventoryInteractions(Interaction interaction)

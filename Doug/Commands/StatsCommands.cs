@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Threading.Tasks;
+using Doug.Menus;
 using Doug.Models;
 using Doug.Repositories;
 using Doug.Slack;
@@ -8,9 +9,7 @@ namespace Doug.Commands
     public interface IStatsCommands
     {
         DougResponse Balance(Command command);
-        DougResponse Health(Command command);
-        DougResponse Energy(Command command);
-        DougResponse Profile(Command command);
+        Task<DougResponse> Profile(Command command);
         DougResponse Equipment(Command command);
     }
 
@@ -32,33 +31,12 @@ namespace Doug.Commands
 
             return new DougResponse(string.Format(DougMessages.Balance, user.Credits));
         }
-        public DougResponse Health(Command command)
+
+        public async Task<DougResponse> Profile(Command command)
         {
             var user = _userRepository.GetUser(command.UserId);
 
-            return new DougResponse(string.Format(DougMessages.Health, user.Health, user.TotalHealth()));
-        }
-        public DougResponse Energy(Command command)
-        {
-            var user = _userRepository.GetUser(command.UserId);
-
-            return new DougResponse(string.Format(DougMessages.Energy, user.Energy, user.TotalEnergy()));
-        }
-
-        public DougResponse Profile(Command command)
-        {
-            var userId = command.UserId;
-
-            if (command.IsUserArgument())
-            {
-                userId = command.GetTargetUserId();
-            }
-
-            var user = _userRepository.GetUser(userId);
-
-            var attachments = new List<Attachment> { Attachment.StatsAttachment(user) };
-
-            _slack.SendAttachments(attachments, command.ChannelId);
+            await _slack.SendEphemeralBlocks(new StatsMenu(user).Blocks, command.UserId, command.ChannelId);
 
             return NoResponse;
         }
