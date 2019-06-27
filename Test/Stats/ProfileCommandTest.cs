@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Doug.Commands;
 using Doug.Models;
 using Doug.Repositories;
@@ -30,7 +31,7 @@ namespace Test.Stats
         }
 
         [TestMethod]
-        public void GivenNoArgument_WhenCheckingStats_GetInformationFromRequester()
+        public async Task GivenNoArgument_WhenCheckingStats_GetInformationFromRequester()
         {
             var command = new Command()
             {
@@ -39,24 +40,9 @@ namespace Test.Stats
                 UserId = User
             };
 
-            _statsCommands.Profile(command);
+            await _statsCommands.Profile(command);
 
             _userRepository.Verify(repo => repo.GetUser(User));
-        }
-
-        [TestMethod]
-        public void GivenOneArgument_WhenCheckingStats_GetInformationFromTargetUser()
-        {
-            var command = new Command()
-            {
-                ChannelId = Channel,
-                Text = "<@otherUserid|username>",
-                UserId = User
-            };
-
-            _statsCommands.Profile(command);
-
-            _userRepository.Verify(repo => repo.GetUser("otherUserid"));
         }
     }
 }

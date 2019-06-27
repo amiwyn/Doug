@@ -64,7 +64,7 @@ namespace Doug.Models
         public int Stamina { get; set; }
 
         public int Level => (int)Math.Floor(Math.Sqrt(Experience) * 0.1 + 1);
-        public int TotalStatsPoints => (int)Math.Floor(Level + 5 * Math.Floor(Level * 0.1)) + 5;
+        public int TotalStatsPoints => (int)Math.Floor(Level + 5 * Math.Floor(Level * 0.1)) + 4;
         public int FreeStatsPoints => TotalStatsPoints + 25 - (Luck + Agility + Charisma + Constitution + Stamina);
         public int Attack => (int)Math.Floor(Charisma * 2.0);
 

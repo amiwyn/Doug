@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Doug.Commands;
 using Doug.Controllers.Dto;
 using Microsoft.AspNetCore.Mvc;
@@ -17,11 +18,11 @@ namespace Doug.Controllers
         }
 
         [HttpPost("profile")]
-        public ActionResult Profile([FromForm]SlackCommandDto slackCommand)
+        public async Task<ActionResult> Profile([FromForm]SlackCommandDto slackCommand)
         {
             try
             {
-                var result = _statsCommands.Profile(slackCommand.ToCommand());
+                var result = await _statsCommands.Profile(slackCommand.ToCommand());
                 return Ok(result.Message);
             }
             catch (Exception ex)
@@ -36,34 +37,6 @@ namespace Doug.Controllers
             try
             {
                 var result = _statsCommands.Balance(slackCommand.ToCommand());
-                return Ok(result.Message);
-            }
-            catch (Exception ex)
-            {
-                return Ok(string.Format(DougMessages.DougError, ex.Message));
-            }
-        }
-
-        [HttpPost("health")]
-        public ActionResult Health([FromForm]SlackCommandDto slackCommand)
-        {
-            try
-            {
-                var result = _statsCommands.Health(slackCommand.ToCommand());
-                return Ok(result.Message);
-            }
-            catch (Exception ex)
-            {
-                return Ok(string.Format(DougMessages.DougError, ex.Message));
-            }
-        }
-
-        [HttpPost("energy")]
-        public ActionResult Energy([FromForm]SlackCommandDto slackCommand)
-        {
-            try
-            {
-                var result = _statsCommands.Energy(slackCommand.ToCommand());
                 return Ok(result.Message);
             }
             catch (Exception ex)
