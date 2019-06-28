@@ -22,7 +22,7 @@ namespace Doug.Menus
         {
             var blocks = new List<BlockMessage>();
 
-            var textBlock = TextBlock.MarkdownTextBlock($"{item.Item.Icon} *{item.Item.Name}* - ({item.InventoryPosition}) \n {item.Item.Description}");
+            var textBlock = TextBlock.MarkdownTextBlock($"{item.Item.Icon} *{item.Item.Name}* - ({item.InventoryPosition}) \n {item.Item.Description}"); //TODO: temporary display inventory position until all commands that requires it are merged
             var itemOptions = ItemActionsAccessory(item.InventoryPosition, item.Item.Price / 2);
 
             blocks.Add(new BlockMessage { Type = "section", Text = textBlock, Accessory = itemOptions });
