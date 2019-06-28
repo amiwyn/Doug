@@ -100,6 +100,8 @@ namespace Doug.Models
         public User()
         {
             InventoryItems = new List<InventoryItem>();
+            Loadout = new Loadout();
+            
             Luck = 5;
             Agility = 5;
             Charisma = 5;
