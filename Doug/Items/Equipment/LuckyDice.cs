@@ -11,6 +11,8 @@
             Icon = ":game_die:";
             Slot = EquipmentSlot.LeftHand;
             Price = 2674;
+
+            Luck = 10;
         }
 
         public override double OnGambling(double chance)
