@@ -36,7 +36,7 @@ namespace Doug.Controllers
                     await InventoryInteractions(interaction);
                     break;
                 case "attribution":
-                    _statsService.AttributeStatPoint(interaction);
+                    await _statsService.AttributeStatPoint(interaction);
                     break;
             }
 

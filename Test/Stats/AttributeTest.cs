@@ -1,6 +1,8 @@
+using System.Threading.Tasks;
 using Doug.Models;
 using Doug.Repositories;
 using Doug.Services;
+using Doug.Slack;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
@@ -24,6 +26,7 @@ namespace Test.Stats
 
         private readonly Mock<IUserRepository> _userRepository = new Mock<IUserRepository>();
         private readonly Mock<IStatsRepository> _statsRepository = new Mock<IStatsRepository>();
+        private readonly Mock<ISlackWebApi> _slack = new Mock<ISlackWebApi>();
         private User _user;
 
         [TestInitialize]
@@ -32,23 +35,23 @@ namespace Test.Stats
             _user = new User() { Id = "testuser", Experience = 0 };
             _userRepository.Setup(repo => repo.GetUser(User)).Returns(_user);
 
-            _userService = new StatsService(_statsRepository.Object, _userRepository.Object);
+            _userService = new StatsService(_statsRepository.Object, _userRepository.Object, _slack.Object);
         }
 
         [TestMethod]
-        public void WhenAttributingLuck_LuckStatIncrease()
+        public async Task WhenAttributingLuck_LuckStatIncrease()
         {
-            _userService.AttributeStatPoint(_interaction);
+            await _userService.AttributeStatPoint(_interaction);
 
             _statsRepository.Verify(repo => repo.AttributeStatPoint(User, "luck"));
         }
 
         [TestMethod]
-        public void GivenUserHasNoFreePoints_WhenAttributingLuck_LuckStatDoNotIncrease()
+        public async Task GivenUserHasNoFreePoints_WhenAttributingLuck_LuckStatDoNotIncrease()
         {
             _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User() { Id = "testuser", Luck = 10 });
 
-            _userService.AttributeStatPoint(_interaction);
+            await _userService.AttributeStatPoint(_interaction);
 
             _statsRepository.Verify(repo => repo.AttributeStatPoint(User, "luck"), Times.Never);
         }

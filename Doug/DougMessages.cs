@@ -77,5 +77,6 @@
         public const string ItemCantBeUsed = "The item in slot {0} cannot be used.";
         public const string InvalidUserArgument = "You must pass a valid user in arguments";
         public const string ItemNotEquipAble = "This item is not equipable.";
+        public const string NoMoreStatsPoints = "No more available stats points.";
     }
 }

@@ -1,34 +1,42 @@
-﻿using Doug.Models;
+﻿using System.Threading.Tasks;
+using Doug.Menus;
+using Doug.Models;
 using Doug.Repositories;
+using Doug.Slack;
 
 namespace Doug.Services
 {
     public interface IStatsService
     {
-        void AttributeStatPoint(Interaction interaction);
+        Task AttributeStatPoint(Interaction interaction);
     }
 
     public class StatsService : IStatsService
     {
         private readonly IUserRepository _userRepository;
         private readonly IStatsRepository _statsRepository;
+        private readonly ISlackWebApi _slack;
 
-        public StatsService(IStatsRepository statsRepository, IUserRepository userRepository)
+        public StatsService(IStatsRepository statsRepository, IUserRepository userRepository, ISlackWebApi slack)
         {
             _statsRepository = statsRepository;
             _userRepository = userRepository;
+            _slack = slack;
         }
 
-        public void AttributeStatPoint(Interaction interaction)
+        public async Task AttributeStatPoint(Interaction interaction)
         {
             var user = _userRepository.GetUser(interaction.UserId);
 
             if (user.FreeStatsPoints <= 0)
             {
-                return; //TODO error message, send user feedback
+                await _slack.SendEphemeralMessage(DougMessages.NoMoreStatsPoints, user.Id, interaction.ChannelId);
+                return;
             }
 
             _statsRepository.AttributeStatPoint(user.Id, interaction.Value);
+
+            await _slack.UpdateInteractionMessage(new StatsMenu(user).Blocks, interaction.ResponseUrl);
         }
     }
 }
