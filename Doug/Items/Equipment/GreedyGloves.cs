@@ -11,6 +11,9 @@
             Icon = ":gloves:";
             Slot = EquipmentSlot.Gloves;
             Price = 3000;
+
+            Attack = 5;
+            Charisma = 5;
         }
 
         public override int OnStealingAmount(int amount)

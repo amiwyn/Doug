@@ -10,6 +10,7 @@ namespace Doug.Repositories
         void UpdateHealth(string userId, int health);
         void AddExperience(string userId, long experience);
         void AddExperienceToUsers(List<string> userIds, long experience);
+        void LevelUpUsers(List<string> userIds);
         void AttributeStatPoint(string userId, string stat);
     }
 
@@ -52,26 +53,34 @@ namespace Doug.Repositories
             _db.SaveChanges();
         }
 
+        public void LevelUpUsers(List<string> userIds)
+        {
+            var users = _db.Users.Where(usr => userIds.Contains(usr.Id)).ToList();
+
+            users.ForEach(usr => usr.LevelUp());
+
+            _db.SaveChanges();
+        }
+
         public void AttributeStatPoint(string userId, string stat)
         {
             var user = _db.Users.Single(usr => usr.Id == userId);
 
             switch (stat)
             {
-                // TODO magic strings
-                case "luck":
+                case Stats.Luck:
                     user.Luck++;
                     break;
-                case "agility":
+                case Stats.Agility:
                     user.Agility++;
                     break;
-                case "charisma":
+                case Stats.Charisma:
                     user.Charisma++;
                     break;
-                case "constitution":
+                case Stats.Constitution:
                     user.Constitution++;
                     break;
-                case "stamina":
+                case Stats.Stamina:
                     user.Stamina++;
                     break;
             }

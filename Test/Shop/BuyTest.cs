@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Doug.Items;
 using Doug.Items.Equipment;
 using Doug.Models;
@@ -34,7 +35,7 @@ namespace Test.Shop
         [TestInitialize]
         public void Setup()
         {
-            _itemFactory.Setup(factory => factory.CreateItem("lucky_dice")).Returns(new LuckyDice());
+            _itemFactory.Setup(factory => factory.CreateItem(It.IsAny<string>())).Returns(new LuckyDice());
             _user = new User() {Id = "testuser", Credits = 431279};
             _userRepository.Setup(repo => repo.GetUser(User)).Returns(_user);
 
@@ -42,27 +43,27 @@ namespace Test.Shop
         }
 
         [TestMethod]
-        public void GivenEnoughCredits_WhenBuyingAnApple_AppleIsAdded()
+        public async Task GivenEnoughCredits_WhenBuyingAnApple_AppleIsAdded()
         {
-            _shopService.Buy(_interaction);
+            await _shopService.Buy(_interaction);
 
             _inventoryRepository.Verify(repo => repo.AddItem(_user, "lucky_dice"));
         }
 
         [TestMethod]
-        public void GivenEnoughCredits_WhenBuyingAnApple_CreditsAreRemovedFromGiver()
+        public async Task GivenEnoughCredits_WhenBuyingAnApple_CreditsAreRemovedFromGiver()
         {
-            _shopService.Buy(_interaction);
+            await _shopService.Buy(_interaction);
 
             _userRepository.Verify(repo => repo.RemoveCredits(User, 2674));
         }
 
         [TestMethod]
-        public void GivenNotEnoughCredits_WhenBuyingAnApple_NotEnoughCreditsMessageIsSent()
+        public async Task GivenNotEnoughCredits_WhenBuyingAnApple_NotEnoughCreditsMessageIsSent()
         {
             _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User() { Id = "testuser", Credits = 22 });
 
-            _shopService.Buy(_interaction);
+            await _shopService.Buy(_interaction);
 
             _slack.Verify(slack => slack.SendEphemeralMessage(It.IsAny<string>(), User, Channel));
         }

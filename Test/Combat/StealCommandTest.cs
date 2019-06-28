@@ -74,13 +74,15 @@ namespace Test.Combat
         }
 
         [TestMethod]
-        public void GivenTargetHasNotEnoughCredits_WhenStealing_NotEnougCreditsMessage()
+        public void GivenTargetHasNotEnoughCredits_WhenStealing_UserLoseAllHisCredits()
         {
-            _userRepository.Setup(repo => repo.GetUser("robert")).Returns(new User { Credits = 0 });
+            _randomService.Setup(rnd => rnd.RollAgainstOpponent(It.IsAny<double>(), It.IsAny<double>())).Returns(true);
+            _itemEventDispatcher.Setup(disp => disp.OnStealingAmount(It.IsAny<User>(), It.IsAny<int>())).Returns(77);
+            _userRepository.Setup(repo => repo.GetUser("robert")).Returns(new User { Id = "robert", Credits = 3 });
 
-            var result = _combatCommands.Steal(_command);
+            _combatCommands.Steal(_command);
 
-            Assert.AreEqual(DougMessages.TargetNoMoney, result.Message);
+            _userRepository.Verify(repo => repo.RemoveCredits("robert", 3));
         }
 
         [TestMethod]

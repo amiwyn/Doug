@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using Doug.Commands;
+using System.Threading.Tasks;
 using Doug.Controllers.Dto;
 using Doug.Models;
 using Doug.Services;
@@ -12,54 +12,53 @@ namespace Doug.Controllers
     public class InteractionsController : ControllerBase
     {
         private readonly IShopService _shopService;
-        private readonly IInventoryCommands _inventoryCommands;
         private readonly IStatsService _statsService;
+        private readonly IInventoryService _inventoryService;
 
-        public InteractionsController(IShopService shopService, IInventoryCommands inventoryCommands, IStatsService statsService)
+        public InteractionsController(IShopService shopService, IStatsService statsService, IInventoryService inventoryService)
         {
             _shopService = shopService;
-            _inventoryCommands = inventoryCommands;
             _statsService = statsService;
+            _inventoryService = inventoryService;
         }
 
         [HttpPost]
-        public ActionResult Interaction([FromForm]SlackInteractionDto slackInteraction)
+        public async Task<ActionResult> Interaction([FromForm]SlackInteractionDto slackInteraction)
         {
             var interaction = slackInteraction.ToInteraction();
 
             switch (interaction.Action)
             {
                 case "buy":
-                    _shopService.Buy(interaction);
-                    return Ok();
+                    await _shopService.Buy(interaction);
+                    break;
                 case "inventory":
-                    return Ok(InventoryInteractions(interaction));
+                    await InventoryInteractions(interaction);
+                    break;
                 case "attribution":
-                    _statsService.AttributeStatPoint(interaction);
-                    return Ok();
-                default:
-                    return Ok();
+                    await _statsService.AttributeStatPoint(interaction);
+                    break;
             }
+
+            return Ok();
         }
 
-        private string InventoryInteractions(Interaction interaction)
+        private async Task InventoryInteractions(Interaction interaction)
         {
-            var components = interaction.Value.Split(":");
-            var action = components.First();
-            var value = components.Last();
-            var command = new Command { ChannelId = interaction.ChannelId, Text = value, UserId = interaction.UserId };
+            var action = interaction.Value.Split(":").First();
 
             switch (action)
             {
                 case "use":
-                    return _inventoryCommands.Use(command).Message;
+                    await _inventoryService.Use(interaction);
+                    return; 
                 case "equip":
-                    return _inventoryCommands.Equip(command).Message;
+                    await _inventoryService.Equip(interaction);
+                    return;
                 case "sell":
-                    _shopService.Sell(interaction);
-                    break;
+                    await _shopService.Sell(interaction);
+                    return;
             }
-            return string.Empty;
         }
     }
 }

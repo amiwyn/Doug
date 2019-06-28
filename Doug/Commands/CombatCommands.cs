@@ -54,7 +54,7 @@ namespace Doug.Commands
 
             if (target.Credits - amount < 0)
             {
-                return new DougResponse(DougMessages.TargetNoMoney);
+                amount = target.Credits;
             }
 
             if (rollSuccessful)
