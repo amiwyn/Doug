@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Doug.Models;
+﻿using Doug.Models;
 using Doug.Repositories;
 using Doug.Slack;
 using System.Linq;

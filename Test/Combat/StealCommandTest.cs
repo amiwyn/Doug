@@ -80,7 +80,7 @@ namespace Test.Combat
             _itemEventDispatcher.Setup(disp => disp.OnStealingAmount(It.IsAny<User>(), It.IsAny<int>())).Returns(77);
             _userRepository.Setup(repo => repo.GetUser("robert")).Returns(new User { Id = "robert", Credits = 3 });
 
-            var result = _combatCommands.Steal(_command);
+            _combatCommands.Steal(_command);
 
             _userRepository.Verify(repo => repo.RemoveCredits("robert", 3));
         }

@@ -1,6 +1,4 @@
-﻿using Doug.Models;
-
-namespace Doug.Items.Equipment
+﻿namespace Doug.Items.Equipment
 {
     public class SteelSword : EquipmentItem
     {

@@ -164,9 +164,7 @@ namespace Doug.Slack
             };
 
             var content = new StringContent(JsonConvert.SerializeObject(updatedMessage, _jsonSettings), Encoding.UTF8, "application/json");
-            var res = await _client.PostAsync(url, content);
-            var asda = await res.Content.ReadAsStringAsync();
-            var asd1 = 0;
+            await _client.PostAsync(url, content);
         }
     }
 }

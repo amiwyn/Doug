@@ -39,21 +39,7 @@ namespace Doug.Services
 
         public async Task AddExperience(User user, long experience, string channel)
         {
-            var level = user.Level;
-
-            _statsRepository.AddExperience(user.Id, experience);
-
-            await BroadcastExperienceGain(user, level, experience, channel);
-        }
-
-        private async Task BroadcastExperienceGain(User user, int previousLevel, long experience, string channel)
-        {
-            
-
-            if (previousLevel < user.Level)
-            {
-                await _slack.BroadcastMessage(string.Format(DougMessages.LevelUp, Utils.UserMention(user.Id), user.Level), channel);
-            }
+            await AddBulkExperience(new List<User> {user}, experience, channel);
         }
 
         public async Task AddBulkExperience(List<User> users, long experience, string channel)
