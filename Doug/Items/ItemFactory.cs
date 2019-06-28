@@ -24,6 +24,8 @@ namespace Doug.Items
         public const string CloakOfSpikes = "cloak_spikes";
         public const string Bread = "bread";
         public const string McdoFries = "mcdo_fries";
+        public const string SteelSword = "steel_sword";
+        public const string ClothArmor = "cloth_armor";
 
         private readonly ISlackWebApi _slack;
         private readonly IStatsRepository _statsRepository;
@@ -54,6 +56,10 @@ namespace Doug.Items
                     return new CoffeeCup(_statsRepository, _inventoryRepository);
                 case PimentSword:
                     return new PimentSword();
+                case SteelSword:
+                    return new SteelSword();
+                case ClothArmor:
+                    return new ClothArmor();
                 case Apple:
                     return new Apple(_statsRepository, _inventoryRepository);
                 case DevilsContract:

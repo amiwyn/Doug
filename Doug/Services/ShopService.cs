@@ -22,7 +22,7 @@ namespace Doug.Services
         private readonly IInventoryRepository _inventoryRepository;
         private readonly IItemFactory _itemFactory;
 
-        public static readonly List<string> ShopItems = new List<string> { ItemFactory.CoffeeCup, ItemFactory.Apple, ItemFactory.Bread, ItemFactory.McdoFries }; // TODO: temp. put this in a table somewhere
+        public static readonly List<string> ShopItems = new List<string> { ItemFactory.CoffeeCup, ItemFactory.Apple, ItemFactory.Bread, ItemFactory.SteelSword, ItemFactory.ClothArmor }; // TODO: temp. put this in a table somewhere
 
         public ShopService(IUserRepository userRepository, ISlackWebApi slack, IInventoryRepository inventoryRepository, IItemFactory itemFactory)
         {
