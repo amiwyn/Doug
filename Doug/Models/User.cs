@@ -107,6 +107,12 @@ namespace Doug.Models
             Stamina = 5;
         }
 
+        public void LevelUp()
+        {
+            Health = TotalHealth();
+            Energy = TotalEnergy();
+        }
+
         public void LoadItems(IItemFactory itemFactory)
         {
             InventoryItems.ForEach(item => item.CreateItem(itemFactory));

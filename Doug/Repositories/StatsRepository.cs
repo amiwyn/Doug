@@ -10,6 +10,7 @@ namespace Doug.Repositories
         void UpdateHealth(string userId, int health);
         void AddExperience(string userId, long experience);
         void AddExperienceToUsers(List<string> userIds, long experience);
+        void LevelUpUsers(List<string> userIds);
         void AttributeStatPoint(string userId, string stat);
     }
 
@@ -48,6 +49,15 @@ namespace Doug.Repositories
             var users = _db.Users.Where(usr => userIds.Contains(usr.Id)).ToList();
 
             users.ForEach(usr => usr.Experience += experience);
+
+            _db.SaveChanges();
+        }
+
+        public void LevelUpUsers(List<string> userIds)
+        {
+            var users = _db.Users.Where(usr => userIds.Contains(usr.Id)).ToList();
+
+            users.ForEach(usr => usr.LevelUp());
 
             _db.SaveChanges();
         }

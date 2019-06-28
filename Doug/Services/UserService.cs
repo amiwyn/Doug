@@ -48,7 +48,7 @@ namespace Doug.Services
 
         private async Task BroadcastExperienceGain(User user, int previousLevel, long experience, string channel)
         {
-            await _slack.SendEphemeralMessage(string.Format(DougMessages.GainedExp, experience), user.Id, channel);
+            
 
             if (previousLevel < user.Level)
             {
@@ -63,9 +63,16 @@ namespace Doug.Services
             var userIds = users.Select(user => user.Id).ToList();
             _statsRepository.AddExperienceToUsers(userIds, experience);
 
-            var tasks = users.Select(user => BroadcastExperienceGain(user, levels.GetValueOrDefault(user.Id), experience, channel));
+            var expGainMessageTasks = users.Select(user => _slack.SendEphemeralMessage(string.Format(DougMessages.GainedExp, experience), user.Id, channel));
 
-            await Task.WhenAll(tasks);
+            var levelUpUsers = users.Where(user => levels.GetValueOrDefault(user.Id) < user.Level).ToList();
+
+            _statsRepository.LevelUpUsers(levelUpUsers.Select(user => user.Id).ToList());
+
+            var levelUpMessageTasks = levelUpUsers.Select(user => _slack.BroadcastMessage(string.Format(DougMessages.LevelUp, Utils.UserMention(user.Id), user.Level), channel));
+
+            await Task.WhenAll(expGainMessageTasks);
+            await Task.WhenAll(levelUpMessageTasks);
         }
     }
 }
