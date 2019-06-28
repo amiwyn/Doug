@@ -58,6 +58,7 @@ namespace Doug
             services.AddTransient<IShopService, ShopService>();
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IStatsService, StatsService>();
+            services.AddTransient<IInventoryService, InventoryService>();
 
             services.AddTransient<ICoffeeCommands, CoffeeCommands>();
             services.AddTransient<ISlursCommands, SlursCommands>();

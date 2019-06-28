@@ -12,7 +12,7 @@ namespace Doug.Services
     public interface IShopService
     {
         Task Buy(Interaction interaction);
-        void Sell(Interaction interaction);
+        Task Sell(Interaction interaction);
     }
 
     public class ShopService : IShopService
@@ -53,7 +53,7 @@ namespace Doug.Services
             await _slack.UpdateInteractionMessage(new ShopMenu(items, user).Blocks, interaction.ResponseUrl);
         }
 
-        public void Sell(Interaction interaction)
+        public async Task Sell(Interaction interaction)
         {
             var user = _userRepository.GetUser(interaction.UserId);
             var position = int.Parse(interaction.Value.Split(":").Last());
@@ -61,7 +61,7 @@ namespace Doug.Services
 
             if (item == null)
             {
-                _slack.SendEphemeralMessage(string.Format(DougMessages.NoItemInSlot, position), user.Id, interaction.ChannelId);
+                await _slack.SendEphemeralMessage(string.Format(DougMessages.NoItemInSlot, position), user.Id, interaction.ChannelId);
                 return;
             }
 
@@ -69,7 +69,9 @@ namespace Doug.Services
 
             _userRepository.AddCredits(user.Id, item.Price / 2);
 
-            _slack.SendEphemeralMessage(string.Format(DougMessages.SoldItem, item.Name, item.Price / 2), user.Id, interaction.ChannelId);
+            await _slack.SendEphemeralMessage(string.Format(DougMessages.SoldItem, item.Name, item.Price / 2), user.Id, interaction.ChannelId);
+
+            await _slack.UpdateInteractionMessage(new InventoryMenu(user.InventoryItems).Blocks, interaction.ResponseUrl);
         }
     }
 }
