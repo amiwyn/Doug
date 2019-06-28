@@ -1,47 +1,58 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Doug.Menus.Blocks;
+using Doug.Menus.Blocks.Accessories;
+using Doug.Menus.Blocks.Text;
 using Doug.Models;
 
 namespace Doug.Menus
 {
     public class InventoryMenu
     {
-        public List<BlockMessage> Blocks { get; set; }
+        public List<Block> Blocks { get; set; }
 
         public InventoryMenu(IEnumerable<InventoryItem> items)
         {
-            Blocks = new List<BlockMessage>
+            Blocks = new List<Block>
             {
-                BlockMessage.Divider()
+                InventoryHeader(),
+                new Divider()
             };
 
-            Blocks.AddRange(items.Aggregate(new List<BlockMessage>(), (list, item) => list.Concat(ItemSection(item)).ToList()));
+            Blocks.AddRange(items.Aggregate(new List<Block>(), (list, item) => list.Concat(ItemSection(item)).ToList()));
         }
 
-        private static List<BlockMessage> ItemSection(InventoryItem item)
+        private Block InventoryHeader()
         {
-            var blocks = new List<BlockMessage>();
+            var inventoryButton = new PrimaryButton(DougMessages.Inventory, "inventory-switch", "inventory");
+            var equipmentButton = new Button(DougMessages.Equipment, "inventory-switch", "equipment");
 
-            var textBlock = TextBlock.MarkdownTextBlock($"{item.Item.Icon} *{item.Item.Name}* - ({item.InventoryPosition}) \n {item.Item.Description}"); //TODO: temporary display inventory position until all commands that requires it are merged
+            return new ActionList(new List<Accessory> { inventoryButton, equipmentButton });
+        }
+
+        private List<Block> ItemSection(InventoryItem item)
+        {
+            var textBlock = new MarkdownText($"{item.Item.Icon} *{item.Item.Name}* - ({item.InventoryPosition}) \n {item.Item.Description}"); //TODO: temporary display inventory position until all commands that requires it are merged
             var itemOptions = ItemActionsAccessory(item.InventoryPosition, item.Item.Price / 2);
 
-            blocks.Add(new BlockMessage { Type = "section", Text = textBlock, Accessory = itemOptions });
-            blocks.Add(BlockMessage.Context(new List<TextBlock> { TextBlock.MarkdownTextBlock(string.Format(DougMessages.Quantity, item.Quantity)) }));
-            blocks.Add(BlockMessage.Divider());
-
-            return blocks;
+            return new List<Block>
+            {
+                new Section(textBlock, itemOptions),
+                new Context(new List<string> {string.Format(DougMessages.Quantity, item.Quantity)}),
+                new Divider()
+            };
         }
 
-        private static Accessory ItemActionsAccessory(int position, int sellValue)
+        private Accessory ItemActionsAccessory(int position, int sellValue)
         {
-            var options = new List<OptionBlock>
+            var options = new List<Option>
             {
-                new OptionBlock(DougMessages.Use, $"use:{position}"),
-                new OptionBlock(DougMessages.Equip, $"equip:{position}"),
-                new OptionBlock(string.Format(DougMessages.Sell, sellValue), $"sell:{position}")
+                new Option(DougMessages.Use, $"use:{position}"),
+                new Option(DougMessages.Equip, $"equip:{position}"),
+                new Option(string.Format(DougMessages.Sell, sellValue), $"sell:{position}")
             };
 
-            return Accessory.OptionList(options, "inventory");
+            return new Overflow(options, "inventory");
         }
     }
 }

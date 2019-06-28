@@ -1,35 +1,37 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Doug.Items;
+using Doug.Menus.Blocks;
+using Doug.Menus.Blocks.Accessories;
+using Doug.Menus.Blocks.Text;
 using Doug.Models;
 
 namespace Doug.Menus
 {
     public class ShopMenu
     {
-        public List<BlockMessage> Blocks { get; set; }
+        public List<Block> Blocks { get; set; }
 
         public ShopMenu(IEnumerable<Item> items, User user)
         {
-            Blocks = new List<BlockMessage>
+            Blocks = new List<Block>
             {
-                BlockMessage.TextSection(DougMessages.ShopSpeech),
-                BlockMessage.Divider()
+                new Section(new MarkdownText(DougMessages.ShopSpeech)),
+                new Divider()
             };
 
             Blocks.AddRange(items.Select(ShopItemSection));
-            Blocks.Add(BlockMessage.Divider());
+            Blocks.Add(new Divider());
 
-            var creditsLeft = TextBlock.MarkdownTextBlock(string.Format(DougMessages.Balance, user.Credits));
-            Blocks.Add(BlockMessage.Context(new List<TextBlock>() { creditsLeft }));
+            Blocks.Add(new Context(new List<string> { string.Format(DougMessages.Balance, user.Credits) }));
         }
 
-        private static BlockMessage ShopItemSection(Item item)
+        private static Block ShopItemSection(Item item)
         {
-            var textBlock = TextBlock.MarkdownTextBlock($"{item.Icon} *{item.Name}* \n {item.Description}");
+            var textBlock = new MarkdownText($"{item.Icon} *{item.Name}* \n {item.Description}");
 
-            var buttonBlock = Accessory.Button(string.Format(DougMessages.BuyFor, item.Price), item.Id, "buy");
-            return new BlockMessage { Type = "section", Text = textBlock, Accessory = buttonBlock };
+            var buttonBlock = new Button(string.Format(DougMessages.BuyFor, item.Price), item.Id, "buy");
+            return new Section(textBlock, buttonBlock);
         }
     }
 }

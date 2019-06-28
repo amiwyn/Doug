@@ -4,8 +4,6 @@
     {
         public const string CoffeeParrotEmoji = ":coffeeparrot:";
         public const string CreditEmoji = ":rupee:";
-        public const string HpEmoji = ":red_circle:";
-        public const string EnergyEmoji = ":large_blue_circle:";
         public const string UpVote = "+1";
         public const string Downvote = "-1";
         public const string Top5 = "Leaderboard";
@@ -61,6 +59,8 @@
         public const string Sell = "Sell for {0} " + CreditEmoji;
         public const string Quantity = "*Quantity:* {0} ";
         public const string SoldItem = "You sold *{0}* for {1} " + CreditEmoji;
+        public const string Inventory = "Inventory";
+        public const string Equipment = "Equipment";
 
         public const string DougError = "Beep boop, it's not working : {0}";
         public const string NotAnAdmin = "You are not an admin.";
