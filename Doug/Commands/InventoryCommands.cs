@@ -104,6 +104,11 @@ namespace Doug.Commands
         {
             var user = _userRepository.GetUser(command.UserId);
 
+            if (user.IsEmptyInventory())
+            {
+                return new DougResponse(string.Format(DougMessages.EmptyInventory, command.UserId, command.ChannelId));
+            }
+
             await _slack.SendEphemeralBlocks(new InventoryMenu(user.InventoryItems).Blocks, command.UserId, command.ChannelId);
 
             return new DougResponse();

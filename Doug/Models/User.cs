@@ -174,5 +174,7 @@ namespace Doug.Models
         {
             return string.Format(DougMessages.NotEnoughCredits, amount, Credits);
         }
+
+        public bool IsEmptyInventory() => InventoryItems.Count == 0;
     }
 }

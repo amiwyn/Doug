@@ -78,5 +78,7 @@
         public const string InvalidUserArgument = "You must pass a valid user in arguments";
         public const string ItemNotEquipAble = "This item is not equipable.";
         public const string NoMoreStatsPoints = "No more available stats points.";
+
+        public const string EmptyInventory = "Oops, yer loot seems empty, buy more at th' shop now.";
     }
 }
