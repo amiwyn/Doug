@@ -2,11 +2,11 @@
 
 namespace Doug.Menus.Blocks.Accessories
 {
-    public class UsersDropdown : Accessory
+    public class UsersSelect : Accessory
     {
         public PlainText Placeholder { get; set; }
 
-        public UsersDropdown(string placeholder, Actions action) : base("users_select", action)
+        public UsersSelect(string placeholder, string action) : base("users_select", action)
         {
             Placeholder = new PlainText(placeholder);
         }

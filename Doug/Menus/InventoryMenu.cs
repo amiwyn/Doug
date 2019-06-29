@@ -24,15 +24,15 @@ namespace Doug.Menus
 
         private Block InventoryHeader()
         {
-            var inventoryButton = new PrimaryButton(DougMessages.Inventory, "inventory", Actions.InventorySwitch);
-            var equipmentButton = new Button(DougMessages.Equipment, "equipment", Actions.EquipmentSwitch);
+            var inventoryButton = new PrimaryButton(DougMessages.Inventory, "inventory", Actions.InventorySwitch.ToString());
+            var equipmentButton = new Button(DougMessages.Equipment, "equipment", Actions.EquipmentSwitch.ToString());
 
             return new ActionList(new List<Accessory> { inventoryButton, equipmentButton });
         }
 
         private List<Block> ItemSection(InventoryItem item)
         {
-            var textBlock = new MarkdownText($"{item.Item.Icon} *{item.Item.Name}* - ({item.InventoryPosition}) \n {item.Item.Description}"); //TODO: temporary display inventory position until all commands that requires it are merged
+            var textBlock = new MarkdownText($"{item.Item.Icon} *{item.Item.Name}* \n {item.Item.Description}");
             var itemOptions = ItemActionsAccessory(item.InventoryPosition, item.Item.Price / 2);
 
             return new List<Block>
@@ -49,10 +49,12 @@ namespace Doug.Menus
             {
                 new Option(DougMessages.Use, $"{InventoryActions.Use}:{position}"),
                 new Option(DougMessages.Equip, $"{InventoryActions.Equip}:{position}"),
+                new Option(DougMessages.Give, $"{InventoryActions.Give}:{position}"),
+                new Option(DougMessages.Target, $"{InventoryActions.Target}:{position}"),
                 new Option(string.Format(DougMessages.Sell, sellValue), $"{InventoryActions.Sell}:{position}")
             };
 
-            return new Overflow(options, Actions.Inventory);
+            return new Overflow(options, Actions.Inventory.ToString());
         }
     }
 }

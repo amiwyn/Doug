@@ -8,7 +8,7 @@ namespace Doug.Menus.Blocks.Accessories
         public string Value { get; set; }
         public string Style { get; set; }
 
-        public PrimaryButton(string text, string value, Actions action) : base("button", action)
+        public PrimaryButton(string text, string value, string action) : base("button", action)
         {
             Text = new PlainText(text);
             Value = value;

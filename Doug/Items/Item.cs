@@ -22,6 +22,11 @@ namespace Doug.Items
             return string.Format(DougMessages.ItemCantBeUsed, itemPos);
         }
 
+        public virtual string Target(int itemPos, User user, User target, string channel)
+        {
+            return string.Format(DougMessages.ItemCantBeUsed, itemPos);
+        }
+
         public virtual bool IsEquipable()
         {
             return false;

@@ -7,14 +7,18 @@
         Attribution,
         InventorySwitch,
         EquipmentSwitch,
-        Equipment
+        Equipment,
+        Give,
+        Target
     }
 
     public enum InventoryActions
     {
         Use,
         Equip,
-        Sell
+        Sell,
+        Give,
+        Target
     }
 
     public enum EquipmentActions

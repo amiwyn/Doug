@@ -12,6 +12,7 @@ namespace Doug.Commands
     {
         DougResponse Use(Command command);
         DougResponse Give(Command command);
+        DougResponse Target(Command command);
         DougResponse Equip(Command command);
         DougResponse UnEquip(Command command);
         Task<DougResponse> Inventory(Command command);
@@ -68,6 +69,23 @@ namespace Doug.Commands
             _slack.BroadcastMessage(message, command.ChannelId);
 
             return new DougResponse();
+        }
+
+        public DougResponse Target(Command command)
+        {
+            var target = _userRepository.GetUser(command.GetTargetUserId());
+            var user = _userRepository.GetUser(command.UserId);
+            var position = int.Parse(command.GetArgumentAt(1));
+            var inventoryItem = user.InventoryItems.SingleOrDefault(itm => itm.InventoryPosition == position);
+
+            if (inventoryItem == null)
+            {
+                return new DougResponse(string.Format(DougMessages.NoItemInSlot, position));
+            }
+
+            var response = inventoryItem.Item.Target(position, user, target, command.ChannelId);
+
+            return new DougResponse(response);
         }
 
         public DougResponse Equip(Command command)

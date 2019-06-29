@@ -64,6 +64,10 @@
         public const string Equipment = "Equipment";
         public const string Info = "Info";
         public const string UnequippedItem = "You unequipped *{0}*.";
+        public const string Target = "Target ...";
+        public const string Give = "Give ...";
+        public const string SelectTarget = "Select a target";
+        public const string SelectTargetText = "Please select a user to target with this action.";
 
         public const string DougError = "Beep boop, it's not working : {0}";
         public const string NotAnAdmin = "You are not an admin.";
