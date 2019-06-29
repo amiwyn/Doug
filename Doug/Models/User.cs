@@ -152,26 +152,10 @@ namespace Doug.Models
             return 0.25 + luckInfluence;
         }
 
-        public double BaseOpponentStealSuccessRate()
-        {
-            return 0.75;
-        }
-
-        public int BaseStealAmount()
-        {
-            return (int)Math.Floor(3 * (Math.Sqrt(TotalAgility()) - Math.Sqrt(5)) + 1);
-        }
-
-        public bool HasEnoughCreditsForAmount(int amount)
-        {
-            return Credits - amount >= 0;
-        }
-
-        public string NotEnoughCreditsForAmountResponse(int amount)
-        {
-            return string.Format(DougMessages.NotEnoughCredits, amount, Credits);
-        }
-
+        public double BaseOpponentStealSuccessRate() => 0.75;
+        public int BaseStealAmount() => (int)Math.Floor(3 * (Math.Sqrt(TotalAgility()) - Math.Sqrt(5)) + 1);
+        public bool HasEnoughCreditsForAmount(int amount) => Credits - amount >= 0;
+        public string NotEnoughCreditsForAmountResponse(int amount) => string.Format(DougMessages.NotEnoughCredits, amount, Credits);
         public bool HasEmptyInventory() => !InventoryItems.Any();
     }
 }
