@@ -23,6 +23,8 @@ namespace Doug.Slack
         Task SendEphemeralMessage(string text, string user, string channel);
         Task SendEphemeralBlocks(IEnumerable<Block> blocks, string user, string channel);
         Task UpdateInteractionMessage(IEnumerable<Block> blocks, string url);
+        Task KickUser(string user, string channel);
+        Task InviteUser(string user, string channel);
     }
 
     public class SlackWebApi : ISlackWebApi
@@ -32,6 +34,8 @@ namespace Doug.Slack
         private const string ReactionAddUrl = "https://slack.com/api/reactions.add";
         private const string ReactionGetUrl = "https://slack.com/api/reactions.get";
         private const string EphemeralUrl = "https://slack.com/api/chat.postEphemeral";
+        private const string KickUrl = "https://slack.com/api/conversations.kick";
+        private const string InviteUrl = "https://slack.com/api/conversations.invite";
 
         private readonly HttpClient _client;
         private readonly string _token;
@@ -170,6 +174,22 @@ namespace Doug.Slack
             var strgsd = JsonConvert.SerializeObject(updatedMessage, _jsonSettings);
             var content = new StringContent(strgsd, Encoding.UTF8, "application/json");
             await _client.PostAsync(url, content);
+        }
+
+        public async Task KickUser(string user, string channel)
+        {
+            var keyValues = CreateBaseRequestPayload(channel);
+            keyValues.Add(new KeyValuePair<string, string>("user", user));
+
+            await PostToUrlWithoutResponse(KickUrl, keyValues);
+        }
+
+        public async Task InviteUser(string user, string channel)
+        {
+            var keyValues = CreateBaseRequestPayload(channel);
+            keyValues.Add(new KeyValuePair<string, string>("users", user));
+
+            await PostToUrlWithoutResponse(InviteUrl, keyValues);
         }
     }
 }
