@@ -12,7 +12,9 @@ namespace Doug.Commands
     {
         DougResponse Use(Command command);
         DougResponse Give(Command command);
+        DougResponse Target(Command command);
         DougResponse Equip(Command command);
+        DougResponse UnEquip(Command command);
         Task<DougResponse> Inventory(Command command);
     }
 
@@ -69,6 +71,23 @@ namespace Doug.Commands
             return new DougResponse();
         }
 
+        public DougResponse Target(Command command)
+        {
+            var target = _userRepository.GetUser(command.GetTargetUserId());
+            var user = _userRepository.GetUser(command.UserId);
+            var position = int.Parse(command.GetArgumentAt(1));
+            var inventoryItem = user.InventoryItems.SingleOrDefault(itm => itm.InventoryPosition == position);
+
+            if (inventoryItem == null)
+            {
+                return new DougResponse(string.Format(DougMessages.NoItemInSlot, position));
+            }
+
+            var response = inventoryItem.Item.Target(position, user, target, command.ChannelId);
+
+            return new DougResponse(response);
+        }
+
         public DougResponse Equip(Command command)
         {
             var user = _userRepository.GetUser(command.UserId);
@@ -98,6 +117,24 @@ namespace Doug.Commands
             _inventoryRepository.RemoveItem(user, position);
 
             return new DougResponse(string.Format(DougMessages.EquippedItem, inventoryItem.Item.Name));
+        }
+
+        public DougResponse UnEquip(Command command)
+        {
+            var user = _userRepository.GetUser(command.UserId);
+            var slot = int.Parse(command.GetArgumentAt(0));
+            var equipment = user.Loadout.GetEquipmentAt((EquipmentSlot) slot);
+
+            if (equipment == null)
+            {
+                return new DougResponse(string.Format(DougMessages.NoEquipmentInSlot, slot));
+            }
+
+            var item = _equipmentRepository.UnequipItem(user.Id, equipment.Slot);
+
+            _inventoryRepository.AddItem(user, item.Id);
+
+            return new DougResponse(string.Format(DougMessages.UnequippedItem, equipment.Name));
         }
 
         public async Task<DougResponse> Inventory(Command command)
