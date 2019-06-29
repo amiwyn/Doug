@@ -28,7 +28,7 @@ namespace Doug.Controllers
         public async Task<ActionResult> Interaction([FromForm]SlackInteractionDto slackInteraction)
         {
             var interaction = slackInteraction.ToInteraction();
-            Enum.TryParse(interaction.Action, out Actions action);
+            var action = interaction.GetAction();
 
             switch (action)
             {
@@ -49,6 +49,12 @@ namespace Doug.Controllers
                     break;
                 case Actions.Equipment:
                     await EquipmentInteractions(interaction);
+                    break;
+                case Actions.Give:
+                    await _inventoryService.Give(interaction);
+                    break;
+                case Actions.Target:
+                    await _inventoryService.Target(interaction);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -88,6 +94,12 @@ namespace Doug.Controllers
                     break;
                 case InventoryActions.Sell:
                     await _shopService.Sell(interaction);
+                    break;
+                case InventoryActions.Give:
+                    await _inventoryService.ShowUserSelect(interaction);
+                    break;
+                case InventoryActions.Target:
+                    await _inventoryService.ShowUserSelect(interaction);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

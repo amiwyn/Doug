@@ -89,7 +89,7 @@ namespace Doug.Menus
                 return new Section(textBlock);
             }
 
-            var buttonBlock = new Button(DougMessages.AddStatPoint, type, Actions.Attribution);
+            var buttonBlock = new Button(DougMessages.AddStatPoint, type, Actions.Attribution.ToString());
             return new Section(textBlock, buttonBlock);
         }
     }

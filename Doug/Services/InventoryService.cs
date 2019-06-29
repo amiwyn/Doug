@@ -2,6 +2,9 @@
 using System.Threading.Tasks;
 using Doug.Commands;
 using Doug.Menus;
+using Doug.Menus.Blocks;
+using Doug.Menus.Blocks.Accessories;
+using Doug.Menus.Blocks.Text;
 using Doug.Models;
 using Doug.Repositories;
 using Doug.Slack;
@@ -15,6 +18,9 @@ namespace Doug.Services
         Task ShowInventory(Interaction interaction);
         Task ShowEquipment(Interaction interaction);
         Task UnEquip(Interaction interaction);
+        Task ShowUserSelect(Interaction interaction);
+        Task Give(Interaction interaction);
+        Task Target(Interaction interaction);
         Task Info(Interaction interaction);
     }
 
@@ -79,6 +85,45 @@ namespace Doug.Services
             await _slack.SendEphemeralMessage(message, interaction.UserId, interaction.ChannelId);
 
             await _slack.UpdateInteractionMessage(new EquipmentMenu(user.Loadout).Blocks, interaction.ResponseUrl);
+        }
+
+        public async Task ShowUserSelect(Interaction interaction)
+        {
+            var user = _userRepository.GetUser(interaction.UserId);
+            var blocks = new InventoryMenu(user.InventoryItems).Blocks;
+
+            var select = new UsersSelect(DougMessages.SelectTarget, $"{interaction.Value}");
+            blocks.Add(new Section(new MarkdownText(DougMessages.SelectTargetText), select));
+            
+            await _slack.UpdateInteractionMessage(blocks, interaction.ResponseUrl);
+        }
+
+        public async Task Give(Interaction interaction)
+        {
+            var user = _userRepository.GetUser(interaction.UserId);
+            var target = $"<@{interaction.Value}|user>";
+            var slot = interaction.GetValueFromAction();
+            var command = new Command { ChannelId = interaction.ChannelId, Text = $"{target} {slot}", UserId = interaction.UserId };
+
+            var message = _inventoryCommands.Give(command).Message;
+
+            await _slack.SendEphemeralMessage(message, interaction.UserId, interaction.ChannelId);
+
+            await _slack.UpdateInteractionMessage(new InventoryMenu(user.InventoryItems).Blocks, interaction.ResponseUrl);
+        }
+
+        public async Task Target(Interaction interaction)
+        {
+            var user = _userRepository.GetUser(interaction.UserId);
+            var target = $"<@{interaction.Value}|user>";
+            var slot = interaction.GetValueFromAction();
+            var command = new Command { ChannelId = interaction.ChannelId, Text = $"{target} {slot}", UserId = interaction.UserId };
+
+            var message = _inventoryCommands.Target(command).Message;
+
+            await _slack.SendEphemeralMessage(message, interaction.UserId, interaction.ChannelId);
+
+            await _slack.UpdateInteractionMessage(new InventoryMenu(user.InventoryItems).Blocks, interaction.ResponseUrl);
         }
 
         public Task Info(Interaction interaction)

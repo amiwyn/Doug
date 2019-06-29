@@ -137,6 +137,11 @@ namespace Doug.Slack
 
         public async Task SendEphemeralMessage(string text, string user, string channel)
         {
+            if (string.IsNullOrWhiteSpace(text))
+            {
+                return;
+            }
+
             var keyValues = CreateBaseRequestPayload(channel);
             keyValues.Add(new KeyValuePair<string, string>("user", user));
             keyValues.Add(new KeyValuePair<string, string>("text", text));
@@ -162,8 +167,8 @@ namespace Doug.Slack
                 ReplaceOriginal = "true",
                 Blocks = blocks
             };
-
-            var content = new StringContent(JsonConvert.SerializeObject(updatedMessage, _jsonSettings), Encoding.UTF8, "application/json");
+            var strgsd = JsonConvert.SerializeObject(updatedMessage, _jsonSettings);
+            var content = new StringContent(strgsd, Encoding.UTF8, "application/json");
             await _client.PostAsync(url, content);
         }
     }

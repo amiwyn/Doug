@@ -31,8 +31,8 @@ namespace Doug.Menus
 
         private Block EquipmentHeader()
         {
-            var inventoryButton = new Button(DougMessages.Inventory, "inventory", Actions.InventorySwitch);
-            var equipmentButton = new PrimaryButton(DougMessages.Equipment, "equipment", Actions.EquipmentSwitch);
+            var inventoryButton = new Button(DougMessages.Inventory, "inventory", Actions.InventorySwitch.ToString());
+            var equipmentButton = new PrimaryButton(DougMessages.Equipment, "equipment", Actions.EquipmentSwitch.ToString());
 
             return new ActionList(new List<Accessory> { inventoryButton, equipmentButton });
         }
@@ -64,7 +64,7 @@ namespace Doug.Menus
                 new Option(DougMessages.Info, $"{EquipmentActions.Info}:{(int)slot}")
             };
 
-            return new Overflow(options, Actions.Equipment);
+            return new Overflow(options, Actions.Equipment.ToString());
         }
     }
 }
