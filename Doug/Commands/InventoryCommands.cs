@@ -141,7 +141,7 @@ namespace Doug.Commands
         {
             var user = _userRepository.GetUser(command.UserId);
 
-            if (user.IsEmptyInventory())
+            if (user.HasEmptyInventory())
             {
                 return new DougResponse(string.Format(DougMessages.EmptyInventory, command.UserId, command.ChannelId));
             }
