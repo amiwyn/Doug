@@ -13,6 +13,7 @@ namespace Doug.Commands
         DougResponse Use(Command command);
         DougResponse Give(Command command);
         DougResponse Equip(Command command);
+        DougResponse UnEquip(Command command);
         Task<DougResponse> Inventory(Command command);
     }
 
@@ -98,6 +99,24 @@ namespace Doug.Commands
             _inventoryRepository.RemoveItem(user, position);
 
             return new DougResponse(string.Format(DougMessages.EquippedItem, inventoryItem.Item.Name));
+        }
+
+        public DougResponse UnEquip(Command command)
+        {
+            var user = _userRepository.GetUser(command.UserId);
+            var slot = int.Parse(command.GetArgumentAt(0));
+            var equipment = user.Loadout.GetEquipmentAt((EquipmentSlot) slot);
+
+            if (equipment == null)
+            {
+                return new DougResponse(string.Format(DougMessages.NoEquipmentInSlot, slot));
+            }
+
+            var item = _equipmentRepository.UnequipItem(user.Id, equipment.Slot);
+
+            _inventoryRepository.AddItem(user, item.Id);
+
+            return new DougResponse(string.Format(DougMessages.UnequippedItem, equipment.Name));
         }
 
         public async Task<DougResponse> Inventory(Command command)

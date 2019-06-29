@@ -30,7 +30,7 @@ namespace Doug.Menus
         {
             var textBlock = new MarkdownText($"{item.Icon} *{item.Name}* \n {item.Description}");
 
-            var buttonBlock = new Button(string.Format(DougMessages.BuyFor, item.Price), item.Id, "buy");
+            var buttonBlock = new Button(string.Format(DougMessages.BuyFor, item.Price), item.Id, Actions.Buy);
             return new Section(textBlock, buttonBlock);
         }
     }

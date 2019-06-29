@@ -7,7 +7,7 @@ namespace Doug.Menus.Blocks.Accessories
         public PlainText Text { get; set; }
         public string Value { get; set; }
 
-        public Button(string text, string value, string actionId) : base("button", actionId)
+        public Button(string text, string value, Actions action) : base("button", action)
         {
             Text = new PlainText(text);
             Value = value;

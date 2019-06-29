@@ -12,6 +12,10 @@ namespace Doug.Services
     {
         Task Use(Interaction interaction);
         Task Equip(Interaction interaction);
+        Task ShowInventory(Interaction interaction);
+        Task ShowEquipment(Interaction interaction);
+        Task UnEquip(Interaction interaction);
+        Task Info(Interaction interaction);
     }
 
     public class InventoryService : IInventoryService
@@ -49,6 +53,37 @@ namespace Doug.Services
             await _slack.SendEphemeralMessage(message, interaction.UserId, interaction.ChannelId);
 
             await _slack.UpdateInteractionMessage(new InventoryMenu(user.InventoryItems).Blocks, interaction.ResponseUrl);
+        }
+
+        public async Task ShowInventory(Interaction interaction)
+        {
+            var user = _userRepository.GetUser(interaction.UserId);
+
+            await _slack.UpdateInteractionMessage(new InventoryMenu(user.InventoryItems).Blocks, interaction.ResponseUrl);
+        }
+
+        public async Task ShowEquipment(Interaction interaction)
+        {
+            var user = _userRepository.GetUser(interaction.UserId);
+
+            await _slack.UpdateInteractionMessage(new EquipmentMenu(user.Loadout).Blocks, interaction.ResponseUrl);
+        }
+
+        public async Task UnEquip(Interaction interaction)
+        {
+            var user = _userRepository.GetUser(interaction.UserId);
+            var command = new Command { ChannelId = interaction.ChannelId, Text = interaction.Value.Split(":").Last(), UserId = interaction.UserId };
+
+            var message = _inventoryCommands.UnEquip(command).Message;
+
+            await _slack.SendEphemeralMessage(message, interaction.UserId, interaction.ChannelId);
+
+            await _slack.UpdateInteractionMessage(new EquipmentMenu(user.Loadout).Blocks, interaction.ResponseUrl);
+        }
+
+        public Task Info(Interaction interaction)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

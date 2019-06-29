@@ -6,7 +6,7 @@ namespace Doug.Menus.Blocks.Accessories
     {
         public PlainText Placeholder { get; set; }
 
-        public UsersDropdown(string placeholder, string actionId) : base("users_select", actionId)
+        public UsersDropdown(string placeholder, Actions action) : base("users_select", action)
         {
             Placeholder = new PlainText(placeholder);
         }

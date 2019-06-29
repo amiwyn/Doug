@@ -5,10 +5,10 @@
         public string Type { get; set; }
         public string ActionId { get; set; }
 
-        protected Accessory(string type, string actionId)
+        protected Accessory(string type, Actions action)
         {
             Type = type;
-            ActionId = actionId;
+            ActionId = action.ToString();
         }
     }
 }
