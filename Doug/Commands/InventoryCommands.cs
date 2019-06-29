@@ -143,7 +143,7 @@ namespace Doug.Commands
 
             if (user.HasEmptyInventory())
             {
-                return new DougResponse($"{DougMessages.EmptyInventory} {command.UserId} {command.ChannelId}");
+                return new DougResponse(DougMessages.EmptyInventory);
             }
 
             await _slack.SendEphemeralBlocks(new InventoryMenu(user.InventoryItems).Blocks, command.UserId, command.ChannelId);
