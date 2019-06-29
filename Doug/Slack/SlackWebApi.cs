@@ -171,8 +171,8 @@ namespace Doug.Slack
                 ReplaceOriginal = "true",
                 Blocks = blocks
             };
-            var strgsd = JsonConvert.SerializeObject(updatedMessage, _jsonSettings);
-            var content = new StringContent(strgsd, Encoding.UTF8, "application/json");
+
+            var content = new StringContent(JsonConvert.SerializeObject(updatedMessage, _jsonSettings), Encoding.UTF8, "application/json");
             await _client.PostAsync(url, content);
         }
 
