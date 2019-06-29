@@ -1,73 +1,76 @@
 ﻿using System.Collections.Generic;
+using Doug.Menus.Blocks;
+using Doug.Menus.Blocks.Accessories;
+using Doug.Menus.Blocks.Text;
 using Doug.Models;
 
 namespace Doug.Menus
 {
     public class StatsMenu
     {
-        public List< BlockMessage> Blocks { get; set; }
+        public List<Block> Blocks { get; set; }
 
         public StatsMenu(User user)
         {
-            Blocks = new List<BlockMessage>
+            Blocks = new List<Block>
             {
-                BlockMessage.TextSection(string.Format(DougMessages.StatsOf, Utils.UserMention(user.Id))),
+                new Section(new MarkdownText(string.Format(DougMessages.StatsOf, Utils.UserMention(user.Id)))),
                 CreateUserOtherInfo(user),
-                BlockMessage.Divider(),
+                new Divider(),
                 CreateHealthFields(user),
                 CreateEnergyFields(user),
-                BlockMessage.Divider()
+                new Divider()
             };
 
             Blocks.AddRange(CreateStatsFields(user));
-            Blocks.Add(BlockMessage.Divider());
+            Blocks.Add(new Divider());
 
             if (user.FreeStatsPoints > 0)
             {
-                var freeStatsPoints = TextBlock.MarkdownTextBlock(string.Format(DougMessages.FreeStatPoints, user.FreeStatsPoints.ToString()));
-                Blocks.Add(BlockMessage.Context(new List<TextBlock> { freeStatsPoints }));
+                var freeStatsPoints = string.Format(DougMessages.FreeStatPoints, user.FreeStatsPoints.ToString());
+                Blocks.Add(new Context(new List<string> { freeStatsPoints }));
             }
         }
 
-        private BlockMessage CreateUserOtherInfo(User user)
+        private Block CreateUserOtherInfo(User user)
         {
-            var userMiscInfo = new List<TextBlock>
+            var userMiscInfo = new List<string>
             {
-                TextBlock.MarkdownTextBlock(string.Format(DougMessages.LevelStats, user.Level)),
-                TextBlock.MarkdownTextBlock(string.Format(DougMessages.ExperienceStats, user.GetExperienceAdvancement() * 100)),
-                TextBlock.MarkdownTextBlock(string.Format(DougMessages.CreditStats, user.Credits))
+                string.Format(DougMessages.LevelStats, user.Level),
+                string.Format(DougMessages.ExperienceStats, user.GetExperienceAdvancement() * 100),
+                string.Format(DougMessages.CreditStats, user.Credits)
             };
 
-            return BlockMessage.Context(userMiscInfo);
+            return new Context(userMiscInfo);
         }
 
-        private BlockMessage CreateHealthFields(User user)
+        private Block CreateHealthFields(User user)
         {
-            var healthFields = new List<TextBlock>
+            var healthFields = new List<string>
             {
-                TextBlock.MarkdownTextBlock(DougMessages.HealthStats),
-                TextBlock.MarkdownTextBlock($"{user.Health}/{user.TotalHealth()}")
+                DougMessages.HealthStats,
+                $"{user.Health}/{user.TotalHealth()}"
             };
 
-            return BlockMessage.FieldsSection(healthFields);
+            return new FieldsSection(healthFields);
         }
 
-        private BlockMessage CreateEnergyFields(User user)
+        private Block CreateEnergyFields(User user)
         {
-            var energyFields = new List<TextBlock>
+            var energyFields = new List<string>
             {
-                TextBlock.MarkdownTextBlock(DougMessages.EnergyStats),
-                TextBlock.MarkdownTextBlock($"{user.Energy}/{user.TotalEnergy()}")
+                DougMessages.EnergyStats,
+                $"{user.Energy}/{user.TotalEnergy()}"
             };
 
-           return BlockMessage.FieldsSection(energyFields);
+           return new FieldsSection(energyFields);
         }
 
-        private List<BlockMessage> CreateStatsFields(User user)
+        private List<Block> CreateStatsFields(User user)
         {
             var buttonDisplayed = user.FreeStatsPoints > 0;
 
-            var blocks = new List<BlockMessage>
+            return new List<Block>
             {
                 StatSection(DougMessages.LuckStats, user.Luck, Stats.Luck, buttonDisplayed),
                 StatSection(DougMessages.AgilityStats, user.Agility, Stats.Agility, buttonDisplayed),
@@ -75,21 +78,19 @@ namespace Doug.Menus
                 StatSection(DougMessages.ConstitutionStats, user.Constitution, Stats.Constitution, buttonDisplayed),
                 StatSection(DougMessages.StaminaStats, user.Stamina, Stats.Stamina, buttonDisplayed)
             };
-
-            return blocks;
         }
 
-        private BlockMessage StatSection(string message, int stat, string type, bool buttonDisplayed)
+        private Block StatSection(string message, int stat, string type, bool buttonDisplayed)
         {
-            var textBlock = TextBlock.MarkdownTextBlock(string.Format(message, stat));
+            var textBlock = new MarkdownText(string.Format(message, stat));
 
             if (!buttonDisplayed)
             {
-                return new BlockMessage {Type = "section", Text = textBlock};
+                return new Section(textBlock);
             }
 
-            var buttonBlock = Accessory.Button(DougMessages.AddStatPoint, type, "attribution");
-            return new BlockMessage { Type = "section", Text = textBlock, Accessory = buttonBlock };
+            var buttonBlock = new Button(DougMessages.AddStatPoint, type, Actions.Attribution.ToString());
+            return new Section(textBlock, buttonBlock);
         }
     }
 }

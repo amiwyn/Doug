@@ -4,7 +4,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
-using Doug.Menus;
+using Doug.Menus.Blocks;
 using Doug.Models;
 using Doug.Repositories;
 using Doug.Slack.Dto;
@@ -21,8 +21,8 @@ namespace Doug.Slack
         Task<List<Reaction>> GetReactions(string timestamp, string channel);
         Task SendAttachments(IEnumerable<Attachment> attachments, string channel);
         Task SendEphemeralMessage(string text, string user, string channel);
-        Task SendEphemeralBlocks(IEnumerable<BlockMessage> blocks, string user, string channel);
-        Task UpdateInteractionMessage(IEnumerable<BlockMessage> blocks, string url);
+        Task SendEphemeralBlocks(IEnumerable<Block> blocks, string user, string channel);
+        Task UpdateInteractionMessage(IEnumerable<Block> blocks, string url);
     }
 
     public class SlackWebApi : ISlackWebApi
@@ -137,6 +137,11 @@ namespace Doug.Slack
 
         public async Task SendEphemeralMessage(string text, string user, string channel)
         {
+            if (string.IsNullOrWhiteSpace(text))
+            {
+                return;
+            }
+
             var keyValues = CreateBaseRequestPayload(channel);
             keyValues.Add(new KeyValuePair<string, string>("user", user));
             keyValues.Add(new KeyValuePair<string, string>("text", text));
@@ -144,7 +149,7 @@ namespace Doug.Slack
             await PostToUrlWithoutResponse(EphemeralUrl, keyValues);
         }
 
-        public async Task SendEphemeralBlocks(IEnumerable<BlockMessage> blocks, string user, string channel)
+        public async Task SendEphemeralBlocks(IEnumerable<Block> blocks, string user, string channel)
         {
             var blocksString = JsonConvert.SerializeObject(blocks, _jsonSettings);
 
@@ -155,15 +160,15 @@ namespace Doug.Slack
             await PostToUrlWithoutResponse(EphemeralUrl, keyValues);
         }
 
-        public async Task UpdateInteractionMessage(IEnumerable<BlockMessage> blocks, string url)
+        public async Task UpdateInteractionMessage(IEnumerable<Block> blocks, string url)
         {
             var updatedMessage = new
             {
                 ReplaceOriginal = "true",
                 Blocks = blocks
             };
-
-            var content = new StringContent(JsonConvert.SerializeObject(updatedMessage, _jsonSettings), Encoding.UTF8, "application/json");
+            var strgsd = JsonConvert.SerializeObject(updatedMessage, _jsonSettings);
+            var content = new StringContent(strgsd, Encoding.UTF8, "application/json");
             await _client.PostAsync(url, content);
         }
     }

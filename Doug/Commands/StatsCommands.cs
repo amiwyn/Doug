@@ -10,7 +10,7 @@ namespace Doug.Commands
     {
         DougResponse Balance(Command command);
         Task<DougResponse> Profile(Command command);
-        DougResponse Equipment(Command command);
+        Task<DougResponse> Equipment(Command command);
     }
 
     public class StatsCommands : IStatsCommands
@@ -41,20 +41,11 @@ namespace Doug.Commands
             return NoResponse;
         }
 
-        public DougResponse Equipment(Command command)
+        public async Task<DougResponse> Equipment(Command command)
         {
-            var userId = command.UserId;
+            var user = _userRepository.GetUser(command.UserId);
 
-            if (command.IsUserArgument())
-            {
-                userId = command.GetTargetUserId();
-            }
-
-            var user = _userRepository.GetUser(userId);
-
-            var attachments = Attachment.EquipmentAttachments(user.Loadout);
-
-            _slack.SendAttachments(attachments, command.ChannelId);
+            await _slack.SendEphemeralBlocks(new EquipmentMenu(user.Loadout).Blocks, command.UserId, command.ChannelId);
 
             return NoResponse;
         }

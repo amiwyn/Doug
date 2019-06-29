@@ -34,6 +34,11 @@ namespace Doug.Controllers.Dto
                 value = slackInteraction.Actions.SingleOrDefault()?.SelectedOption.Value;
             }
 
+            if (slackInteraction.Actions.SingleOrDefault()?.Type == "users_select")
+            {
+                value = slackInteraction.Actions.SingleOrDefault()?.SelectedUser;
+            }
+
             return new Interaction
             {
                 Action = slackInteraction.Actions.SingleOrDefault()?.ActionId,
@@ -76,6 +81,7 @@ namespace Doug.Controllers.Dto
         public string ActionId { get; set; }
         public string Value { get; set; }
         public SlackInteractionOption SelectedOption { get; set; }
+        public string SelectedUser { get; set; }
     }
 
     public class SlackInteractionOption

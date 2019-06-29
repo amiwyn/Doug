@@ -46,11 +46,11 @@ namespace Doug.Controllers
         }
 
         [HttpPost("equipment")]
-        public ActionResult Equipment([FromForm]SlackCommandDto slackCommand)
+        public async Task<ActionResult> Equipment([FromForm]SlackCommandDto slackCommand)
         {
             try
             {
-                var result = _statsCommands.Equipment(slackCommand.ToCommand());
+                var result = await _statsCommands.Equipment(slackCommand.ToCommand());
                 return Ok(result.Message);
             }
             catch (Exception ex)
