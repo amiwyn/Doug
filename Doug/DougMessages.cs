@@ -4,8 +4,6 @@
     {
         public const string CoffeeParrotEmoji = ":coffeeparrot:";
         public const string CreditEmoji = ":rupee:";
-        public const string HpEmoji = ":red_circle:";
-        public const string EnergyEmoji = ":large_blue_circle:";
         public const string UpVote = "+1";
         public const string Downvote = "-1";
         public const string Top5 = "Leaderboard";
@@ -52,15 +50,20 @@
         public const string ConsumedItem = "You consumed the item.";
         public const string LevelUp = ":confetti_ball: {0} is now level *{1}*!";
         public const string GainedExp = "You gained {0} experience points.";
-        public const string EquippedItem = "You Equipped *{0}*.";
+        public const string EquippedItem = "You equipped *{0}*.";
         public const string ShopSpeech = "*Oi!* Welcome to my shop! I sell various stuff from all around the continent.\n\n *Come in, have a look:*";
         public const string BuyFor = "Buy for {0} " + CreditEmoji;
         public const string UserDied = "Oh dear, {0} died!";
         public const string Use = "Use";
         public const string Equip = "Equip";
+        public const string UnEquip = "Unequip";
         public const string Sell = "Sell for {0} " + CreditEmoji;
         public const string Quantity = "*Quantity:* {0} ";
         public const string SoldItem = "You sold *{0}* for {1} " + CreditEmoji;
+        public const string Inventory = "Inventory";
+        public const string Equipment = "Equipment";
+        public const string Info = "Info";
+        public const string UnequippedItem = "You unequipped *{0}*.";
 
         public const string DougError = "Beep boop, it's not working : {0}";
         public const string NotAnAdmin = "You are not an admin.";
@@ -78,5 +81,6 @@
         public const string InvalidUserArgument = "You must pass a valid user in arguments";
         public const string ItemNotEquipAble = "This item is not equipable.";
         public const string NoMoreStatsPoints = "No more available stats points.";
+        public const string NoEquipmentInSlot = "No equipment in slot {0}";
     }
 }

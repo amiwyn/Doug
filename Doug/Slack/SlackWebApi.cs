@@ -4,7 +4,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
-using Doug.Menus;
+using Doug.Menus.Blocks;
 using Doug.Models;
 using Doug.Repositories;
 using Doug.Slack.Dto;
@@ -21,8 +21,8 @@ namespace Doug.Slack
         Task<List<Reaction>> GetReactions(string timestamp, string channel);
         Task SendAttachments(IEnumerable<Attachment> attachments, string channel);
         Task SendEphemeralMessage(string text, string user, string channel);
-        Task SendEphemeralBlocks(IEnumerable<BlockMessage> blocks, string user, string channel);
-        Task UpdateInteractionMessage(IEnumerable<BlockMessage> blocks, string url);
+        Task SendEphemeralBlocks(IEnumerable<Block> blocks, string user, string channel);
+        Task UpdateInteractionMessage(IEnumerable<Block> blocks, string url);
     }
 
     public class SlackWebApi : ISlackWebApi
@@ -144,7 +144,7 @@ namespace Doug.Slack
             await PostToUrlWithoutResponse(EphemeralUrl, keyValues);
         }
 
-        public async Task SendEphemeralBlocks(IEnumerable<BlockMessage> blocks, string user, string channel)
+        public async Task SendEphemeralBlocks(IEnumerable<Block> blocks, string user, string channel)
         {
             var blocksString = JsonConvert.SerializeObject(blocks, _jsonSettings);
 
@@ -155,7 +155,7 @@ namespace Doug.Slack
             await PostToUrlWithoutResponse(EphemeralUrl, keyValues);
         }
 
-        public async Task UpdateInteractionMessage(IEnumerable<BlockMessage> blocks, string url)
+        public async Task UpdateInteractionMessage(IEnumerable<Block> blocks, string url)
         {
             var updatedMessage = new
             {

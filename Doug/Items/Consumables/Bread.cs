@@ -13,7 +13,7 @@ namespace Doug.Items.Consumables
             _statsRepository = statsRepository;
             Id = ItemFactory.Bread;
             Name = "Bread";
-            Description = "A nice steamy loaf of bread. It's fresh from the bakery. Restores 25 health.";
+            Description = "A nice steamy loaf of bread. It's fresh from the bakery. Restores 50 health.";
             Rarity = Rarity.Common;
             Icon = ":bread:";
             Price = 50;
