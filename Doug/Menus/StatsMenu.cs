@@ -72,11 +72,11 @@ namespace Doug.Menus
 
             return new List<Block>
             {
-                StatSection(DougMessages.LuckStats, user.Luck, Stats.Luck, buttonDisplayed),
-                StatSection(DougMessages.AgilityStats, user.Agility, Stats.Agility, buttonDisplayed),
-                StatSection(DougMessages.CharismaStats, user.Charisma, Stats.Charisma, buttonDisplayed),
-                StatSection(DougMessages.ConstitutionStats, user.Constitution, Stats.Constitution, buttonDisplayed),
-                StatSection(DougMessages.StaminaStats, user.Stamina, Stats.Stamina, buttonDisplayed)
+                StatSection(DougMessages.LuckStats, user.TotalLuck(), Stats.Luck, buttonDisplayed),
+                StatSection(DougMessages.AgilityStats, user.TotalAgility(), Stats.Agility, buttonDisplayed),
+                StatSection(DougMessages.CharismaStats, user.TotalCharisma(), Stats.Charisma, buttonDisplayed),
+                StatSection(DougMessages.ConstitutionStats, user.TotalConstitution(), Stats.Constitution, buttonDisplayed),
+                StatSection(DougMessages.StaminaStats, user.TotalStamina(), Stats.Stamina, buttonDisplayed)
             };
         }
 
