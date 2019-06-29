@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Doug.Items;
+using System.Linq;
 
 namespace Doug.Models
 {
@@ -170,5 +171,7 @@ namespace Doug.Models
         {
             return string.Format(DougMessages.NotEnoughCredits, amount, Credits);
         }
+
+        public bool HasEmptyInventory() => !InventoryItems.Any();
     }
 }
