@@ -12,6 +12,7 @@ namespace Doug.Repositories
         void AddExperienceToUsers(List<string> userIds, long experience);
         void LevelUpUsers(List<string> userIds);
         void AttributeStatPoint(string userId, string stat);
+        void KillUser(string userId);
     }
 
     public class StatsRepository : IStatsRepository
@@ -84,6 +85,15 @@ namespace Doug.Repositories
                     user.Stamina++;
                     break;
             }
+
+            _db.SaveChanges();
+        }
+
+        public void KillUser(string userId)
+        {
+            var user = _db.Users.Single(usr => usr.Id == userId);
+
+            user.Dies();
 
             _db.SaveChanges();
         }
