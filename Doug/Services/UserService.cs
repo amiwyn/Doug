@@ -29,12 +29,15 @@ namespace Doug.Services
         {
             user.Health -= health;
 
-            if (user.Health <= 0)
+            if (user.IsDead())
             {
+                _statsRepository.KillUser(user.Id);
                 await _slack.BroadcastMessage(string.Format(DougMessages.UserDied, Utils.UserMention(user.Id)), channel);
             }
-
-            _statsRepository.UpdateHealth(user.Id, user.Health);
+            else
+            {
+                _statsRepository.UpdateHealth(user.Id, user.Health);
+            }
         }
 
         public async Task AddExperience(User user, long experience, string channel)

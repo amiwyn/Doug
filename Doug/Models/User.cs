@@ -152,10 +152,23 @@ namespace Doug.Models
             return 0.25 + luckInfluence;
         }
 
+        public void Dies()
+        {
+            Health = 1;
+            Energy = 0;
+
+            var nextLevelExp = (long)Math.Pow((Level + 1) * 10 - 10, 2);
+            var prevLevelExp = (long)Math.Pow((Level - 1) * 10, 2);
+
+            var expLoss = (long)(0.1 * (nextLevelExp - prevLevelExp));
+            Experience = Experience - expLoss <= prevLevelExp ? prevLevelExp : Experience - expLoss;
+        }
+
         public double BaseOpponentStealSuccessRate() => 0.75;
         public int BaseStealAmount() => (int)Math.Floor(3 * (Math.Sqrt(TotalAgility()) - Math.Sqrt(5)) + 1);
         public bool HasEnoughCreditsForAmount(int amount) => Credits - amount >= 0;
         public string NotEnoughCreditsForAmountResponse(int amount) => string.Format(DougMessages.NotEnoughCredits, amount, Credits);
         public bool HasEmptyInventory() => !InventoryItems.Any();
+        public bool IsDead() => Health <= 0;
     }
 }
