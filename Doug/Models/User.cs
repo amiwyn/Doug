@@ -87,30 +87,12 @@ namespace Doug.Models
             Energy = TotalEnergy();
         }
 
-        public int TotalLuck()
-        {
-            return Loadout.Luck + Luck;
-        }
-
-        public int TotalAgility()
-        {
-            return Loadout.Agility + Agility;
-        }
-
-        public int TotalCharisma()
-        {
-            return Loadout.Charisma + Charisma;
-        }
-
-        public int TotalConstitution()
-        {
-            return Loadout.Constitution + Constitution;
-        }
-
-        public int TotalStamina()
-        {
-            return Loadout.Stamina + Stamina;
-        }
+        public int TotalLuck() => Loadout.Luck + Luck;
+        public int TotalAgility() => Loadout.Agility + Agility;
+        public int TotalCharisma() => Loadout.Charisma + Charisma;
+        public int TotalConstitution() => Loadout.Constitution + Constitution;
+        public int TotalStamina() => Loadout.Stamina + Stamina;
+        public int TotalAttack() => Loadout.Attack + Attack;
 
         public void LoadItems(IItemFactory itemFactory)
         {

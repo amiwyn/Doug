@@ -1,4 +1,5 @@
-﻿using Doug.Items;
+﻿using System.Threading.Tasks;
+using Doug.Items;
 using Doug.Models;
 using Doug.Repositories;
 using Doug.Services;
@@ -9,11 +10,14 @@ namespace Doug.Commands
     public interface ICombatCommands
     {
         DougResponse Steal(Command command);
+        Task<DougResponse> Attack(Command command);
     }
 
     public class CombatCommands : ICombatCommands
     {
         private const int StealEnergyCost = 1;
+        private const int AttackEnergyCost = 1;
+        private const int KillExperienceGain = 100;
         private static readonly DougResponse NoResponse = new DougResponse();
 
         private readonly IItemEventDispatcher _itemEventDispatcher;
@@ -21,14 +25,16 @@ namespace Doug.Commands
         private readonly ISlackWebApi _slack;
         private readonly IStatsRepository _statsRepository;
         private readonly IRandomService _randomService;
+        private readonly IUserService _userService;
 
-        public CombatCommands(IItemEventDispatcher itemEventDispatcher, IUserRepository userRepository, ISlackWebApi slack, IStatsRepository statsRepository, IRandomService randomService)
+        public CombatCommands(IItemEventDispatcher itemEventDispatcher, IUserRepository userRepository, ISlackWebApi slack, IStatsRepository statsRepository, IRandomService randomService, IUserService userService)
         {
             _itemEventDispatcher = itemEventDispatcher;
             _userRepository = userRepository;
             _slack = slack;
             _statsRepository = statsRepository;
             _randomService = randomService;
+            _userService = userService;
         }
 
         public DougResponse Steal(Command command)
@@ -69,6 +75,33 @@ namespace Doug.Commands
             {
                 var message = string.Format(DougMessages.StealFail, Utils.UserMention(command.UserId), Utils.UserMention(target.Id));
                 _slack.BroadcastMessage(message, command.ChannelId);
+            }
+
+            return NoResponse;
+        }
+
+        public async Task<DougResponse> Attack(Command command)
+        {
+            var user = _userRepository.GetUser(command.UserId);
+            var target = _userRepository.GetUser(command.GetTargetUserId());
+            var energy = user.Energy - AttackEnergyCost;
+            var damage = user.TotalAttack();
+
+            if (energy < 0)
+            {
+                return new DougResponse(DougMessages.NotEnoughEnergy);
+            }
+
+            _statsRepository.UpdateEnergy(command.UserId, energy);
+
+            var message = string.Format(DougMessages.UserAttackedTarget, Utils.UserMention(user.Id), Utils.UserMention(target.Id), damage);
+            await _slack.BroadcastMessage(message, command.ChannelId);
+
+            await _userService.RemoveHealth(target, damage, command.ChannelId);
+
+            if (target.IsDead())
+            {
+                await _userService.AddExperience(user, KillExperienceGain, command.ChannelId);
             }
 
             return NoResponse;
