@@ -49,6 +49,7 @@ namespace Doug.Models
         public int Charisma => Equipment.Sum(equip => equip.Value.Charisma);
         public int Constitution => Equipment.Sum(equip => equip.Value.Constitution);
         public int Stamina => Equipment.Sum(equip => equip.Value.Stamina);
+        public int Attack => Equipment.Sum(equip => equip.Value.Attack);
 
         public void Equip(EquipmentItem item)
         {
