@@ -91,12 +91,12 @@ namespace Doug.Repositories
 
         public bool IsCoffeeBreak()
         {
-            return _db.Channel.Single().IsCoffee;
+            return _db.CoffeeBreak.Single().IsCoffee;
         }
 
         public void EndCoffeeBreak()
         {
-            var channel = _db.Channel.Single();
+            var channel = _db.CoffeeBreak.Single();
             channel.IsCoffee = false;
 
             _db.SaveChanges();
@@ -104,7 +104,7 @@ namespace Doug.Repositories
 
         public void StartCoffeeBreak()
         {
-            var channel = _db.Channel.Single();
+            var channel = _db.CoffeeBreak.Single();
             channel.IsCoffee = true;
 
             _db.SaveChanges();

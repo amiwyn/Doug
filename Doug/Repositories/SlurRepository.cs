@@ -41,7 +41,7 @@ namespace Doug.Repositories
 
         public int GetFat()
         {
-            return _db.Channel.Single().FatCounter;
+            return _db.CoffeeBreak.Single().FatCounter;
         }
 
         public ICollection<RecentFlame> GetRecentSlurs()
@@ -71,7 +71,7 @@ namespace Doug.Repositories
 
         public void IncrementFat()
         {
-            _db.Channel.Single().FatCounter++;
+            _db.CoffeeBreak.Single().FatCounter++;
             _db.SaveChanges();
         }
 
