@@ -19,12 +19,12 @@ namespace Doug.Items
 
         public virtual string Use(int itemPos, User user, string channel)
         {
-            return string.Format(DougMessages.ItemCantBeUsed, itemPos);
+            return DougMessages.ItemCantBeUsed;
         }
 
         public virtual string Target(int itemPos, User user, User target, string channel)
         {
-            return string.Format(DougMessages.ItemCantBeUsed, itemPos);
+            return DougMessages.ItemCantBeUsed;
         }
 
         public virtual bool IsEquipable()

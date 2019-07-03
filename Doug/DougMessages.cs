@@ -82,7 +82,7 @@
         public const string NotEnoughEnergy = "You don't have enough energy.";
         public const string TargetNoMoney = "Your target don't have enough " + CreditEmoji;
         public const string NoItemInSlot = "There is no item in slot {0}.";
-        public const string ItemCantBeUsed = "The item in slot {0} cannot be used.";
+        public const string ItemCantBeUsed = "This item cannot be used";
         public const string InvalidUserArgument = "You must pass a valid user in arguments";
         public const string ItemNotEquipAble = "This item is not equipable.";
         public const string NoMoreStatsPoints = "No more available stats points.";
