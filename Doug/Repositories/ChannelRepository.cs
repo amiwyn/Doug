@@ -5,7 +5,7 @@ namespace Doug.Repositories
 {
     public interface IChannelRepository
     {
-        string GetAccessToken();
+        void GetAccessTokens(out string bot, out string user);
         string GetRemindJob();
         void SetRemindJob(string jobId);
         void SendGambleChallenge(GambleChallenge challenge);
@@ -22,19 +22,21 @@ namespace Doug.Repositories
             _db = dougContext;
         }
 
-        public string GetAccessToken()
-        {
-            return _db.Channel.Single().Token;
-        }
-
         public GambleChallenge GetGambleChallenge(string target)
         {
             return _db.GambleChallenges.SingleOrDefault(cha => cha.TargetId == target);
         }
 
+        public void GetAccessTokens(out string bot, out string user)
+        {
+            var coffee = _db.CoffeeBreak.Single();
+            bot = coffee.BotToken;
+            user = coffee.UserToken;
+        }
+
         public string GetRemindJob()
         {
-            return _db.Channel.Single().CoffeeRemindJobId;
+            return _db.CoffeeBreak.Single().CoffeeRemindJobId;
         }
 
         public void RemoveGambleChallenge(string target)
@@ -55,7 +57,7 @@ namespace Doug.Repositories
 
         public void SetRemindJob(string jobId)
         {
-            _db.Channel.Single().CoffeeRemindJobId = jobId;
+            _db.CoffeeBreak.Single().CoffeeRemindJobId = jobId;
             _db.SaveChanges();
         }
     }

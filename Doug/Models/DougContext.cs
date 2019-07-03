@@ -6,10 +6,11 @@ namespace Doug.Models
     {
         public DbSet<User> Users { get; set; }
         public DbSet<Slur> Slurs { get; set; }
-        public DbSet<Channel> Channel { get; set; }
+        public DbSet<CoffeeBreak> CoffeeBreak { get; set; }
         public DbSet<Roster> Roster { get; set; }
         public DbSet<RecentFlame> RecentSlurs { get; set; }
         public DbSet<GambleChallenge> GambleChallenges { get; set; }
+        public DbSet<Channel> Channels { get; set; }
 
         public DougContext(DbContextOptions<DougContext> options) : base(options)
         {

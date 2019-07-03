@@ -111,9 +111,8 @@ namespace Doug
             else
             {
                 //see https://aka.ms/aspnetcore-hsts.
-                //app.UseHsts();
-                //app.Use(RequestSigning);
-                app.UseDeveloperExceptionPage();
+                app.UseHsts();
+                app.Use(RequestSigning);
             }
 
             app.UseHttpsRedirection();
@@ -133,8 +132,8 @@ namespace Doug
         private async Task RequestSigning(HttpContext context, Func<Task> next)
         {
             string slackSignature = context.Request.Headers["x-slack-signature"];
-            long timestamp = long.Parse(context.Request.Headers["x-slack-request-timestamp"]);
-            string signingSecret = Environment.GetEnvironmentVariable("SLACK_SIGNING_SECRET");
+            var timestamp = long.Parse(context.Request.Headers["x-slack-request-timestamp"]);
+            var signingSecret = Environment.GetEnvironmentVariable("SLACK_SIGNING_SECRET");
             string content;
 
             if (slackSignature == null)
@@ -146,23 +145,23 @@ namespace Doug
 
             context.Request.EnableRewind();
 
-            using (StreamReader reader = new StreamReader(context.Request.Body, Encoding.UTF8, true, 1024, true))
+            using (var reader = new StreamReader(context.Request.Body, Encoding.UTF8, true, 1024, true))
             {
                 content = await reader.ReadToEndAsync();
             }
 
             context.Request.Body.Position = 0;
 
-            string sigBase = string.Format("v0:{0}:{1}", timestamp, content);
+            var sigBase = $"v0:{timestamp}:{content}";
 
-            UTF8Encoding encoding = new UTF8Encoding();
+            var encoding = new UTF8Encoding();
 
             var hmac = new HMACSHA256(encoding.GetBytes(signingSecret));
-            byte[] hashBytes = hmac.ComputeHash(encoding.GetBytes(sigBase));
+            var hashBytes = hmac.ComputeHash(encoding.GetBytes(sigBase));
 
-            var ganeratedSignature = "v0=" + BitConverter.ToString(hashBytes).Replace("-", "").ToLower();
+            var generatedSignature = "v0=" + BitConverter.ToString(hashBytes).Replace("-", "").ToLower();
 
-            if (ganeratedSignature == slackSignature)
+            if (generatedSignature == slackSignature)
             {
                 await next();
             }

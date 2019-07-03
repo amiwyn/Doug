@@ -38,13 +38,14 @@ namespace Doug.Slack
         private const string InviteUrl = "https://slack.com/api/conversations.invite";
 
         private readonly HttpClient _client;
-        private readonly string _token;
+        private readonly string _botToken;
+        private readonly string _userToken;
         private readonly JsonSerializerSettings _jsonSettings;
 
         public SlackWebApi(HttpClient client, IChannelRepository channelRepository)
         {
             _client = client;
-            _token = channelRepository.GetAccessToken();
+            channelRepository.GetAccessTokens(out _botToken, out _userToken);
 
             var contractResolver = new DefaultContractResolver
             {
@@ -73,7 +74,7 @@ namespace Doug.Slack
         {
             return new List<KeyValuePair<string, string>>
             {
-                new KeyValuePair<string, string>("token", _token),
+                new KeyValuePair<string, string>("token", _botToken),
                 new KeyValuePair<string, string>("channel", channel)
             };
         }
@@ -96,7 +97,7 @@ namespace Doug.Slack
         {
             var builder = new UriBuilder(UserInfoUrl);
             var query = HttpUtility.ParseQueryString(builder.Query);
-            query["token"] = _token;
+            query["token"] = _botToken;
             query["user"] = userId;
             builder.Query = query.ToString();
             string url = builder.ToString();
@@ -119,7 +120,7 @@ namespace Doug.Slack
         {
             var builder = new UriBuilder(ReactionGetUrl);
             var query = HttpUtility.ParseQueryString(builder.Query);
-            query["token"] = _token;
+            query["token"] = _botToken;
             query["channel"] = channel;
             query["timestamp"] = timestamp;
             builder.Query = query.ToString();
@@ -178,16 +179,24 @@ namespace Doug.Slack
 
         public async Task KickUser(string user, string channel)
         {
-            var keyValues = CreateBaseRequestPayload(channel);
-            keyValues.Add(new KeyValuePair<string, string>("user", user));
+            var keyValues = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("token", _userToken),
+                new KeyValuePair<string, string>("channel", channel),
+                new KeyValuePair<string, string>("user", user)
+            };
 
             await PostToUrlWithoutResponse(KickUrl, keyValues);
         }
 
         public async Task InviteUser(string user, string channel)
         {
-            var keyValues = CreateBaseRequestPayload(channel);
-            keyValues.Add(new KeyValuePair<string, string>("users", user));
+            var keyValues = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("token", _userToken),
+                new KeyValuePair<string, string>("channel", channel),
+                new KeyValuePair<string, string>("users", user)
+            };
 
             await PostToUrlWithoutResponse(InviteUrl, keyValues);
         }
