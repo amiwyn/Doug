@@ -24,7 +24,7 @@ namespace Test.Shop
             Value = "sell:4"
         };
 
-        private IShopService _shopService;
+        private IShopMenuService _shopMenuService;
 
         private readonly Mock<IUserRepository> _userRepository = new Mock<IUserRepository>();
         private readonly Mock<ISlackWebApi> _slack = new Mock<ISlackWebApi>();
@@ -39,13 +39,13 @@ namespace Test.Shop
             _user = new User() { Id = "testuser", InventoryItems = items };
             _userRepository.Setup(repo => repo.GetUser(User)).Returns(_user);
 
-            _shopService = new ShopService(_userRepository.Object, _slack.Object, _inventoryRepository.Object, _itemFactory.Object);
+            _shopMenuService = new ShopMenuService(_userRepository.Object, _slack.Object, _inventoryRepository.Object, _itemFactory.Object);
         }
 
         [TestMethod]
         public void WhenSelling_MoneyIsAdded()
         {
-            _shopService.Sell(_interaction);
+            _shopMenuService.Sell(_interaction);
 
             _userRepository.Verify(repo => repo.AddCredits(User, 1337));
         }
@@ -53,7 +53,7 @@ namespace Test.Shop
         [TestMethod]
         public void WhenSelling_ItemIsRemoved()
         {
-            _shopService.Sell(_interaction);
+            _shopMenuService.Sell(_interaction);
 
             _inventoryRepository.Verify(repo => repo.RemoveItem(_user, 4));
         }
@@ -63,7 +63,7 @@ namespace Test.Shop
         {
             _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User() { Id = "testuser", InventoryItems = new List<InventoryItem>() });
 
-            _shopService.Sell(_interaction);
+            _shopMenuService.Sell(_interaction);
 
             _slack.Verify(slack => slack.SendEphemeralMessage("There is no item in slot 4.", User, Channel));
         }

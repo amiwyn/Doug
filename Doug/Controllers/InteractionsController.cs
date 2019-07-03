@@ -13,15 +13,15 @@ namespace Doug.Controllers
     [ApiController]
     public class InteractionsController : ControllerBase
     {
-        private readonly IShopService _shopService;
-        private readonly IStatsService _statsService;
-        private readonly IInventoryService _inventoryService;
+        private readonly IShopMenuService _shopMenuService;
+        private readonly IStatsMenuService _statsMenuService;
+        private readonly IInventoryMenuService _inventoryMenuService;
 
-        public InteractionsController(IShopService shopService, IStatsService statsService, IInventoryService inventoryService)
+        public InteractionsController(IShopMenuService shopMenuService, IStatsMenuService statsMenuService, IInventoryMenuService inventoryMenuService)
         {
-            _shopService = shopService;
-            _statsService = statsService;
-            _inventoryService = inventoryService;
+            _shopMenuService = shopMenuService;
+            _statsMenuService = statsMenuService;
+            _inventoryMenuService = inventoryMenuService;
         }
 
         [HttpPost]
@@ -33,28 +33,28 @@ namespace Doug.Controllers
             switch (action)
             {
                 case Actions.Buy:
-                    await _shopService.Buy(interaction);
+                    await _shopMenuService.Buy(interaction);
                     break;
                 case Actions.Inventory:
                     await InventoryInteractions(interaction);
                     break;
                 case Actions.Attribution:
-                    await _statsService.AttributeStatPoint(interaction);
+                    await _statsMenuService.AttributeStatPoint(interaction);
                     break;
                 case Actions.InventorySwitch:
-                    await _inventoryService.ShowInventory(interaction);
+                    await _inventoryMenuService.ShowInventory(interaction);
                     break;
                 case Actions.EquipmentSwitch:
-                    await _inventoryService.ShowEquipment(interaction);
+                    await _inventoryMenuService.ShowEquipment(interaction);
                     break;
                 case Actions.Equipment:
                     await EquipmentInteractions(interaction);
                     break;
                 case Actions.Give:
-                    await _inventoryService.Give(interaction);
+                    await _inventoryMenuService.Give(interaction);
                     break;
                 case Actions.Target:
-                    await _inventoryService.Target(interaction);
+                    await _inventoryMenuService.Target(interaction);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -70,10 +70,10 @@ namespace Doug.Controllers
             switch (action)
             {
                 case EquipmentActions.UnEquip:
-                    await _inventoryService.UnEquip(interaction);
+                    await _inventoryMenuService.UnEquip(interaction);
                     break;
                 case EquipmentActions.Info:
-                    await _inventoryService.Info(interaction);
+                    await _inventoryMenuService.Info(interaction);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -87,19 +87,19 @@ namespace Doug.Controllers
             switch (action)
             {
                 case InventoryActions.Use:
-                    await _inventoryService.Use(interaction);
+                    await _inventoryMenuService.Use(interaction);
                     break;
                 case InventoryActions.Equip:
-                    await _inventoryService.Equip(interaction);
+                    await _inventoryMenuService.Equip(interaction);
                     break;
                 case InventoryActions.Sell:
-                    await _shopService.Sell(interaction);
+                    await _shopMenuService.Sell(interaction);
                     break;
                 case InventoryActions.Give:
-                    await _inventoryService.ShowUserSelect(interaction);
+                    await _inventoryMenuService.ShowUserSelect(interaction);
                     break;
                 case InventoryActions.Target:
-                    await _inventoryService.ShowUserSelect(interaction);
+                    await _inventoryMenuService.ShowUserSelect(interaction);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

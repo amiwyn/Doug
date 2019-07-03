@@ -92,7 +92,7 @@ namespace Doug.Commands
         {
             var user = _userRepository.GetUser(command.UserId);
 
-            var items = ShopService.ShopItems.Select(itm => _itemFactory.CreateItem(itm));
+            var items = ShopMenuService.ShopItems.Select(itm => _itemFactory.CreateItem(itm));
 
             await _slack.SendEphemeralBlocks(new ShopMenu(items, user).Blocks, command.UserId, command.ChannelId);
 
