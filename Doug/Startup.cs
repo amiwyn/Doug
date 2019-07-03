@@ -111,8 +111,9 @@ namespace Doug
             else
             {
                 //see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-                app.Use(RequestSigning);
+                //app.UseHsts();
+                //app.Use(RequestSigning);
+                app.UseDeveloperExceptionPage();
             }
 
             app.UseHttpsRedirection();
