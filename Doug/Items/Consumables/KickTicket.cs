@@ -28,7 +28,9 @@ namespace Doug.Items.Consumables
         {
             base.Use(itemPos, user, channel);
 
-            _slack.KickUser(target.Id, channel);
+            _slack.KickUser(target.Id, channel).Wait();
+
+            _slack.BroadcastMessage(string.Format(DougMessages.UsedItemOnTarget, Utils.UserMention(user.Id), Name, Utils.UserMention(target.Id)), channel);
 
             return string.Empty;
         }

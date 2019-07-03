@@ -69,6 +69,7 @@
         public const string SelectTarget = "Select a target";
         public const string SelectTargetText = "Please select a user to target with this action.";
         public const string UserAttackedTarget = "{0} dealt {2} damage to {1}!";
+        public const string UsedItemOnTarget = "{0} used a *{1}* on {2}";
 
         public const string DougError = "Beep boop, it's not working : {0}";
         public const string NotAnAdmin = "You are not an admin.";
