@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using Doug.Items;
 using Doug.Models;
 using Doug.Repositories;
@@ -101,14 +102,21 @@ namespace Doug.Commands
                 return new DougResponse(DougMessages.NotInRightChannel);
             }
 
+            var flaggedUsers = await _slack.GetUsersInChannel(command.ChannelId);
+
+            if (flaggedUsers.Any(usr => usr == target.Id))
+            {
+                return new DougResponse(DougMessages.UserIsNotInPvp);
+            }
+
             _statsRepository.UpdateEnergy(command.UserId, energy);
 
             var message = string.Format(DougMessages.UserAttackedTarget, _userService.Mention(user), _userService.Mention(target), damage);
             await _slack.BroadcastMessage(message, command.ChannelId);
 
-            await _userService.RemoveHealth(target, damage, command.ChannelId);
+            var userIsDead = await _userService.RemoveHealth(target, damage, command.ChannelId);
 
-            if (target.IsDead())
+            if (userIsDead)
             {
                 await _userService.AddExperience(user, KillExperienceGain, command.ChannelId);
             }
