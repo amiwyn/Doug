@@ -45,6 +45,13 @@ namespace Doug.Commands
             var user = _userRepository.GetUser(command.UserId);
             var target = _userRepository.GetUser(command.GetTargetUserId());
 
+            var channelType = _channelRepository.GetChannelType(command.ChannelId);
+
+            if (channelType != ChannelType.Common)
+            {
+                return new DougResponse(DougMessages.NotInRightChannel);
+            }
+
             var energy = user.Energy - StealEnergyCost;
 
             if (energy < 0)
