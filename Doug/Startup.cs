@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Net;
 using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
@@ -13,6 +14,7 @@ using Doug.Slack;
 using Hangfire;
 using Hangfire.SQLite;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Internal;
@@ -115,6 +117,8 @@ namespace Doug
                 app.Use(RequestSigning);
             }
 
+            app.UseExceptionHandler(DougExceptionHandler);
+
             app.UseHttpsRedirection();
             app.Use(EventLimiter);
             app.UseMvc();
@@ -170,6 +174,19 @@ namespace Doug
                 context.Response.StatusCode = 400;
                 await context.Response.WriteAsync("Request signing failed");
             }
+        }
+
+        private void DougExceptionHandler(IApplicationBuilder builder)
+        {
+            builder.Run(async context =>
+            {
+                context.Response.StatusCode = (int)HttpStatusCode.OK;
+                var error = context.Features.Get<IExceptionHandlerFeature>();
+                if (error != null)
+                {
+                    await context.Response.WriteAsync(string.Format(DougMessages.DougError, error.Error.Message)).ConfigureAwait(false);
+                }
+            });
         }
     }
 }

@@ -20,57 +20,29 @@ namespace Doug.Controllers
         [HttpPost("use")]
         public ActionResult Use([FromForm]SlackCommandDto slackCommand)
         {
-            try
-            {
-                var result = _inventoryCommands.Use(slackCommand.ToCommand());
-                return Ok(result.Message);
-            }
-            catch (Exception ex)
-            {
-                return Ok(string.Format(DougMessages.DougError, ex.Message));
-            }
+            var result = _inventoryCommands.Use(slackCommand.ToCommand());
+            return Ok(result.Message);
         }
 
         [HttpPost("give")]
         public ActionResult Give([FromForm]SlackCommandDto slackCommand)
         {
-            try
-            {
-                var result = _inventoryCommands.Give(slackCommand.ToCommand());
-                return Ok(result.Message);
-            }
-            catch (Exception ex)
-            {
-                return Ok(string.Format(DougMessages.DougError, ex.Message));
-            }
+            var result = _inventoryCommands.Give(slackCommand.ToCommand());
+            return Ok(result.Message);
         }
 
         [HttpPost("equip")]
         public ActionResult Equip([FromForm]SlackCommandDto slackCommand)
         {
-            try
-            {
-                var result = _inventoryCommands.Equip(slackCommand.ToCommand());
-                return Ok(result.Message);
-            }
-            catch (Exception ex)
-            {
-                return Ok(string.Format(DougMessages.DougError, ex.Message));
-            }
+            var result = _inventoryCommands.Equip(slackCommand.ToCommand());
+            return Ok(result.Message);
         }
 
         [HttpPost("inventory")]
         public async Task<ActionResult> Inventory([FromForm]SlackCommandDto slackCommand)
         {
-            try
-            {
-                var result = await _inventoryCommands.Inventory(slackCommand.ToCommand());
-                return Ok(result.Message);
-            }
-            catch (Exception ex)
-            {
-                return Ok(string.Format(DougMessages.DougError, ex.Message));
-            }
+            var result = await _inventoryCommands.Inventory(slackCommand.ToCommand());
+            return Ok(result.Message);
         }
     }
 }
