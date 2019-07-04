@@ -5,6 +5,7 @@ using Doug.Items.Consumables;
 using Doug.Items.Equipment;
 using Doug.Models;
 using Doug.Repositories;
+using Doug.Services;
 using Doug.Slack;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -32,18 +33,19 @@ namespace Test.Inventory
         private readonly Mock<IStatsRepository> _statsRepository = new Mock<IStatsRepository>();
         private readonly Mock<IInventoryRepository> _inventoryRepository = new Mock<IInventoryRepository>();
         private readonly Mock<IEquipmentRepository> _equipmentRepository = new Mock<IEquipmentRepository>();
+        private readonly Mock<IUserService> _userService = new Mock<IUserService>();
 
         private EquipmentItem _item;
 
         [TestInitialize]
         public void Setup()
         {
-            _item = new AwakeningOrb(_slack.Object);
+            _item = new AwakeningOrb(_slack.Object, _userService.Object);
             var loadout = new Loadout();
             var items = new List<InventoryItem>() {new InventoryItem("testuser", "testitem") {InventoryPosition = 6, Item = _item } };
             _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User() { Id = "testuser", InventoryItems = items, Loadout = loadout });
 
-            _inventoryCommands = new InventoryCommands(_userRepository.Object, _slack.Object, _inventoryRepository.Object, _equipmentRepository.Object);
+            _inventoryCommands = new InventoryCommands(_userRepository.Object, _slack.Object, _inventoryRepository.Object, _equipmentRepository.Object, _userService.Object);
         }
 
         [TestMethod]

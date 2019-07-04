@@ -22,7 +22,7 @@ namespace Test.Stats
             Value = "luck"
         };
 
-        private StatsService _userService;
+        private StatsMenuService _userMenuService;
 
         private readonly Mock<IUserRepository> _userRepository = new Mock<IUserRepository>();
         private readonly Mock<IStatsRepository> _statsRepository = new Mock<IStatsRepository>();
@@ -35,13 +35,13 @@ namespace Test.Stats
             _user = new User() { Id = "testuser", Experience = 0 };
             _userRepository.Setup(repo => repo.GetUser(User)).Returns(_user);
 
-            _userService = new StatsService(_statsRepository.Object, _userRepository.Object, _slack.Object);
+            _userMenuService = new StatsMenuService(_statsRepository.Object, _userRepository.Object, _slack.Object);
         }
 
         [TestMethod]
         public async Task WhenAttributingLuck_LuckStatIncrease()
         {
-            await _userService.AttributeStatPoint(_interaction);
+            await _userMenuService.AttributeStatPoint(_interaction);
 
             _statsRepository.Verify(repo => repo.AttributeStatPoint(User, "luck"));
         }
@@ -51,7 +51,7 @@ namespace Test.Stats
         {
             _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User() { Id = "testuser", Luck = 10 });
 
-            await _userService.AttributeStatPoint(_interaction);
+            await _userMenuService.AttributeStatPoint(_interaction);
 
             _statsRepository.Verify(repo => repo.AttributeStatPoint(User, "luck"), Times.Never);
         }

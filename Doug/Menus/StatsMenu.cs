@@ -14,7 +14,7 @@ namespace Doug.Menus
         {
             Blocks = new List<Block>
             {
-                new Section(new MarkdownText(string.Format(DougMessages.StatsOf, Utils.UserMention(user.Id)))),
+                new Section(new MarkdownText(string.Format(DougMessages.StatsOf, $"<@{user.Id}>"))),
                 CreateUserOtherInfo(user),
                 new Divider(),
                 CreateHealthFields(user),

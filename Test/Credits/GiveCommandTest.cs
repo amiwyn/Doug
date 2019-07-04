@@ -2,6 +2,7 @@ using Doug.Commands;
 using Doug.Items;
 using Doug.Models;
 using Doug.Repositories;
+using Doug.Services;
 using Doug.Slack;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -27,13 +28,15 @@ namespace Test.Credits
         private readonly Mock<IUserRepository> _userRepository = new Mock<IUserRepository>();
         private readonly Mock<ISlackWebApi> _slack = new Mock<ISlackWebApi>();
         private readonly Mock<IItemFactory> _itemFactory = new Mock<IItemFactory>();
+        private readonly Mock<IUserService> _userService = new Mock<IUserService>();
 
         [TestInitialize]
         public void Setup()
         {
             _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User() { Id = "testuser", Credits = 79});
+            _userRepository.Setup(repo => repo.GetUser("otherUserid")).Returns(new User() { Id = "otherUserid", Credits = 79});
 
-            _creditsCommands = new CreditsCommands(_userRepository.Object, _slack.Object, _itemFactory.Object);
+            _creditsCommands = new CreditsCommands(_userRepository.Object, _slack.Object, _itemFactory.Object, _userService.Object);
         }
 
         [TestMethod]

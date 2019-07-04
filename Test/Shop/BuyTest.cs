@@ -24,7 +24,7 @@ namespace Test.Shop
             Value = "lucky_dice"
         };
 
-        private ShopService _shopService;
+        private ShopMenuService _shopMenuService;
 
         private readonly Mock<IUserRepository> _userRepository = new Mock<IUserRepository>();
         private readonly Mock<ISlackWebApi> _slack = new Mock<ISlackWebApi>();
@@ -39,13 +39,13 @@ namespace Test.Shop
             _user = new User() {Id = "testuser", Credits = 431279};
             _userRepository.Setup(repo => repo.GetUser(User)).Returns(_user);
 
-            _shopService = new ShopService(_userRepository.Object, _slack.Object, _inventoryRepository.Object, _itemFactory.Object);
+            _shopMenuService = new ShopMenuService(_userRepository.Object, _slack.Object, _inventoryRepository.Object, _itemFactory.Object);
         }
 
         [TestMethod]
         public async Task GivenEnoughCredits_WhenBuyingAnApple_AppleIsAdded()
         {
-            await _shopService.Buy(_interaction);
+            await _shopMenuService.Buy(_interaction);
 
             _inventoryRepository.Verify(repo => repo.AddItem(_user, "lucky_dice"));
         }
@@ -53,7 +53,7 @@ namespace Test.Shop
         [TestMethod]
         public async Task GivenEnoughCredits_WhenBuyingAnApple_CreditsAreRemovedFromGiver()
         {
-            await _shopService.Buy(_interaction);
+            await _shopMenuService.Buy(_interaction);
 
             _userRepository.Verify(repo => repo.RemoveCredits(User, 2674));
         }
@@ -63,7 +63,7 @@ namespace Test.Shop
         {
             _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User() { Id = "testuser", Credits = 22 });
 
-            await _shopService.Buy(_interaction);
+            await _shopMenuService.Buy(_interaction);
 
             _slack.Verify(slack => slack.SendEphemeralMessage(It.IsAny<string>(), User, Channel));
         }

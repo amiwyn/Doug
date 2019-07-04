@@ -30,12 +30,13 @@ namespace Test.Coffee
         private readonly Mock<ISlackWebApi> _slack = new Mock<ISlackWebApi>();
         private readonly Mock<IAuthorizationService> _adminValidator = new Mock<IAuthorizationService>();
         private readonly Mock<ICoffeeService> _coffeeBreakService = new Mock<ICoffeeService>();
+        private readonly Mock<IUserService> _userService = new Mock<IUserService>();
 
         [TestInitialize]
         public void Setup()
         {
             _adminValidator.Setup(admin => admin.IsUserSlackAdmin(User)).Returns(Task.FromResult(true));
-            _coffeeCommands = new CoffeeCommands(_coffeeRepository.Object, _userRepository.Object, _slack.Object, _adminValidator.Object, _coffeeBreakService.Object);
+            _coffeeCommands = new CoffeeCommands(_coffeeRepository.Object, _userRepository.Object, _slack.Object, _adminValidator.Object, _coffeeBreakService.Object, _userService.Object);
         }
 
         [TestMethod]

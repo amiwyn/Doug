@@ -32,32 +32,27 @@ namespace Test.Slurs
         private readonly Mock<ISlackWebApi> _slack = new Mock<ISlackWebApi>();
         private readonly Mock<IAuthorizationService> _adminValidator = new Mock<IAuthorizationService>();
         private readonly Mock<IItemEventDispatcher> _eventDispatcher = new Mock<IItemEventDispatcher>();
+        private readonly Mock<IUserService> _userService = new Mock<IUserService>();
 
         [TestInitialize]
         public void Setup()
         {
             _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User() { Id = "a", Credits = 69 });
-            _eventDispatcher.Setup(disp => disp.OnFlaming(It.IsAny<Command>(), It.IsAny<string>())).Returns((Command cmd, string slur) => slur);
+            _eventDispatcher.Setup(disp => disp.OnFlaming(It.IsAny<User>(), It.IsAny<User>(), It.IsAny<Command>(), It.IsAny<string>())).Returns((User caller, User target, Command cmd, string slur) => slur);
             _slurRepository.Setup(repo => repo.GetSlurs()).Returns(new List<Slur>() { new Slur("{user} is a {random} 350++ bitch", "asdf") });
-            _userRepository.Setup(repo => repo.GetUsers()).Returns(new List<User>() { new User() { Id = "robert" } });
+            _userRepository.Setup(repo => repo.GetUsers()).Returns(new List<User>() { new User { Id = "testuser" }, new User { Id = "otherUserid" } });
 
-            _slursCommands = new SlursCommands(_slurRepository.Object, _userRepository.Object, _slack.Object, _adminValidator.Object, _eventDispatcher.Object);
+            _slursCommands = new SlursCommands(_slurRepository.Object, _userRepository.Object, _slack.Object, _adminValidator.Object, _eventDispatcher.Object, _userService.Object);
         }
 
         [TestMethod]
         public async Task GivenASlurWithUserMention_WhenFlaming_UserIsMentioned()
         {
+            _userService.Setup(service => service.Mention(It.IsAny<User>())).Returns("<@otherUserid>");
+
             await _slursCommands.Flame(_command);
 
             _slack.Verify(slack => slack.BroadcastMessage(It.IsRegex("<@otherUserid>"), Channel));
-        }
-
-        [TestMethod]
-        public async Task GivenASlurWithRandom_WhenFlaming_RandomIsMentioned()
-        {
-            await _slursCommands.Flame(_command);
-
-            _slack.Verify(slack => slack.BroadcastMessage(It.IsRegex("<@robert>"), Channel));
         }
 
         [TestMethod]
@@ -126,7 +121,7 @@ namespace Test.Slurs
         {
             await _slursCommands.Flame(_command);
 
-            _eventDispatcher.Verify(disp => disp.OnFlaming(_command, It.IsAny<string>()));
+            _eventDispatcher.Verify(disp => disp.OnFlaming(It.IsAny<User>(), It.IsAny<User>(), _command, It.IsAny<string>()));
         }
     }
 }

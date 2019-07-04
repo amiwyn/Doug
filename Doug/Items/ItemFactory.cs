@@ -47,7 +47,7 @@ namespace Doug.Items
             switch (itemId)
             {
                 case AwakeningOrb:
-                    return new AwakeningOrb(_slack);
+                    return new AwakeningOrb(_slack, _userService);
                 case LuckyDice:
                     return new LuckyDice();
                 case BurglarBoots:
@@ -69,7 +69,7 @@ namespace Doug.Items
                 case CloakOfSpikes:
                     return new CloakOfSpikes();
                 case KickTicket:
-                    return new KickTicket(_inventoryRepository, _slack);
+                    return new KickTicket(_inventoryRepository, _slack, _userService);
                 case InviteTicket:
                     return new InviteTicket(_inventoryRepository, _slack); 
                 case Bread:

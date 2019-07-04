@@ -32,6 +32,7 @@ namespace Test.Slurs
         private readonly Mock<ISlackWebApi> _slack = new Mock<ISlackWebApi>();
         private readonly Mock<IAuthorizationService> _adminValidator = new Mock<IAuthorizationService>();
         private readonly Mock<IItemEventDispatcher> _eventDispatcher = new Mock<IItemEventDispatcher>();
+        private readonly Mock<IUserService> _userService = new Mock<IUserService>();
 
         [TestInitialize]
         public void Setup()
@@ -41,7 +42,7 @@ namespace Test.Slurs
             _slurRepository.Setup(repo => repo.GetRecentSlurs()).Returns(new List<RecentFlame>() { new RecentFlame() });
             _slurRepository.Setup(repo => repo.GetSlur(It.IsAny<int>())).Returns(new Slur("ffff", "asdf"));
 
-            _slursCommands = new SlursCommands(_slurRepository.Object, _userRepository.Object, _slack.Object, _adminValidator.Object, _eventDispatcher.Object);
+            _slursCommands = new SlursCommands(_slurRepository.Object, _userRepository.Object, _slack.Object, _adminValidator.Object, _eventDispatcher.Object, _userService.Object);
         }
 
         [TestMethod]
@@ -55,6 +56,7 @@ namespace Test.Slurs
         [TestMethod]
         public void WhenCheckingLastSlurAuthor_LastSlurAuthorIsReturned()
         {
+            _userService.Setup(service => service.Mention(It.IsAny<User>())).Returns("<@asdf>");
             var result = _slursCommands.WhoLast(_command);
 
             Assert.AreEqual("<@asdf> created that slur.", result.Message);

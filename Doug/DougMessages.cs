@@ -69,6 +69,7 @@
         public const string SelectTarget = "Select a target";
         public const string SelectTargetText = "Please select a user to target with this action.";
         public const string UserAttackedTarget = "{0} dealt {2} damage to {1}!";
+        public const string UsedItemOnTarget = "{0} used a *{1}* on {2}";
 
         public const string DougError = "Beep boop, it's not working : {0}";
         public const string NotAnAdmin = "You are not an admin.";
@@ -82,7 +83,7 @@
         public const string NotEnoughEnergy = "You don't have enough energy.";
         public const string TargetNoMoney = "Your target don't have enough " + CreditEmoji;
         public const string NoItemInSlot = "There is no item in slot {0}.";
-        public const string ItemCantBeUsed = "The item in slot {0} cannot be used.";
+        public const string ItemCantBeUsed = "This item cannot be used";
         public const string InvalidUserArgument = "You must pass a valid user in arguments";
         public const string ItemNotEquipAble = "This item is not equipable.";
         public const string NoMoreStatsPoints = "No more available stats points.";

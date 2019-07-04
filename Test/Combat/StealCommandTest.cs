@@ -31,6 +31,7 @@ namespace Test.Combat
         private readonly Mock<IItemEventDispatcher> _itemEventDispatcher = new Mock<IItemEventDispatcher>();
         private readonly Mock<IStatsRepository> _statsRepository = new Mock<IStatsRepository>();
         private readonly Mock<IRandomService> _randomService = new Mock<IRandomService>();
+        private readonly Mock<IUserService> _userService = new Mock<IUserService>();
 
 
         [TestInitialize]
@@ -40,7 +41,7 @@ namespace Test.Combat
             _userRepository.Setup(repo => repo.GetUser("robert")).Returns(new User { Id = "robert", Credits = 10 });
             _itemEventDispatcher.Setup(disp => disp.OnStealingAmount(It.IsAny<User>(), It.IsAny<int>())).Returns(1);
 
-            _combatCommands = new CombatCommands(_itemEventDispatcher.Object, _userRepository.Object, _slack.Object, _statsRepository.Object, _randomService.Object);
+            _combatCommands = new CombatCommands(_itemEventDispatcher.Object, _userRepository.Object, _slack.Object, _statsRepository.Object, _randomService.Object, _userService.Object);
         }
 
         [TestMethod]

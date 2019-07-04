@@ -3,6 +3,7 @@ using Doug.Commands;
 using Doug.Items.Misc;
 using Doug.Models;
 using Doug.Repositories;
+using Doug.Services;
 using Doug.Slack;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -32,6 +33,7 @@ namespace Test.Inventory
         private readonly Mock<ISlackWebApi> _slack = new Mock<ISlackWebApi>();
         private readonly Mock<IInventoryRepository> _inventoryRepository = new Mock<IInventoryRepository>();
         private readonly Mock<IEquipmentRepository> _equipmentRepository = new Mock<IEquipmentRepository>();
+        private readonly Mock<IUserService> _userService = new Mock<IUserService>();
 
         [TestInitialize]
         public void Setup()
@@ -43,7 +45,7 @@ namespace Test.Inventory
             _userRepository.Setup(repo => repo.GetUser(User)).Returns(_user);
             _userRepository.Setup(repo => repo.GetUser("ginette")).Returns(_target);
 
-            _inventoryCommands = new InventoryCommands(_userRepository.Object, _slack.Object, _inventoryRepository.Object, _equipmentRepository.Object);
+            _inventoryCommands = new InventoryCommands(_userRepository.Object, _slack.Object, _inventoryRepository.Object, _equipmentRepository.Object, _userService.Object);
         }
 
         [TestMethod]

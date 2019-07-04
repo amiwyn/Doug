@@ -31,13 +31,14 @@ namespace Test.Slurs
         private readonly Mock<ISlackWebApi> _slack = new Mock<ISlackWebApi>();
         private readonly Mock<IAuthorizationService> _adminValidator = new Mock<IAuthorizationService>();
         private readonly Mock<IItemEventDispatcher> _eventDispatcher = new Mock<IItemEventDispatcher>();
+        private readonly Mock<IUserService> _userService = new Mock<IUserService>();
 
         [TestInitialize]
         public void Setup()
         {
             _slurRepository.Setup(repo => repo.GetSlursFrom(User)).Returns(new List<Slur>() { new Slur("slur", "asdf") });
 
-            _slursCommands = new SlursCommands(_slurRepository.Object, _userRepository.Object, _slack.Object, _adminValidator.Object, _eventDispatcher.Object);
+            _slursCommands = new SlursCommands(_slurRepository.Object, _userRepository.Object, _slack.Object, _adminValidator.Object, _eventDispatcher.Object, _userService.Object);
         }
 
         [TestMethod]

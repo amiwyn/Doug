@@ -13,7 +13,7 @@ namespace Doug.Repositories
         void SkipUser(string userId);
         void ConfirmUserReady(string userId);
         ICollection<User> GetReadyParticipants();
-        ICollection<string> GetMissingParticipants();
+        ICollection<User> GetMissingParticipants();
         void ResetRoster();
         bool IsCoffeeBreak();
         void EndCoffeeBreak();
@@ -50,9 +50,17 @@ namespace Doug.Repositories
             }
         }
 
-        public ICollection<string> GetMissingParticipants()
+        public ICollection<User> GetMissingParticipants()
         {
-            return _db.Roster.Where(user => !user.IsSkipping && !user.IsReady).Select(user => user.Id).ToList();
+            var userIds = _db.Roster.Where(user => !user.IsSkipping && !user.IsReady).Select(user => user.Id).ToList();
+
+            var users = _db.Users.Where(usr => userIds.Contains(usr.Id))
+                .Include(usr => usr.InventoryItems)
+                .Include(usr => usr.Loadout)
+                .ToList();
+
+            users.ForEach(user => user.LoadItems(_itemFactory));
+            return users;
         }
 
         public ICollection<User> GetReadyParticipants()

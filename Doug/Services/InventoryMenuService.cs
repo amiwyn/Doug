@@ -11,7 +11,7 @@ using Doug.Slack;
 
 namespace Doug.Services
 {
-    public interface IInventoryService
+    public interface IInventoryMenuService
     {
         Task Use(Interaction interaction);
         Task Equip(Interaction interaction);
@@ -24,13 +24,13 @@ namespace Doug.Services
         Task Info(Interaction interaction);
     }
 
-    public class InventoryService : IInventoryService
+    public class InventoryMenuService : IInventoryMenuService
     {
         private readonly ISlackWebApi _slack;
         private readonly IUserRepository _userRepository;
         private readonly IInventoryCommands _inventoryCommands;
 
-        public InventoryService(ISlackWebApi slack, IUserRepository userRepository, IInventoryCommands inventoryCommands)
+        public InventoryMenuService(ISlackWebApi slack, IUserRepository userRepository, IInventoryCommands inventoryCommands)
         {
             _slack = slack;
             _userRepository = userRepository;

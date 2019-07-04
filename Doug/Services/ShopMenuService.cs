@@ -9,13 +9,13 @@ using Doug.Slack;
 
 namespace Doug.Services
 {
-    public interface IShopService
+    public interface IShopMenuService
     {
-        Task Buy(Interaction interaction);
-        Task Sell(Interaction interaction);
+        Task Buy(Interaction interaction); // TODO: put these in a separate service
+        Task Sell(Interaction interaction); // TODO: put these in a separate service
     }
 
-    public class ShopService : IShopService
+    public class ShopMenuService : IShopMenuService
     {
         private readonly IUserRepository _userRepository;
         private readonly ISlackWebApi _slack;
@@ -24,7 +24,7 @@ namespace Doug.Services
 
         public static readonly List<string> ShopItems = new List<string> { ItemFactory.CoffeeCup, ItemFactory.Apple, ItemFactory.Bread, ItemFactory.SteelSword, ItemFactory.ClothArmor }; // TODO: temp. put this in a table somewhere
 
-        public ShopService(IUserRepository userRepository, ISlackWebApi slack, IInventoryRepository inventoryRepository, IItemFactory itemFactory)
+        public ShopMenuService(IUserRepository userRepository, ISlackWebApi slack, IInventoryRepository inventoryRepository, IItemFactory itemFactory)
         {
             _userRepository = userRepository;
             _slack = slack;
@@ -32,7 +32,7 @@ namespace Doug.Services
             _itemFactory = itemFactory;
         }
 
-        public async Task Buy(Interaction interaction)
+        public async Task Buy(Interaction interaction) 
         {
             var user = _userRepository.GetUser(interaction.UserId);
             var item = _itemFactory.CreateItem(interaction.Value);

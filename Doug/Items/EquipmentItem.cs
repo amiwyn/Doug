@@ -48,5 +48,10 @@ namespace Doug.Items
         {
             return amount;
         }
+
+        public virtual string OnMention(string mention)
+        {
+            return mention;
+        }
     }
 }
