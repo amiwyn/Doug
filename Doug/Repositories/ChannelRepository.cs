@@ -39,7 +39,7 @@ namespace Doug.Repositories
 
         public ChannelType GetChannelType(string channelId)
         {
-            var typeString = _db.Channels.Single(channel => channel.Id == channelId).Type;
+            var typeString = _db.Channels.SingleOrDefault(channel => channel.Id == channelId)?.Type;
             Enum.TryParse(typeString, out ChannelType channelType);
             return channelType;
         }

@@ -2,6 +2,7 @@
 {
     public enum ChannelType
     {
+        Default,
         Pvp,
         Casino,
         Coffee,
