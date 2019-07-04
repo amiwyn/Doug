@@ -1,5 +1,7 @@
-﻿using Doug.Models;
+﻿using System;
+using Doug.Models;
 using System.Linq;
+using Doug.Menus;
 
 namespace Doug.Repositories
 {
@@ -8,6 +10,7 @@ namespace Doug.Repositories
         void SendGambleChallenge(GambleChallenge challenge);
         GambleChallenge GetGambleChallenge(string target);
         void RemoveGambleChallenge(string target);
+        ChannelType GetChannelType(string channelId);
     }
 
     public class ChannelRepository : IChannelRepository
@@ -32,6 +35,13 @@ namespace Doug.Repositories
                 _db.GambleChallenges.Remove(challenge);
                 _db.SaveChanges();
             }
+        }
+
+        public ChannelType GetChannelType(string channelId)
+        {
+            var typeString = _db.Channels.Single(channel => channel.Id == channelId).Type;
+            Enum.TryParse(typeString, out ChannelType channelType);
+            return channelType;
         }
 
         public void SendGambleChallenge(GambleChallenge challenge)

@@ -88,6 +88,7 @@
         public const string ItemNotEquipAble = "This item is not equipable.";
         public const string NoMoreStatsPoints = "No more available stats points.";
         public const string NoEquipmentInSlot = "No equipment in slot {0}";
+        public const string NotInRightChannel = "You cannot perform this action in this channel.";
 
         public const string EmptyInventory = "Oops, yer loot seems empty, buy more at th' shop now.";
     }

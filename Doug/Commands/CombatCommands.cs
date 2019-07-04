@@ -26,8 +26,9 @@ namespace Doug.Commands
         private readonly IStatsRepository _statsRepository;
         private readonly IRandomService _randomService;
         private readonly IUserService _userService;
+        private readonly IChannelRepository _channelRepository;
 
-        public CombatCommands(IItemEventDispatcher itemEventDispatcher, IUserRepository userRepository, ISlackWebApi slack, IStatsRepository statsRepository, IRandomService randomService, IUserService userService)
+        public CombatCommands(IItemEventDispatcher itemEventDispatcher, IUserRepository userRepository, ISlackWebApi slack, IStatsRepository statsRepository, IRandomService randomService, IUserService userService, IChannelRepository channelRepository)
         {
             _itemEventDispatcher = itemEventDispatcher;
             _userRepository = userRepository;
@@ -35,6 +36,7 @@ namespace Doug.Commands
             _statsRepository = statsRepository;
             _randomService = randomService;
             _userService = userService;
+            _channelRepository = channelRepository;
         }
 
         public DougResponse Steal(Command command)
@@ -90,6 +92,13 @@ namespace Doug.Commands
             if (energy < 0)
             {
                 return new DougResponse(DougMessages.NotEnoughEnergy);
+            }
+
+            var channelType = _channelRepository.GetChannelType(command.ChannelId);
+
+            if (channelType != ChannelType.Pvp)
+            {
+                return new DougResponse(DougMessages.NotInRightChannel);
             }
 
             _statsRepository.UpdateEnergy(command.UserId, energy);
