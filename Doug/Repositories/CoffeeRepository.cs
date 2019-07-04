@@ -18,7 +18,6 @@ namespace Doug.Repositories
         bool IsCoffeeBreak();
         void EndCoffeeBreak();
         void StartCoffeeBreak();
-        void GetAccessTokens(out string bot, out string user);
         string GetRemindJob();
         void SetRemindJob(string jobId);
     }
@@ -119,13 +118,6 @@ namespace Doug.Repositories
             channel.IsCoffee = true;
 
             _db.SaveChanges();
-        }
-
-        public void GetAccessTokens(out string bot, out string user)
-        {
-            var coffee = _db.CoffeeBreak.Single();
-            bot = coffee.BotToken;
-            user = coffee.UserToken;
         }
 
         public string GetRemindJob()

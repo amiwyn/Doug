@@ -1,12 +1,12 @@
 ﻿using System;
 using Doug.Models;
 using System.Linq;
-using Doug.Menus;
 
 namespace Doug.Repositories
 {
     public interface IChannelRepository
     {
+        void GetAccessTokens(out string bot, out string user);
         void SendGambleChallenge(GambleChallenge challenge);
         GambleChallenge GetGambleChallenge(string target);
         void RemoveGambleChallenge(string target);
@@ -42,6 +42,13 @@ namespace Doug.Repositories
             var typeString = _db.Channels.Single(channel => channel.Id == channelId).Type;
             Enum.TryParse(typeString, out ChannelType channelType);
             return channelType;
+        }
+
+        public void GetAccessTokens(out string bot, out string user)
+        {
+            var coffee = _db.CoffeeBreak.Single();
+            bot = coffee.BotToken;
+            user = coffee.UserToken;
         }
 
         public void SendGambleChallenge(GambleChallenge challenge)
