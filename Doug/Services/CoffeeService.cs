@@ -25,17 +25,15 @@ namespace Doug.Services
 
         private readonly ISlackWebApi _slack;
         private readonly ICoffeeRepository _coffeeRepository;
-        private readonly IChannelRepository _channelRepository;
         private readonly IBackgroundJobClient _backgroundJobClient;
         private readonly IUserRepository _userRepository;
         private readonly IInventoryRepository _inventoryRepository;
         private readonly IUserService _userService;
 
-        public CoffeeService(ISlackWebApi slackWebApi, ICoffeeRepository coffeeRepository, IChannelRepository channelRepository, IBackgroundJobClient backgroundJobClient, IUserRepository userRepository, IInventoryRepository inventoryRepository, IUserService userService)
+        public CoffeeService(ISlackWebApi slackWebApi, ICoffeeRepository coffeeRepository, IBackgroundJobClient backgroundJobClient, IUserRepository userRepository, IInventoryRepository inventoryRepository, IUserService userService)
         {
             _slack = slackWebApi;
             _coffeeRepository = coffeeRepository;
-            _channelRepository = channelRepository;
             _backgroundJobClient = backgroundJobClient;
             _userRepository = userRepository;
             _inventoryRepository = inventoryRepository;
@@ -63,7 +61,7 @@ namespace Doug.Services
                 return;
             }
 
-            var remindJob = _channelRepository.GetRemindJob();
+            var remindJob = _coffeeRepository.GetRemindJob();
 
             if (!string.IsNullOrEmpty(remindJob))
             {
@@ -72,7 +70,7 @@ namespace Doug.Services
 
             var newRemindJob = _backgroundJobClient.Schedule(() => CoffeeRemind(channelId), TimeSpan.FromSeconds(CoffeeRemindDelaySeconds));
 
-            _channelRepository.SetRemindJob(newRemindJob);
+            _coffeeRepository.SetRemindJob(newRemindJob);
         }
 
         private static bool IsInTimespan(DateTime currentTime, TimeSpan targetTime, int tolerance)

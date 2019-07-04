@@ -20,43 +20,22 @@ namespace Doug.Controllers
         [HttpPost("profile")]
         public async Task<ActionResult> Profile([FromForm]SlackCommandDto slackCommand)
         {
-            try
-            {
-                var result = await _statsCommands.Profile(slackCommand.ToCommand());
-                return Ok(result.Message);
-            }
-            catch (Exception ex)
-            {
-                return Ok(string.Format(DougMessages.DougError, ex.Message));
-            }
+            var result = await _statsCommands.Profile(slackCommand.ToCommand());
+            return Ok(result.Message);
         }
 
         [HttpPost("balance")]
         public ActionResult Balance([FromForm]SlackCommandDto slackCommand)
         {
-            try
-            {
-                var result = _statsCommands.Balance(slackCommand.ToCommand());
-                return Ok(result.Message);
-            }
-            catch (Exception ex)
-            {
-                return Ok(string.Format(DougMessages.DougError, ex.Message));
-            }
+            var result = _statsCommands.Balance(slackCommand.ToCommand());
+            return Ok(result.Message);
         }
 
         [HttpPost("equipment")]
         public async Task<ActionResult> Equipment([FromForm]SlackCommandDto slackCommand)
         {
-            try
-            {
-                var result = await _statsCommands.Equipment(slackCommand.ToCommand());
-                return Ok(result.Message);
-            }
-            catch (Exception ex)
-            {
-                return Ok(string.Format(DougMessages.DougError, ex.Message));
-            }
+            var result = await _statsCommands.Equipment(slackCommand.ToCommand());
+            return Ok(result.Message);
         }
     }
 }

@@ -11,7 +11,7 @@ namespace Doug.Services
     public interface IUserService
     {
         string Mention(User user);
-        Task RemoveHealth(User user, int health, string channel);
+        Task<bool> RemoveHealth(User user, int health, string channel);
         Task AddExperience(User user, long experience, string channel);
         Task AddBulkExperience(List<User> users, long experience, string channel);
     }
@@ -34,7 +34,7 @@ namespace Doug.Services
             return _eventDispatcher.OnMention(user, $"<@{user.Id}>");
         }
 
-        public async Task RemoveHealth(User user, int health, string channel)
+        public async Task<bool> RemoveHealth(User user, int health, string channel)
         {
             user.Health -= health;
 
@@ -42,11 +42,11 @@ namespace Doug.Services
             {
                 _statsRepository.KillUser(user.Id);
                 await _slack.BroadcastMessage(string.Format(DougMessages.UserDied, Mention(user)), channel);
+                return true;
             }
-            else
-            {
-                _statsRepository.UpdateHealth(user.Id, user.Health);
-            }
+
+            _statsRepository.UpdateHealth(user.Id, user.Health);
+            return false;
         }
 
         public async Task AddExperience(User user, long experience, string channel)

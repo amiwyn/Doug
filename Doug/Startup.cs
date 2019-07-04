@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Net;
 using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
@@ -13,6 +14,7 @@ using Doug.Slack;
 using Hangfire;
 using Hangfire.SQLite;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Internal;
@@ -47,34 +49,34 @@ namespace Doug
             services.AddSingleton(new HttpClient(new HttpClientHandler(), false));
 
             
-            services.AddTransient<ISlackWebApi, SlackWebApi>();
-            services.AddTransient<IItemEventDispatcher, ItemEventDispatcher>();
-            services.AddTransient<IItemFactory, ItemFactory>();
+            services.AddScoped<ISlackWebApi, SlackWebApi>();
+            services.AddScoped<IItemEventDispatcher, ItemEventDispatcher>();
+            services.AddScoped<IItemFactory, ItemFactory>();
 
-            services.AddTransient<IEventService, EventService>();
-            services.AddTransient<IAuthorizationService, AuthorizationService>();
-            services.AddTransient<ICoffeeService, CoffeeService>();
-            services.AddTransient<IRandomService, RandomService>();
-            services.AddTransient<IShopMenuService, ShopMenuService>();
-            services.AddTransient<IUserService, UserService>();
-            services.AddTransient<IStatsMenuService, StatsMenuService>();
-            services.AddTransient<IInventoryMenuService, InventoryMenuService>();
+            services.AddScoped<IEventService, EventService>();
+            services.AddScoped<IAuthorizationService, AuthorizationService>();
+            services.AddScoped<ICoffeeService, CoffeeService>();
+            services.AddScoped<IRandomService, RandomService>();
+            services.AddScoped<IShopMenuService, ShopMenuService>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IStatsMenuService, StatsMenuService>();
+            services.AddScoped<IInventoryMenuService, InventoryMenuService>();
 
-            services.AddTransient<ICoffeeCommands, CoffeeCommands>();
-            services.AddTransient<ISlursCommands, SlursCommands>();
-            services.AddTransient<ICreditsCommands, CreditsCommands>();
-            services.AddTransient<ICasinoCommands, CasinoCommands>();
-            services.AddTransient<ICombatCommands, CombatCommands>();
-            services.AddTransient<IInventoryCommands, InventoryCommands>();
-            services.AddTransient<IStatsCommands, StatsCommands>();
+            services.AddScoped<ICoffeeCommands, CoffeeCommands>();
+            services.AddScoped<ISlursCommands, SlursCommands>();
+            services.AddScoped<ICreditsCommands, CreditsCommands>();
+            services.AddScoped<ICasinoCommands, CasinoCommands>();
+            services.AddScoped<ICombatCommands, CombatCommands>();
+            services.AddScoped<IInventoryCommands, InventoryCommands>();
+            services.AddScoped<IStatsCommands, StatsCommands>();
 
-            services.AddTransient<IChannelRepository, ChannelRepository>();
-            services.AddTransient<IUserRepository, UserRepository>();
-            services.AddTransient<ICoffeeRepository, CoffeeRepository>();
-            services.AddTransient<ISlurRepository, SlurRepository>();
-            services.AddTransient<IStatsRepository, StatsRepository>();
-            services.AddTransient<IInventoryRepository, InventoryRepository>();
-            services.AddTransient<IEquipmentRepository, EquipmentRepository>();
+            services.AddScoped<IChannelRepository, ChannelRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<ICoffeeRepository, CoffeeRepository>();
+            services.AddScoped<ISlurRepository, SlurRepository>();
+            services.AddScoped<IStatsRepository, StatsRepository>();
+            services.AddScoped<IInventoryRepository, InventoryRepository>();
+            services.AddScoped<IEquipmentRepository, EquipmentRepository>();
 
             var env = Environment.GetEnvironmentVariable("APP_ENV");
 
@@ -114,6 +116,8 @@ namespace Doug
                 app.UseHsts();
                 app.Use(RequestSigning);
             }
+
+            app.UseExceptionHandler(DougExceptionHandler);
 
             app.UseHttpsRedirection();
             app.Use(EventLimiter);
@@ -170,6 +174,19 @@ namespace Doug
                 context.Response.StatusCode = 400;
                 await context.Response.WriteAsync("Request signing failed");
             }
+        }
+
+        private void DougExceptionHandler(IApplicationBuilder builder)
+        {
+            builder.Run(async context =>
+            {
+                context.Response.StatusCode = (int)HttpStatusCode.OK;
+                var error = context.Features.Get<IExceptionHandlerFeature>();
+                if (error != null)
+                {
+                    await context.Response.WriteAsync(string.Format(DougMessages.DougError, error.Error.Message)).ConfigureAwait(false);
+                }
+            });
         }
     }
 }

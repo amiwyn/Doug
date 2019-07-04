@@ -18,6 +18,8 @@ namespace Doug.Repositories
         bool IsCoffeeBreak();
         void EndCoffeeBreak();
         void StartCoffeeBreak();
+        string GetRemindJob();
+        void SetRemindJob(string jobId);
     }
 
     public class CoffeeRepository : ICoffeeRepository
@@ -115,6 +117,17 @@ namespace Doug.Repositories
             var channel = _db.CoffeeBreak.Single();
             channel.IsCoffee = true;
 
+            _db.SaveChanges();
+        }
+
+        public string GetRemindJob()
+        {
+            return _db.CoffeeBreak.Single().CoffeeRemindJobId;
+        }
+
+        public void SetRemindJob(string jobId)
+        {
+            _db.CoffeeBreak.Single().CoffeeRemindJobId = jobId;
             _db.SaveChanges();
         }
 
