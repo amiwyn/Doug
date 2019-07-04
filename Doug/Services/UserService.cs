@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Doug.Items;
 using Doug.Models;
 using Doug.Repositories;
 using Doug.Slack;
@@ -9,6 +10,7 @@ namespace Doug.Services
 {
     public interface IUserService
     {
+        string Mention(User user);
         Task RemoveHealth(User user, int health, string channel);
         Task AddExperience(User user, long experience, string channel);
         Task AddBulkExperience(List<User> users, long experience, string channel);
@@ -18,11 +20,18 @@ namespace Doug.Services
     {
         private readonly ISlackWebApi _slack;
         private readonly IStatsRepository _statsRepository;
+        private readonly IItemEventDispatcher _eventDispatcher;
 
-        public UserService(ISlackWebApi slack, IStatsRepository statsRepository)
+        public UserService(ISlackWebApi slack, IStatsRepository statsRepository, IItemEventDispatcher eventDispatcher)
         {
             _slack = slack;
             _statsRepository = statsRepository;
+            _eventDispatcher = eventDispatcher;
+        }
+
+        public string Mention(User user)
+        {
+            return _eventDispatcher.OnMention(user, $"<@{user.Id}>");
         }
 
         public async Task RemoveHealth(User user, int health, string channel)
@@ -32,7 +41,7 @@ namespace Doug.Services
             if (user.IsDead())
             {
                 _statsRepository.KillUser(user.Id);
-                await _slack.BroadcastMessage(string.Format(DougMessages.UserDied, Utils.UserMention(user.Id)), channel);
+                await _slack.BroadcastMessage(string.Format(DougMessages.UserDied, Mention(user)), channel);
             }
             else
             {
@@ -58,7 +67,7 @@ namespace Doug.Services
 
             _statsRepository.LevelUpUsers(levelUpUsers.Select(user => user.Id).ToList());
 
-            var levelUpMessageTasks = levelUpUsers.Select(user => _slack.BroadcastMessage(string.Format(DougMessages.LevelUp, Utils.UserMention(user.Id), user.Level), channel));
+            var levelUpMessageTasks = levelUpUsers.Select(user => _slack.BroadcastMessage(string.Format(DougMessages.LevelUp, Mention(user), user.Level), channel));
 
             await Task.WhenAll(expGainMessageTasks);
             await Task.WhenAll(levelUpMessageTasks);

@@ -6,18 +6,18 @@ using Doug.Slack;
 
 namespace Doug.Services
 {
-    public interface IStatsService
+    public interface IStatsMenuService
     {
         Task AttributeStatPoint(Interaction interaction);
     }
 
-    public class StatsService : IStatsService
+    public class StatsMenuService : IStatsMenuService
     {
         private readonly IUserRepository _userRepository;
         private readonly IStatsRepository _statsRepository;
         private readonly ISlackWebApi _slack;
 
-        public StatsService(IStatsRepository statsRepository, IUserRepository userRepository, ISlackWebApi slack)
+        public StatsMenuService(IStatsRepository statsRepository, IUserRepository userRepository, ISlackWebApi slack)
         {
             _statsRepository = statsRepository;
             _userRepository = userRepository;

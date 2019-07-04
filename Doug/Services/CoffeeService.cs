@@ -44,8 +44,8 @@ namespace Doug.Services
 
         public void CountParrot(string userId, string channelId, DateTime currentTime)
         {
-            if (!Utils.IsInTimespan(currentTime, TimeSpan.FromHours(MorningBreak), Tolerance) &&
-                !Utils.IsInTimespan(currentTime, TimeSpan.FromHours(AfternoonBreak), Tolerance))
+            if (!IsInTimespan(currentTime, TimeSpan.FromHours(MorningBreak), Tolerance) &&
+                !IsInTimespan(currentTime, TimeSpan.FromHours(AfternoonBreak), Tolerance))
             {
                 return;
             }
@@ -75,6 +75,14 @@ namespace Doug.Services
             _channelRepository.SetRemindJob(newRemindJob);
         }
 
+        private static bool IsInTimespan(DateTime currentTime, TimeSpan targetTime, int tolerance)
+        {
+            var start = targetTime.Subtract(TimeSpan.FromMinutes(tolerance));
+            var end = targetTime.Add(TimeSpan.FromMinutes(tolerance));
+
+            return (currentTime.TimeOfDay > start) && (currentTime.TimeOfDay < end);
+        }
+
         public void CoffeeRemind(string channelId)
         {
             var readyParticipants = _coffeeRepository.GetReadyParticipants();
@@ -83,7 +91,7 @@ namespace Doug.Services
             var total = missingParticipants.Count + readyParticipants.Count;
 
             var userMentionList = missingParticipants
-                .Select(Utils.UserMention)
+                .Select(_userService.Mention)
                 .Aggregate(string.Empty, (userId, acc) => acc + " " + userId);
 
 

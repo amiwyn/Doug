@@ -55,10 +55,10 @@ namespace Doug
             services.AddTransient<IAuthorizationService, AuthorizationService>();
             services.AddTransient<ICoffeeService, CoffeeService>();
             services.AddTransient<IRandomService, RandomService>();
-            services.AddTransient<IShopService, ShopService>();
+            services.AddTransient<IShopMenuService, ShopMenuService>();
             services.AddTransient<IUserService, UserService>();
-            services.AddTransient<IStatsService, StatsService>();
-            services.AddTransient<IInventoryService, InventoryService>();
+            services.AddTransient<IStatsMenuService, StatsMenuService>();
+            services.AddTransient<IInventoryMenuService, InventoryMenuService>();
 
             services.AddTransient<ICoffeeCommands, CoffeeCommands>();
             services.AddTransient<ISlursCommands, SlursCommands>();

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 namespace Doug.Models
 {
@@ -9,8 +8,6 @@ namespace Doug.Models
         public string Color { get; set; }
         public string Pretext { get; set; }
         public List<Field> Fields { get; set; }
-
-        private static readonly string[] RarityColor = { "#adadad", "#26cc3e", "#2669cc", "#e26b16", "#860daa" };
 
         public Attachment()
         {
@@ -29,22 +26,6 @@ namespace Doug.Models
             slurs.ForEach(slur => attachment.Fields.Add(new Field(slur.Text)));
 
             return attachment;
-        }
-
-        public static List<Attachment> EquipmentAttachments(Loadout loadout)
-        {
-            return loadout.Equipment.Select(entry =>
-            {
-                var item = entry.Value;
-                var itemAttachment = new Attachment()
-                {
-                    Color = RarityColor[(int)item.Rarity],
-                };
-
-                itemAttachment.Fields.Add(new Field($"{item.Slot.ToString()} - {item.Icon} {item.Name}"));
-
-                return itemAttachment;
-            }).ToList();
         }
     }
 

@@ -36,6 +36,7 @@ namespace Test.Casino
         private readonly Mock<IItemEventDispatcher> _itemEventDispatcher = new Mock<IItemEventDispatcher>();
         private readonly Mock<IStatsRepository> _statsRepository = new Mock<IStatsRepository>();
         private readonly Mock<IRandomService> _randomService = new Mock<IRandomService>();
+        private readonly Mock<IUserService> _userService = new Mock<IUserService>();
 
 
         [TestInitialize]
@@ -43,7 +44,7 @@ namespace Test.Casino
         {
             _userRepository.Setup(repo => repo.GetUser(User)).Returns(_user);
 
-            _casinoCommands = new CasinoCommands(_userRepository.Object, _slack.Object, _channelRepository.Object, _backgroundClient.Object, _itemEventDispatcher.Object, _statsRepository.Object, _randomService.Object);
+            _casinoCommands = new CasinoCommands(_userRepository.Object, _slack.Object, _channelRepository.Object, _backgroundClient.Object, _itemEventDispatcher.Object, _statsRepository.Object, _randomService.Object, _userService.Object);
         }
 
         [TestMethod]

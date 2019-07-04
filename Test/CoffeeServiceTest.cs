@@ -37,7 +37,7 @@ namespace Test
         [TestMethod]
         public void GivenRightTime_WhenCountingParrotOfUser_UserIsReady()
         {
-            _coffeeRepository.Setup(repo => repo.GetMissingParticipants()).Returns(new List<string>() { "bob" });
+            _coffeeRepository.Setup(repo => repo.GetMissingParticipants()).Returns(new List<User>());
             var time = new DateTime(1, 1, 1, 18, 0, 0);
 
             _coffeeService.CountParrot(User, Channel, time);
@@ -48,7 +48,7 @@ namespace Test
         [TestMethod]
         public void GivenWrongTime_WhenCountingParrotOfUser_UserIsNotReady()
         {
-            _coffeeRepository.Setup(repo => repo.GetMissingParticipants()).Returns(new List<string>() { "bob" });
+            _coffeeRepository.Setup(repo => repo.GetMissingParticipants()).Returns(new List<User>());
             var time = new DateTime(1, 1, 1, 19, 0, 0);
 
             _coffeeService.CountParrot(User, Channel, time);
@@ -59,7 +59,7 @@ namespace Test
         [TestMethod]
         public void GivenRightTime_AndEveryoneIsReady_WhenCountingParrotOfUser_BroadcastStart()
         {
-            _coffeeRepository.Setup(repo => repo.GetMissingParticipants()).Returns(new List<string>());
+            _coffeeRepository.Setup(repo => repo.GetMissingParticipants()).Returns(new List<User>());
             var time = new DateTime(1, 1, 1, 18, 0, 0);
 
             _coffeeService.CountParrot(User, Channel, time);
@@ -70,7 +70,7 @@ namespace Test
         [TestMethod]
         public void GivenRightTime_ButNotEveryoneIsReady_WhenCountingParrotOfUser_DontBroadcastStart()
         {
-            _coffeeRepository.Setup(repo => repo.GetMissingParticipants()).Returns(new List<string>() { "bob" });
+            _coffeeRepository.Setup(repo => repo.GetMissingParticipants()).Returns(new List<User>() { new User() });
             var time = new DateTime(1, 1, 1, 18, 0, 0);
 
             _coffeeService.CountParrot(User, Channel, time);
@@ -81,8 +81,9 @@ namespace Test
         [TestMethod]
         public void GivenOneReady_AndGivenOneNotReady_WhenReminding_SendOneOverTwoRemind()
         {
-            _coffeeRepository.Setup(repo => repo.GetMissingParticipants()).Returns(new List<string>() { "bob" });
-            _coffeeRepository.Setup(repo => repo.GetReadyParticipants()).Returns(new List<User>() { new User() { Id = "robert" }});
+            _userService.Setup(service => service.Mention(It.IsAny<User>())).Returns("<@bob>");
+            _coffeeRepository.Setup(repo => repo.GetMissingParticipants()).Returns(new List<User> { new User() });
+            _coffeeRepository.Setup(repo => repo.GetReadyParticipants()).Returns(new List<User> { new User { Id = "robert" } });
 
             _coffeeService.CoffeeRemind(Channel);
 
