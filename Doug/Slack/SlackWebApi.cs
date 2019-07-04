@@ -42,10 +42,10 @@ namespace Doug.Slack
         private readonly string _userToken;
         private readonly JsonSerializerSettings _jsonSettings;
 
-        public SlackWebApi(HttpClient client, IChannelRepository channelRepository)
+        public SlackWebApi(HttpClient client, ICoffeeRepository coffeeRepository)
         {
             _client = client;
-            channelRepository.GetAccessTokens(out _botToken, out _userToken);
+            coffeeRepository.GetAccessTokens(out _botToken, out _userToken);
 
             var contractResolver = new DefaultContractResolver
             {

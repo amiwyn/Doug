@@ -21,7 +21,6 @@ namespace Test
 
         private readonly Mock<ISlackWebApi> _slack = new Mock<ISlackWebApi>();
         private readonly Mock<ICoffeeRepository> _coffeeRepository = new Mock<ICoffeeRepository>();
-        private readonly Mock<IChannelRepository> _channelRepository = new Mock<IChannelRepository>();
         private readonly Mock<IBackgroundJobClient> _backgroundJobClient = new Mock<IBackgroundJobClient>();
         private readonly Mock<IUserRepository> _userRepository = new Mock<IUserRepository>();
         private readonly Mock<IInventoryRepository> _inventoryRepository = new Mock<IInventoryRepository>();
@@ -31,7 +30,7 @@ namespace Test
         public void Setup()
         {
             _userRepository.Setup(repo => repo.GetUser(It.IsAny<string>())).Returns(new User());
-            _coffeeService = new CoffeeService(_slack.Object, _coffeeRepository.Object, _channelRepository.Object, _backgroundJobClient.Object, _userRepository.Object, _inventoryRepository.Object, _userService.Object);
+            _coffeeService = new CoffeeService(_slack.Object, _coffeeRepository.Object, _backgroundJobClient.Object, _userRepository.Object, _inventoryRepository.Object, _userService.Object);
         }
 
         [TestMethod]
