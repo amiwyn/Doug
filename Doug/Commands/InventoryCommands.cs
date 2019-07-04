@@ -4,6 +4,7 @@ using Doug.Items;
 using Doug.Menus;
 using Doug.Models;
 using Doug.Repositories;
+using Doug.Services;
 using Doug.Slack;
 
 namespace Doug.Commands
@@ -24,13 +25,15 @@ namespace Doug.Commands
         private readonly ISlackWebApi _slack;
         private readonly IInventoryRepository _inventoryRepository;
         private readonly IEquipmentRepository _equipmentRepository;
+        private readonly IUserService _userService;
 
-        public InventoryCommands(IUserRepository userRepository, ISlackWebApi slack, IInventoryRepository inventoryRepository, IEquipmentRepository equipmentRepository)
+        public InventoryCommands(IUserRepository userRepository, ISlackWebApi slack, IInventoryRepository inventoryRepository, IEquipmentRepository equipmentRepository, IUserService userService)
         {
             _userRepository = userRepository;
             _slack = slack;
             _inventoryRepository = inventoryRepository;
             _equipmentRepository = equipmentRepository;
+            _userService = userService;
         }
 
         public DougResponse Use(Command command)
@@ -65,7 +68,7 @@ namespace Doug.Commands
 
             _inventoryRepository.AddItem(target, inventoryItem.ItemId);
 
-            var message = string.Format(DougMessages.UserGaveItem, Utils.UserMention(user.Id), inventoryItem.Item.Name, Utils.UserMention(target.Id));
+            var message = string.Format(DougMessages.UserGaveItem, _userService.Mention(user), inventoryItem.Item.Name, _userService.Mention(target));
             _slack.BroadcastMessage(message, command.ChannelId);
 
             return new DougResponse();

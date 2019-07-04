@@ -35,14 +35,16 @@ namespace Doug.Commands
         private readonly IItemEventDispatcher _itemEventDispatcher;
 
         private static readonly DougResponse NoResponse = new DougResponse();
+        private readonly IUserService _userService;
 
-        public SlursCommands(ISlurRepository slursRepository, IUserRepository userRepository, ISlackWebApi messageSender, IAuthorizationService adminValidator, IItemEventDispatcher itemEventDispatcher)
+        public SlursCommands(ISlurRepository slursRepository, IUserRepository userRepository, ISlackWebApi messageSender, IAuthorizationService adminValidator, IItemEventDispatcher itemEventDispatcher, IUserService userService)
         {
             _slurRepository = slursRepository;
             _userRepository = userRepository;
             _slack = messageSender;
             _adminValidator = adminValidator;
             _itemEventDispatcher = itemEventDispatcher;
+            _userService = userService;
         }
 
         public DougResponse AddSlur(Command command)
@@ -163,13 +165,15 @@ namespace Doug.Commands
         private async Task SendSlurToChannel(Command command, Slur slur)
         {
             var users = _userRepository.GetUsers();
+            var caller = users.Single(usr => usr.Id == command.UserId);
+            var target = users.Single(usr => usr.Id == command.GetTargetUserId());
 
             var rnd = new Random();
-            var randomUser = users.ElementAt(rnd.Next(users.Count)).Id;
+            var randomUser = users.ElementAt(rnd.Next(users.Count));
 
-            var message = BuildSlurMessage(slur.Text, randomUser, command.GetTargetUserId());
+            var message = BuildSlurMessage(slur.Text, randomUser, target);
 
-            message = _itemEventDispatcher.OnFlaming(command, message);
+            message = _itemEventDispatcher.OnFlaming(caller, target, command, message);
 
             var timestamp = await _slack.BroadcastMessage(message, command.ChannelId);
 
@@ -179,10 +183,10 @@ namespace Doug.Commands
             await _slack.AddReaction(DougMessages.Downvote, timestamp, command.ChannelId);
         }
 
-        private string BuildSlurMessage(string message, string randomUserid, string targetUserId)
+        private string BuildSlurMessage(string message, User randomUser, User targetUser)
         {
-            message = message.Replace(SlurUserMention, Utils.UserMention(targetUserId));
-            message = message.Replace(RandomUserMention, Utils.UserMention(randomUserid));
+            message = message.Replace(SlurUserMention, _userService.Mention(targetUser));
+            message = message.Replace(RandomUserMention, _userService.Mention(randomUser));
 
             if (message.Contains(Fatty))
             {
@@ -215,10 +219,10 @@ namespace Doug.Commands
             recentSlurs.Sort((e1, e2) => e1.Id.CompareTo(e2.Id));
 
             var latestFlame = recentSlurs.Last();
-
             var latestSlur = _slurRepository.GetSlur(latestFlame.SlurId);
+            var creator = _userRepository.GetUser(latestSlur.CreatedBy);
 
-            return new DougResponse(string.Format(DougMessages.SlurCreatedBy, Utils.UserMention(latestSlur.CreatedBy)));
+            return new DougResponse(string.Format(DougMessages.SlurCreatedBy, _userService.Mention(creator)));
         }
     }
 }

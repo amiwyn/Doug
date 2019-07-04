@@ -28,8 +28,9 @@ namespace Doug.Commands
 
         private static readonly DougResponse NoResponse = new DougResponse();
         private readonly IStatsRepository _statsRepository;
+        private readonly IUserService _userService;
 
-        public CasinoCommands(IUserRepository userRepository, ISlackWebApi messageSender, IChannelRepository channelRepository, IBackgroundJobClient backgroundJobClient, IItemEventDispatcher itemEventDispatcher, IStatsRepository statsRepository, IRandomService randomService)
+        public CasinoCommands(IUserRepository userRepository, ISlackWebApi messageSender, IChannelRepository channelRepository, IBackgroundJobClient backgroundJobClient, IItemEventDispatcher itemEventDispatcher, IStatsRepository statsRepository, IRandomService randomService, IUserService userService)
         {
             _userRepository = userRepository;
             _slack = messageSender;
@@ -38,6 +39,7 @@ namespace Doug.Commands
             _itemEventDispatcher = itemEventDispatcher;
             _statsRepository = statsRepository;
             _randomService = randomService;
+            _userService = userService;
         }
 
         public DougResponse Gamble(Command command)
@@ -77,7 +79,7 @@ namespace Doug.Commands
                 _userRepository.RemoveCredits(command.UserId, amount);
             }
 
-            var message = string.Format(baseMessage, Utils.UserMention(command.UserId), amount);
+            var message = string.Format(baseMessage, _userService.Mention(user), amount);
             _slack.BroadcastMessage(message, command.ChannelId);
 
             return NoResponse;
@@ -109,7 +111,10 @@ namespace Doug.Commands
             if (command.GetArgumentAt(0).ToLower() == DeclineChallengeWord)
             {
                 var challenge = _channelRepository.GetGambleChallenge(command.UserId);
-                _slack.BroadcastMessage(string.Format(DougMessages.GambleDeclined, Utils.UserMention(command.UserId), Utils.UserMention(challenge.RequesterId)), command.ChannelId);
+                var target = _userRepository.GetUser(command.UserId);
+                var challenger = _userRepository.GetUser(challenge.RequesterId);
+
+                _slack.BroadcastMessage(string.Format(DougMessages.GambleDeclined, _userService.Mention(target), _userService.Mention(challenger)), command.ChannelId);
                 _channelRepository.RemoveGambleChallenge(challenge.TargetId);
             }
 
@@ -120,6 +125,8 @@ namespace Doug.Commands
         {
             var amount = int.Parse(command.GetArgumentAt(1));
             var targetId = command.GetTargetUserId();
+            var caller = _userRepository.GetUser(command.UserId);
+            var target = _userRepository.GetUser(targetId);
 
             if (amount <= 0 || command.UserId == targetId)
             {
@@ -137,7 +144,7 @@ namespace Doug.Commands
 
             _backgroundJobClient.Schedule(() => ChallengeTimeout(targetId), TimeSpan.FromMinutes(3));
 
-            _slack.BroadcastMessage(string.Format(DougMessages.ChallengeSent, Utils.UserMention(command.UserId), Utils.UserMention(targetId), amount), command.ChannelId);
+            _slack.BroadcastMessage(string.Format(DougMessages.ChallengeSent, _userService.Mention(caller), _userService.Mention(target), amount), command.ChannelId);
             _slack.SendEphemeralMessage(DougMessages.GambleChallengeTip, targetId, command.ChannelId);
 
             return NoResponse;
@@ -162,13 +169,13 @@ namespace Doug.Commands
 
             if (!requester.HasEnoughCreditsForAmount(challenge.Amount))
             {
-                _slack.BroadcastMessage(string.Format(DougMessages.InsufficientCredits, Utils.UserMention(requester.Id), challenge.Amount), command.ChannelId);
+                _slack.BroadcastMessage(string.Format(DougMessages.InsufficientCredits, _userService.Mention(requester), challenge.Amount), command.ChannelId);
                 return;
             }
 
             if (!target.HasEnoughCreditsForAmount(challenge.Amount))
             {
-                _slack.BroadcastMessage(string.Format(DougMessages.InsufficientCredits, Utils.UserMention(target.Id), challenge.Amount), command.ChannelId);
+                _slack.BroadcastMessage(string.Format(DougMessages.InsufficientCredits, _userService.Mention(target), challenge.Amount), command.ChannelId);
                 return;
             }
 
@@ -186,7 +193,7 @@ namespace Doug.Commands
 
             _channelRepository.RemoveGambleChallenge(challenge.TargetId);
 
-            var message = string.Format(DougMessages.GambleChallenge, Utils.UserMention(winner.Id), challenge.Amount, Utils.UserMention(loser.Id));
+            var message = string.Format(DougMessages.GambleChallenge, _userService.Mention(winner), challenge.Amount, _userService.Mention(loser));
             _slack.BroadcastMessage(message, command.ChannelId);
         }
 

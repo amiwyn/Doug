@@ -1,5 +1,6 @@
 using Doug.Items.Equipment;
 using Doug.Models;
+using Doug.Services;
 using Doug.Slack;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -23,11 +24,13 @@ namespace Test.Items
         private AwakeningOrb _awakeningOrb;
 
         private readonly Mock<ISlackWebApi> _slack = new Mock<ISlackWebApi>();
+        private readonly Mock<IUserService> _userService = new Mock<IUserService>();
 
         [TestMethod]
         public void WhenGettingFlamed_TargetIsNotifiedWithTheCallersName()
         {
-            _awakeningOrb = new AwakeningOrb(_slack.Object);
+            _userService.Setup(service => service.Mention(It.IsAny<User>())).Returns("<@testuser>");
+            _awakeningOrb = new AwakeningOrb(_slack.Object, _userService.Object);
 
             _awakeningOrb.OnGettingFlamed(_command, "hehehee");
 
@@ -37,7 +40,7 @@ namespace Test.Items
         [TestMethod]
         public void WhenGettingFlamed_SlurDoesNotChange()
         {
-            _awakeningOrb = new AwakeningOrb(_slack.Object);
+            _awakeningOrb = new AwakeningOrb(_slack.Object, _userService.Object);
 
             var result = _awakeningOrb.OnGettingFlamed(_command, "hehehee");
 

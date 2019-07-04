@@ -11,8 +11,8 @@ namespace Doug.Services
 {
     public interface IShopMenuService
     {
-        Task Buy(Interaction interaction);
-        Task Sell(Interaction interaction);
+        Task Buy(Interaction interaction); // TODO: put these in a separate service
+        Task Sell(Interaction interaction); // TODO: put these in a separate service
     }
 
     public class ShopMenuService : IShopMenuService
@@ -32,7 +32,7 @@ namespace Doug.Services
             _itemFactory = itemFactory;
         }
 
-        public async Task Buy(Interaction interaction) // TODO: put this in a separate service
+        public async Task Buy(Interaction interaction) 
         {
             var user = _userRepository.GetUser(interaction.UserId);
             var item = _itemFactory.CreateItem(interaction.Value);

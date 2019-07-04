@@ -24,18 +24,19 @@ namespace Doug.Commands
 
         private static readonly DougResponse NoResponse = new DougResponse();
         private readonly IItemFactory _itemFactory;
+        private readonly IUserService _userService;
 
-        public CreditsCommands(IUserRepository userRepository, ISlackWebApi messageSender, IItemFactory itemFactory)
+        public CreditsCommands(IUserRepository userRepository, ISlackWebApi messageSender, IItemFactory itemFactory, IUserService userService)
         {
             _userRepository = userRepository;
             _slack = messageSender;
             _itemFactory = itemFactory;
+            _userService = userService;
         }
 
         public DougResponse Give(Command command)
         {
             var amount = int.Parse(command.GetArgumentAt(1));
-            var target = command.GetTargetUserId();
 
             if (amount <= 0)
             {
@@ -48,16 +49,17 @@ namespace Doug.Commands
             }
 
             var user = _userRepository.GetUser(command.UserId);
+            var target = _userRepository.GetUser(command.GetTargetUserId());
 
             if (!user.HasEnoughCreditsForAmount(amount))
             {
                 return new DougResponse(user.NotEnoughCreditsForAmountResponse(amount));
             }
 
-            _userRepository.RemoveCredits(command.UserId, amount);
-            _userRepository.AddCredits(target, amount);
+            _userRepository.RemoveCredits(user.Id, amount);
+            _userRepository.AddCredits(target.Id, amount);
 
-            var message = string.Format(DougMessages.UserGaveCredits, Utils.UserMention(command.UserId), amount, Utils.UserMention(target));
+            var message = string.Format(DougMessages.UserGaveCredits, _userService.Mention(user), amount, _userService.Mention(target));
             _slack.BroadcastMessage(message, command.ChannelId);
 
             return NoResponse;
@@ -67,7 +69,7 @@ namespace Doug.Commands
         {
             var users = _userRepository.GetUsers();
 
-            return new DougResponse(users.Aggregate(string.Empty, (acc, user) => string.Format("{0}{3}{2} = {1}\n", acc, Utils.UserMention(user.Id), user.Credits, DougMessages.CreditEmoji)));
+            return new DougResponse(users.Aggregate(string.Empty, (acc, user) => string.Format("{0}{3}{2} = {1}\n", acc, _userService.Mention(user), user.Credits, DougMessages.CreditEmoji)));
         }
 
         public DougResponse Leaderboard(Command command)
@@ -78,7 +80,7 @@ namespace Doug.Commands
             list.Reverse();
             list = list.GetRange(0, 5);
 
-            var userList = list.Select(u => $"{Utils.UserMention(u.Id)} : {u.Credits}");
+            var userList = list.Select(u => $"{_userService.Mention(u)} : {u.Credits}");
 
             var users = userList.Aggregate((first, next) => first + "\n" + next);
             var message = $"{DougMessages.Top5}\n{users}";

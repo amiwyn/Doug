@@ -68,12 +68,12 @@ namespace Doug.Commands
                 _userRepository.RemoveCredits(target.Id, amount);
                 _userRepository.AddCredits(command.UserId, amount);
 
-                var message = string.Format(DougMessages.StealCredits, Utils.UserMention(command.UserId), amount, Utils.UserMention(target.Id));
+                var message = string.Format(DougMessages.StealCredits, _userService.Mention(user), amount, _userService.Mention(target));
                 _slack.BroadcastMessage(message, command.ChannelId);
             }
             else
             {
-                var message = string.Format(DougMessages.StealFail, Utils.UserMention(command.UserId), Utils.UserMention(target.Id));
+                var message = string.Format(DougMessages.StealFail, _userService.Mention(user), _userService.Mention(target));
                 _slack.BroadcastMessage(message, command.ChannelId);
             }
 
@@ -94,7 +94,7 @@ namespace Doug.Commands
 
             _statsRepository.UpdateEnergy(command.UserId, energy);
 
-            var message = string.Format(DougMessages.UserAttackedTarget, Utils.UserMention(user.Id), Utils.UserMention(target.Id), damage);
+            var message = string.Format(DougMessages.UserAttackedTarget, _userService.Mention(user), _userService.Mention(target), damage);
             await _slack.BroadcastMessage(message, command.ChannelId);
 
             await _userService.RemoveHealth(target, damage, command.ChannelId);

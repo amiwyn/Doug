@@ -44,6 +44,7 @@ namespace Test.Casino
         private readonly Mock<IItemEventDispatcher> _itemEventDispatcher = new Mock<IItemEventDispatcher>();
         private readonly Mock<IStatsRepository> _statsRepository = new Mock<IStatsRepository>();
         private readonly Mock<IRandomService> _randomService = new Mock<IRandomService>();
+        private readonly Mock<IUserService> _userService = new Mock<IUserService>();
 
         [TestInitialize]
         public void Setup()
@@ -53,7 +54,7 @@ namespace Test.Casino
 
             _channelRepository.Setup(repo => repo.GetGambleChallenge(User)).Returns(new GambleChallenge("testuser", "ginette", 10));
 
-            _casinoCommands = new CasinoCommands(_userRepository.Object, _slack.Object, _channelRepository.Object, _backgroundClient.Object, _itemEventDispatcher.Object, _statsRepository.Object, _randomService.Object);
+            _casinoCommands = new CasinoCommands(_userRepository.Object, _slack.Object, _channelRepository.Object, _backgroundClient.Object, _itemEventDispatcher.Object, _statsRepository.Object, _randomService.Object, _userService.Object);
         }
 
         [TestMethod]
@@ -130,7 +131,8 @@ namespace Test.Casino
         [TestMethod]
         public void GivenRequesterIsBroke_WhenAcceptingGambleChallenge_ChallengeIsCancelled()
         {
-            _userRepository.Setup(repo => repo.GetUser("ginette")).Returns(new User() { Id = "ginette", Credits = 7 });
+            _userService.Setup(service => service.Mention(It.IsAny<User>())).Returns("<@ginette>");
+            _userRepository.Setup(repo => repo.GetUser("ginette")).Returns(new User { Id = "ginette", Credits = 7 });
 
             var command = new Command()
             {
@@ -147,6 +149,7 @@ namespace Test.Casino
         [TestMethod]
         public void GivenTargetIsBroke_WhenAcceptingGambleChallenge_ChallengeIsCancelled()
         {
+            _userService.Setup(service => service.Mention(It.IsAny<User>())).Returns("<@testuser>");
             _userRepository.Setup(repo => repo.GetUser("testuser")).Returns(new User() { Id = "testuser", Credits = 7 });
 
             var command = new Command()

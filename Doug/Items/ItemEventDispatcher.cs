@@ -1,32 +1,22 @@
 ﻿using Doug.Models;
-using Doug.Repositories;
 using System.Linq;
 
 namespace Doug.Items
 {
     public interface IItemEventDispatcher
     {
-        string OnFlaming(Command command, string slur);
+        string OnFlaming(User caller, User target, Command command, string slur);
         double OnGambling(User user, double baseChance);
         double OnStealingChance(User user, double baseChance);
         double OnGettingStolenChance(User user, double baseChance);
         int OnStealingAmount(User user, int baseAmount);
+        string OnMention(User user, string mention);
     }
 
     public class ItemEventDispatcher : IItemEventDispatcher
     {
-        private readonly IUserRepository _userRepository;
-
-        public ItemEventDispatcher(IUserRepository userRepository)
+        public string OnFlaming(User caller, User target, Command command, string slur)
         {
-            _userRepository = userRepository;
-        }
-
-        public string OnFlaming(Command command, string slur)
-        {
-            var caller = _userRepository.GetUser(command.UserId);
-            var target = _userRepository.GetUser(command.GetTargetUserId());
-
             slur = target.Loadout.Equipment.Aggregate(slur, (acc, item) => item.Value.OnGettingFlamed(command, acc));
 
             return caller.Loadout.Equipment.Aggregate(slur, (acc, item) => item.Value.OnFlaming(command, acc));
@@ -50,6 +40,11 @@ namespace Doug.Items
         public int OnStealingAmount(User user, int baseAmount)
         {
             return user.Loadout.Equipment.Aggregate(baseAmount, (amount, item) => item.Value.OnStealingAmount(amount));
+        }
+
+        public string OnMention(User user, string mention)
+        {
+            return user.Loadout.Equipment.Aggregate(mention, (amount, item) => item.Value.OnMention(mention));
         }
     }
 }
