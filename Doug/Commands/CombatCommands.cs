@@ -15,8 +15,8 @@ namespace Doug.Commands
 
     public class CombatCommands : ICombatCommands
     {
-        private const int StealEnergyCost = 1;
-        private const int AttackEnergyCost = 1;
+        private const int StealEnergyCost = 2;
+        private const int AttackEnergyCost = 3;
         private const int KillExperienceGain = 100;
         private static readonly DougResponse NoResponse = new DougResponse();
 
@@ -68,12 +68,20 @@ namespace Doug.Commands
                 _userRepository.RemoveCredits(target.Id, amount);
                 _userRepository.AddCredits(command.UserId, amount);
 
-                var message = string.Format(DougMessages.StealCredits, _userService.Mention(user), amount, _userService.Mention(target));
-                _slack.BroadcastMessage(message, command.ChannelId);
+                var message = string.Format(DougMessages.StealCredits, amount, _userService.Mention(target), energy);
+                return new DougResponse(message);
             }
             else
             {
-                var message = string.Format(DougMessages.StealFail, _userService.Mention(user), _userService.Mention(target));
+                var message = _itemEventDispatcher.OnStealingFailed(
+                    user, 
+                    _userService.Mention(target), 
+                    string.Format(
+                        DougMessages.StealFail, 
+                        _userService.Mention(user), 
+                        _userService.Mention(target)
+                        )
+                    );
                 _slack.BroadcastMessage(message, command.ChannelId);
             }
 

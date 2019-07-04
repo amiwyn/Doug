@@ -16,14 +16,15 @@
             Agility = 2;
         }
 
-        public override DougResponse OnStealingFailed(User user, string targetUserMention)
+        public override DougResponse OnStealingFailed(string response, string targetUserMention)
         {
-            return "You failed to rob " + targetUserMention + ", but at least you didn't get caught... this time.";
+            return "Someone failed to rob " + targetUserMention + ", but they were too quick to get caught... this time.";
         }
 
-        public override DougResponse OnDeath()
-        {
-            return LoseItem();
-        }
+        // NYI
+        //public override DougResponse OnDeath(string response, User user, User killer)
+        //{
+        //    return LoseItem();
+        //}
     }
 }

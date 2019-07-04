@@ -13,9 +13,11 @@ namespace Doug.Items.Equipment
             Icon = ":dark_sunglasses:";
             Slot = EquipmentSlot.Head;
             Price = 1337;
+
+            Charisma = 1;
         }
 
-        public override string OnMentioned(string userId)
+        public override string OnMention(string userId)
         {
             return ":sunglasses:";
         }

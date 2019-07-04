@@ -11,6 +11,8 @@ namespace Doug.Items
         double OnGettingStolenChance(User user, double baseChance);
         int OnStealingAmount(User user, int baseAmount);
         string OnMention(User user, string mention);
+        string OnStealingFailed(User user, string targetUserMention, string response);
+        string OnDeath(User user, User killer, string response);
     }
 
     public class ItemEventDispatcher : IItemEventDispatcher
@@ -44,7 +46,17 @@ namespace Doug.Items
 
         public string OnMention(User user, string mention)
         {
-            return user.Loadout.Equipment.Aggregate(mention, (amount, item) => item.Value.OnMention(mention));
+            return user.Loadout.Equipment.Aggregate(mention, (acc, item) => item.Value.OnMention(mention));
+        }
+
+        public string OnStealingFailed(User user, string targetUserMention, string response)
+        {
+            return user.Loadout.Equipment.Aggregate(response, (acc, item) => item.Value.OnStealingFailed(response, targetUserMention));
+        }
+
+        public string OnDeath(User user, User killer, string response)
+        {
+            return user.Loadout.Equipment.Aggregate(response, (acc, item) => item.Value.OnDeath(response, user, killer));
         }
     }
 }

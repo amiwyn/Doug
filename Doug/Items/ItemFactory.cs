@@ -17,6 +17,8 @@ namespace Doug.Items
         public const string LuckyDice = "lucky_dice";
         public const string BurglarBoots = "burglar_boots";
         public const string GreedyGloves = "greedy_gloves";
+        public const string IncognitoShades = "incognito_shades";
+        public const string MainGauche = "main_gauche";
         public const string CoffeeCup = "coffee_cup";
         public const string PimentSword = "piment_sword";
         public const string Apple = "apple";
@@ -54,6 +56,10 @@ namespace Doug.Items
                     return new BurglarBoots();
                 case GreedyGloves:
                     return new GreedyGloves();
+                case IncognitoShades:
+                    return new IncognitoShades();
+                case MainGauche:
+                    return new MainGauche();
                 case CoffeeCup:
                     return new CoffeeCup(_statsRepository, _inventoryRepository);
                 case PimentSword:
