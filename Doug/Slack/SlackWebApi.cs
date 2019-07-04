@@ -208,7 +208,7 @@ namespace Doug.Slack
         {
             var keyValues = CreateBaseRequestPayload(channel);
 
-            var response = await PostToUrl(EphemeralUrl, keyValues);
+            var response = await PostToUrl(ChannelInfoUrl, keyValues);
 
             return JsonConvert.DeserializeObject<ChannelMembersResponse>(response, _jsonSettings).Members;
         }

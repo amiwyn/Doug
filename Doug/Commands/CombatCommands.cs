@@ -104,7 +104,7 @@ namespace Doug.Commands
 
             var flaggedUsers = await _slack.GetUsersInChannel(command.ChannelId);
 
-            if (flaggedUsers.Any(usr => usr == target.Id))
+            if (flaggedUsers.All(usr => usr != target.Id))
             {
                 return new DougResponse(DougMessages.UserIsNotInPvp);
             }
