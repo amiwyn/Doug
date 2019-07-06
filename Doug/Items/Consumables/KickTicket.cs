@@ -20,6 +20,7 @@ namespace Doug.Items.Consumables
             Rarity = Rarity.Uncommon;
             Icon = ":ticket:";
             Price = 100;
+            IsTradable = false;
         }
 
         public override string Use(int itemPos, User user, string channel)

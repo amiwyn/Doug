@@ -30,6 +30,7 @@ namespace Test.Shop
         private readonly Mock<ISlackWebApi> _slack = new Mock<ISlackWebApi>();
         private readonly Mock<IInventoryRepository>  _inventoryRepository = new Mock<IInventoryRepository>();
         private readonly Mock<IItemFactory> _itemFactory = new Mock<IItemFactory>();
+        private readonly Mock<IShopService> _shopService = new Mock<IShopService>();
         private User _user;
 
         [TestInitialize]
@@ -39,7 +40,7 @@ namespace Test.Shop
             _user = new User() {Id = "testuser", Credits = 431279};
             _userRepository.Setup(repo => repo.GetUser(User)).Returns(_user);
 
-            _shopMenuService = new ShopMenuService(_userRepository.Object, _slack.Object, _inventoryRepository.Object, _itemFactory.Object);
+            _shopMenuService = new ShopMenuService(_userRepository.Object, _slack.Object, _itemFactory.Object, _shopService.Object);
         }
 
         [TestMethod]

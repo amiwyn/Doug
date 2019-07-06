@@ -61,6 +61,7 @@ namespace Doug
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IStatsMenuService, StatsMenuService>();
             services.AddScoped<IInventoryMenuService, InventoryMenuService>();
+            services.AddScoped<IShopService, ShopService>();
 
             services.AddScoped<ICoffeeCommands, CoffeeCommands>();
             services.AddScoped<ISlursCommands, SlursCommands>();
