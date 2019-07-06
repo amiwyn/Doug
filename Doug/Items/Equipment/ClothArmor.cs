@@ -11,6 +11,7 @@
             Icon = ":shirt:";
             Slot = EquipmentSlot.Body;
             Price = 85;
+            LevelRequirement = 1;
         }
     }
 }

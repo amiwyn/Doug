@@ -11,6 +11,7 @@
             Icon = ":game_die:";
             Slot = EquipmentSlot.LeftHand;
             Price = 2674;
+            LevelRequirement = 5;
 
             Luck = 10;
         }

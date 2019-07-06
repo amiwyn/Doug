@@ -11,6 +11,7 @@
             Icon = ":boot:";
             Slot = EquipmentSlot.Boots;
             Price = 3000;
+            LevelRequirement = 15;
         }
 
         public override double OnStealingChance(double chance)

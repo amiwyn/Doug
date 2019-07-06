@@ -11,6 +11,7 @@
             Icon = ":gloves:";
             Slot = EquipmentSlot.Gloves;
             Price = 3000;
+            LevelRequirement = 20;
 
             Attack = 5;
             Charisma = 5;
