@@ -92,6 +92,7 @@
         public const string UserIsNotInPvp = "The target user is not in the pvp channel.";
         public const string ItemNotTradable = "This item is not tradable.";
         public const string EmptyInventory = "Oops, yer loot seems empty, buy more at th' shop now.";
+        public const string LevelRequirementNotMet = "You need to be at least level {0} to wear this item.";
     }
 }
 

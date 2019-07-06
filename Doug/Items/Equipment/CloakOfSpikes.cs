@@ -14,6 +14,7 @@ namespace Doug.Items.Equipment
             Icon = ":shirt:";
             Slot = EquipmentSlot.Body;
             Price = 1150;
+            LevelRequirement = 10;
         }
 
         public override string OnGettingFlamed(Command command, string slur)

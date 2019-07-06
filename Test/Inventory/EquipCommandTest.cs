@@ -84,5 +84,16 @@ namespace Test.Inventory
 
             Assert.AreEqual("This item is not equipable.", result.Message);
         }
+
+        [TestMethod]
+        public void GivenItemLevelisTooHigh_WhenEquipping_ItemLevelTooHighMessageSent()
+        {
+            var items = new List<InventoryItem>() { new InventoryItem("testuser", "testitem") { InventoryPosition = 6, Item = new CloakOfSpikes() } };
+            _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User() { Id = "testuser", InventoryItems = items });
+
+            var result = _inventoryCommands.Equip(_command);
+
+            Assert.AreEqual("You need to be at least level 10 to wear this item.", result.Message);
+        }
     }
 }

@@ -11,6 +11,7 @@ namespace Doug.Items
         public int Constitution { get; set; }
         public int Stamina { get; set; }
         public EquipmentSlot Slot { get; set; }
+        public int LevelRequirement { get; set; }
 
         protected EquipmentItem() { }
 
