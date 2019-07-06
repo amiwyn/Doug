@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Doug.Commands;
+using Doug.Items.Consumables;
 using Doug.Items.Misc;
 using Doug.Models;
 using Doug.Repositories;
@@ -38,7 +39,12 @@ namespace Test.Inventory
         [TestInitialize]
         public void Setup()
         {
-            var items = new List<InventoryItem>() {new InventoryItem("testuser", "testitem") {InventoryPosition = 2, Item = new Default()}};
+            var items = new List<InventoryItem>()
+            {
+                new InventoryItem("testuser", "testitem") {InventoryPosition = 2, Item = new Default()},
+                new InventoryItem("testuser", "testitem") {InventoryPosition = 3, Item = new KickTicket(null, null, null)}
+            };
+            
             _user = new User() { Id = "testuser", InventoryItems = items };
             _target = new User() { Id = "ginette", InventoryItems = items };
 
@@ -72,6 +78,21 @@ namespace Test.Inventory
             var result = _inventoryCommands.Give(_command);
 
             Assert.AreEqual("There is no item in slot 2.", result.Message);
+        }
+
+        [TestMethod]
+        public void GivenItemIsNotTradable_WhenGivingItem_ItemNotTradableMessage()
+        {
+            var command = new Command()
+            {
+                ChannelId = Channel,
+                Text = "<@ginette|username> 3",
+                UserId = User
+            };
+
+            var result = _inventoryCommands.Give(command);
+
+            Assert.AreEqual("This item is not tradable.", result.Message);
         }
     }
 }

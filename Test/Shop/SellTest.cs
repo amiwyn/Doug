@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Doug.Items;
+using Doug.Items.Consumables;
 using Doug.Items.Equipment;
 using Doug.Models;
 using Doug.Repositories;
@@ -27,7 +28,12 @@ namespace Test.Shop
         [TestInitialize]
         public void Setup()
         {
-            var items = new List<InventoryItem>() { new InventoryItem("testuser", "testitem") { InventoryPosition = 4, Item = new LuckyDice() } };
+            var items = new List<InventoryItem>()
+            {
+                new InventoryItem("testuser", "testitem") { InventoryPosition = 4, Item = new LuckyDice() },
+                new InventoryItem("testuser", "testitem") { InventoryPosition = 3, Item = new KickTicket(null, null, null) }
+            };
+
             _user = new User() { Id = "testuser", InventoryItems = items };
             _userRepository.Setup(repo => repo.GetUser(User)).Returns(_user);
 
@@ -58,6 +64,14 @@ namespace Test.Shop
             var result = _shopService.Sell(user, 4);
 
             Assert.AreEqual("There is no item in slot 4.", result.Message);
+        }
+
+        [TestMethod]
+        public void GivenItemIsNotTradable_WhenSelling_ItemNotTradableMessage()
+        {
+            var result = _shopService.Sell(_user, 3);
+
+            Assert.AreEqual("This item is not tradable.", result.Message);
         }
     }
 }

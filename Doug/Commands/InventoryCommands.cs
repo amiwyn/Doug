@@ -64,6 +64,11 @@ namespace Doug.Commands
                 return new DougResponse(string.Format(DougMessages.NoItemInSlot, position));
             }
 
+            if (!inventoryItem.Item.IsTradable)
+            {
+               return new DougResponse(DougMessages.ItemNotTradable); 
+            }
+
             _inventoryRepository.RemoveItem(user, position);
 
             _inventoryRepository.AddItem(target, inventoryItem.ItemId);

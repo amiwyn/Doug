@@ -50,6 +50,11 @@ namespace Doug.Services
                 return new DougResponse(string.Format(DougMessages.NoItemInSlot, position));
             }
 
+            if (!item.IsTradable)
+            {
+                return new DougResponse(DougMessages.ItemNotTradable);
+            }
+
             _inventoryRepository.RemoveItem(user, position);
 
             _userRepository.AddCredits(user.Id, item.Price / 2);
