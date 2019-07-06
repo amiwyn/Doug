@@ -40,6 +40,7 @@ namespace Doug.Services
 
             if (user.IsDead())
             {
+                _eventDispatcher.OnDeath(user);
                 _statsRepository.KillUser(user.Id);
                 await _slack.BroadcastMessage(string.Format(DougMessages.UserDied, Mention(user)), channel);
                 return true;

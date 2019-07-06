@@ -11,10 +11,22 @@ namespace Doug.Items
         double OnGettingStolenChance(User user, double baseChance);
         int OnStealingAmount(User user, int baseAmount);
         string OnMention(User user, string mention);
+        bool OnDeath(User user);
+        bool OnDeathByUser(User user, User killer);
     }
 
     public class ItemEventDispatcher : IItemEventDispatcher
     {
+        public bool OnDeath(User user)
+        {
+            return user.Loadout.Equipment.Aggregate(true, (isDead, item) => item.Value.OnDeath() && isDead);
+        }
+
+        public bool OnDeathByUser(User user, User killer)
+        {
+            return user.Loadout.Equipment.Aggregate(true, (isDead, item) => item.Value.OnDeathByUser(killer) && isDead);
+        }
+
         public string OnFlaming(User caller, User target, Command command, string slur)
         {
             slur = target.Loadout.Equipment.Aggregate(slur, (acc, item) => item.Value.OnGettingFlamed(command, acc));

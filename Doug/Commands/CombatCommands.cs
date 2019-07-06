@@ -125,6 +125,7 @@ namespace Doug.Commands
 
             if (userIsDead)
             {
+                _itemEventDispatcher.OnDeathByUser(target, user);
                 await _userService.AddExperience(user, KillExperienceGain, command.ChannelId);
             }
 
