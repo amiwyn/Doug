@@ -65,12 +65,11 @@ namespace Doug.Items
         }
 
         /// <summary>
-        /// Event triggered when the user dies from the hand of another. Return false to kill the killer instead.
+        /// Event triggered when the user dies from the hand of a killer.
         /// </summary>
         /// <returns></returns>
-        public virtual bool OnDeathByUser(User target)
+        public virtual void OnDeathByUser(User killer)
         {
-            return true;
         }
     }
 }

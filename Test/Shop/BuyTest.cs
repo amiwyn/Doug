@@ -4,7 +4,6 @@ using Doug.Items.Equipment;
 using Doug.Models;
 using Doug.Repositories;
 using Doug.Services;
-using Doug.Slack;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
@@ -18,7 +17,6 @@ namespace Test.Shop
         private ShopService _shopService;
 
         private readonly Mock<IUserRepository> _userRepository = new Mock<IUserRepository>();
-        private readonly Mock<ISlackWebApi> _slack = new Mock<ISlackWebApi>();
         private readonly Mock<IInventoryRepository>  _inventoryRepository = new Mock<IInventoryRepository>();
         private readonly Mock<IItemFactory> _itemFactory = new Mock<IItemFactory>();
         private User _user;

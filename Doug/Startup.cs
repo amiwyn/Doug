@@ -6,6 +6,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Doug.Commands;
+using Doug.Effects;
 using Doug.Items;
 using Doug.Models;
 using Doug.Repositories;
@@ -50,8 +51,9 @@ namespace Doug
 
             
             services.AddScoped<ISlackWebApi, SlackWebApi>();
-            services.AddScoped<IItemEventDispatcher, ItemEventDispatcher>();
+            services.AddScoped<IEventDispatcher, EventDispatcher>();
             services.AddScoped<IItemFactory, ItemFactory>();
+            services.AddScoped<IEffectFactory, EffectFactory>();
 
             services.AddScoped<IEventService, EventService>();
             services.AddScoped<IAuthorizationService, AuthorizationService>();

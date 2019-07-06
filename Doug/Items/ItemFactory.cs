@@ -33,13 +33,15 @@ namespace Doug.Items
         private readonly IStatsRepository _statsRepository;
         private readonly IInventoryRepository _inventoryRepository;
         private readonly IUserService _userService;
+        private readonly IEventDispatcher _eventDispatcher;
 
-        public ItemFactory(ISlackWebApi slack, IStatsRepository statsRepository, IInventoryRepository inventoryRepository, IUserService userService)
+        public ItemFactory(ISlackWebApi slack, IStatsRepository statsRepository, IInventoryRepository inventoryRepository, IUserService userService, IEventDispatcher eventDispatcher)
         {
             _slack = slack;
             _statsRepository = statsRepository;
             _inventoryRepository = inventoryRepository;
             _userService = userService;
+            _eventDispatcher = eventDispatcher;
         }
 
         public Item CreateItem(string itemId)
@@ -69,7 +71,7 @@ namespace Doug.Items
                 case CloakOfSpikes:
                     return new CloakOfSpikes();
                 case KickTicket:
-                    return new KickTicket(_inventoryRepository, _slack, _userService);
+                    return new KickTicket(_inventoryRepository, _slack, _userService, _eventDispatcher);
                 case InviteTicket:
                     return new InviteTicket(_inventoryRepository, _slack); 
                 case Bread:

@@ -32,7 +32,7 @@ namespace Test.Combat
 
         private readonly Mock<IUserRepository> _userRepository = new Mock<IUserRepository>();
         private readonly Mock<ISlackWebApi> _slack = new Mock<ISlackWebApi>();
-        private readonly Mock<IItemEventDispatcher> _itemEventDispatcher = new Mock<IItemEventDispatcher>();
+        private readonly Mock<IEventDispatcher> _itemEventDispatcher = new Mock<IEventDispatcher>();
         private readonly Mock<IStatsRepository> _statsRepository = new Mock<IStatsRepository>();
         private readonly Mock<IRandomService> _randomService = new Mock<IRandomService>();
         private readonly Mock<IUserService> _userService = new Mock<IUserService>();

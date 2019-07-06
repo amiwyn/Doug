@@ -35,6 +35,11 @@ namespace Doug.Models
                 .HasOne(o => o.Loadout).WithOne()
                 .HasForeignKey<User>(o => o.Id);
 
+            modelBuilder.Entity<UserEffect>()
+                .HasOne(u => u.User)
+                .WithMany(u => u.Effects)
+                .HasForeignKey(u => u.UserId);
+
             base.OnModelCreating(modelBuilder);
         }
     }

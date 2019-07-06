@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Doug.Items;
 using System.Linq;
+using Doug.Effects;
 
 namespace Doug.Models
 {
@@ -13,6 +14,7 @@ namespace Doug.Models
         public string Id { get; set; }
         public int Credits { get; set; }
         public List<InventoryItem> InventoryItems { get; set; }
+        public List<UserEffect> Effects { get; set; }
         public Loadout Loadout { get; set; }
         public long Experience { get; set; }
 
@@ -72,6 +74,7 @@ namespace Doug.Models
         public User()
         {
             InventoryItems = new List<InventoryItem>();
+            Effects = new List<UserEffect>();
             Loadout = new Loadout();
             
             Luck = 5;
@@ -98,6 +101,11 @@ namespace Doug.Models
         {
             InventoryItems.ForEach(item => item.CreateItem(itemFactory));
             Loadout.CreateEquipment(itemFactory);
+        }
+
+        public void LoadEffects(IEffectFactory effectFactory)
+        {
+            Effects.ForEach(effect => effect.CreateEffect(effectFactory));
         }
 
         public double GetExperienceAdvancement()

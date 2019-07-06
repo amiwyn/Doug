@@ -29,7 +29,7 @@ namespace Test.Slurs
         private readonly Mock<IUserRepository> _userRepository = new Mock<IUserRepository>();
         private readonly Mock<ISlackWebApi> _slack = new Mock<ISlackWebApi>();
         private readonly Mock<IAuthorizationService> _adminValidator = new Mock<IAuthorizationService>();
-        private readonly Mock<IItemEventDispatcher> _eventDispatcher = new Mock<IItemEventDispatcher>();
+        private readonly Mock<IEventDispatcher> _eventDispatcher = new Mock<IEventDispatcher>();
         private readonly Mock<IUserService> _userService = new Mock<IUserService>();
 
         [TestInitialize]

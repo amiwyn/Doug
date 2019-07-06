@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
+using Doug.Effects;
 using Doug.Items;
 
 namespace Doug.Repositories
@@ -20,11 +21,13 @@ namespace Doug.Repositories
     {
         private readonly DougContext _db;
         private readonly IItemFactory _itemFactory;
+        private readonly IEffectFactory _effectFactory;
 
-        public UserRepository(DougContext dougContext, IItemFactory itemFactory)
+        public UserRepository(DougContext dougContext, IItemFactory itemFactory, IEffectFactory effectFactory)
         {
             _db = dougContext;
             _itemFactory = itemFactory;
+            _effectFactory = effectFactory;
         }
 
         public void AddCredits(string userId, int amount)
@@ -65,9 +68,11 @@ namespace Doug.Repositories
             var user = _db.Users
                 .Include(usr => usr.InventoryItems)
                 .Include(usr => usr.Loadout)
+                .Include(usr => usr.Effects)
                 .Single(usr => usr.Id == userId);
 
             user.LoadItems(_itemFactory);
+            user.LoadEffects(_effectFactory);
 
             return user;
         }

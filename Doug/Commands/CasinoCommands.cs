@@ -22,7 +22,7 @@ namespace Doug.Commands
         private readonly IChannelRepository _channelRepository;
         private readonly ISlackWebApi _slack;
         private readonly IBackgroundJobClient _backgroundJobClient;
-        private readonly IItemEventDispatcher _itemEventDispatcher;
+        private readonly IEventDispatcher _eventDispatcher;
         private readonly IRandomService _randomService;
 
 
@@ -30,13 +30,13 @@ namespace Doug.Commands
         private readonly IStatsRepository _statsRepository;
         private readonly IUserService _userService;
 
-        public CasinoCommands(IUserRepository userRepository, ISlackWebApi messageSender, IChannelRepository channelRepository, IBackgroundJobClient backgroundJobClient, IItemEventDispatcher itemEventDispatcher, IStatsRepository statsRepository, IRandomService randomService, IUserService userService)
+        public CasinoCommands(IUserRepository userRepository, ISlackWebApi messageSender, IChannelRepository channelRepository, IBackgroundJobClient backgroundJobClient, IEventDispatcher eventDispatcher, IStatsRepository statsRepository, IRandomService randomService, IUserService userService)
         {
             _userRepository = userRepository;
             _slack = messageSender;
             _channelRepository = channelRepository;
             _backgroundJobClient = backgroundJobClient;
-            _itemEventDispatcher = itemEventDispatcher;
+            _eventDispatcher = eventDispatcher;
             _statsRepository = statsRepository;
             _randomService = randomService;
             _userService = userService;
@@ -87,7 +87,7 @@ namespace Doug.Commands
 
         private bool UserCoinFlipWin(User user)
         {
-            var userChance = _itemEventDispatcher.OnGambling(user, user.BaseGambleChance());
+            var userChance = _eventDispatcher.OnGambling(user, user.BaseGambleChance());
             return _randomService.RollAgainstOpponent(userChance, 0.5);
         }
 
@@ -199,8 +199,8 @@ namespace Doug.Commands
 
         private bool VersusCoinFlipWin(User caller, User target)
         {
-            var callerChance = _itemEventDispatcher.OnGambling(caller, caller.BaseGambleChance());
-            var targetChance = _itemEventDispatcher.OnGambling(target, target.BaseGambleChance());
+            var callerChance = _eventDispatcher.OnGambling(caller, caller.BaseGambleChance());
+            var targetChance = _eventDispatcher.OnGambling(target, target.BaseGambleChance());
 
             return _randomService.RollAgainstOpponent(callerChance, targetChance);
         }
