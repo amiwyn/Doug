@@ -54,5 +54,23 @@ namespace Doug.Items
         {
             return mention;
         }
+
+        /// <summary>
+        /// Event triggered when the user dies. Return true to prevent the user from dying.
+        /// </summary>
+        /// <returns></returns>
+        public virtual bool OnDeath()
+        {
+            return false;
+        }
+
+        /// <summary>
+        /// Event triggered when the user dies from the hand of another. Return true to kill the killer instead.
+        /// </summary>
+        /// <returns></returns>
+        public virtual bool OnDeathByUser()
+        {
+            return false;
+        }
     }
 }
