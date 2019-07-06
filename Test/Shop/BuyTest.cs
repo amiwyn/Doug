@@ -13,10 +13,9 @@ namespace Test.Shop
     [TestClass]
     public class BuyTest
     {
-        private const string Channel = "coco-channel";
         private const string User = "testuser";
 
-        private ShopService _shopMenuService;
+        private ShopService _shopService;
 
         private readonly Mock<IUserRepository> _userRepository = new Mock<IUserRepository>();
         private readonly Mock<ISlackWebApi> _slack = new Mock<ISlackWebApi>();
@@ -31,13 +30,13 @@ namespace Test.Shop
             _user = new User() {Id = "testuser", Credits = 431279};
             _userRepository.Setup(repo => repo.GetUser(User)).Returns(_user);
 
-            _shopMenuService = new ShopService(_userRepository.Object, _inventoryRepository.Object, _itemFactory.Object);
+            _shopService = new ShopService(_userRepository.Object, _inventoryRepository.Object, _itemFactory.Object);
         }
 
         [TestMethod]
         public void GivenEnoughCredits_WhenBuyingAnApple_AppleIsAdded()
         {
-            _shopMenuService.Buy(_user, "lucky_dice");
+            _shopService.Buy(_user, "lucky_dice");
 
             _inventoryRepository.Verify(repo => repo.AddItem(_user, "lucky_dice"));
         }
@@ -45,7 +44,7 @@ namespace Test.Shop
         [TestMethod]
         public void GivenEnoughCredits_WhenBuyingAnApple_CreditsAreRemovedFromGiver()
         {
-            _shopMenuService.Buy(_user, "lucky_dice");
+            _shopService.Buy(_user, "lucky_dice");
 
             _userRepository.Verify(repo => repo.RemoveCredits(User, 2674));
         }
@@ -55,7 +54,7 @@ namespace Test.Shop
         {
             var user = new User() {Id = "testuser", Credits = 22};
 
-            var result = _shopMenuService.Buy(user, "lucky_dice");
+            var result = _shopService.Buy(user, "lucky_dice");
 
             Assert.AreEqual("You need 2674 " + DougMessages.CreditEmoji + " to do this and you have 22 " + DougMessages.CreditEmoji, result.Message);
         }
