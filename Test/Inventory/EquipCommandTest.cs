@@ -42,8 +42,8 @@ namespace Test.Inventory
         {
             _item = new AwakeningOrb(_slack.Object, _userService.Object);
             var loadout = new Loadout();
-            var items = new List<InventoryItem>() {new InventoryItem("testuser", "testitem") {InventoryPosition = 6, Item = _item } };
-            _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User() { Id = "testuser", InventoryItems = items, Loadout = loadout });
+            var items = new List<InventoryItem>() { new InventoryItem("testuser", "testitem") { InventoryPosition = 6, Item = _item } };
+            _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User { Id = "testuser", Experience = 4370, InventoryItems = items, Loadout = loadout });
 
             _inventoryCommands = new InventoryCommands(_userRepository.Object, _slack.Object, _inventoryRepository.Object, _equipmentRepository.Object, _userService.Object);
         }
