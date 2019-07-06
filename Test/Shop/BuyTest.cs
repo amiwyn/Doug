@@ -1,4 +1,4 @@
-using System.Threading.Tasks;
+using Doug;
 using Doug.Items;
 using Doug.Items.Equipment;
 using Doug.Models;
@@ -16,21 +16,12 @@ namespace Test.Shop
         private const string Channel = "coco-channel";
         private const string User = "testuser";
 
-        private readonly Interaction _interaction = new Interaction
-        {
-            ChannelId = Channel,
-            UserId = User,
-            Action = "buy",
-            Value = "lucky_dice"
-        };
-
-        private ShopMenuService _shopMenuService;
+        private ShopService _shopMenuService;
 
         private readonly Mock<IUserRepository> _userRepository = new Mock<IUserRepository>();
         private readonly Mock<ISlackWebApi> _slack = new Mock<ISlackWebApi>();
         private readonly Mock<IInventoryRepository>  _inventoryRepository = new Mock<IInventoryRepository>();
         private readonly Mock<IItemFactory> _itemFactory = new Mock<IItemFactory>();
-        private readonly Mock<IShopService> _shopService = new Mock<IShopService>();
         private User _user;
 
         [TestInitialize]
@@ -40,33 +31,33 @@ namespace Test.Shop
             _user = new User() {Id = "testuser", Credits = 431279};
             _userRepository.Setup(repo => repo.GetUser(User)).Returns(_user);
 
-            _shopMenuService = new ShopMenuService(_userRepository.Object, _slack.Object, _itemFactory.Object, _shopService.Object);
+            _shopMenuService = new ShopService(_userRepository.Object, _inventoryRepository.Object, _itemFactory.Object);
         }
 
         [TestMethod]
-        public async Task GivenEnoughCredits_WhenBuyingAnApple_AppleIsAdded()
+        public void GivenEnoughCredits_WhenBuyingAnApple_AppleIsAdded()
         {
-            await _shopMenuService.Buy(_interaction);
+            _shopMenuService.Buy(_user, "lucky_dice");
 
             _inventoryRepository.Verify(repo => repo.AddItem(_user, "lucky_dice"));
         }
 
         [TestMethod]
-        public async Task GivenEnoughCredits_WhenBuyingAnApple_CreditsAreRemovedFromGiver()
+        public void GivenEnoughCredits_WhenBuyingAnApple_CreditsAreRemovedFromGiver()
         {
-            await _shopMenuService.Buy(_interaction);
+            _shopMenuService.Buy(_user, "lucky_dice");
 
             _userRepository.Verify(repo => repo.RemoveCredits(User, 2674));
         }
 
         [TestMethod]
-        public async Task GivenNotEnoughCredits_WhenBuyingAnApple_NotEnoughCreditsMessageIsSent()
+        public void GivenNotEnoughCredits_WhenBuyingAnApple_NotEnoughCreditsMessageIsSent()
         {
-            _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User() { Id = "testuser", Credits = 22 });
+            var user = new User() {Id = "testuser", Credits = 22};
 
-            await _shopMenuService.Buy(_interaction);
+            var result = _shopMenuService.Buy(user, "lucky_dice");
 
-            _slack.Verify(slack => slack.SendEphemeralMessage(It.IsAny<string>(), User, Channel));
+            Assert.AreEqual("You need 2674 " + DougMessages.CreditEmoji + " to do this and you have 22 " + DougMessages.CreditEmoji, result.Message);
         }
     }
 }
