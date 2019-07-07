@@ -11,6 +11,7 @@ namespace Doug.Models
         public DbSet<RecentFlame> RecentSlurs { get; set; }
         public DbSet<GambleChallenge> GambleChallenges { get; set; }
         public DbSet<Channel> Channels { get; set; }
+        public DbSet<UserEffect> UserEffect { get; set; }
 
         public DougContext(DbContextOptions<DougContext> options) : base(options)
         {
@@ -34,6 +35,9 @@ namespace Doug.Models
                 .ToTable("Users")
                 .HasOne(o => o.Loadout).WithOne()
                 .HasForeignKey<User>(o => o.Id);
+
+            modelBuilder.Entity<UserEffect>()
+                .HasKey(e => new { e.UserId, e.EffectId });
 
             modelBuilder.Entity<UserEffect>()
                 .HasOne(u => u.User)

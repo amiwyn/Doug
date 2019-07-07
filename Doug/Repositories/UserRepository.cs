@@ -1,9 +1,10 @@
-﻿using Doug.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Doug.Models;
 using System.Collections.Generic;
 using System.Linq;
 using Doug.Effects;
 using Doug.Items;
+using Z.EntityFramework.Plus;
 
 namespace Doug.Repositories
 {
@@ -66,13 +67,14 @@ namespace Doug.Repositories
         public User GetUser(string userId)
         {
             var user = _db.Users
-                .Include(usr => usr.InventoryItems)
-                .Include(usr => usr.Loadout)
-                .Include(usr => usr.Effects)
+                .IncludeFilter(usr => usr.Effects.Where(effect => effect.EndTime >= DateTime.UtcNow))
+                .IncludeFilter(usr => usr.InventoryItems)
+                .IncludeFilter(usr => usr.Loadout)
                 .Single(usr => usr.Id == userId);
 
             user.LoadItems(_itemFactory);
             user.LoadEffects(_effectFactory);
+
 
             return user;
         }

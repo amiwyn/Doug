@@ -23,14 +23,18 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Serialization;
 
 namespace Doug
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        private readonly ILogger<Startup> _logger;
+
+        public Startup(IConfiguration configuration, ILogger<Startup> logger)
         {
+            _logger = logger;
             Configuration = configuration;
         }
 
@@ -80,6 +84,7 @@ namespace Doug
             services.AddScoped<IStatsRepository, StatsRepository>();
             services.AddScoped<IInventoryRepository, InventoryRepository>();
             services.AddScoped<IEquipmentRepository, EquipmentRepository>();
+            services.AddScoped<IEffectRepository, EffectRepository>();
 
             var env = Environment.GetEnvironmentVariable("APP_ENV");
 
@@ -187,6 +192,7 @@ namespace Doug
                 var error = context.Features.Get<IExceptionHandlerFeature>();
                 if (error != null)
                 {
+                    _logger.LogError(error.Error, context.Request.Path.ToString());
                     await context.Response.WriteAsync(string.Format(DougMessages.DougError, error.Error.Message)).ConfigureAwait(false);
                 }
             });

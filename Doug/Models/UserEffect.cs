@@ -6,7 +6,6 @@ namespace Doug.Models
 {
     public class UserEffect
     {
-        public int Id { get; set; }
         public string UserId { get; set; }
         public string EffectId { get; set; }
         public DateTime EndTime { get; set; }

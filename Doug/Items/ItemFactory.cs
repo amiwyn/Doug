@@ -28,20 +28,23 @@ namespace Doug.Items
         public const string ClothArmor = "cloth_armor";
         public const string KickTicket = "kick_ticket";
         public const string InviteTicket = "invite_ticket";
+        public const string BigMac = "big_mac";
 
         private readonly ISlackWebApi _slack;
         private readonly IStatsRepository _statsRepository;
         private readonly IInventoryRepository _inventoryRepository;
         private readonly IUserService _userService;
         private readonly IEventDispatcher _eventDispatcher;
+        private readonly IEffectRepository _effectRepository;
 
-        public ItemFactory(ISlackWebApi slack, IStatsRepository statsRepository, IInventoryRepository inventoryRepository, IUserService userService, IEventDispatcher eventDispatcher)
+        public ItemFactory(ISlackWebApi slack, IStatsRepository statsRepository, IInventoryRepository inventoryRepository, IUserService userService, IEventDispatcher eventDispatcher, IEffectRepository effectRepository)
         {
             _slack = slack;
             _statsRepository = statsRepository;
             _inventoryRepository = inventoryRepository;
             _userService = userService;
             _eventDispatcher = eventDispatcher;
+            _effectRepository = effectRepository;
         }
 
         public Item CreateItem(string itemId)
@@ -78,6 +81,8 @@ namespace Doug.Items
                     return new Bread(_statsRepository, _inventoryRepository);
                 case McdoFries:
                     return new McdoFries(_statsRepository, _inventoryRepository, _userService);
+                case BigMac:
+                    return new BigMac(_inventoryRepository, _effectRepository);
                 default:
                     return new Default();
             }

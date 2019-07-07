@@ -28,7 +28,7 @@ namespace Test.Shop
             var items = new List<InventoryItem>()
             {
                 new InventoryItem("testuser", "testitem") { InventoryPosition = 4, Item = new LuckyDice() },
-                new InventoryItem("testuser", "testitem") { InventoryPosition = 3, Item = new KickTicket(null, null, null) }
+                new InventoryItem("testuser", "testitem") { InventoryPosition = 3, Item = new KickTicket(null, null, null, null) }
             };
 
             _user = new User() { Id = "testuser", InventoryItems = items };
