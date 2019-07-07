@@ -18,6 +18,7 @@ namespace Doug.Effects
         }
 
         public const string TrollBlessing = "troll_blessing";
+        public const string NicotineHigh = "nicotine_high";
 
         public Effect CreateEffect(string effectId)
         {
@@ -25,6 +26,8 @@ namespace Doug.Effects
             {
                 case TrollBlessing:
                     return new TrollBlessing(_slack);
+                case NicotineHigh:
+                    return new NicotineHigh();
                 default:
                     return new UnknownEffect();
             }

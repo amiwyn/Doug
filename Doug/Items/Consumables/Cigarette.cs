@@ -5,29 +5,29 @@ using Doug.Repositories;
 
 namespace Doug.Items.Consumables
 {
-    public class BigMac : ConsumableItem
+    public class Cigarette : ConsumableItem
     {
         private readonly IEffectRepository _effectRepository;
         private const int DurationInMinutes = 5;
 
-        public BigMac(IInventoryRepository inventoryRepository, IEffectRepository effectRepository) : base(inventoryRepository)
+        public Cigarette(IInventoryRepository inventoryRepository, IEffectRepository effectRepository) : base(inventoryRepository)
         {
             _effectRepository = effectRepository;
-            Id = ItemFactory.BigMac;
-            Name = "Big Mac";
-            Description = "On va tu au Mc Donald? Gives *Troll's Blessing* for 5 minutes";
+            Id = ItemFactory.Cigarette;
+            Name = "Cigarette";
+            Description = "A cigarette that probably belonged to Vapane. Gives *Nicotine High* for 5 minutes";
             Rarity = Rarity.Uncommon;
-            Icon = ":hamburger:";
-            Price = 100;
+            Icon = ":smoking:";
+            Price = 10;
         }
 
         public override string Use(int itemPos, User user, string channel)
         {
             base.Use(itemPos, user, channel);
 
-            var effect = new TrollBlessing(null);
+            var effect = new NicotineHigh();
 
-            _effectRepository.AddEffect(user, EffectFactory.TrollBlessing, DurationInMinutes);
+            _effectRepository.AddEffect(user, EffectFactory.NicotineHigh, DurationInMinutes);
 
             return string.Format(DougMessages.AddedEffect, effect.Name, DurationInMinutes);
         }

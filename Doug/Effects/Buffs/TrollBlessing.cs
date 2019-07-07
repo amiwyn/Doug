@@ -12,7 +12,7 @@ namespace Doug.Effects.Buffs
             _slack = slack;
             Id = EffectFactory.TrollBlessing;
             Name = "Troll's Blessing";
-            Description = "You are blessed by the god of trolls. Immune to kicks. When someone kicks you, it kicks that person instead.";
+            Description = "You are blessed by the gods. Immune to kicks. When someone kicks you, it kicks that person instead.";
             Rank = Rank.Divine;
             Icon = ":poop:";
         }

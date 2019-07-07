@@ -10,6 +10,12 @@ namespace Doug.Effects
         public Rank Rank { get; set; }
         public string Icon { get; set; }
 
+        public int Luck { get; set; }
+        public int Agility { get; set; }
+        public int Charisma { get; set; }
+        public int Constitution { get; set; }
+        public int Stamina { get; set; }
+
         public virtual bool IsBuff()
         {
             return true;

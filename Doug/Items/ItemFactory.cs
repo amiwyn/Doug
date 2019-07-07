@@ -35,6 +35,7 @@ namespace Doug.Items
         public const string CharismaReset = "cha_reset";
         public const string ConstitutionReset = "con_reset";
         public const string StaminaReset = "stam_reset";
+        public const string Cigarette = "cigarette";
 
         private readonly ISlackWebApi _slack;
         private readonly IStatsRepository _statsRepository;
@@ -99,6 +100,8 @@ namespace Doug.Items
                     return new LuckReset(_statsRepository, _inventoryRepository);
                 case StaminaReset:
                     return new StaminaReset(_statsRepository, _inventoryRepository);
+                case Cigarette:
+                    return new Cigarette(_inventoryRepository, _effectRepository);
                 default:
                     return new Default();
             }
