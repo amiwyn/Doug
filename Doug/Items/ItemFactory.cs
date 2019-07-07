@@ -1,4 +1,5 @@
 ﻿using Doug.Items.Consumables;
+using Doug.Items.Consumables.Resets;
 using Doug.Items.Equipment;
 using Doug.Items.Misc;
 using Doug.Repositories;
@@ -29,6 +30,11 @@ namespace Doug.Items
         public const string KickTicket = "kick_ticket";
         public const string InviteTicket = "invite_ticket";
         public const string BigMac = "big_mac";
+        public const string AgilityReset = "agi_reset";
+        public const string LuckReset = "luck_reset";
+        public const string CharismaReset = "cha_reset";
+        public const string ConstitutionReset = "con_reset";
+        public const string StaminaReset = "stam_reset";
 
         private readonly ISlackWebApi _slack;
         private readonly IStatsRepository _statsRepository;
@@ -83,6 +89,16 @@ namespace Doug.Items
                     return new McdoFries(_statsRepository, _inventoryRepository, _userService);
                 case BigMac:
                     return new BigMac(_inventoryRepository, _effectRepository);
+                case AgilityReset:
+                    return new AgilityReset(_statsRepository, _inventoryRepository);
+                case CharismaReset:
+                    return new CharismaReset(_statsRepository, _inventoryRepository);
+                case ConstitutionReset:
+                    return new ConstitutionReset(_statsRepository, _inventoryRepository);
+                case LuckReset:
+                    return new LuckReset(_statsRepository, _inventoryRepository);
+                case StaminaReset:
+                    return new StaminaReset(_statsRepository, _inventoryRepository);
                 default:
                     return new Default();
             }

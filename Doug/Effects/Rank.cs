@@ -4,6 +4,7 @@
     {
         Common,
         Enchanted,
-        Divine
+        Divine,
+        Infernal
     }
 }
