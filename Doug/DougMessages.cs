@@ -3,11 +3,11 @@
     public static class DougMessages
     {
         public const string CoffeeParrotEmoji = ":coffeeparrot:";
-        public const string CreditEmoji = ":rupee:";
+        public const string CreditEmoji = ":rupyellow:";
         public const string UpVote = "+1";
         public const string Downvote = "-1";
-        public const string Top5 = "Leaderboard";
 
+        public const string Top5 = "Leaderboard";
         public const string JoinedCoffee = "{0} joined the coffee break.";
         public const string KickedCoffee = "{0} was kicked from the coffee break.";
         public const string SkippedCoffee = "{0} will skip the coffee break.";
@@ -82,7 +82,6 @@
         public const string NotChallenged = "You are not challenged.";
         public const string SlurAlreadyExists = "That slur already exists.";
         public const string NotEnoughEnergy = "You don't have enough energy.";
-        public const string TargetNoMoney = "Your target don't have enough " + CreditEmoji;
         public const string NoItemInSlot = "There is no item in slot {0}.";
         public const string ItemCantBeUsed = "This item cannot be used";
         public const string InvalidUserArgument = "You must pass a valid user in arguments";
