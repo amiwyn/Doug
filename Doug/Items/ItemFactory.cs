@@ -37,6 +37,7 @@ namespace Doug.Items
         public const string StaminaReset = "stam_reset";
         public const string BachelorsDegree = "bachelor_degree";
         public const string Cigarette = "cigarette";
+        public const string SuicidePill = "suicide_pill";
 
         private readonly ISlackWebApi _slack;
         private readonly IStatsRepository _statsRepository;
@@ -105,6 +106,8 @@ namespace Doug.Items
                     return new Cigarette(_inventoryRepository, _effectRepository);
                 case BachelorsDegree:
                     return new BachelorsDegree();
+                case SuicidePill:
+                    return new SuicidePill(_inventoryRepository, _userService);
                 default:
                     return new Default();
             }
