@@ -21,7 +21,7 @@ namespace Doug.Commands
         private const int KillExperienceGain = 100;
         private static readonly DougResponse NoResponse = new DougResponse();
 
-        private readonly IItemEventDispatcher _itemEventDispatcher;
+        private readonly IEventDispatcher _eventDispatcher;
         private readonly IUserRepository _userRepository;
         private readonly ISlackWebApi _slack;
         private readonly IStatsRepository _statsRepository;
@@ -29,9 +29,9 @@ namespace Doug.Commands
         private readonly IUserService _userService;
         private readonly IChannelRepository _channelRepository;
 
-        public CombatCommands(IItemEventDispatcher itemEventDispatcher, IUserRepository userRepository, ISlackWebApi slack, IStatsRepository statsRepository, IRandomService randomService, IUserService userService, IChannelRepository channelRepository)
+        public CombatCommands(IEventDispatcher eventDispatcher, IUserRepository userRepository, ISlackWebApi slack, IStatsRepository statsRepository, IRandomService randomService, IUserService userService, IChannelRepository channelRepository)
         {
-            _itemEventDispatcher = itemEventDispatcher;
+            _eventDispatcher = eventDispatcher;
             _userRepository = userRepository;
             _slack = slack;
             _statsRepository = statsRepository;
@@ -45,6 +45,13 @@ namespace Doug.Commands
             var user = _userRepository.GetUser(command.UserId);
             var target = _userRepository.GetUser(command.GetTargetUserId());
 
+            var channelType = _channelRepository.GetChannelType(command.ChannelId);
+
+            if (channelType != ChannelType.Common)
+            {
+                return new DougResponse(DougMessages.NotInRightChannel);
+            }
+
             var energy = user.Energy - StealEnergyCost;
 
             if (energy < 0)
@@ -54,12 +61,12 @@ namespace Doug.Commands
 
             _statsRepository.UpdateEnergy(command.UserId, energy);
 
-            var userChance = _itemEventDispatcher.OnStealingChance(user, user.BaseStealSuccessRate());
-            var targetChance = _itemEventDispatcher.OnGettingStolenChance(target, target.BaseOpponentStealSuccessRate());
+            var userChance = _eventDispatcher.OnStealingChance(user, user.BaseStealSuccessRate());
+            var targetChance = _eventDispatcher.OnGettingStolenChance(target, target.BaseOpponentStealSuccessRate());
 
             var rollSuccessful = _randomService.RollAgainstOpponent(userChance, targetChance);
 
-            var amount = _itemEventDispatcher.OnStealingAmount(user, user.BaseStealAmount());
+            var amount = _eventDispatcher.OnStealingAmount(user, user.BaseStealAmount());
 
             if (target.Credits - amount < 0)
             {
@@ -118,6 +125,7 @@ namespace Doug.Commands
 
             if (userIsDead)
             {
+                _eventDispatcher.OnDeathByUser(target, user);
                 await _userService.AddExperience(user, KillExperienceGain, command.ChannelId);
             }
 

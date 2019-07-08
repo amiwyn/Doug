@@ -18,6 +18,7 @@ namespace Doug.Items.Consumables
             Rarity = Rarity.Uncommon;
             Icon = ":credit_card:";
             Price = 100;
+            IsTradable = false;
         }
 
         public override string Use(int itemPos, User user, string channel)

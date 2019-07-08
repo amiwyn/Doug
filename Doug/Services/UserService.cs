@@ -20,9 +20,9 @@ namespace Doug.Services
     {
         private readonly ISlackWebApi _slack;
         private readonly IStatsRepository _statsRepository;
-        private readonly IItemEventDispatcher _eventDispatcher;
+        private readonly IEventDispatcher _eventDispatcher;
 
-        public UserService(ISlackWebApi slack, IStatsRepository statsRepository, IItemEventDispatcher eventDispatcher)
+        public UserService(ISlackWebApi slack, IStatsRepository statsRepository, IEventDispatcher eventDispatcher)
         {
             _slack = slack;
             _statsRepository = statsRepository;
@@ -40,6 +40,11 @@ namespace Doug.Services
 
             if (user.IsDead())
             {
+                if (!_eventDispatcher.OnDeath(user))
+                {
+                    return false;
+                }
+
                 _statsRepository.KillUser(user.Id);
                 await _slack.BroadcastMessage(string.Format(DougMessages.UserDied, Mention(user)), channel);
                 return true;

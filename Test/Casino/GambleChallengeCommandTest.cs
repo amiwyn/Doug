@@ -41,7 +41,7 @@ namespace Test.Casino
         private readonly Mock<ISlackWebApi> _slack = new Mock<ISlackWebApi>();
         private readonly Mock<IChannelRepository> _channelRepository = new Mock<IChannelRepository>();
         private readonly Mock<IBackgroundJobClient> _backgroundClient = new Mock<IBackgroundJobClient>();
-        private readonly Mock<IItemEventDispatcher> _itemEventDispatcher = new Mock<IItemEventDispatcher>();
+        private readonly Mock<IEventDispatcher> _itemEventDispatcher = new Mock<IEventDispatcher>();
         private readonly Mock<IStatsRepository> _statsRepository = new Mock<IStatsRepository>();
         private readonly Mock<IRandomService> _randomService = new Mock<IRandomService>();
         private readonly Mock<IUserService> _userService = new Mock<IUserService>();

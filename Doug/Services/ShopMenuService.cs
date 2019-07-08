@@ -11,45 +11,36 @@ namespace Doug.Services
 {
     public interface IShopMenuService
     {
-        Task Buy(Interaction interaction); // TODO: put these in a separate service
-        Task Sell(Interaction interaction); // TODO: put these in a separate service
+        Task Buy(Interaction interaction);
+        Task Sell(Interaction interaction);
     }
 
     public class ShopMenuService : IShopMenuService
     {
         private readonly IUserRepository _userRepository;
         private readonly ISlackWebApi _slack;
-        private readonly IInventoryRepository _inventoryRepository;
         private readonly IItemFactory _itemFactory;
+        private readonly IShopService _shopService;
 
         public static readonly List<string> ShopItems = new List<string> { ItemFactory.CoffeeCup, ItemFactory.Apple, ItemFactory.Bread, ItemFactory.SteelSword, ItemFactory.ClothArmor }; // TODO: temp. put this in a table somewhere
 
-        public ShopMenuService(IUserRepository userRepository, ISlackWebApi slack, IInventoryRepository inventoryRepository, IItemFactory itemFactory)
+        public ShopMenuService(IUserRepository userRepository, ISlackWebApi slack, IItemFactory itemFactory, IShopService shopService)
         {
             _userRepository = userRepository;
             _slack = slack;
-            _inventoryRepository = inventoryRepository;
             _itemFactory = itemFactory;
+            _shopService = shopService;
         }
 
         public async Task Buy(Interaction interaction) 
         {
             var user = _userRepository.GetUser(interaction.UserId);
-            var item = _itemFactory.CreateItem(interaction.Value);
 
-            if (!user.HasEnoughCreditsForAmount(item.Price))
-            {
-                var message = user.NotEnoughCreditsForAmountResponse(item.Price);
-                await _slack.SendEphemeralMessage(message, user.Id, interaction.ChannelId);
-                return;
-            }
+            var response = _shopService.Buy(user, interaction.Value);
 
-            _userRepository.RemoveCredits(user.Id, item.Price);
-
-            _inventoryRepository.AddItem(user, item.Id);
+            await _slack.SendEphemeralMessage(response.Message, user.Id, interaction.ChannelId);
 
             var items = ShopItems.Select(itm => _itemFactory.CreateItem(itm));
-
             await _slack.UpdateInteractionMessage(new ShopMenu(items, user).Blocks, interaction.ResponseUrl);
         }
 
@@ -57,19 +48,10 @@ namespace Doug.Services
         {
             var user = _userRepository.GetUser(interaction.UserId);
             var position = int.Parse(interaction.Value.Split(":").Last());
-            var item = user.InventoryItems.SingleOrDefault(itm => itm.InventoryPosition == position)?.Item;
 
-            if (item == null)
-            {
-                await _slack.SendEphemeralMessage(string.Format(DougMessages.NoItemInSlot, position), user.Id, interaction.ChannelId);
-                return;
-            }
+            var response = _shopService.Sell(user, position);
 
-            _inventoryRepository.RemoveItem(user, position);
-
-            _userRepository.AddCredits(user.Id, item.Price / 2);
-
-            await _slack.SendEphemeralMessage(string.Format(DougMessages.SoldItem, item.Name, item.Price / 2), user.Id, interaction.ChannelId);
+            await _slack.SendEphemeralMessage(response.Message, user.Id, interaction.ChannelId);
 
             await _slack.UpdateInteractionMessage(new InventoryMenu(user.InventoryItems).Blocks, interaction.ResponseUrl);
         }

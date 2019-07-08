@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Doug.Items;
 using System.Linq;
+using Doug.Effects;
 
 namespace Doug.Models
 {
@@ -13,6 +14,7 @@ namespace Doug.Models
         public string Id { get; set; }
         public int Credits { get; set; }
         public List<InventoryItem> InventoryItems { get; set; }
+        public List<UserEffect> Effects { get; set; }
         public Loadout Loadout { get; set; }
         public long Experience { get; set; }
 
@@ -72,6 +74,7 @@ namespace Doug.Models
         public User()
         {
             InventoryItems = new List<InventoryItem>();
+            Effects = new List<UserEffect>();
             Loadout = new Loadout();
             
             Luck = 5;
@@ -87,17 +90,22 @@ namespace Doug.Models
             Energy = TotalEnergy();
         }
 
-        public int TotalLuck() => Loadout.Luck + Luck;
-        public int TotalAgility() => Loadout.Agility + Agility;
-        public int TotalCharisma() => Loadout.Charisma + Charisma;
-        public int TotalConstitution() => Loadout.Constitution + Constitution;
-        public int TotalStamina() => Loadout.Stamina + Stamina;
+        public int TotalLuck() => Loadout.Luck + Luck + Effects.Sum(userEffect => userEffect.Effect.Luck);
+        public int TotalAgility() => Loadout.Agility + Agility + Effects.Sum(userEffect => userEffect.Effect.Agility);
+        public int TotalCharisma() => Loadout.Charisma + Charisma + Effects.Sum(userEffect => userEffect.Effect.Charisma);
+        public int TotalConstitution() => Loadout.Constitution + Constitution + Effects.Sum(userEffect => userEffect.Effect.Constitution);
+        public int TotalStamina() => Loadout.Stamina + Stamina + Effects.Sum(userEffect => userEffect.Effect.Stamina);
         public int TotalAttack() => Loadout.Attack + Attack;
 
         public void LoadItems(IItemFactory itemFactory)
         {
             InventoryItems.ForEach(item => item.CreateItem(itemFactory));
             Loadout.CreateEquipment(itemFactory);
+        }
+
+        public void LoadEffects(IEffectFactory effectFactory)
+        {
+            Effects.ForEach(effect => effect.CreateEffect(effectFactory));
         }
 
         public double GetExperienceAdvancement()

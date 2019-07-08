@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Doug.Commands;
 using Doug.Controllers.Dto;
 using Microsoft.AspNetCore.Mvc;

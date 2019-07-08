@@ -6,7 +6,8 @@
         Pvp,
         Casino,
         Coffee,
-        Marketplace
+        Marketplace,
+        Common
     }
 
     public class Channel

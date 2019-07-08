@@ -6,6 +6,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Doug.Commands;
+using Doug.Effects;
 using Doug.Items;
 using Doug.Models;
 using Doug.Repositories;
@@ -22,14 +23,18 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Serialization;
 
 namespace Doug
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        private readonly ILogger<Startup> _logger;
+
+        public Startup(IConfiguration configuration, ILogger<Startup> logger)
         {
+            _logger = logger;
             Configuration = configuration;
         }
 
@@ -50,8 +55,9 @@ namespace Doug
 
             
             services.AddScoped<ISlackWebApi, SlackWebApi>();
-            services.AddScoped<IItemEventDispatcher, ItemEventDispatcher>();
+            services.AddScoped<IEventDispatcher, EventDispatcher>();
             services.AddScoped<IItemFactory, ItemFactory>();
+            services.AddScoped<IEffectFactory, EffectFactory>();
 
             services.AddScoped<IEventService, EventService>();
             services.AddScoped<IAuthorizationService, AuthorizationService>();
@@ -61,6 +67,7 @@ namespace Doug
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IStatsMenuService, StatsMenuService>();
             services.AddScoped<IInventoryMenuService, InventoryMenuService>();
+            services.AddScoped<IShopService, ShopService>();
 
             services.AddScoped<ICoffeeCommands, CoffeeCommands>();
             services.AddScoped<ISlursCommands, SlursCommands>();
@@ -77,6 +84,7 @@ namespace Doug
             services.AddScoped<IStatsRepository, StatsRepository>();
             services.AddScoped<IInventoryRepository, InventoryRepository>();
             services.AddScoped<IEquipmentRepository, EquipmentRepository>();
+            services.AddScoped<IEffectRepository, EffectRepository>();
 
             var env = Environment.GetEnvironmentVariable("APP_ENV");
 
@@ -184,6 +192,7 @@ namespace Doug
                 var error = context.Features.Get<IExceptionHandlerFeature>();
                 if (error != null)
                 {
+                    _logger.LogError(error.Error, context.Request.Path.ToString());
                     await context.Response.WriteAsync(string.Format(DougMessages.DougError, error.Error.Message)).ConfigureAwait(false);
                 }
             });
