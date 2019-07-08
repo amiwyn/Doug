@@ -35,6 +35,7 @@ namespace Doug.Items
         public const string CharismaReset = "cha_reset";
         public const string ConstitutionReset = "con_reset";
         public const string StaminaReset = "stam_reset";
+        public const string BachelorsDegree = "bachelor_degree";
         public const string Cigarette = "cigarette";
 
         private readonly ISlackWebApi _slack;
@@ -102,6 +103,8 @@ namespace Doug.Items
                     return new StaminaReset(_statsRepository, _inventoryRepository);
                 case Cigarette:
                     return new Cigarette(_inventoryRepository, _effectRepository);
+                case BachelorsDegree:
+                    return new BachelorsDegree();
                 default:
                     return new Default();
             }
