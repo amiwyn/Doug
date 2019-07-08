@@ -32,7 +32,7 @@ namespace Doug.Services
             if (message.ContainsMcdonaldMention())
             {
                 Command command = new Command() { ChannelId = message.Channel, UserId = GabId, Text = $"<@{GabId}|gabriel.fillit>" };
-                _slurs.Flame(command).Wait();
+                _slurs.Flame(command).Wait(); //TODO: dont block here
             }
         }
     }
