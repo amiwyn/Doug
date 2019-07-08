@@ -1,5 +1,4 @@
-﻿using Doug.Effects;
-using Doug.Models;
+﻿using Doug.Models;
 using Doug.Repositories;
 using Doug.Services;
 

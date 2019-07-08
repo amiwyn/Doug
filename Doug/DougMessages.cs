@@ -22,7 +22,6 @@
         public const string UserGaveCredits = "{0} gave {1} " + CreditEmoji + " to {2}";
         public const string StatsOf = "Profile and stats of {0}";
         public const string CreditStats = CreditEmoji + " {0}";
-        public const string UserIdStats = ":robot_face: User ID : {0}";
         public const string LevelStats = "Level {0}";
         public const string ExperienceStats = "{0:0.##}%";
         public const string HealthStats = "Health Points :";
@@ -71,6 +70,7 @@
         public const string UserAttackedTarget = "{0} dealt {2} damage to {1}!";
         public const string UsedItemOnTarget = "{0} used a *{1}* on {2}";
         public const string AddedEffect = "You obtained the *{0}* effect for {1} minutes";
+        public const string Surrendered = "{0} has surrendered :fr:";
 
         public const string DougError = "Beep boop, it's not working : {0}";
         public const string NotAnAdmin = "You are not an admin.";

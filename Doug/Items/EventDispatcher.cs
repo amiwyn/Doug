@@ -36,6 +36,7 @@ namespace Doug.Items
         public string OnFlaming(User caller, User target, Command command, string slur)
         {
             slur = target.Loadout.Equipment.Aggregate(slur, (acc, item) => item.Value.OnGettingFlamed(command, acc));
+            slur = target.Effects.Aggregate(slur, (acc, userEffect) => userEffect.Effect.OnGettingFlamed(command, acc));
 
             return caller.Loadout.Equipment.Aggregate(slur, (acc, item) => item.Value.OnFlaming(command, acc));
         }

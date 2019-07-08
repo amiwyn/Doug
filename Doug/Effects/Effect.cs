@@ -29,5 +29,10 @@ namespace Doug.Effects
         {
             return true;
         }
+
+        public virtual string OnGettingFlamed(Command command, string slur)
+        {
+            return slur;
+        }
     }
 }
