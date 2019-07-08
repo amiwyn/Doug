@@ -3,7 +3,7 @@
     public static class DougMessages
     {
         public const string CoffeeParrotEmoji = ":coffeeparrot:";
-        public const string CreditEmoji = ":rupyellow:";
+        public const string CreditEmoji = ":fritesmcdo:";
         public const string UpVote = "+1";
         public const string Downvote = "-1";
 
