@@ -40,7 +40,7 @@ namespace Test.Inventory
             loadout.Equip(new CloakOfSpikes());
 
             _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User() { Id = "testuser", Loadout = loadout });
-            _equipmentRepository.Setup(repo => repo.UnequipItem("testuser", EquipmentSlot.Body)).Returns(new CloakOfSpikes());
+            _equipmentRepository.Setup(repo => repo.UnequipItem(It.IsAny<User>(), EquipmentSlot.Body)).Returns(new CloakOfSpikes());
 
             _inventoryCommands = new InventoryCommands(_userRepository.Object, _slack.Object, _inventoryRepository.Object, _equipmentRepository.Object, _userService.Object);
         }
@@ -50,7 +50,7 @@ namespace Test.Inventory
         {
             _inventoryCommands.UnEquip(_command);
 
-            _equipmentRepository.Verify(repo => repo.UnequipItem(User, EquipmentSlot.Body));
+            _equipmentRepository.Verify(repo => repo.UnequipItem(It.IsAny<User>(), EquipmentSlot.Body));
         }
 
         [TestMethod]
