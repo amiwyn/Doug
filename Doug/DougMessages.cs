@@ -7,7 +7,7 @@
         public const string UpVote = "+1";
         public const string Downvote = "-1";
 
-        public const string Top5 = "Leaderboard";
+        public const string Top5 = "Top users by level :";
         public const string JoinedCoffee = "{0} joined the coffee break.";
         public const string KickedCoffee = "{0} was kicked from the coffee break.";
         public const string SkippedCoffee = "{0} will skip the coffee break.";

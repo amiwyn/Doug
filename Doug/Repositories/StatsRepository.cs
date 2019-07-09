@@ -11,6 +11,7 @@ namespace Doug.Repositories
         void AddExperience(string userId, long experience);
         void AddExperienceToUsers(List<string> userIds, long experience);
         void LevelUpUsers(List<string> userIds);
+        void RegenerateUsersHealth(List<string> userIds, int amount);
         void AttributeStatPoint(string userId, string stat);
         void FreeStatPoint(string userId, string stat);
         void KillUser(string userId);
@@ -60,6 +61,15 @@ namespace Doug.Repositories
             var users = _db.Users.Where(usr => userIds.Contains(usr.Id)).ToList();
 
             users.ForEach(usr => usr.LevelUp());
+
+            _db.SaveChanges();
+        }
+
+        public void RegenerateUsersHealth(List<string> userIds, int amount)
+        {
+            var users = _db.Users.Where(usr => userIds.Contains(usr.Id)).ToList();
+
+            users.ForEach(usr => usr.RegenerateHealth());
 
             _db.SaveChanges();
         }

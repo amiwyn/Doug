@@ -53,7 +53,7 @@ namespace Test.Inventory
         {
             _inventoryCommands.Equip(_command);
 
-            _equipmentRepository.Verify(repo => repo.EquipItem(User, _item));
+            _equipmentRepository.Verify(repo => repo.EquipItem(It.IsAny<User>(), _item));
         }
 
         [TestMethod]

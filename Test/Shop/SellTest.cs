@@ -63,12 +63,12 @@ namespace Test.Shop
             Assert.AreEqual("There is no item in slot 4.", result.Message);
         }
 
-        [TestMethod]
-        public void GivenItemIsNotTradable_WhenSelling_ItemNotTradableMessage()
-        {
-            var result = _shopService.Sell(_user, 3);
+        //[TestMethod]
+        //public void GivenItemIsNotTradable_WhenSelling_ItemNotTradableMessage()
+        //{
+        //    var result = _shopService.Sell(_user, 3);
 
-            Assert.AreEqual("This item is not tradable.", result.Message);
-        }
+        //    Assert.AreEqual("This item is not tradable.", result.Message);
+        //}
     }
 }
