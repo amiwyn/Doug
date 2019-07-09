@@ -156,7 +156,7 @@ namespace Doug.Models
 
         public void RegenerateHealth()
         {
-            Health += (int)(TotalHealth() * 0.1);
+            Health += (int)(TotalHealth() * 0.2);
         }
 
         public double BaseOpponentStealSuccessRate() => 0.75;
