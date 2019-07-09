@@ -11,6 +11,7 @@
             Icon = ":page_with_curl:";
             Slot = EquipmentSlot.LeftHand;
             Price = 4;
+            LevelRequirement = 1;
         }
 
         public override double OnStealingChance(double chance)

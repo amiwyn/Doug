@@ -32,18 +32,18 @@ namespace Doug.Commands
         private readonly IUserRepository _userRepository;
         private readonly ISlackWebApi _slack;
         private readonly IAuthorizationService _adminValidator;
-        private readonly IItemEventDispatcher _itemEventDispatcher;
+        private readonly IEventDispatcher _eventDispatcher;
 
         private static readonly DougResponse NoResponse = new DougResponse();
         private readonly IUserService _userService;
 
-        public SlursCommands(ISlurRepository slursRepository, IUserRepository userRepository, ISlackWebApi messageSender, IAuthorizationService adminValidator, IItemEventDispatcher itemEventDispatcher, IUserService userService)
+        public SlursCommands(ISlurRepository slursRepository, IUserRepository userRepository, ISlackWebApi messageSender, IAuthorizationService adminValidator, IEventDispatcher eventDispatcher, IUserService userService)
         {
             _slurRepository = slursRepository;
             _userRepository = userRepository;
             _slack = messageSender;
             _adminValidator = adminValidator;
-            _itemEventDispatcher = itemEventDispatcher;
+            _eventDispatcher = eventDispatcher;
             _userService = userService;
         }
 
@@ -173,7 +173,7 @@ namespace Doug.Commands
 
             var message = BuildSlurMessage(slur.Text, randomUser, target);
 
-            message = _itemEventDispatcher.OnFlaming(caller, target, command, message);
+            message = _eventDispatcher.OnFlaming(caller, target, command, message);
 
             var timestamp = await _slack.BroadcastMessage(message, command.ChannelId);
 

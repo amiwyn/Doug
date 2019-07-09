@@ -17,7 +17,7 @@ namespace Doug.Items.Consumables
             Description = "A gift by the gods ~ Use this item to join the coffee channel.";
             Rarity = Rarity.Uncommon;
             Icon = ":credit_card:";
-            Price = 100;
+            Price = 10;
         }
 
         public override string Use(int itemPos, User user, string channel)

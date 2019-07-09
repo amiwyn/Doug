@@ -21,6 +21,7 @@ namespace Doug.Items.Equipment
             Icon = ":crystal_ball:";
             Slot = EquipmentSlot.LeftHand;
             Price = 2100;
+            LevelRequirement = 5;
         }
 
         public override string OnGettingFlamed(Command command, string slur)

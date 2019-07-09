@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Doug.Models;
 using Doug.Commands;
 
@@ -6,7 +7,7 @@ namespace Doug.Services
 {
     public interface IEventService
     {
-        void MessageReceived(MessageEvent messageEvent);
+        Task MessageReceived(MessageEvent messageEvent);
     }
 
     public class EventService : IEventService
@@ -22,7 +23,7 @@ namespace Doug.Services
             _slurs = slurs;
         }
 
-        public void MessageReceived(MessageEvent message)
+        public async Task MessageReceived(MessageEvent message)
         {
             if (message.IsValidCoffeeParrot())
             {
@@ -32,7 +33,7 @@ namespace Doug.Services
             if (message.ContainsMcdonaldMention())
             {
                 Command command = new Command() { ChannelId = message.Channel, UserId = GabId, Text = $"<@{GabId}|gabriel.fillit>" };
-                _slurs.Flame(command);
+                await _slurs.Flame(command);
             }
         }
     }

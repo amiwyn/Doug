@@ -42,8 +42,8 @@ namespace Test.Inventory
         {
             _item = new AwakeningOrb(_slack.Object, _userService.Object);
             var loadout = new Loadout();
-            var items = new List<InventoryItem>() {new InventoryItem("testuser", "testitem") {InventoryPosition = 6, Item = _item } };
-            _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User() { Id = "testuser", InventoryItems = items, Loadout = loadout });
+            var items = new List<InventoryItem>() { new InventoryItem("testuser", "testitem") { InventoryPosition = 6, Item = _item } };
+            _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User { Id = "testuser", Experience = 4370, InventoryItems = items, Loadout = loadout });
 
             _inventoryCommands = new InventoryCommands(_userRepository.Object, _slack.Object, _inventoryRepository.Object, _equipmentRepository.Object, _userService.Object);
         }
@@ -83,6 +83,17 @@ namespace Test.Inventory
             var result = _inventoryCommands.Equip(_command);
 
             Assert.AreEqual("This item is not equipable.", result.Message);
+        }
+
+        [TestMethod]
+        public void GivenItemLevelisTooHigh_WhenEquipping_ItemLevelTooHighMessageSent()
+        {
+            var items = new List<InventoryItem>() { new InventoryItem("testuser", "testitem") { InventoryPosition = 6, Item = new CloakOfSpikes() } };
+            _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User() { Id = "testuser", InventoryItems = items });
+
+            var result = _inventoryCommands.Equip(_command);
+
+            Assert.AreEqual("You need to be at least level 10 to wear this item.", result.Message);
         }
     }
 }

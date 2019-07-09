@@ -13,6 +13,7 @@ namespace Doug.Items.Equipment
             Icon = ":hot_pepper:";
             Slot = EquipmentSlot.RightHand;
             Price = 224;
+            LevelRequirement = 5;
 
             Attack = 24;
         }

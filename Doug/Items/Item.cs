@@ -11,10 +11,12 @@ namespace Doug.Items
         public string Icon { get; set; }
         public int MaxStack { get; set; }
         public int Price { get; set; }
+        public bool IsTradable { get; set; }
 
         protected Item()
         {
             MaxStack = 1;
+            IsTradable = true;
         }
 
         public virtual string Use(int itemPos, User user, string channel)

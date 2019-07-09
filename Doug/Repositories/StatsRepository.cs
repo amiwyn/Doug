@@ -12,6 +12,7 @@ namespace Doug.Repositories
         void AddExperienceToUsers(List<string> userIds, long experience);
         void LevelUpUsers(List<string> userIds);
         void AttributeStatPoint(string userId, string stat);
+        void FreeStatPoint(string userId, string stat);
         void KillUser(string userId);
     }
 
@@ -67,26 +68,40 @@ namespace Doug.Repositories
         {
             var user = _db.Users.Single(usr => usr.Id == userId);
 
+            EditStatPoint(user, stat, 1);
+
+            _db.SaveChanges();
+        }
+
+        public void FreeStatPoint(string userId, string stat)
+        {
+            var user = _db.Users.Single(usr => usr.Id == userId);
+
+            EditStatPoint(user, stat, -1);
+
+            _db.SaveChanges();
+        }
+
+        private void EditStatPoint(User user, string stat, int modifier)
+        {
             switch (stat)
             {
                 case Stats.Luck:
-                    user.Luck++;
+                    user.Luck += modifier;
                     break;
                 case Stats.Agility:
-                    user.Agility++;
+                    user.Agility += modifier;
                     break;
                 case Stats.Charisma:
-                    user.Charisma++;
+                    user.Charisma += modifier;
                     break;
                 case Stats.Constitution:
-                    user.Constitution++;
+                    user.Constitution += modifier;
                     break;
                 case Stats.Stamina:
-                    user.Stamina++;
+                    user.Stamina += modifier;
                     break;
             }
-
-            _db.SaveChanges();
         }
 
         public void KillUser(string userId)

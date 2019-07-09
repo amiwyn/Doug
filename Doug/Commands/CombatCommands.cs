@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using Doug.Items;
 using Doug.Models;
 using Doug.Repositories;
@@ -20,27 +21,36 @@ namespace Doug.Commands
         private const int KillExperienceGain = 100;
         private static readonly DougResponse NoResponse = new DougResponse();
 
-        private readonly IItemEventDispatcher _itemEventDispatcher;
+        private readonly IEventDispatcher _eventDispatcher;
         private readonly IUserRepository _userRepository;
         private readonly ISlackWebApi _slack;
         private readonly IStatsRepository _statsRepository;
         private readonly IRandomService _randomService;
         private readonly IUserService _userService;
+        private readonly IChannelRepository _channelRepository;
 
-        public CombatCommands(IItemEventDispatcher itemEventDispatcher, IUserRepository userRepository, ISlackWebApi slack, IStatsRepository statsRepository, IRandomService randomService, IUserService userService)
+        public CombatCommands(IEventDispatcher eventDispatcher, IUserRepository userRepository, ISlackWebApi slack, IStatsRepository statsRepository, IRandomService randomService, IUserService userService, IChannelRepository channelRepository)
         {
-            _itemEventDispatcher = itemEventDispatcher;
+            _eventDispatcher = eventDispatcher;
             _userRepository = userRepository;
             _slack = slack;
             _statsRepository = statsRepository;
             _randomService = randomService;
             _userService = userService;
+            _channelRepository = channelRepository;
         }
 
         public DougResponse Steal(Command command)
         {
             var user = _userRepository.GetUser(command.UserId);
             var target = _userRepository.GetUser(command.GetTargetUserId());
+
+            var channelType = _channelRepository.GetChannelType(command.ChannelId);
+
+            if (channelType != ChannelType.Common)
+            {
+                return new DougResponse(DougMessages.NotInRightChannel);
+            }
 
             var energy = user.Energy - StealEnergyCost;
 
@@ -51,12 +61,12 @@ namespace Doug.Commands
 
             _statsRepository.UpdateEnergy(command.UserId, energy);
 
-            var userChance = _itemEventDispatcher.OnStealingChance(user, user.BaseStealSuccessRate());
-            var targetChance = _itemEventDispatcher.OnGettingStolenChance(target, target.BaseOpponentStealSuccessRate());
+            var userChance = _eventDispatcher.OnStealingChance(user, user.BaseStealSuccessRate());
+            var targetChance = _eventDispatcher.OnGettingStolenChance(target, target.BaseOpponentStealSuccessRate());
 
             var rollSuccessful = _randomService.RollAgainstOpponent(userChance, targetChance);
 
-            var amount = _itemEventDispatcher.OnStealingAmount(user, user.BaseStealAmount());
+            var amount = _eventDispatcher.OnStealingAmount(user, user.BaseStealAmount());
 
             if (target.Credits - amount < 0)
             {
@@ -100,15 +110,30 @@ namespace Doug.Commands
                 return new DougResponse(DougMessages.NotEnoughEnergy);
             }
 
+            var channelType = _channelRepository.GetChannelType(command.ChannelId);
+
+            if (channelType != ChannelType.Pvp)
+            {
+                return new DougResponse(DougMessages.NotInRightChannel);
+            }
+
+            var flaggedUsers = await _slack.GetUsersInChannel(command.ChannelId);
+
+            if (flaggedUsers.All(usr => usr != target.Id))
+            {
+                return new DougResponse(DougMessages.UserIsNotInPvp);
+            }
+
             _statsRepository.UpdateEnergy(command.UserId, energy);
 
             var message = string.Format(DougMessages.UserAttackedTarget, _userService.Mention(user), _userService.Mention(target), damage);
             await _slack.BroadcastMessage(message, command.ChannelId);
 
-            await _userService.RemoveHealth(target, damage, command.ChannelId);
+            var userIsDead = await _userService.RemoveHealth(target, damage, command.ChannelId);
 
-            if (target.IsDead())
+            if (userIsDead)
             {
+                _eventDispatcher.OnDeathByUser(target, user);
                 await _userService.AddExperience(user, KillExperienceGain, command.ChannelId);
             }
 

@@ -1,4 +1,5 @@
 ﻿using Doug.Items.Consumables;
+using Doug.Items.Consumables.Resets;
 using Doug.Items.Equipment;
 using Doug.Items.Misc;
 using Doug.Repositories;
@@ -30,18 +31,31 @@ namespace Doug.Items
         public const string ClothArmor = "cloth_armor";
         public const string KickTicket = "kick_ticket";
         public const string InviteTicket = "invite_ticket";
+        public const string BigMac = "big_mac";
+        public const string AgilityReset = "agi_reset";
+        public const string LuckReset = "luck_reset";
+        public const string CharismaReset = "cha_reset";
+        public const string ConstitutionReset = "con_reset";
+        public const string StaminaReset = "stam_reset";
+        public const string BachelorsDegree = "bachelor_degree";
+        public const string Cigarette = "cigarette";
+        public const string SuicidePill = "suicide_pill";
 
         private readonly ISlackWebApi _slack;
         private readonly IStatsRepository _statsRepository;
         private readonly IInventoryRepository _inventoryRepository;
         private readonly IUserService _userService;
+        private readonly IEventDispatcher _eventDispatcher;
+        private readonly IEffectRepository _effectRepository;
 
-        public ItemFactory(ISlackWebApi slack, IStatsRepository statsRepository, IInventoryRepository inventoryRepository, IUserService userService)
+        public ItemFactory(ISlackWebApi slack, IStatsRepository statsRepository, IInventoryRepository inventoryRepository, IUserService userService, IEventDispatcher eventDispatcher, IEffectRepository effectRepository)
         {
             _slack = slack;
             _statsRepository = statsRepository;
             _inventoryRepository = inventoryRepository;
             _userService = userService;
+            _eventDispatcher = eventDispatcher;
+            _effectRepository = effectRepository;
         }
 
         public Item CreateItem(string itemId)
@@ -75,13 +89,31 @@ namespace Doug.Items
                 case CloakOfSpikes:
                     return new CloakOfSpikes();
                 case KickTicket:
-                    return new KickTicket(_inventoryRepository, _slack, _userService);
+                    return new KickTicket(_inventoryRepository, _slack, _userService, _eventDispatcher);
                 case InviteTicket:
                     return new InviteTicket(_inventoryRepository, _slack); 
                 case Bread:
                     return new Bread(_statsRepository, _inventoryRepository);
                 case McdoFries:
                     return new McdoFries(_statsRepository, _inventoryRepository, _userService);
+                case BigMac:
+                    return new BigMac(_inventoryRepository, _effectRepository);
+                case AgilityReset:
+                    return new AgilityReset(_statsRepository, _inventoryRepository);
+                case CharismaReset:
+                    return new CharismaReset(_statsRepository, _inventoryRepository);
+                case ConstitutionReset:
+                    return new ConstitutionReset(_statsRepository, _inventoryRepository);
+                case LuckReset:
+                    return new LuckReset(_statsRepository, _inventoryRepository);
+                case StaminaReset:
+                    return new StaminaReset(_statsRepository, _inventoryRepository);
+                case Cigarette:
+                    return new Cigarette(_inventoryRepository, _effectRepository);
+                case BachelorsDegree:
+                    return new BachelorsDegree();
+                case SuicidePill:
+                    return new SuicidePill(_inventoryRepository, _userService);
                 default:
                     return new Default();
             }

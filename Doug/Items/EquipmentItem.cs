@@ -11,6 +11,7 @@ namespace Doug.Items
         public int Constitution { get; set; }
         public int Stamina { get; set; }
         public EquipmentSlot Slot { get; set; }
+        public int LevelRequirement { get; set; }
 
         protected EquipmentItem() { }
 
@@ -52,6 +53,23 @@ namespace Doug.Items
         public virtual string OnMention(string mention)
         {
             return mention;
+        }
+
+        /// <summary>
+        /// Event triggered when the user dies. Return false to prevent the user from dying.
+        /// </summary>
+        /// <returns></returns>
+        public virtual bool OnDeath()
+        {
+            return true;
+        }
+
+        /// <summary>
+        /// Event triggered when the user dies from the hand of a killer.
+        /// </summary>
+        /// <returns></returns>
+        public virtual void OnDeathByUser(User killer)
+        {
         }
     }
 }

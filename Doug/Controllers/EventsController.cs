@@ -1,4 +1,5 @@
-﻿using Doug.Models;
+﻿using System.Threading.Tasks;
+using Doug.Models;
 using Doug.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,7 +19,7 @@ namespace Doug.Controllers
         }
 
         [HttpPost]
-        public ActionResult Event(SlackEvent slackEvent)
+        public async Task<ActionResult> Event(SlackEvent slackEvent)
         {
             if (slackEvent.Type == UrlVerification)
             {
@@ -28,7 +29,7 @@ namespace Doug.Controllers
             switch (slackEvent.Event.Type)
             {
                 case MessageType:
-                    _eventService.MessageReceived(slackEvent.Event);
+                    await _eventService.MessageReceived(slackEvent.Event);
                     return Ok();
                 default:
                     return Ok();

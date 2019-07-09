@@ -6,8 +6,8 @@
         public const string CreditEmoji = ":rupee:";
         public const string UpVote = "+1";
         public const string Downvote = "-1";
-        public const string Top5 = "Leaderboard";
 
+        public const string Top5 = "Leaderboard";
         public const string JoinedCoffee = "{0} joined the coffee break.";
         public const string KickedCoffee = "{0} was kicked from the coffee break.";
         public const string SkippedCoffee = "{0} will skip the coffee break.";
@@ -22,7 +22,6 @@
         public const string UserGaveCredits = "{0} gave {1} " + CreditEmoji + " to {2}";
         public const string StatsOf = "Profile and stats of {0}";
         public const string CreditStats = CreditEmoji + " {0}";
-        public const string UserIdStats = ":robot_face: User ID : {0}";
         public const string LevelStats = "Level {0}";
         public const string ExperienceStats = "{0:0.##}%";
         public const string HealthStats = "Health Points :";
@@ -70,6 +69,8 @@
         public const string SelectTargetText = "Please select a user to target with this action.";
         public const string UserAttackedTarget = "{0} dealt {2} damage to {1}!";
         public const string UsedItemOnTarget = "{0} used a *{1}* on {2}";
+        public const string AddedEffect = "You obtained the *{0}* effect for {1} minutes";
+        public const string Surrendered = "{0} has surrendered :fr:";
 
         public const string DougError = "Beep boop, it's not working : {0}";
         public const string NotAnAdmin = "You are not an admin.";
@@ -81,15 +82,17 @@
         public const string NotChallenged = "You are not challenged.";
         public const string SlurAlreadyExists = "That slur already exists.";
         public const string NotEnoughEnergy = "You don't have enough energy.";
-        public const string TargetNoMoney = "Your target don't have enough " + CreditEmoji;
         public const string NoItemInSlot = "There is no item in slot {0}.";
         public const string ItemCantBeUsed = "This item cannot be used";
         public const string InvalidUserArgument = "You must pass a valid user in arguments";
         public const string ItemNotEquipAble = "This item is not equipable.";
         public const string NoMoreStatsPoints = "No more available stats points.";
         public const string NoEquipmentInSlot = "No equipment in slot {0}";
-
+        public const string NotInRightChannel = "You cannot perform this action in this channel.";
+        public const string UserIsNotInPvp = "The target user is not in the pvp channel.";
+        public const string ItemNotTradable = "This item is not tradable.";
         public const string EmptyInventory = "Oops, yer loot seems empty, buy more at th' shop now.";
+        public const string LevelRequirementNotMet = "You need to be at least level {0} to wear this item.";
     }
 }
 

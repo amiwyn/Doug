@@ -1,8 +1,10 @@
-﻿using Doug.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Doug.Models;
 using System.Collections.Generic;
 using System.Linq;
+using Doug.Effects;
 using Doug.Items;
+using Z.EntityFramework.Plus;
 
 namespace Doug.Repositories
 {
@@ -20,11 +22,13 @@ namespace Doug.Repositories
     {
         private readonly DougContext _db;
         private readonly IItemFactory _itemFactory;
+        private readonly IEffectFactory _effectFactory;
 
-        public UserRepository(DougContext dougContext, IItemFactory itemFactory)
+        public UserRepository(DougContext dougContext, IItemFactory itemFactory, IEffectFactory effectFactory)
         {
             _db = dougContext;
             _itemFactory = itemFactory;
+            _effectFactory = effectFactory;
         }
 
         public void AddCredits(string userId, int amount)
@@ -63,18 +67,30 @@ namespace Doug.Repositories
         public User GetUser(string userId)
         {
             var user = _db.Users
-                .Include(usr => usr.InventoryItems)
-                .Include(usr => usr.Loadout)
+                .IncludeFilter(usr => usr.Effects.Where(effect => effect.EndTime >= DateTime.UtcNow))
+                .IncludeFilter(usr => usr.InventoryItems)
+                .IncludeFilter(usr => usr.Loadout)
                 .Single(usr => usr.Id == userId);
 
             user.LoadItems(_itemFactory);
+            user.LoadEffects(_effectFactory);
+
 
             return user;
         }
 
         public List<User> GetUsers()
         {
-            return _db.Users.ToList();
+            var users = _db.Users
+                .IncludeFilter(usr => usr.Effects.Where(effect => effect.EndTime >= DateTime.UtcNow))
+                .IncludeFilter(usr => usr.InventoryItems)
+                .IncludeFilter(usr => usr.Loadout)
+                .ToList();
+
+            users.ForEach(usr => usr.LoadItems(_itemFactory));
+            users.ForEach(usr => usr.LoadEffects(_effectFactory));
+
+            return users;
         }
 
         public void RemoveCredits(string userId, int amount)

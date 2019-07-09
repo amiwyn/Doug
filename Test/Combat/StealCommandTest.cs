@@ -28,20 +28,22 @@ namespace Test.Combat
 
         private readonly Mock<IUserRepository> _userRepository = new Mock<IUserRepository>();
         private readonly Mock<ISlackWebApi> _slack = new Mock<ISlackWebApi>();
-        private readonly Mock<IItemEventDispatcher> _itemEventDispatcher = new Mock<IItemEventDispatcher>();
+        private readonly Mock<IEventDispatcher> _itemEventDispatcher = new Mock<IEventDispatcher>();
         private readonly Mock<IStatsRepository> _statsRepository = new Mock<IStatsRepository>();
         private readonly Mock<IRandomService> _randomService = new Mock<IRandomService>();
         private readonly Mock<IUserService> _userService = new Mock<IUserService>();
+        private readonly Mock<IChannelRepository> _channelRepository = new Mock<IChannelRepository>();
 
 
         [TestInitialize]
         public void Setup()
         {
+            _channelRepository.Setup(repo => repo.GetChannelType("coco-channel")).Returns(ChannelType.Common);
             _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User { Energy = 10 });
             _userRepository.Setup(repo => repo.GetUser("robert")).Returns(new User { Id = "robert", Credits = 10 });
             _itemEventDispatcher.Setup(disp => disp.OnStealingAmount(It.IsAny<User>(), It.IsAny<int>())).Returns(1);
 
-            _combatCommands = new CombatCommands(_itemEventDispatcher.Object, _userRepository.Object, _slack.Object, _statsRepository.Object, _randomService.Object, _userService.Object);
+            _combatCommands = new CombatCommands(_itemEventDispatcher.Object, _userRepository.Object, _slack.Object, _statsRepository.Object, _randomService.Object, _userService.Object, _channelRepository.Object);
         }
 
         [TestMethod]
@@ -103,5 +105,16 @@ namespace Test.Combat
 
             _itemEventDispatcher.Verify(dispatcher => dispatcher.OnStealingAmount(It.IsAny<User>(), It.IsAny<int>()));
         }
+
+        [TestMethod]
+        public void GivenUserIsInWrongChannel_WhenStealing_WrongChannelMessage()
+        {
+            _channelRepository.Setup(repo => repo.GetChannelType("coco-channel")).Returns(ChannelType.Casino);
+
+            var result = _combatCommands.Steal(_command);
+
+            Assert.AreEqual(DougMessages.NotInRightChannel, result.Message);
+        }
+
     }
 }

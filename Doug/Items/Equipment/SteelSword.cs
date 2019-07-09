@@ -11,6 +11,7 @@
             Icon = ":dagger_knife:";
             Slot = EquipmentSlot.RightHand;
             Price = 65;
+            LevelRequirement = 1;
 
             Attack = 18;
             Charisma = 2;

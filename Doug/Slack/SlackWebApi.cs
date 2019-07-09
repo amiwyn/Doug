@@ -25,6 +25,7 @@ namespace Doug.Slack
         Task UpdateInteractionMessage(IEnumerable<Block> blocks, string url);
         Task KickUser(string user, string channel);
         Task InviteUser(string user, string channel);
+        Task<List<string>> GetUsersInChannel(string channel);
     }
 
     public class SlackWebApi : ISlackWebApi
@@ -36,6 +37,8 @@ namespace Doug.Slack
         private const string EphemeralUrl = "https://slack.com/api/chat.postEphemeral";
         private const string KickUrl = "https://slack.com/api/conversations.kick";
         private const string InviteUrl = "https://slack.com/api/conversations.invite";
+        private const string ChannelInfoUrl = "https://slack.com/api/conversations.members";
+
 
         private readonly HttpClient _client;
         private readonly string _botToken;
@@ -199,6 +202,15 @@ namespace Doug.Slack
             };
 
             await PostToUrlWithoutResponse(InviteUrl, keyValues);
+        }
+
+        public async Task<List<string>> GetUsersInChannel(string channel)
+        {
+            var keyValues = CreateBaseRequestPayload(channel);
+
+            var response = await PostToUrl(ChannelInfoUrl, keyValues);
+
+            return JsonConvert.DeserializeObject<ChannelMembersResponse>(response, _jsonSettings).Members;
         }
     }
 }
