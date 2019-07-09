@@ -76,11 +76,11 @@ namespace Doug.Commands
         {
             var list = _userRepository.GetUsers().ToList();
 
-            list.Sort((u1, u2) => u1.Credits.CompareTo(u2.Credits));
+            list.Sort((u1, u2) => u1.Level.CompareTo(u2.Level));
             list.Reverse();
             list = list.GetRange(0, 5);
 
-            var userList = list.Select(u => $"{_userService.Mention(u)} : {u.Credits}");
+            var userList = list.Select(u => $"{u.Level} - {_userService.Mention(u)}");
 
             var users = userList.Aggregate((first, next) => first + "\n" + next);
             var message = $"{DougMessages.Top5}\n{users}";
