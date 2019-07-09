@@ -154,6 +154,11 @@ namespace Doug.Models
             Experience = Experience - expLoss <= prevLevelExp ? prevLevelExp : Experience - expLoss;
         }
 
+        public void RegenerateHealth()
+        {
+            Health += (int)(TotalHealth() * 0.1);
+        }
+
         public double BaseOpponentStealSuccessRate() => 0.75;
         public int BaseStealAmount() => (int)Math.Floor(3 * (Math.Sqrt(TotalAgility()) - Math.Sqrt(5)) + 1);
         public bool HasEnoughCreditsForAmount(int amount) => Credits - amount >= 0;
