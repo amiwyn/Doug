@@ -47,6 +47,8 @@ namespace Doug.Repositories
 
             user.Loadout.UnEquip(slot);
 
+            _db.SaveChanges();
+
             return equipment;
         }
     }
