@@ -81,7 +81,16 @@ namespace Doug.Repositories
 
         public List<User> GetUsers()
         {
-            return _db.Users.ToList();
+            var users = _db.Users
+                .IncludeFilter(usr => usr.Effects.Where(effect => effect.EndTime >= DateTime.UtcNow))
+                .IncludeFilter(usr => usr.InventoryItems)
+                .IncludeFilter(usr => usr.Loadout)
+                .ToList();
+
+            users.ForEach(usr => usr.LoadItems(_itemFactory));
+            users.ForEach(usr => usr.LoadEffects(_effectFactory));
+
+            return users;
         }
 
         public void RemoveCredits(string userId, int amount)
