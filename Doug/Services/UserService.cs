@@ -47,6 +47,7 @@ namespace Doug.Services
 
                 _statsRepository.KillUser(user.Id);
                 await _slack.BroadcastMessage(string.Format(DougMessages.UserDied, Mention(user)), channel);
+                await _slack.KickUser(user.Id, channel);
                 return true;
             }
 

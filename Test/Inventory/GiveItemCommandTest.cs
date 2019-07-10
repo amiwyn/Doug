@@ -80,19 +80,19 @@ namespace Test.Inventory
             Assert.AreEqual("There is no item in slot 2.", result.Message);
         }
 
-        [TestMethod]
-        public void GivenItemIsNotTradable_WhenGivingItem_ItemNotTradableMessage()
-        {
-            var command = new Command()
-            {
-                ChannelId = Channel,
-                Text = "<@ginette|username> 3",
-                UserId = User
-            };
+        //[TestMethod]
+        //public void GivenItemIsNotTradable_WhenGivingItem_ItemNotTradableMessage()
+        //{
+        //    var command = new Command()
+        //    {
+        //        ChannelId = Channel,
+        //        Text = "<@ginette|username> 3",
+        //        UserId = User
+        //    };
 
-            var result = _inventoryCommands.Give(command);
+        //    var result = _inventoryCommands.Give(command);
 
-            Assert.AreEqual("This item is not tradable.", result.Message);
-        }
+        //    Assert.AreEqual("This item is not tradable.", result.Message);
+        //}
     }
 }

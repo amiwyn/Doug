@@ -22,7 +22,7 @@ namespace Doug.Effects.Debuffs
 
         public override string OnGettingFlamed(Command command, string slur)
         {
-            _slack.BroadcastMessage(string.Format(DougMessages.Surrendered, _userService.Mention(new User { Id = command.UserId})), command.ChannelId);
+            _slack.BroadcastMessage(string.Format(DougMessages.Surrendered, _userService.Mention(new User { Id = command.GetTargetUserId()})), command.ChannelId);
 
             return base.OnGettingFlamed(command, slur);
         }

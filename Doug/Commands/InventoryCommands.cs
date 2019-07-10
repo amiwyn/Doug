@@ -123,11 +123,11 @@ namespace Doug.Commands
 
             if (equipment != null)
             {
-                var item = _equipmentRepository.UnequipItem(user.Id, equipmentItem.Slot);
+                var item = _equipmentRepository.UnequipItem(user, equipmentItem.Slot);
                 _inventoryRepository.AddItem(user, item.Id);
             }
 
-            _equipmentRepository.EquipItem(user.Id, equipmentItem);
+            _equipmentRepository.EquipItem(user, equipmentItem);
             _inventoryRepository.RemoveItem(user, position);
 
             return new DougResponse(string.Format(DougMessages.EquippedItem, inventoryItem.Item.Name));
@@ -144,7 +144,7 @@ namespace Doug.Commands
                 return new DougResponse(string.Format(DougMessages.NoEquipmentInSlot, slot));
             }
 
-            var item = _equipmentRepository.UnequipItem(user.Id, equipment.Slot);
+            var item = _equipmentRepository.UnequipItem(user, equipment.Slot);
 
             _inventoryRepository.AddItem(user, item.Id);
 
