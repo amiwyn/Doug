@@ -17,6 +17,8 @@ namespace Doug.Models
         public List<UserEffect> Effects { get; set; }
         public Loadout Loadout { get; set; }
         public long Experience { get; set; }
+        public DateTime AttackCooldown { get; set; }
+        public DateTime StealCooldown { get; set; }
 
         public int Health
         {
@@ -154,16 +156,16 @@ namespace Doug.Models
             Experience = Experience - expLoss <= prevLevelExp ? prevLevelExp : Experience - expLoss;
         }
 
-        public void RegenerateHealth()
-        {
-            Health += (int)(TotalHealth() * 0.2);
-        }
-
+        public void RegenerateHealth() => Health += (int)(TotalHealth() * 0.2);
         public double BaseOpponentStealSuccessRate() => 0.75;
         public int BaseStealAmount() => (int)Math.Floor(3 * (Math.Sqrt(TotalAgility()) - Math.Sqrt(5)) + 1);
         public bool HasEnoughCreditsForAmount(int amount) => Credits - amount >= 0;
         public string NotEnoughCreditsForAmountResponse(int amount) => string.Format(DougMessages.NotEnoughCredits, amount, Credits);
         public bool HasEmptyInventory() => !InventoryItems.Any();
         public bool IsDead() => Health <= 0;
+        public bool IsAttackOnCooldown() => DateTime.UtcNow <= AttackCooldown;
+        public bool IsStealOnCooldown() => DateTime.UtcNow <= StealCooldown;
+        public int CalculateAttackCooldownRemaining() => (int)(AttackCooldown - DateTime.UtcNow).TotalSeconds;
+        public int CalculateStealCooldownRemaining() => (int)(StealCooldown - DateTime.UtcNow).TotalSeconds;
     }
 }

@@ -29,8 +29,9 @@ namespace Doug.Services
         private readonly IUserRepository _userRepository;
         private readonly IInventoryRepository _inventoryRepository;
         private readonly IUserService _userService;
+        private readonly IStatsRepository _statsRepository;
 
-        public CoffeeService(ISlackWebApi slackWebApi, ICoffeeRepository coffeeRepository, IBackgroundJobClient backgroundJobClient, IUserRepository userRepository, IInventoryRepository inventoryRepository, IUserService userService)
+        public CoffeeService(ISlackWebApi slackWebApi, ICoffeeRepository coffeeRepository, IBackgroundJobClient backgroundJobClient, IUserRepository userRepository, IInventoryRepository inventoryRepository, IUserService userService, IStatsRepository statsRepository)
         {
             _slack = slackWebApi;
             _coffeeRepository = coffeeRepository;
@@ -38,6 +39,7 @@ namespace Doug.Services
             _userRepository = userRepository;
             _inventoryRepository = inventoryRepository;
             _userService = userService;
+            _statsRepository = statsRepository;
         }
 
         public void CountParrot(string userId, string channelId, DateTime currentTime)
@@ -116,6 +118,7 @@ namespace Doug.Services
             var participants = _coffeeRepository.GetReadyParticipants().ToList();
             var participantsId = participants.Select(user => user.Id).ToList();
 
+            _statsRepository.RegenerateUsersHealth(participantsId);
             _userRepository.AddCreditsToUsers(participantsId, CoffeeBreakAward);
             _inventoryRepository.AddItemToUsers(participants, ItemFactory.CoffeeCup);
 
