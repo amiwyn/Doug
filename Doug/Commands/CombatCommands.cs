@@ -55,7 +55,7 @@ namespace Doug.Commands
 
             var channelType = _channelRepository.GetChannelType(command.ChannelId);
 
-            if (channelType != ChannelType.Common || channelType != ChannelType.Pvp)
+            if (channelType != ChannelType.Common && channelType != ChannelType.Pvp)
             {
                 return new DougResponse(DougMessages.NotInRightChannel);
             }
