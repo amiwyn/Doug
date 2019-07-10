@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Doug.Items;
 using Doug.Models;
@@ -19,6 +20,8 @@ namespace Doug.Commands
         private const int StealEnergyCost = 1;
         private const int AttackEnergyCost = 1;
         private const int KillExperienceGain = 100;
+        private const int StealCooldown = 30;
+        private const int AttackCooldown = 30;
         private static readonly DougResponse NoResponse = new DougResponse();
 
         private readonly IEventDispatcher _eventDispatcher;
@@ -45,6 +48,11 @@ namespace Doug.Commands
             var user = _userRepository.GetUser(command.UserId);
             var target = _userRepository.GetUser(command.GetTargetUserId());
 
+            if (user.IsStealOnCooldown())
+            {
+                return new DougResponse(string.Format(DougMessages.CommandOnCooldown, user.CalculateStealCooldownRemaining()));
+            }
+
             var channelType = _channelRepository.GetChannelType(command.ChannelId);
 
             if (channelType != ChannelType.Common)
@@ -60,6 +68,8 @@ namespace Doug.Commands
             }
 
             _statsRepository.UpdateEnergy(command.UserId, energy);
+
+            _userRepository.SetStealCooldown(user.Id, DateTime.UtcNow + TimeSpan.FromSeconds(StealCooldown));
 
             var userChance = _eventDispatcher.OnStealingChance(user, user.BaseStealSuccessRate());
             var targetChance = _eventDispatcher.OnGettingStolenChance(target, target.BaseOpponentStealSuccessRate());
@@ -97,6 +107,11 @@ namespace Doug.Commands
             var energy = user.Energy - AttackEnergyCost;
             var damage = user.TotalAttack();
 
+            if (user.IsAttackOnCooldown())
+            {
+                return new DougResponse(string.Format(DougMessages.CommandOnCooldown, user.CalculateAttackCooldownRemaining()));
+            }
+
             if (energy < 0)
             {
                 return new DougResponse(DougMessages.NotEnoughEnergy);
@@ -117,6 +132,8 @@ namespace Doug.Commands
             }
 
             _statsRepository.UpdateEnergy(command.UserId, energy);
+
+            _userRepository.SetAttackCooldown(user.Id, DateTime.UtcNow + TimeSpan.FromSeconds(AttackCooldown));
 
             var message = string.Format(DougMessages.UserAttackedTarget, _userService.Mention(user), _userService.Mention(target), damage);
             await _slack.BroadcastMessage(message, command.ChannelId);
