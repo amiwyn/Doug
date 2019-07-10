@@ -333,5 +333,6 @@ ASALocalRun/
 # Local History for Visual Studio
 .localhistory/
 
+*.db
 Doug/doug.db
 Doug/jobs.db

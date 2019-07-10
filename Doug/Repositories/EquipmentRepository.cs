@@ -7,6 +7,7 @@ namespace Doug.Repositories
     {
         void EquipItem(User user, EquipmentItem item);
         EquipmentItem UnequipItem(User user, EquipmentSlot slot);
+        void DeleteEquippedItem(User user, EquipmentSlot slot);
     }
 
     public class EquipmentRepository : IEquipmentRepository
@@ -34,6 +35,13 @@ namespace Doug.Repositories
             _db.SaveChanges();
 
             return equipment;
+        }
+
+        public void DeleteEquippedItem(User user, EquipmentSlot slot)
+        {
+            user.Loadout.UnEquip(slot);
+
+            _db.SaveChanges();
         }
     }
 }

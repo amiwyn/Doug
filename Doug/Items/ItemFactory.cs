@@ -44,11 +44,12 @@ namespace Doug.Items
         private readonly ISlackWebApi _slack;
         private readonly IStatsRepository _statsRepository;
         private readonly IInventoryRepository _inventoryRepository;
+        private readonly IEquipmentRepository _equipmentRepository;
         private readonly IUserService _userService;
         private readonly IEventDispatcher _eventDispatcher;
         private readonly IEffectRepository _effectRepository;
 
-        public ItemFactory(ISlackWebApi slack, IStatsRepository statsRepository, IInventoryRepository inventoryRepository, IUserService userService, IEventDispatcher eventDispatcher, IEffectRepository effectRepository)
+        public ItemFactory(ISlackWebApi slack, IStatsRepository statsRepository, IInventoryRepository inventoryRepository, IUserService userService, IEventDispatcher eventDispatcher, IEffectRepository effectRepository, IEquipmentRepository equipmentRepository)
         {
             _slack = slack;
             _statsRepository = statsRepository;
@@ -56,6 +57,7 @@ namespace Doug.Items
             _userService = userService;
             _eventDispatcher = eventDispatcher;
             _effectRepository = effectRepository;
+            _equipmentRepository = equipmentRepository;
         }
 
         public Item CreateItem(string itemId)
@@ -73,7 +75,7 @@ namespace Doug.Items
                 case IncognitoShades:
                     return new IncognitoShades();
                 case MainGauche:
-                    return new MainGauche(_slack, _userService, _inventoryRepository);
+                    return new MainGauche(_slack, _userService, _inventoryRepository, _equipmentRepository);
                 case CoffeeCup:
                     return new CoffeeCup(_statsRepository, _inventoryRepository);
                 case PimentSword:

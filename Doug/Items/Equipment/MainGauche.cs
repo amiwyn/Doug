@@ -12,13 +12,14 @@ namespace Doug.Items.Equipment
         private IInventoryRepository _inventoryRepository;
         private IEquipmentRepository _equipmentRepository;
 
-        public MainGauche(ISlackWebApi slack, IUserService userService, IInventoryRepository inventoryRepository)
+        public MainGauche(ISlackWebApi slack, IUserService userService, IInventoryRepository inventoryRepository, IEquipmentRepository equipmentRepository)
         {
             _slack = slack;
             _userService = userService;
             _inventoryRepository = inventoryRepository;
+            _equipmentRepository = equipmentRepository;
 
-           Id = ItemFactory.MainGauche;
+            Id = ItemFactory.MainGauche;
             Name = "Main Gauche";
             Description = "A dented, dulled brass shank. You won't be caught while /stealing, but any player that kills you steals this item.";
             Rarity = Rarity.Unique;
@@ -42,7 +43,7 @@ namespace Doug.Items.Equipment
 
         public override bool OnDeath(User user)
         {
-            _inventoryRepository.DeleteEquippedItem(user.Id, EquipmentSlot.LeftHand);
+            _equipmentRepository.DeleteEquippedItem(user, EquipmentSlot.LeftHand);
             return true;
         }
     }

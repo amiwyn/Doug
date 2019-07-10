@@ -81,15 +81,5 @@ namespace Doug.Repositories
             users.ForEach(user => AddItemToUser(user, itemId));
             _db.SaveChanges();
         }
-
-        public void DeleteEquippedItem(string userId, EquipmentSlot slot)
-        {
-            var user = _db.Users
-                .Include(usr => usr.Loadout)
-                .Single(usr => usr.Id == userId);
-
-            user.LoadItems(_itemFactory);
-            user.Loadout.DeleteEquipment(slot);
-        }
     }
 }
