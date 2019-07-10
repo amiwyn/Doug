@@ -1,6 +1,4 @@
-﻿using Doug.models;
-
-namespace Doug.Items.Equipment
+﻿namespace Doug.Items.Equipment
 {
     public class IncognitoShades : EquipmentItem
     {

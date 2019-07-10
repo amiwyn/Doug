@@ -44,6 +44,12 @@ namespace Doug.Models
             }
         }
 
+        public void DeleteEquipment(EquipmentSlot slot)
+        {
+            Equipment.Remove(slot);
+            SetLoadoutStrings();
+        }
+
         public int Luck => Equipment.Sum(equip => equip.Value.Luck);
         public int Agility => Equipment.Sum(equip => equip.Value.Agility);
         public int Charisma => Equipment.Sum(equip => equip.Value.Charisma);

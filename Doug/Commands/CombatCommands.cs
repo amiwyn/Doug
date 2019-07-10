@@ -83,7 +83,7 @@ namespace Doug.Commands
             }
             else
             {
-                var message = _itemEventDispatcher.OnStealingFailed(
+                var message = _eventDispatcher.OnStealingFailed(
                     user, 
                     _userService.Mention(target), 
                     string.Format(

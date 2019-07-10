@@ -73,7 +73,7 @@ namespace Doug.Items
                 case IncognitoShades:
                     return new IncognitoShades();
                 case MainGauche:
-                    return new MainGauche();
+                    return new MainGauche(_slack, _userService, _inventoryRepository);
                 case CoffeeCup:
                     return new CoffeeCup(_statsRepository, _inventoryRepository);
                 case PimentSword:

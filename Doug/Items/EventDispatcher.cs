@@ -21,7 +21,7 @@ namespace Doug.Items
     {
         public bool OnDeath(User user)
         {
-            return user.Loadout.Equipment.Aggregate(true, (isDead, item) => item.Value.OnDeath() && isDead);
+            return user.Loadout.Equipment.Aggregate(true, (isDead, item) => item.Value.OnDeath(user) && isDead);
         }
 
         public void OnDeathByUser(User user, User killer)
@@ -70,11 +70,6 @@ namespace Doug.Items
         public string OnStealingFailed(User user, string targetUserMention, string response)
         {
             return user.Loadout.Equipment.Aggregate(response, (acc, item) => item.Value.OnStealingFailed(response, targetUserMention));
-        }
-
-        public string OnDeath(User user, User killer, string response)
-        {
-            return user.Loadout.Equipment.Aggregate(response, (acc, item) => item.Value.OnDeath(response, user, killer));
         }
     }
 }

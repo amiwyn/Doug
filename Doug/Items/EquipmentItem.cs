@@ -55,11 +55,15 @@ namespace Doug.Items
             return mention;
         }
 
+        public virtual string OnStealingFailed(string targetUserMention, string message){
+            return message;
+        }
+
         /// <summary>
         /// Event triggered when the user dies. Return false to prevent the user from dying.
         /// </summary>
         /// <returns></returns>
-        public virtual bool OnDeath()
+        public virtual bool OnDeath(User user)
         {
             return true;
         }
