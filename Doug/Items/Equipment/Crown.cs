@@ -16,7 +16,7 @@ namespace Doug.Items.Equipment
             Slot = EquipmentSlot.Head;
             Price = 90969469;
             LevelRequirement = 1;
-            IsTradable = false;
+            IsSellable = false;
 
             Strength = 5;
             Luck = 5;

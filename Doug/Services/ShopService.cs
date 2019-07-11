@@ -56,7 +56,7 @@ namespace Doug.Services
                 return new DougResponse(string.Format(DougMessages.NoItemInSlot, position));
             }
 
-            if (!item.IsTradable)
+            if (!item.IsSellable)
             {
                 return new DougResponse(DougMessages.ItemNotTradable);
             }
