@@ -136,6 +136,11 @@ namespace Doug.Commands
 
             var damage = user.TotalAttack();
 
+            if (new Random().NextDouble() < 0.1) //TODO put this in user.
+            {
+                damage *= 2;
+            }
+
             var message = string.Format(DougMessages.UserAttackedTarget, _userService.Mention(user), _userService.Mention(target), damage);
             await _slack.BroadcastMessage(message, command.ChannelId);
 
