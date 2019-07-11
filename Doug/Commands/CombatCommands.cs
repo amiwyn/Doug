@@ -134,12 +134,7 @@ namespace Doug.Commands
 
             _userRepository.SetAttackCooldown(user.Id, DateTime.UtcNow + TimeSpan.FromSeconds(AttackCooldown));
 
-            var damage = user.TotalAttack();
-
-            if (new Random().NextDouble() < 0.1) //TODO put this in user.
-            {
-                damage *= 2;
-            }
+            var damage = user.AttackStrike();
 
             var message = string.Format(DougMessages.UserAttackedTarget, _userService.Mention(user), _userService.Mention(target), damage);
             await _slack.BroadcastMessage(message, command.ChannelId);

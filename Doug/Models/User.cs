@@ -165,6 +165,16 @@ namespace Doug.Models
             Health -= reducedDamage;
         }
 
+        public int AttackStrike()
+        {
+            if (new Random().NextDouble() < 0.1)
+            {
+                return TotalAttack() * 2;
+            }
+
+            return TotalAttack();
+        }
+
         public void RegenerateHealth() => Health += (int)(TotalHealth() * 0.2);
         public double BaseOpponentStealSuccessRate() => 0.75;
         public int BaseStealAmount() => (int)Math.Floor(3 * (Math.Sqrt(TotalAgility()) - Math.Sqrt(5)) + 1);
