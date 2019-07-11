@@ -32,12 +32,13 @@ namespace Doug.Items
         public const string BigMac = "big_mac";
         public const string AgilityReset = "agi_reset";
         public const string LuckReset = "luck_reset";
-        public const string CharismaReset = "cha_reset";
+        public const string StrengthReset = "str_reset";
         public const string ConstitutionReset = "con_reset";
         public const string StaminaReset = "stam_reset";
         public const string BachelorsDegree = "bachelor_degree";
         public const string Cigarette = "cigarette";
         public const string SuicidePill = "suicide_pill";
+        public const string Crown = "crown";
 
         private readonly ISlackWebApi _slack;
         private readonly IStatsRepository _statsRepository;
@@ -94,8 +95,8 @@ namespace Doug.Items
                     return new BigMac(_inventoryRepository, _effectRepository);
                 case AgilityReset:
                     return new AgilityReset(_statsRepository, _inventoryRepository);
-                case CharismaReset:
-                    return new CharismaReset(_statsRepository, _inventoryRepository);
+                case StrengthReset:
+                    return new StrengthReset(_statsRepository, _inventoryRepository);
                 case ConstitutionReset:
                     return new ConstitutionReset(_statsRepository, _inventoryRepository);
                 case LuckReset:
@@ -108,6 +109,8 @@ namespace Doug.Items
                     return new BachelorsDegree();
                 case SuicidePill:
                     return new SuicidePill(_inventoryRepository, _userService);
+                case Crown:
+                    return new Crown();
                 default:
                     return new Default();
             }

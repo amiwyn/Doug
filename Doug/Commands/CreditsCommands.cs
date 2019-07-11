@@ -25,13 +25,15 @@ namespace Doug.Commands
         private static readonly DougResponse NoResponse = new DougResponse();
         private readonly IItemFactory _itemFactory;
         private readonly IUserService _userService;
+        private readonly IGovernmentService _governmentService;
 
-        public CreditsCommands(IUserRepository userRepository, ISlackWebApi messageSender, IItemFactory itemFactory, IUserService userService)
+        public CreditsCommands(IUserRepository userRepository, ISlackWebApi messageSender, IItemFactory itemFactory, IUserService userService, IGovernmentService governmentService)
         {
             _userRepository = userRepository;
             _slack = messageSender;
             _itemFactory = itemFactory;
             _userService = userService;
+            _governmentService = governmentService;
         }
 
         public DougResponse Give(Command command)
@@ -96,7 +98,7 @@ namespace Doug.Commands
 
             var items = ShopMenuService.ShopItems.Select(itm => _itemFactory.CreateItem(itm));
 
-            await _slack.SendEphemeralBlocks(new ShopMenu(items, user).Blocks, command.UserId, command.ChannelId);
+            await _slack.SendEphemeralBlocks(new ShopMenu(items, user, _governmentService).Blocks, command.UserId, command.ChannelId);
 
             return NoResponse; 
         }

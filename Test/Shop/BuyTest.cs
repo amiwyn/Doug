@@ -19,16 +19,18 @@ namespace Test.Shop
         private readonly Mock<IUserRepository> _userRepository = new Mock<IUserRepository>();
         private readonly Mock<IInventoryRepository>  _inventoryRepository = new Mock<IInventoryRepository>();
         private readonly Mock<IItemFactory> _itemFactory = new Mock<IItemFactory>();
+        private readonly Mock<IGovernmentService> _governmentService = new Mock<IGovernmentService>();
         private User _user;
 
         [TestInitialize]
         public void Setup()
         {
+            _governmentService.Setup(repo => repo.GetPriceWithTaxes(It.IsAny<Item>())).Returns((Item item) => item.Price);
             _itemFactory.Setup(factory => factory.CreateItem(It.IsAny<string>())).Returns(new LuckyDice());
             _user = new User() {Id = "testuser", Credits = 431279};
             _userRepository.Setup(repo => repo.GetUser(User)).Returns(_user);
 
-            _shopService = new ShopService(_userRepository.Object, _inventoryRepository.Object, _itemFactory.Object);
+            _shopService = new ShopService(_userRepository.Object, _inventoryRepository.Object, _itemFactory.Object, _governmentService.Object);
         }
 
         [TestMethod]

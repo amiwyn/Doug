@@ -46,7 +46,7 @@ namespace Doug.Models
 
         public int Luck => Equipment.Sum(equip => equip.Value.Luck);
         public int Agility => Equipment.Sum(equip => equip.Value.Agility);
-        public int Charisma => Equipment.Sum(equip => equip.Value.Charisma);
+        public int Strength => Equipment.Sum(equip => equip.Value.Strength);
         public int Constitution => Equipment.Sum(equip => equip.Value.Constitution);
         public int Stamina => Equipment.Sum(equip => equip.Value.Stamina);
         public int Attack => Equipment.Sum(equip => equip.Value.Attack);

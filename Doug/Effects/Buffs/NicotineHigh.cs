@@ -6,10 +6,10 @@
         {
             Id = EffectFactory.TrollBlessing;
             Name = "Nicotine High";
-            Description = "You gain +15 charisma for 5 minutes.";
+            Description = "You gain +15 strength for 5 minutes.";
             Rank = Rank.Common;
             Icon = ":smoking:";
-            Charisma = 15;
+            Strength = 15;
         }
     }
 }

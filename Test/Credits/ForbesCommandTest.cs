@@ -22,13 +22,14 @@ namespace Test.Credits
         private readonly Mock<ISlackWebApi> _slack = new Mock<ISlackWebApi>();
         private readonly Mock<IItemFactory> _itemFactory = new Mock<IItemFactory>();
         private readonly Mock<IUserService> _userService = new Mock<IUserService>();
+        private readonly Mock<IGovernmentService> _governmentService = new Mock<IGovernmentService>();
 
         [TestInitialize]
         public void Setup()
         {
             _userRepository.Setup(repo => repo.GetUsers()).Returns(new List<User>());
 
-            _creditsCommands = new CreditsCommands(_userRepository.Object, _slack.Object, _itemFactory.Object, _userService.Object);
+            _creditsCommands = new CreditsCommands(_userRepository.Object, _slack.Object, _itemFactory.Object, _userService.Object, _governmentService.Object);
         }
 
         [TestMethod]

@@ -26,7 +26,7 @@
         public const string ExperienceStats = "{0:0.##}%";
         public const string HealthStats = "Health Points :";
         public const string EnergyStats = "Energy Points :";
-        public const string CharismaStats = ":information_desk_person: Charisma : {0}";
+        public const string StrengthStats = ":information_desk_person: Strength : {0}";
         public const string AgilityStats = ":runner: Agility : {0}";
         public const string LuckStats = ":four_leaf_clover: Luck : {0}";
         public const string ConstitutionStats = ":heart: Constitution : {0}";

@@ -29,6 +29,7 @@ namespace Test.Credits
         private readonly Mock<ISlackWebApi> _slack = new Mock<ISlackWebApi>();
         private readonly Mock<IItemFactory> _itemFactory = new Mock<IItemFactory>();
         private readonly Mock<IUserService> _userService = new Mock<IUserService>();
+        private readonly Mock<IGovernmentService> _governmentService = new Mock<IGovernmentService>();
 
         [TestInitialize]
         public void Setup()
@@ -36,7 +37,7 @@ namespace Test.Credits
             _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User() { Id = "testuser", Credits = 79});
             _userRepository.Setup(repo => repo.GetUser("otherUserid")).Returns(new User() { Id = "otherUserid", Credits = 79});
 
-            _creditsCommands = new CreditsCommands(_userRepository.Object, _slack.Object, _itemFactory.Object, _userService.Object);
+            _creditsCommands = new CreditsCommands(_userRepository.Object, _slack.Object, _itemFactory.Object, _userService.Object, _governmentService.Object);
         }
 
         [TestMethod]

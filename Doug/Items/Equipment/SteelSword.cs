@@ -14,7 +14,7 @@
             LevelRequirement = 1;
 
             Attack = 18;
-            Charisma = 2;
+            Strength = 2;
         }
     }
 }

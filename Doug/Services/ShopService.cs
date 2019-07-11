@@ -16,12 +16,14 @@ namespace Doug.Services
         private readonly IUserRepository _userRepository;
         private readonly IInventoryRepository _inventoryRepository;
         private readonly IItemFactory _itemFactory;
+        private readonly IGovernmentService _governmentService;
 
-        public ShopService(IUserRepository userRepository, IInventoryRepository inventoryRepository, IItemFactory itemFactory)
+        public ShopService(IUserRepository userRepository, IInventoryRepository inventoryRepository, IItemFactory itemFactory, IGovernmentService governmentService)
         {
             _userRepository = userRepository;
             _inventoryRepository = inventoryRepository;
             _itemFactory = itemFactory;
+            _governmentService = governmentService;
         }
 
 
@@ -29,14 +31,18 @@ namespace Doug.Services
         {
             var item = _itemFactory.CreateItem(itemId);
 
-            if (!user.HasEnoughCreditsForAmount(item.Price))
+            var price = _governmentService.GetPriceWithTaxes(item);
+
+            if (!user.HasEnoughCreditsForAmount(price))
             {
-                return new DougResponse(user.NotEnoughCreditsForAmountResponse(item.Price));
+                return new DougResponse(user.NotEnoughCreditsForAmountResponse(price));
             }
 
-            _userRepository.RemoveCredits(user.Id, item.Price);
+            _userRepository.RemoveCredits(user.Id, price);
 
             _inventoryRepository.AddItem(user, item.Id);
+
+            _governmentService.CollectSalesTaxes(item);
 
             return new DougResponse();
         }
@@ -50,7 +56,7 @@ namespace Doug.Services
                 return new DougResponse(string.Format(DougMessages.NoItemInSlot, position));
             }
 
-            if (!item.IsTradable)
+            if (!item.IsSellable)
             {
                 return new DougResponse(DougMessages.ItemNotTradable);
             }
