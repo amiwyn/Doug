@@ -22,7 +22,7 @@ namespace Doug.Items.Consumables
 
         public override string Use(int itemPos, User user, string channel)
         {
-            _userService.RemoveHealth(user, LossAmount, channel);
+            _userService.ApplyMagicalDamage(user, LossAmount, channel);
 
             return base.Use(itemPos, user, channel);
         }

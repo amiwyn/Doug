@@ -50,6 +50,7 @@ namespace Doug.Models
         public int Constitution => Equipment.Sum(equip => equip.Value.Constitution);
         public int Stamina => Equipment.Sum(equip => equip.Value.Stamina);
         public int Attack => Equipment.Sum(equip => equip.Value.Attack);
+        public int Defense => Equipment.Sum(equip => equip.Value.Defense);
 
         public void Equip(EquipmentItem item)
         {

@@ -98,6 +98,7 @@ namespace Doug.Models
         public int TotalConstitution() => Loadout.Constitution + Constitution + Effects.Sum(userEffect => userEffect.Effect.Constitution);
         public int TotalStamina() => Loadout.Stamina + Stamina + Effects.Sum(userEffect => userEffect.Effect.Stamina);
         public int TotalAttack() => Loadout.Attack + Attack;
+        public int TotalDefense() => Loadout.Defense + (int)Math.Floor(2.0 * TotalConstitution());
 
         public void LoadItems(IItemFactory itemFactory)
         {
@@ -154,6 +155,14 @@ namespace Doug.Models
 
             var expLoss = (long)(0.1 * (nextLevelExp - prevLevelExp));
             Experience = Experience - expLoss <= prevLevelExp ? prevLevelExp : Experience - expLoss;
+        }
+
+        public void ApplyPhysicalDamage(int damage)
+        {
+            var reducedDamage = damage - TotalDefense();
+            reducedDamage = reducedDamage <= 0 ? 0 : reducedDamage;
+
+            Health -= reducedDamage;
         }
 
         public void RegenerateHealth() => Health += (int)(TotalHealth() * 0.2);

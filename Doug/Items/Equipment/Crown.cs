@@ -1,8 +1,4 @@
-﻿using Doug.Models;
-using Doug.Services;
-using Doug.Slack;
-
-namespace Doug.Items.Equipment
+﻿namespace Doug.Items.Equipment
 {
     public class Crown : EquipmentItem
     {
