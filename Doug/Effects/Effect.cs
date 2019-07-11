@@ -12,7 +12,7 @@ namespace Doug.Effects
 
         public int Luck { get; set; }
         public int Agility { get; set; }
-        public int Charisma { get; set; }
+        public int Strength { get; set; }
         public int Constitution { get; set; }
         public int Stamina { get; set; }
 

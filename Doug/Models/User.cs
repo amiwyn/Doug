@@ -64,14 +64,14 @@ namespace Doug.Models
 
         public int Luck { get; set; }
         public int Agility { get; set; }
-        public int Charisma { get; set; }
+        public int Strength { get; set; }
         public int Constitution { get; set; }
         public int Stamina { get; set; }
 
         public int Level => (int)Math.Floor(Math.Sqrt(Experience) * 0.1 + 1);
         public int TotalStatsPoints => (int)Math.Floor(Level + 5 * Math.Floor(Level * 0.1)) + 4;
-        public int FreeStatsPoints => TotalStatsPoints + 25 - (Luck + Agility + Charisma + Constitution + Stamina);
-        public int Attack => (int)Math.Floor(Charisma * 2.0);
+        public int FreeStatsPoints => TotalStatsPoints + 25 - (Luck + Agility + Strength + Constitution + Stamina);
+        public int Attack => (int)Math.Floor(Strength * 2.0);
 
         public User()
         {
@@ -81,7 +81,7 @@ namespace Doug.Models
             
             Luck = 5;
             Agility = 5;
-            Charisma = 5;
+            Strength = 5;
             Constitution = 5;
             Stamina = 5;
         }
@@ -94,7 +94,7 @@ namespace Doug.Models
 
         public int TotalLuck() => Loadout.Luck + Luck + Effects.Sum(userEffect => userEffect.Effect.Luck);
         public int TotalAgility() => Loadout.Agility + Agility + Effects.Sum(userEffect => userEffect.Effect.Agility);
-        public int TotalCharisma() => Loadout.Charisma + Charisma + Effects.Sum(userEffect => userEffect.Effect.Charisma);
+        public int TotalStrength() => Loadout.Strength + Strength + Effects.Sum(userEffect => userEffect.Effect.Strength);
         public int TotalConstitution() => Loadout.Constitution + Constitution + Effects.Sum(userEffect => userEffect.Effect.Constitution);
         public int TotalStamina() => Loadout.Stamina + Stamina + Effects.Sum(userEffect => userEffect.Effect.Stamina);
         public int TotalAttack() => Loadout.Attack + Attack;

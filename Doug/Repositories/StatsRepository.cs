@@ -102,8 +102,8 @@ namespace Doug.Repositories
                 case Stats.Agility:
                     user.Agility += modifier;
                     break;
-                case Stats.Charisma:
-                    user.Charisma += modifier;
+                case Stats.Strength:
+                    user.Strength += modifier;
                     break;
                 case Stats.Constitution:
                     user.Constitution += modifier;

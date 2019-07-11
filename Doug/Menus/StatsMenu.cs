@@ -74,7 +74,7 @@ namespace Doug.Menus
             {
                 StatSection(DougMessages.LuckStats, user.TotalLuck(), Stats.Luck, buttonDisplayed),
                 StatSection(DougMessages.AgilityStats, user.TotalAgility(), Stats.Agility, buttonDisplayed),
-                StatSection(DougMessages.CharismaStats, user.TotalCharisma(), Stats.Charisma, buttonDisplayed),
+                StatSection(DougMessages.StrengthStats, user.TotalStrength(), Stats.Strength, buttonDisplayed),
                 StatSection(DougMessages.ConstitutionStats, user.TotalConstitution(), Stats.Constitution, buttonDisplayed),
                 StatSection(DougMessages.StaminaStats, user.TotalStamina(), Stats.Stamina, buttonDisplayed)
             };

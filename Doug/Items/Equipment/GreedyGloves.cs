@@ -14,7 +14,7 @@
             LevelRequirement = 20;
 
             Attack = 5;
-            Charisma = 5;
+            Strength = 5;
         }
 
         public override int OnStealingAmount(int amount)
