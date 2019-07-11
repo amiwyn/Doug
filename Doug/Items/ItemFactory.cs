@@ -38,6 +38,7 @@ namespace Doug.Items
         public const string BachelorsDegree = "bachelor_degree";
         public const string Cigarette = "cigarette";
         public const string SuicidePill = "suicide_pill";
+        public const string Crown = "crown";
 
         private readonly ISlackWebApi _slack;
         private readonly IStatsRepository _statsRepository;
@@ -108,6 +109,8 @@ namespace Doug.Items
                     return new BachelorsDegree();
                 case SuicidePill:
                     return new SuicidePill(_inventoryRepository, _userService);
+                case Crown:
+                    return new Crown();
                 default:
                     return new Default();
             }
