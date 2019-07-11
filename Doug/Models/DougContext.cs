@@ -12,6 +12,7 @@ namespace Doug.Models
         public DbSet<GambleChallenge> GambleChallenges { get; set; }
         public DbSet<Channel> Channels { get; set; }
         public DbSet<UserEffect> UserEffect { get; set; }
+        public DbSet<Government> Government { get; set; }
 
         public DougContext(DbContextOptions<DougContext> options) : base(options)
         {

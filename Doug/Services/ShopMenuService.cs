@@ -21,15 +21,17 @@ namespace Doug.Services
         private readonly ISlackWebApi _slack;
         private readonly IItemFactory _itemFactory;
         private readonly IShopService _shopService;
+        private readonly IGovernmentService _governmentService;
 
         public static readonly List<string> ShopItems = new List<string> { ItemFactory.CoffeeCup, ItemFactory.Apple, ItemFactory.Bread, ItemFactory.SteelSword, ItemFactory.ClothArmor }; // TODO: temp. put this in a table somewhere
 
-        public ShopMenuService(IUserRepository userRepository, ISlackWebApi slack, IItemFactory itemFactory, IShopService shopService)
+        public ShopMenuService(IUserRepository userRepository, ISlackWebApi slack, IItemFactory itemFactory, IShopService shopService, IGovernmentService governmentService)
         {
             _userRepository = userRepository;
             _slack = slack;
             _itemFactory = itemFactory;
             _shopService = shopService;
+            _governmentService = governmentService;
         }
 
         public async Task Buy(Interaction interaction) 
@@ -41,7 +43,7 @@ namespace Doug.Services
             await _slack.SendEphemeralMessage(response.Message, user.Id, interaction.ChannelId);
 
             var items = ShopItems.Select(itm => _itemFactory.CreateItem(itm));
-            await _slack.UpdateInteractionMessage(new ShopMenu(items, user).Blocks, interaction.ResponseUrl);
+            await _slack.UpdateInteractionMessage(new ShopMenu(items, user, _governmentService).Blocks, interaction.ResponseUrl);
         }
 
         public async Task Sell(Interaction interaction)
