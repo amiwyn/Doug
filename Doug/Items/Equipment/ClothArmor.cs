@@ -12,6 +12,8 @@
             Slot = EquipmentSlot.Body;
             Price = 85;
             LevelRequirement = 1;
+
+            Defense = 15;
         }
     }
 }
