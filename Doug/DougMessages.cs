@@ -33,6 +33,10 @@
         public const string StaminaStats = ":male_mage: Stamina : {0}";
         public const string FreeStatPoints = "{0} stats points left";
         public const string AddStatPoint = ":heavy_plus_sign:";
+        public const string DefenseStat = ":shield: Defense : {0}";
+        public const string DodgeStat = ":dizzy: Dodge : {0}";
+        public const string HitrateStat = ":anger: Hit Rate : {0}";
+        public const string GambleStat = ":money_with_wings: Gamble Chance : {0:0.##}%";
         public const string WonGamble = "{0} flipped a coin and won {1} " + CreditEmoji;
         public const string LostGamble = "{0} flipped a coin and lost {1} " + CreditEmoji;
         public const string ChallengeSent = "{0} challenged {1} to a coinflip for {2} " + CreditEmoji;

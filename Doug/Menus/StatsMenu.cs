@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Doug.Menus.Blocks;
 using Doug.Menus.Blocks.Accessories;
 using Doug.Menus.Blocks.Text;
@@ -17,10 +18,19 @@ namespace Doug.Menus
                 new Section(new MarkdownText(string.Format(DougMessages.StatsOf, $"<@{user.Id}>"))),
                 CreateUserOtherInfo(user),
                 new Divider(),
-                CreateHealthFields(user),
-                CreateEnergyFields(user),
-                new Divider()
             };
+
+            if (user.Effects.Count > 0)
+            {
+                Blocks.Add(CreateEffectFields(user));
+                Blocks.Add(new Divider());
+            }
+
+            Blocks.Add(CreateHealthFields(user));
+            Blocks.Add(CreateEnergyFields(user));
+            Blocks.Add(new Divider());
+            Blocks.Add(CreateOtherStatsFields(user));
+            Blocks.Add(new Divider());
 
             Blocks.AddRange(CreateStatsFields(user));
             Blocks.Add(new Divider());
@@ -30,6 +40,12 @@ namespace Doug.Menus
                 var freeStatsPoints = string.Format(DougMessages.FreeStatPoints, user.FreeStatsPoints.ToString());
                 Blocks.Add(new Context(new List<string> { freeStatsPoints }));
             }
+        }
+
+        private Block CreateEffectFields(User user)
+        {
+            var fields = user.Effects.Select(ef => $"{ef.Effect.Icon} - {ef.Effect.Name}").ToList();
+            return new FieldsSection(fields);
         }
 
         private Block CreateUserOtherInfo(User user)
@@ -49,7 +65,7 @@ namespace Doug.Menus
             var healthFields = new List<string>
             {
                 DougMessages.HealthStats,
-                $"{user.Health}/{user.TotalHealth()}"
+                $"*{user.Health}*/{user.TotalHealth()}"
             };
 
             return new FieldsSection(healthFields);
@@ -60,7 +76,7 @@ namespace Doug.Menus
             var energyFields = new List<string>
             {
                 DougMessages.EnergyStats,
-                $"{user.Energy}/{user.TotalEnergy()}"
+                $"*{user.Energy}*/{user.TotalEnergy()}"
             };
 
            return new FieldsSection(energyFields);
@@ -92,5 +108,19 @@ namespace Doug.Menus
             var buttonBlock = new Button(DougMessages.AddStatPoint, type, Actions.Attribution.ToString());
             return new Section(textBlock, buttonBlock);
         }
+
+        private Block CreateOtherStatsFields(User user)
+        {
+            var statsFields = new List<string>
+            {
+                string.Format(DougMessages.DefenseStat, user.TotalDefense()),
+                string.Format(DougMessages.DodgeStat, user.TotalDodge()),
+                string.Format(DougMessages.HitrateStat, user.TotalHitrate()),
+                string.Format(DougMessages.GambleStat, user.BaseGambleChance()*100),
+            };
+
+            return new FieldsSection(statsFields);
+        }
+
     }
 }
