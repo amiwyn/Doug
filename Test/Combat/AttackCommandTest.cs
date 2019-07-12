@@ -55,7 +55,7 @@ namespace Test.Combat
         {
             await _combatCommands.Attack(_command);
 
-            _userService.Verify(service => service.RemoveHealth(It.IsAny<User>(), 10, Channel));
+            _userService.Verify(service => service.ApplyMagicalDamage(It.IsAny<User>(), 10, Channel));
         }
 
         [TestMethod]
@@ -71,7 +71,7 @@ namespace Test.Combat
         [TestMethod]
         public async Task GivenTargetIsAboutToDie_WhenAttacking_UserGet100Experience()
         {
-            _userService.Setup(service => service.RemoveHealth(It.IsAny<User>(), 10, Channel)).Returns(Task.FromResult(true));
+            _userService.Setup(service => service.ApplyMagicalDamage(It.IsAny<User>(), 10, Channel)).Returns(Task.FromResult(true));
 
             await _combatCommands.Attack(_command);
 

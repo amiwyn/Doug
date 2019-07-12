@@ -5,6 +5,7 @@ namespace Doug.Items
     public class EquipmentItem : Item
     {
         public int Attack { get; set; }
+        public int Defense { get; set; }
         public int Luck { get; set; }
         public int Agility { get; set; }
         public int Strength { get; set; }

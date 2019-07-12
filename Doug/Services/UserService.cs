@@ -11,9 +11,10 @@ namespace Doug.Services
     public interface IUserService
     {
         string Mention(User user);
-        Task<bool> RemoveHealth(User user, int health, string channel);
+        Task<bool> ApplyMagicalDamage(User user, int damage, string channel);
         Task AddExperience(User user, long experience, string channel);
         Task AddBulkExperience(List<User> users, long experience, string channel);
+        Task<bool> ApplyPhysicalDamage(User user, int damage, string channel);
     }
 
     public class UserService : IUserService
@@ -34,30 +35,36 @@ namespace Doug.Services
             return _eventDispatcher.OnMention(user, $"<@{user.Id}>");
         }
 
-        public async Task<bool> RemoveHealth(User user, int health, string channel)
+        public async Task<bool> ApplyMagicalDamage(User user, int damage, string channel)
         {
-            user.Health -= health;
+            user.Health -= damage;
 
             if (user.IsDead())
             {
-                if (!_eventDispatcher.OnDeath(user))
-                {
-                    return false;
-                }
-
-                _statsRepository.KillUser(user.Id);
-                await _slack.BroadcastMessage(string.Format(DougMessages.UserDied, Mention(user)), channel);
-                await _slack.KickUser(user.Id, channel);
-                return true;
+                return await HandleDeath(user, channel);
             }
 
             _statsRepository.UpdateHealth(user.Id, user.Health);
             return false;
         }
 
+        private async Task<bool> HandleDeath(User user, string channel)
+        {
+            if (!_eventDispatcher.OnDeath(user))
+            {
+                return false;
+            }
+
+            _statsRepository.KillUser(user.Id);
+            await _slack.BroadcastMessage(string.Format(DougMessages.UserDied, Mention(user)), channel);
+            await _slack.KickUser(user.Id, channel);
+            return true;
+
+        }
+
         public async Task AddExperience(User user, long experience, string channel)
         {
-            await AddBulkExperience(new List<User> {user}, experience, channel);
+            await AddBulkExperience(new List<User> { user }, experience, channel);
         }
 
         public async Task AddBulkExperience(List<User> users, long experience, string channel)
@@ -77,6 +84,19 @@ namespace Doug.Services
 
             await Task.WhenAll(expGainMessageTasks);
             await Task.WhenAll(levelUpMessageTasks);
+        }
+
+        public async Task<bool> ApplyPhysicalDamage(User user, int damage, string channel)
+        {
+            user.ApplyPhysicalDamage(damage);
+
+            if (user.IsDead())
+            {
+                return await HandleDeath(user, channel);
+            }
+
+            _statsRepository.UpdateHealth(user.Id, user.Health);
+            return false;
         }
     }
 }

@@ -105,7 +105,6 @@ namespace Doug.Commands
             var user = _userRepository.GetUser(command.UserId);
             var target = _userRepository.GetUser(command.GetTargetUserId());
             var energy = user.Energy - AttackEnergyCost;
-            var damage = user.TotalAttack();
 
             if (user.IsAttackOnCooldown())
             {
@@ -135,10 +134,12 @@ namespace Doug.Commands
 
             _userRepository.SetAttackCooldown(user.Id, DateTime.UtcNow + TimeSpan.FromSeconds(AttackCooldown));
 
+            var damage = user.AttackStrike();
+
             var message = string.Format(DougMessages.UserAttackedTarget, _userService.Mention(user), _userService.Mention(target), damage);
             await _slack.BroadcastMessage(message, command.ChannelId);
 
-            var userIsDead = await _userService.RemoveHealth(target, damage, command.ChannelId);
+            var userIsDead = await _userService.ApplyPhysicalDamage(target, damage, command.ChannelId);
 
             if (userIsDead)
             {

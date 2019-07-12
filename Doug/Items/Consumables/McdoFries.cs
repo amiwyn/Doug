@@ -31,7 +31,7 @@ namespace Doug.Items.Consumables
 
             _statsRepository.UpdateEnergy(user.Id, user.Energy);
 
-            _userService.RemoveHealth(user, LossAmount, channel);
+            _userService.ApplyMagicalDamage(user, LossAmount, channel);
 
             return string.Format(DougMessages.RecoverItem, Name, RecoverAmount, "energy");
         }
