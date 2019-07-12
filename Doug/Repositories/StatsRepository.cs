@@ -80,6 +80,11 @@ namespace Doug.Repositories
 
             EditStatPoint(user, stat, 1);
 
+            if (stat == Stats.Constitution)
+            {
+                user.Health += 15;
+            }
+
             _db.SaveChanges();
         }
 
