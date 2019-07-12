@@ -8,6 +8,9 @@ namespace Doug.Repositories
         User GetRuler();
         double GetTaxRate();
         void AddTaxesToRuler(int amount);
+        void StartRevolutionVote(string userId, string timestamp);
+        void Revolution();
+        Government GetGovernment();
     }
 
     public class GovernmentRepository : IGovernmentRepository
@@ -35,6 +38,26 @@ namespace Doug.Repositories
             var ruler = GetRuler();
             ruler.Credits += amount;
             _db.SaveChanges();
+        }
+
+        public void StartRevolutionVote(string userId, string timestamp)
+        {
+            var government = _db.Government.Single();
+            government.RevolutionLeader = userId;
+            government.RevolutionTimestamp = timestamp;
+            _db.SaveChanges();
+        }
+
+        public void Revolution()
+        {
+            var government = _db.Government.Single();
+            government.Ruler = government.RevolutionLeader;
+            _db.SaveChanges();
+        }
+
+        public Government GetGovernment()
+        {
+            return _db.Government.Single();
         }
     }
 }

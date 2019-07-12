@@ -13,6 +13,7 @@
             Price = 90969469;
             LevelRequirement = 1;
             IsSellable = false;
+            IsTradable = false;
 
             Strength = 5;
             Luck = 5;

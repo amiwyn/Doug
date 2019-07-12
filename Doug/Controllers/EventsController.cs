@@ -11,6 +11,7 @@ namespace Doug.Controllers
     {
         private const string MessageType = "message";
         private const string UrlVerification = "url_verification";
+        private const string ReactionAdded = "reaction_added";
         private readonly IEventService _eventService;
 
         public EventsController(IEventService eventService)
@@ -31,6 +32,9 @@ namespace Doug.Controllers
                 case MessageType:
                     await _eventService.MessageReceived(slackEvent.Event);
                     return Ok();
+                case ReactionAdded:
+                    await _eventService.ReactionAdded(slackEvent.Event);
+                    return Ok();
                 default:
                     return Ok();
             }
@@ -38,14 +42,9 @@ namespace Doug.Controllers
 
         public class SlackEvent
         {
-            public string Token { get; set; }
             public string Challenge { get; set; }
-            public string TeamId { get; set; }
-            public string ApiAppId { get; set; }
-            public MessageEvent Event { get; set; }
+            public SlackEventData Event { get; set; }
             public string Type { get; set; }
-            public string EventId { get; set; }
-            public string EventTime { get; set; }
         }
     }
 }

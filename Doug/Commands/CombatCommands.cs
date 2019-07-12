@@ -13,6 +13,7 @@ namespace Doug.Commands
     {
         DougResponse Steal(Command command);
         Task<DougResponse> Attack(Command command);
+        Task<DougResponse> Revolution(Command command);
     }
 
     public class CombatCommands : ICombatCommands
@@ -30,8 +31,9 @@ namespace Doug.Commands
         private readonly IRandomService _randomService;
         private readonly IUserService _userService;
         private readonly IChannelRepository _channelRepository;
+        private readonly IGovernmentService _governmentService;
 
-        public CombatCommands(IEventDispatcher eventDispatcher, IUserRepository userRepository, ISlackWebApi slack, IStatsRepository statsRepository, IRandomService randomService, IUserService userService, IChannelRepository channelRepository)
+        public CombatCommands(IEventDispatcher eventDispatcher, IUserRepository userRepository, ISlackWebApi slack, IStatsRepository statsRepository, IRandomService randomService, IUserService userService, IChannelRepository channelRepository, IGovernmentService governmentService)
         {
             _eventDispatcher = eventDispatcher;
             _userRepository = userRepository;
@@ -40,6 +42,7 @@ namespace Doug.Commands
             _randomService = randomService;
             _userService = userService;
             _channelRepository = channelRepository;
+            _governmentService = governmentService;
         }
 
         public DougResponse Steal(Command command)
@@ -145,6 +148,13 @@ namespace Doug.Commands
 
 
             return NoResponse;
+        }
+
+        public async Task<DougResponse> Revolution(Command command)
+        {
+            var user = _userRepository.GetUser(command.UserId);
+            await _governmentService.StartRevolutionVote(user, command.ChannelId);
+            return new DougResponse();
         }
     }
 }
