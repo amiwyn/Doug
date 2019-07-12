@@ -19,7 +19,6 @@ namespace Doug.Commands
     {
         private const int StealEnergyCost = 1;
         private const int AttackEnergyCost = 1;
-        private const int KillExperienceGain = 100;
         private const int StealCooldown = 30;
         private const int AttackCooldown = 30;
         private static readonly DougResponse NoResponse = new DougResponse();
@@ -134,18 +133,16 @@ namespace Doug.Commands
 
             _userRepository.SetAttackCooldown(user.Id, DateTime.UtcNow + TimeSpan.FromSeconds(AttackCooldown));
 
-            var damage = user.AttackStrike();
+            var damageDealt = await _userService.PhysicalAttack(user, target, command.ChannelId);
 
-            var message = string.Format(DougMessages.UserAttackedTarget, _userService.Mention(user), _userService.Mention(target), damage);
+            var message = string.Format(DougMessages.UserAttackedTarget, _userService.Mention(user), _userService.Mention(target), damageDealt);
+            if (damageDealt == 0)
+            {
+                message = string.Format(DougMessages.Missed, _userService.Mention(user), _userService.Mention(target));
+            }
+
             await _slack.BroadcastMessage(message, command.ChannelId);
 
-            var userIsDead = await _userService.ApplyPhysicalDamage(target, damage, command.ChannelId);
-
-            if (userIsDead)
-            {
-                _eventDispatcher.OnDeathByUser(target, user);
-                await _userService.AddExperience(user, KillExperienceGain, command.ChannelId);
-            }
 
             return NoResponse;
         }

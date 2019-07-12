@@ -71,6 +71,7 @@
         public const string UsedItemOnTarget = "{0} used a *{1}* on {2}";
         public const string AddedEffect = "You obtained the *{0}* effect for {1} minutes";
         public const string Surrendered = "{0} has surrendered :fr:";
+        public const string Missed = "{0} missed his attack on {1}!";
 
         public const string DougError = "Beep boop, it's not working : {0}";
         public const string NotAnAdmin = "You are not an admin.";

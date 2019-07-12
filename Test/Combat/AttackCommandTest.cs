@@ -55,7 +55,7 @@ namespace Test.Combat
         {
             await _combatCommands.Attack(_command);
 
-            _userService.Verify(service => service.ApplyMagicalDamage(It.IsAny<User>(), 10, Channel));
+            _userService.Verify(service => service.PhysicalAttack(It.IsAny<User>(), It.IsAny<User>(), Channel));
         }
 
         [TestMethod]
@@ -66,16 +66,6 @@ namespace Test.Combat
             var result = await _combatCommands.Attack(_command);
 
             Assert.AreEqual(DougMessages.NotEnoughEnergy, result.Message);
-        }
-
-        [TestMethod]
-        public async Task GivenTargetIsAboutToDie_WhenAttacking_UserGet100Experience()
-        {
-            _userService.Setup(service => service.ApplyMagicalDamage(It.IsAny<User>(), 10, Channel)).Returns(Task.FromResult(true));
-
-            await _combatCommands.Attack(_command);
-
-            _userService.Verify(service => service.AddExperience(_user, 100, Channel));
         }
 
         [TestMethod]

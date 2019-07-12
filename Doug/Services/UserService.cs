@@ -14,11 +14,13 @@ namespace Doug.Services
         Task<bool> ApplyMagicalDamage(User user, int damage, string channel);
         Task AddExperience(User user, long experience, string channel);
         Task AddBulkExperience(List<User> users, long experience, string channel);
-        Task<bool> ApplyPhysicalDamage(User user, int damage, string channel);
+        Task<int> PhysicalAttack(User user, User target, string channel);
     }
 
     public class UserService : IUserService
     {
+        private const int KillExperienceGain = 100;
+
         private readonly ISlackWebApi _slack;
         private readonly IStatsRepository _statsRepository;
         private readonly IEventDispatcher _eventDispatcher;
@@ -86,17 +88,18 @@ namespace Doug.Services
             await Task.WhenAll(levelUpMessageTasks);
         }
 
-        public async Task<bool> ApplyPhysicalDamage(User user, int damage, string channel)
+        public async Task<int> PhysicalAttack(User user, User target, string channel)
         {
-            user.ApplyPhysicalDamage(damage);
+            var damageDealt = user.AttackUser(target);
 
-            if (user.IsDead())
+            if (target.IsDead() && await HandleDeath(target, channel))
             {
-                return await HandleDeath(user, channel);
+                _eventDispatcher.OnDeathByUser(target, user);
+                await AddExperience(user, KillExperienceGain, channel);
             }
 
-            _statsRepository.UpdateHealth(user.Id, user.Health);
-            return false;
+            _statsRepository.UpdateHealth(target.Id, target.Health);
+            return damageDealt;
         }
     }
 }
