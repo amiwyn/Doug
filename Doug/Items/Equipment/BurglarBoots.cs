@@ -10,7 +10,7 @@
             Rarity = Rarity.Unique;
             Icon = ":boot:";
             Slot = EquipmentSlot.Boots;
-            Price = 3000;
+            Price = 2625;
             LevelRequirement = 15;
         }
 

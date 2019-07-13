@@ -10,7 +10,7 @@
             Rarity = Rarity.Rare;
             Icon = ":gloves:";
             Slot = EquipmentSlot.Gloves;
-            Price = 3000;
+            Price = 2250;
             LevelRequirement = 20;
 
             Attack = 5;

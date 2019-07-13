@@ -1,6 +1,4 @@
-﻿using Doug.Effects;
-using Doug.Effects.Buffs;
-using Doug.Models;
+﻿using Doug.Models;
 using Doug.Repositories;
 
 namespace Doug.Items.Consumables

@@ -41,6 +41,7 @@ namespace Doug.Items
         public const string Crown = "crown";
         public const string HolyWater = "holy_water";
         public const string StraightEdge = "straight_edge";
+        public const string MysteryBox = "mystery_box";
 
         private readonly ISlackWebApi _slack;
         private readonly IStatsRepository _statsRepository;
@@ -48,8 +49,9 @@ namespace Doug.Items
         private readonly IUserService _userService;
         private readonly IEventDispatcher _eventDispatcher;
         private readonly IEffectRepository _effectRepository;
+        private readonly IRandomService _randomService;
 
-        public ItemFactory(ISlackWebApi slack, IStatsRepository statsRepository, IInventoryRepository inventoryRepository, IUserService userService, IEventDispatcher eventDispatcher, IEffectRepository effectRepository)
+        public ItemFactory(ISlackWebApi slack, IStatsRepository statsRepository, IInventoryRepository inventoryRepository, IUserService userService, IEventDispatcher eventDispatcher, IEffectRepository effectRepository, IRandomService randomService)
         {
             _slack = slack;
             _statsRepository = statsRepository;
@@ -57,6 +59,7 @@ namespace Doug.Items
             _userService = userService;
             _eventDispatcher = eventDispatcher;
             _effectRepository = effectRepository;
+            _randomService = randomService;
         }
 
         public Item CreateItem(string itemId)
@@ -117,6 +120,8 @@ namespace Doug.Items
                     return new HolyWater(_inventoryRepository, _effectRepository);
                 case StraightEdge:
                     return new StraightEdge();
+                case MysteryBox:
+                    return new MysteryBox(_inventoryRepository, _randomService, _slack, _userService, this);
                 default:
                     return new Default();
             }

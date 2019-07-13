@@ -79,6 +79,7 @@
         public const string RevolutionVote = "{0} want to lead the revolution :fire: who's with em?";
         public const string RevolutionSucceeded = "<!here> - Off with {0}'s head! {1} is the new emperor!";
         public const string Cleansed = "You are cleansed of all your effects.";
+        public const string LootboxAnnouncement = "{0} opened *{1}* and received {2}";
 
         public const string DougError = "Beep boop, it's not working : {0}";
         public const string NotAnAdmin = "You are not an admin.";
