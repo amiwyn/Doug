@@ -7,6 +7,7 @@ namespace Doug.Repositories
     public interface IEffectRepository
     {
         void AddEffect(User user, string effectId, int durationMinutes);
+        void RemoveAllEffects(User user);
     }
 
     public class EffectRepository : IEffectRepository
@@ -34,6 +35,12 @@ namespace Doug.Repositories
                 EndTime = DateTime.UtcNow.AddMinutes(durationMinutes)
             });
 
+            _db.SaveChanges();
+        }
+
+        public void RemoveAllEffects(User user)
+        {
+            user.Effects.Clear();
             _db.SaveChanges();
         }
     }

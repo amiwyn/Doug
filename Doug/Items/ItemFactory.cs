@@ -39,6 +39,7 @@ namespace Doug.Items
         public const string Cigarette = "cigarette";
         public const string SuicidePill = "suicide_pill";
         public const string Crown = "crown";
+        public const string HolyWater = "holy_water";
 
         private readonly ISlackWebApi _slack;
         private readonly IStatsRepository _statsRepository;
