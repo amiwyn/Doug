@@ -18,8 +18,8 @@ namespace Doug.Items.Equipment
             Name = "Orb of Awakening";
             Description = "When equipped, this strange orb will notify you privately who flamed you. You must be active to receive the notification.";
             Rarity = Rarity.Rare;
-            Icon = ":crystal_ball:";
-            Slot = EquipmentSlot.LeftHand;
+            Icon = ":awakening_orb:";
+            Slot = EquipmentSlot.Neck;
             Price = 2100;
             LevelRequirement = 5;
         }
