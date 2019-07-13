@@ -6,7 +6,7 @@ namespace WebJobs
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["dougbotdb"].ConnectionString))
             using (var command = new SqlCommand("DailyReset", conn)

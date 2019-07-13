@@ -9,7 +9,6 @@ namespace Doug.Models
         public string Id { get; set; }
         public string Head { get; set; }
         public string Body { get; set; }
-        public string Legs { get; set; }
         public string Boots { get; set; }
         public string Gloves { get; set; }
         public string LeftHand { get; set; }
@@ -27,7 +26,6 @@ namespace Doug.Models
         {
             AddEquipment(Head, itemFactory);
             AddEquipment(Body, itemFactory);
-            AddEquipment(Legs, itemFactory);
             AddEquipment(Boots, itemFactory);
             AddEquipment(Gloves, itemFactory);
             AddEquipment(LeftHand, itemFactory);
@@ -77,7 +75,6 @@ namespace Doug.Models
         {
             Head = GetEquipmentAt(EquipmentSlot.Head)?.Id;
             Body = GetEquipmentAt(EquipmentSlot.Body)?.Id;
-            Legs = GetEquipmentAt(EquipmentSlot.Legs)?.Id;
             Boots = GetEquipmentAt(EquipmentSlot.Boots)?.Id;
             Gloves = GetEquipmentAt(EquipmentSlot.Gloves)?.Id;
             LeftHand = GetEquipmentAt(EquipmentSlot.LeftHand)?.Id;
