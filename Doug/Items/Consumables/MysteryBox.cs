@@ -28,7 +28,7 @@ namespace Doug.Items.Consumables
             Name = "Mystery Box";
             Description = "A mysterious box. Who knows what you might get if you open it.";
             Rarity = Rarity.Rare;
-            Icon = ":gift:";
+            Icon = ":mystery_box:";
             Price = 100;
 
             _dropTable = new Dictionary<LootItem, double>

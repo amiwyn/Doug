@@ -15,7 +15,7 @@ namespace Doug.Items.Consumables
             Name = "Coffee";
             Description = "A good cuppa. Restores 25 energy.";
             Rarity = Rarity.Common;
-            Icon = ":coffee:";
+            Icon = ":coffee_bowl:";
             Price = 50;
         }
 

@@ -20,7 +20,7 @@ namespace Doug.Items.Consumables
             Name = "Kick Ticket";
             Description = "This item can be used to kick the user of your choice. I would use it on gab if I were you...";
             Rarity = Rarity.Uncommon;
-            Icon = ":ticket:";
+            Icon = ":kick_ticket:";
             Price = 10;
             IsSellable = false;
         }

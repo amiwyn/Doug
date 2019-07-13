@@ -14,7 +14,7 @@ namespace Doug.Items.Consumables
             Name = "Holy Water";
             Description = "Water used to purify your sins. Removes all active effects on you.";
             Rarity = Rarity.Unique;
-            Icon = ":droplet:";
+            Icon = ":holy_water:";
             Price = 100;
         }
 

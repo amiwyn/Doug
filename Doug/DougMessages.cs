@@ -24,8 +24,8 @@
         public const string CreditStats = CreditEmoji + " {0}";
         public const string LevelStats = "Level {0}";
         public const string ExperienceStats = "{0:0.##}%";
-        public const string HealthStats = "Health Points :";
-        public const string EnergyStats = "Energy Points :";
+        public const string HealthStats = ":hp: Health : {0}";
+        public const string EnergyStats = ":mp: Mana : {0}";
         public const string StrengthStats = ":information_desk_person: Strength : {0}";
         public const string AgilityStats = ":runner: Agility : {0}";
         public const string LuckStats = ":four_leaf_clover: Luck : {0}";

@@ -14,7 +14,7 @@ namespace Doug.Items.Consumables.Resets
             Name = "Agility Reset Potion";
             Description = "Reset 1 point of agility.";
             Rarity = Rarity.Rare;
-            Icon = ":tropical_drink:";
+            Icon = ":reset_potion:";
             Price = 25;
         }
 

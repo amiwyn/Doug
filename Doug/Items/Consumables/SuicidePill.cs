@@ -16,7 +16,7 @@ namespace Doug.Items.Consumables
             Name = "Suicide Pill";
             Description = "When you want to end it all...";
             Rarity = Rarity.Common;
-            Icon = ":pill:";
+            Icon = ":pill1:";
             Price = 10;
         }
 

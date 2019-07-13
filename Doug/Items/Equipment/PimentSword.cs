@@ -10,7 +10,7 @@ namespace Doug.Items.Equipment
             Name = "Fucking Sword of Piment";
             Description = "Well.. this sword is really spicy. Still useless, you're kinda dumb of owning it.";
             Rarity = Rarity.Uncommon;
-            Icon = ":hot_pepper:";
+            Icon = ":piment_sword:";
             Slot = EquipmentSlot.RightHand;
             Price = 224;
             LevelRequirement = 5;

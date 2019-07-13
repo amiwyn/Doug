@@ -8,7 +8,7 @@
             Name = "Straight Edge";
             Description = "No thanks, I'm straight edge.";
             Rarity = Rarity.Common;
-            Icon = ":knife:";
+            Icon = ":straight_edge:";
             Slot = EquipmentSlot.RightHand;
             Price = 1200;
             LevelRequirement = 20;

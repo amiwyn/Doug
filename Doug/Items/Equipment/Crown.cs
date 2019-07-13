@@ -8,7 +8,7 @@
             Name = "Crown";
             Description = "Ye be a royals. Enjoy your power trip while ya head still stands on ya shoulders.";
             Rarity = Rarity.Legendary;
-            Icon = ":crown:";
+            Icon = ":emperor_crown:";
             Slot = EquipmentSlot.Head;
             Price = 90969469;
             LevelRequirement = 1;

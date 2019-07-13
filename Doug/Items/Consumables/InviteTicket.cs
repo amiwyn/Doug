@@ -16,7 +16,7 @@ namespace Doug.Items.Consumables
             Name = "Invite Ticket";
             Description = "A gift by the gods ~ Use this item to join the coffee channel.";
             Rarity = Rarity.Uncommon;
-            Icon = ":credit_card:";
+            Icon = ":join_ticket:";
             Price = 10;
             IsSellable = false;
         }

@@ -15,7 +15,7 @@ namespace Doug.Items.Consumables
             Name = "Apple";
             Description = "Ahhh, a fresh apple. So healthy. Restores 25 health.";
             Rarity = Rarity.Common;
-            Icon = ":apple:";
+            Icon = ":apple_food:";
             Price = 25;
         }
 

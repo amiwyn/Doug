@@ -8,7 +8,7 @@
             Name = "Steel Sword";
             Description = "A durable sword. Light and Fast.";
             Rarity = Rarity.Common;
-            Icon = ":dagger_knife:";
+            Icon = ":sword1:";
             Slot = EquipmentSlot.RightHand;
             Price = 65;
             LevelRequirement = 1;

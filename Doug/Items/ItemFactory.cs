@@ -26,7 +26,9 @@ namespace Doug.Items
         public const string Bread = "bread";
         public const string McdoFries = "mcdo_fries";
         public const string SteelSword = "steel_sword";
-        public const string ClothArmor = "cloth_armor";
+        public const string LeatherArmor = "cloth_armor";
+        public const string LeatherGloves = "leather_gloves";
+        public const string LeatherBoots = "leather_boots";
         public const string KickTicket = "kick_ticket";
         public const string InviteTicket = "invite_ticket";
         public const string BigMac = "big_mac";
@@ -80,8 +82,12 @@ namespace Doug.Items
                     return new PimentSword();
                 case SteelSword:
                     return new SteelSword();
-                case ClothArmor:
-                    return new ClothArmor();
+                case LeatherArmor:
+                    return new LeatherArmor();
+                case LeatherBoots:
+                    return new LeatherBoots();
+                case LeatherGloves:
+                    return new LeatherGloves();
                 case Apple:
                     return new Apple(_statsRepository, _inventoryRepository);
                 case DevilsContract:

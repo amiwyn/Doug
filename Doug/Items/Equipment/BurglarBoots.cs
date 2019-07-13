@@ -8,7 +8,7 @@
             Name = "Burglar Boots";
             Description = "The boots of a notorious burglar. Indubitably the best tool for a burglary. Increases the chances of success when stealing rupees.";
             Rarity = Rarity.Unique;
-            Icon = ":boot:";
+            Icon = ":burglar_boots:";
             Slot = EquipmentSlot.Boots;
             Price = 2625;
             LevelRequirement = 15;

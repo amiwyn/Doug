@@ -14,7 +14,7 @@ namespace Doug.Items.Consumables.Resets
             Name = "Strength Reset Potion";
             Description = "Reset 1 point of strength.";
             Rarity = Rarity.Rare;
-            Icon = ":tropical_drink:";
+            Icon = ":reset_potion:";
             Price = 25;
         }
 

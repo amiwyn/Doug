@@ -26,9 +26,6 @@ namespace Doug.Menus
                 Blocks.Add(new Divider());
             }
 
-            Blocks.Add(CreateHealthFields(user));
-            Blocks.Add(CreateEnergyFields(user));
-            Blocks.Add(new Divider());
             Blocks.Add(CreateOtherStatsFields(user));
             Blocks.Add(new Divider());
 
@@ -58,28 +55,6 @@ namespace Doug.Menus
             };
 
             return new Context(userMiscInfo);
-        }
-
-        private Block CreateHealthFields(User user)
-        {
-            var healthFields = new List<string>
-            {
-                DougMessages.HealthStats,
-                $"*{user.Health}*/{user.TotalHealth()}"
-            };
-
-            return new FieldsSection(healthFields);
-        }
-
-        private Block CreateEnergyFields(User user)
-        {
-            var energyFields = new List<string>
-            {
-                DougMessages.EnergyStats,
-                $"*{user.Energy}*/{user.TotalEnergy()}"
-            };
-
-           return new FieldsSection(energyFields);
         }
 
         private List<Block> CreateStatsFields(User user)
@@ -113,10 +88,13 @@ namespace Doug.Menus
         {
             var statsFields = new List<string>
             {
+                string.Format(DougMessages.HealthStats, $"*{user.Health}*/{user.TotalHealth()}"),
+                string.Format(DougMessages.EnergyStats, $"*{user.Energy}*/{user.TotalEnergy()}"),
                 string.Format(DougMessages.DefenseStat, user.TotalDefense()),
                 string.Format(DougMessages.DodgeStat, user.TotalDodge()),
-                string.Format(DougMessages.HitrateStat, user.TotalHitrate()),
                 string.Format(DougMessages.GambleStat, user.BaseGambleChance()*100),
+                string.Format(DougMessages.HitrateStat, user.TotalHitrate()),
+                
             };
 
             return new FieldsSection(statsFields);

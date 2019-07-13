@@ -17,7 +17,7 @@ namespace Doug.Items.Consumables
             Name = "Big Mac";
             Description = "On va tu au Mc Donald? Gives *Troll's Blessing* for 5 minutes";
             Rarity = Rarity.Uncommon;
-            Icon = ":hamburger:";
+            Icon = ":bigmac:";
             Price = 100;
         }
 

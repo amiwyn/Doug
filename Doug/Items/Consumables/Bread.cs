@@ -15,7 +15,7 @@ namespace Doug.Items.Consumables
             Name = "Bread";
             Description = "A nice steamy loaf of bread. It's fresh from the bakery. Restores 50 health.";
             Rarity = Rarity.Common;
-            Icon = ":bread:";
+            Icon = ":bread_food:";
             Price = 50;
         }
 

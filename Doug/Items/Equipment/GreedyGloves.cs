@@ -8,7 +8,7 @@
             Name = "Gloves of Greed";
             Description = "These gloves give you an unquenchable thirst for rupees. Increase the amount of rupees you can steal.";
             Rarity = Rarity.Rare;
-            Icon = ":gloves:";
+            Icon = ":greedy_gloves:";
             Slot = EquipmentSlot.Gloves;
             Price = 2250;
             LevelRequirement = 20;
