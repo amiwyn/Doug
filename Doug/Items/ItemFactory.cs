@@ -40,6 +40,7 @@ namespace Doug.Items
         public const string SuicidePill = "suicide_pill";
         public const string Crown = "crown";
         public const string HolyWater = "holy_water";
+        public const string StraightEdge = "straight_edge";
 
         private readonly ISlackWebApi _slack;
         private readonly IStatsRepository _statsRepository;
@@ -112,6 +113,10 @@ namespace Doug.Items
                     return new SuicidePill(_inventoryRepository, _userService);
                 case Crown:
                     return new Crown();
+                case HolyWater:
+                    return new HolyWater(_inventoryRepository, _effectRepository);
+                case StraightEdge:
+                    return new StraightEdge();
                 default:
                     return new Default();
             }
