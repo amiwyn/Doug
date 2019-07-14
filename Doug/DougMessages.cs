@@ -80,6 +80,16 @@
         public const string RevolutionSucceeded = "<!here> - Off with {0}'s head! {1} is the new emperor!";
         public const string Cleansed = "You are cleansed of all your effects.";
         public const string LootboxAnnouncement = "{0} opened *{1}* and received {2}";
+        public const string ItemLevel = "*Level {0}*";
+        public const string ItemAttack = "`Attack {0:+#;-#}`";
+        public const string ItemDefense = "`Defense {0:+#;-#}`";
+        public const string ItemHitrate = "`Hitrate {0:+#;-#}`";
+        public const string ItemDodge = "`Dodge {0:+#;-#}`";
+        public const string ItemStrength = "`Strength {0:+#;-#}`";
+        public const string ItemAgility = "`Agility {0:+#;-#}`";
+        public const string ItemStamina = "`Stamina {0:+#;-#}`";
+        public const string ItemConstitution = "`Constitution {0:+#;-#}`";
+        public const string ItemLuck = "`Luck {0:+#;-#}`";
 
         public const string DougError = "Beep boop, it's not working : {0}";
         public const string NotAnAdmin = "You are not an admin.";

@@ -8,7 +8,7 @@ namespace Doug.Menus.Blocks
     {
         public List<TextBlock> Elements { get; set; }
 
-        public Context(List<string> elements) : base("context")
+        public Context(IEnumerable<string> elements) : base("context")
         {
             Elements = elements.Select(txt => (TextBlock)new MarkdownText(txt)).ToList();
         }
