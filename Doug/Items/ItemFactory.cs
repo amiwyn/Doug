@@ -2,6 +2,7 @@
 using Doug.Items.Consumables.Resets;
 using Doug.Items.Equipment;
 using Doug.Items.Equipment.Sets.Noob;
+using Doug.Items.Lootboxes;
 using Doug.Items.Misc;
 using Doug.Repositories;
 using Doug.Services;

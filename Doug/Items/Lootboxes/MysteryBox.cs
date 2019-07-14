@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Doug.Items.Consumables;
 using Doug.Items.Consumables.Resets;
 using Doug.Items.Equipment;
 using Doug.Items.Misc;
@@ -7,7 +8,7 @@ using Doug.Repositories;
 using Doug.Services;
 using Doug.Slack;
 
-namespace Doug.Items.Consumables
+namespace Doug.Items.Lootboxes
 {
     public class MysteryBox : ConsumableItem
     {
