@@ -12,11 +12,11 @@
             Rarity = Rarity.Common;
             Icon = ":straight_edge:";
             Slot = EquipmentSlot.RightHand;
-            Price = 1200;
+            Price = 820;
             LevelRequirement = 20;
 
-            Attack = 58;
-            Constitution = 5;
+            Attack = 69;
+            Constitution = 4;
         }
     }
 }
