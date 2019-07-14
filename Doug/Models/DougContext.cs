@@ -13,6 +13,7 @@ namespace Doug.Models
         public DbSet<Channel> Channels { get; set; }
         public DbSet<UserEffect> UserEffect { get; set; }
         public DbSet<Government> Government { get; set; }
+        public DbSet<Shop> Shops { get; set; }
 
         public DougContext(DbContextOptions<DougContext> options) : base(options)
         {
@@ -44,6 +45,14 @@ namespace Doug.Models
                 .HasOne(u => u.User)
                 .WithMany(u => u.Effects)
                 .HasForeignKey(u => u.UserId);
+
+            modelBuilder.Entity<ShopItem>()
+                .HasKey(s => new { s.ShopId, s.ItemId });
+
+            modelBuilder.Entity<ShopItem>()
+                .HasOne(s => s.Shop)
+                .WithMany(s => s.ShopItems)
+                .HasForeignKey(s => s.ShopId);
 
             base.OnModelCreating(modelBuilder);
         }
