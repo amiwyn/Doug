@@ -3,7 +3,7 @@ using Doug.Slack;
 using Hangfire;
 using System;
 using System.Linq;
-using Doug.Items;
+using Doug.Items.Consumables;
 
 namespace Doug.Services
 {
@@ -120,7 +120,7 @@ namespace Doug.Services
 
             _statsRepository.RegenerateUsersHealth(participantsId);
             _userRepository.AddCreditsToUsers(participantsId, CoffeeBreakAward);
-            _inventoryRepository.AddItemToUsers(participants, ItemFactory.CoffeeCup);
+            _inventoryRepository.AddItemToUsers(participants, CoffeeCup.ItemId);
 
             _userService.AddBulkExperience(participants, CoffeeExperienceAward, channelId).Wait();
 

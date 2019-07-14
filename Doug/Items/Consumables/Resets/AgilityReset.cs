@@ -5,12 +5,14 @@ namespace Doug.Items.Consumables.Resets
 {
     public class AgilityReset : ConsumableItem
     {
+        public const string ItemId = "agi_reset";
+
         private readonly IStatsRepository _statsRepository;
 
         public AgilityReset(IStatsRepository statsRepository, IInventoryRepository inventoryRepository) : base(inventoryRepository)
         {
             _statsRepository = statsRepository;
-            Id = ItemFactory.AgilityReset;
+            Id = ItemId;
             Name = "Agility Reset Potion";
             Description = "Reset 1 point of agility.";
             Rarity = Rarity.Rare;

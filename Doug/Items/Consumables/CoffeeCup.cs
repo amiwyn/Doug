@@ -5,13 +5,15 @@ namespace Doug.Items.Consumables
 {
     public class CoffeeCup : ConsumableItem
     {
+        public const string ItemId = "coffee_cup";
+
         private readonly IStatsRepository _statsRepository;
         private const int RecoverAmount = 25;
 
         public CoffeeCup(IStatsRepository statsRepository, IInventoryRepository inventoryRepository) : base(inventoryRepository)
         {
             _statsRepository = statsRepository;
-            Id = ItemFactory.CoffeeCup;
+            Id = ItemId;
             Name = "Coffee";
             Description = "A good cuppa. Restores 25 energy.";
             Rarity = Rarity.Common;

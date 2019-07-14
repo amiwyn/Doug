@@ -58,7 +58,7 @@ namespace Test.Inventory
         {
             _inventoryCommands.UnEquip(_command);
 
-            _inventoryRepository.Verify(repo => repo.AddItem(It.IsAny<User>(), ItemFactory.CloakOfSpikes));
+            _inventoryRepository.Verify(repo => repo.AddItem(It.IsAny<User>(), CloakOfSpikes.ItemId));
         }
 
         [TestMethod]

@@ -1,10 +1,12 @@
 ﻿namespace Doug.Items.Equipment
 {
-    public class DevilContract : EquipmentItem
+    public class DevilsContract : EquipmentItem
     {
-        public DevilContract()
+        public const string ItemId = "devil_contract";
+
+        public DevilsContract()
         {
-            Id = ItemFactory.DevilsContract;
+            Id = ItemId;
             Name = "Deal with the Devil";
             Description = "He told you no one could steal from you ever again... you should have read the small text. Block stealing. Cannot Steal.";
             Rarity = Rarity.Legendary;

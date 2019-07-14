@@ -5,12 +5,14 @@ namespace Doug.Items.Consumables
 {
     public class HolyWater : ConsumableItem
     {
+        public const string ItemId = "holy_water";
+
         private readonly IEffectRepository _effectRepository;
 
         public HolyWater(IInventoryRepository inventoryRepository, IEffectRepository effectRepository) : base(inventoryRepository)
         {
             _effectRepository = effectRepository;
-            Id = ItemFactory.HolyWater;
+            Id = ItemId;
             Name = "Holy Water";
             Description = "Water used to purify your sins. Removes all active effects on you.";
             Rarity = Rarity.Unique;

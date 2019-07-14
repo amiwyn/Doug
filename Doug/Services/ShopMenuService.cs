@@ -2,6 +2,8 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Doug.Items;
+using Doug.Items.Consumables;
+using Doug.Items.Equipment.Sets.Noob;
 using Doug.Menus;
 using Doug.Models;
 using Doug.Repositories;
@@ -23,7 +25,7 @@ namespace Doug.Services
         private readonly IShopService _shopService;
         private readonly IGovernmentService _governmentService;
 
-        public static readonly List<string> ShopItems = new List<string> { ItemFactory.CoffeeCup, ItemFactory.Apple, ItemFactory.Bread, ItemFactory.SteelSword, ItemFactory.LeatherArmor }; // TODO: temp. put this in a table somewhere
+        public static readonly List<string> ShopItems = new List<string> { CoffeeCup.ItemId, Apple.ItemId, Bread.ItemId, ShortBlade.ItemId, PeasantShirt.ItemId }; // TODO: temp. put this in a table somewhere
 
         public ShopMenuService(IUserRepository userRepository, ISlackWebApi slack, IItemFactory itemFactory, IShopService shopService, IGovernmentService governmentService)
         {

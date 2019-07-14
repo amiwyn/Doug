@@ -7,6 +7,8 @@ namespace Doug.Items.Consumables
 {
     public class KickTicket : ConsumableItem
     {
+        public const string ItemId = "kick_ticket";
+
         private readonly ISlackWebApi _slack;
         private readonly IUserService _userService;
         private readonly IEventDispatcher _eventDispatcher;
@@ -16,7 +18,7 @@ namespace Doug.Items.Consumables
             _slack = slack;
             _userService = userService;
             _eventDispatcher = eventDispatcher;
-            Id = ItemFactory.KickTicket;
+            Id = ItemId;
             Name = "Kick Ticket";
             Description = "This item can be used to kick the user of your choice. I would use it on gab if I were you...";
             Rarity = Rarity.Uncommon;

@@ -2,9 +2,11 @@
 {
     public class GreedyGloves : EquipmentItem
     {
+        public const string ItemId = "greedy_gloves";
+
         public GreedyGloves()
         {
-            Id = ItemFactory.GreedyGloves;
+            Id = ItemId;
             Name = "Gloves of Greed";
             Description = "These gloves give you an unquenchable thirst for rupees. Increase the amount of rupees you can steal.";
             Rarity = Rarity.Rare;

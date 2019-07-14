@@ -2,9 +2,11 @@
 {
     public class StraightEdge : EquipmentItem
     {
+        public const string ItemId = "straight_edge";
+
         public StraightEdge()
         {
-            Id = ItemFactory.StraightEdge;
+            Id = ItemId;
             Name = "Straight Edge";
             Description = "No thanks, I'm straight edge.";
             Rarity = Rarity.Common;

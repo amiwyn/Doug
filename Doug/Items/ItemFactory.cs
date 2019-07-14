@@ -1,6 +1,7 @@
 ﻿using Doug.Items.Consumables;
 using Doug.Items.Consumables.Resets;
 using Doug.Items.Equipment;
+using Doug.Items.Equipment.Sets.Noob;
 using Doug.Items.Misc;
 using Doug.Repositories;
 using Doug.Services;
@@ -14,37 +15,6 @@ namespace Doug.Items
     }
     public class ItemFactory : IItemFactory
     {
-        public const string AwakeningOrb = "awakening_orb";
-        public const string LuckyDice = "lucky_dice";
-        public const string BurglarBoots = "burglar_boots";
-        public const string GreedyGloves = "greedy_gloves";
-        public const string CoffeeCup = "coffee_cup";
-        public const string PimentSword = "piment_sword";
-        public const string Apple = "apple";
-        public const string DevilsContract = "devil_contract";
-        public const string CloakOfSpikes = "cloak_spikes";
-        public const string Bread = "bread";
-        public const string McdoFries = "mcdo_fries";
-        public const string SteelSword = "steel_sword";
-        public const string LeatherArmor = "cloth_armor";
-        public const string LeatherGloves = "leather_gloves";
-        public const string LeatherBoots = "leather_boots";
-        public const string KickTicket = "kick_ticket";
-        public const string InviteTicket = "invite_ticket";
-        public const string BigMac = "big_mac";
-        public const string AgilityReset = "agi_reset";
-        public const string LuckReset = "luck_reset";
-        public const string StrengthReset = "str_reset";
-        public const string ConstitutionReset = "con_reset";
-        public const string StaminaReset = "stam_reset";
-        public const string BachelorsDegree = "bachelor_degree";
-        public const string Cigarette = "cigarette";
-        public const string SuicidePill = "suicide_pill";
-        public const string Crown = "crown";
-        public const string HolyWater = "holy_water";
-        public const string StraightEdge = "straight_edge";
-        public const string MysteryBox = "mystery_box";
-
         private readonly ISlackWebApi _slack;
         private readonly IStatsRepository _statsRepository;
         private readonly IInventoryRepository _inventoryRepository;
@@ -68,68 +38,54 @@ namespace Doug.Items
         {
             switch (itemId)
             {
-                case AwakeningOrb:
-                    return new AwakeningOrb(_slack, _userService);
-                case LuckyDice:
-                    return new LuckyDice();
-                case BurglarBoots:
-                    return new BurglarBoots();
-                case GreedyGloves:
-                    return new GreedyGloves();
-                case CoffeeCup:
-                    return new CoffeeCup(_statsRepository, _inventoryRepository);
-                case PimentSword:
-                    return new PimentSword();
-                case SteelSword:
-                    return new SteelSword();
-                case LeatherArmor:
-                    return new LeatherArmor();
-                case LeatherBoots:
-                    return new LeatherBoots();
-                case LeatherGloves:
-                    return new LeatherGloves();
-                case Apple:
-                    return new Apple(_statsRepository, _inventoryRepository);
-                case DevilsContract:
-                    return new DevilContract();
-                case CloakOfSpikes:
-                    return new CloakOfSpikes();
-                case KickTicket:
-                    return new KickTicket(_inventoryRepository, _slack, _userService, _eventDispatcher);
-                case InviteTicket:
-                    return new InviteTicket(_inventoryRepository, _slack); 
-                case Bread:
-                    return new Bread(_statsRepository, _inventoryRepository);
-                case McdoFries:
-                    return new McdoFries(_statsRepository, _inventoryRepository, _userService);
-                case BigMac:
-                    return new BigMac(_inventoryRepository, _effectRepository);
-                case AgilityReset:
-                    return new AgilityReset(_statsRepository, _inventoryRepository);
-                case StrengthReset:
-                    return new StrengthReset(_statsRepository, _inventoryRepository);
-                case ConstitutionReset:
-                    return new ConstitutionReset(_statsRepository, _inventoryRepository);
-                case LuckReset:
-                    return new LuckReset(_statsRepository, _inventoryRepository);
-                case StaminaReset:
-                    return new StaminaReset(_statsRepository, _inventoryRepository);
-                case Cigarette:
-                    return new Cigarette(_inventoryRepository, _effectRepository);
-                case BachelorsDegree:
-                    return new BachelorsDegree();
-                case SuicidePill:
-                    return new SuicidePill(_inventoryRepository, _userService);
-                case Crown:
-                    return new Crown();
-                case HolyWater:
-                    return new HolyWater(_inventoryRepository, _effectRepository);
-                case StraightEdge:
-                    return new StraightEdge();
-                case MysteryBox:
-                    return new MysteryBox(_inventoryRepository, _randomService, _slack, _userService, this);
-                default:
-                    return new Default();
+                // Consumables
+                case CoffeeCup.ItemId: return new CoffeeCup(_statsRepository, _inventoryRepository);
+                case Apple.ItemId: return new Apple(_statsRepository, _inventoryRepository);
+                case Bread.ItemId: return new Bread(_statsRepository, _inventoryRepository);
+                case McdoFries.ItemId: return new McdoFries(_statsRepository, _inventoryRepository, _userService);
+
+                // Utility Consumables
+                case SuicidePill.ItemId: return new SuicidePill(_inventoryRepository, _userService);
+                case KickTicket.ItemId: return new KickTicket(_inventoryRepository, _slack, _userService, _eventDispatcher);
+                case InviteTicket.ItemId: return new InviteTicket(_inventoryRepository, _slack);
+
+                // Effect Consumables
+                case BigMac.ItemId: return new BigMac(_inventoryRepository, _effectRepository);
+                case Cigarette.ItemId: return new Cigarette(_inventoryRepository, _effectRepository);
+                case HolyWater.ItemId: return new HolyWater(_inventoryRepository, _effectRepository);
+
+                // Resets
+                case AgilityReset.ItemId: return new AgilityReset(_statsRepository, _inventoryRepository);
+                case StrengthReset.ItemId: return new StrengthReset(_statsRepository, _inventoryRepository);
+                case ConstitutionReset.ItemId: return new ConstitutionReset(_statsRepository, _inventoryRepository);
+                case LuckReset.ItemId: return new LuckReset(_statsRepository, _inventoryRepository);
+                case StaminaReset.ItemId: return new StaminaReset(_statsRepository, _inventoryRepository);
+
+                // Special Equipment
+                case AwakeningOrb.ItemId: return new AwakeningOrb(_slack, _userService);
+                case LuckyDice.ItemId: return new LuckyDice();
+                case BurglarBoots.ItemId: return new BurglarBoots();
+                case GreedyGloves.ItemId: return new GreedyGloves();
+                case DevilsContract.ItemId: return new DevilsContract();
+                case PimentSword.ItemId: return new PimentSword();
+                case CloakOfSpikes.ItemId: return new CloakOfSpikes();
+                case StraightEdge.ItemId: return new StraightEdge();
+                case Crown.ItemId: return new Crown();
+
+                // Noob Set
+                case FarmersArmor.ItemId: return new FarmersArmor();
+                case FarmersBoots.ItemId: return new FarmersBoots();
+                case FarmersGloves.ItemId: return new FarmersGloves();
+                case PeasantBoots.ItemId: return new PeasantBoots();
+                case PeasantShirt.ItemId: return new PeasantShirt();
+                case ShortBlade.ItemId: return new ShortBlade();
+                case ShortSword.ItemId: return new ShortSword();
+                case WoodenShield.ItemId: return new WoodenShield();
+
+                // Misc
+                case BachelorsDegree.ItemId: return new BachelorsDegree();
+                case MysteryBox.ItemId: return new MysteryBox(_inventoryRepository, _randomService, _slack, _userService, this);
+                default: return new Default();
             }
         }
     }

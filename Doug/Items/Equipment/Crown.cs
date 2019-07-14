@@ -2,9 +2,11 @@
 {
     public class Crown : EquipmentItem
     {
+        public const string ItemId = "crown";
+
         public Crown()
         {
-            Id = ItemFactory.Crown;
+            Id = ItemId;
             Name = "Crown";
             Description = "Ye be a royals. Enjoy your power trip while ya head still stands on ya shoulders.";
             Rarity = Rarity.Legendary;

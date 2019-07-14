@@ -1,4 +1,7 @@
 ﻿using System.Collections.Generic;
+using Doug.Items.Consumables.Resets;
+using Doug.Items.Equipment;
+using Doug.Items.Misc;
 using Doug.Models;
 using Doug.Repositories;
 using Doug.Services;
@@ -8,6 +11,8 @@ namespace Doug.Items.Consumables
 {
     public class MysteryBox : ConsumableItem
     {
+        public const string ItemId = "mystery_box";
+
         private readonly Dictionary<LootItem, double> _dropTable;
 
         private readonly IRandomService _randomService;
@@ -24,7 +29,7 @@ namespace Doug.Items.Consumables
             _userService = userService;
             _itemFactory = itemFactory;
 
-            Id = ItemFactory.MysteryBox;
+            Id = ItemId;
             Name = "Mystery Box";
             Description = "A mysterious box. Who knows what you might get if you open it.";
             Rarity = Rarity.Rare;
@@ -33,28 +38,28 @@ namespace Doug.Items.Consumables
 
             _dropTable = new Dictionary<LootItem, double>
             {
-                { new LootItem(ItemFactory.Apple, 5), 0.1 },
-                { new LootItem(ItemFactory.CoffeeCup, 5), 0.1 },
-                { new LootItem(ItemFactory.Bread, 5), 0.1 },
-                { new LootItem(ItemFactory.McdoFries, 2), 0.05 },
-                { new LootItem(ItemFactory.KickTicket, 3), 0.05 },
-                { new LootItem(ItemFactory.InviteTicket, 3), 0.1 },
-                { new LootItem(ItemFactory.HolyWater, 1), 0.05 },
-                { new LootItem(ItemFactory.SuicidePill, 1), 0.05 },
-                { new LootItem(ItemFactory.Cigarette, 1), 0.05 },
-                { new LootItem(ItemFactory.BachelorsDegree, 1), 0.05 },
+                { new LootItem(Apple.ItemId, 5), 0.1 },
+                { new LootItem(CoffeeCup.ItemId, 5), 0.1 },
+                { new LootItem(Bread.ItemId, 5), 0.1 },
+                { new LootItem(McdoFries.ItemId, 2), 0.05 },
+                { new LootItem(KickTicket.ItemId, 3), 0.05 },
+                { new LootItem(InviteTicket.ItemId, 3), 0.1 },
+                { new LootItem(HolyWater.ItemId, 1), 0.05 },
+                { new LootItem(SuicidePill.ItemId, 1), 0.05 },
+                { new LootItem(Cigarette.ItemId, 1), 0.05 },
+                { new LootItem(BachelorsDegree.ItemId, 1), 0.05 },
 
-                { new LootItem(ItemFactory.StraightEdge, 1), 0.01 },
-                { new LootItem(ItemFactory.CloakOfSpikes, 1), 0.01 },
-                { new LootItem(ItemFactory.AwakeningOrb, 1), 0.01 },
-                { new LootItem(ItemFactory.BurglarBoots, 1), 0.01 },
-                { new LootItem(ItemFactory.GreedyGloves, 1), 0.01 },
+                { new LootItem(StraightEdge.ItemId, 1), 0.01 },
+                { new LootItem(CloakOfSpikes.ItemId, 1), 0.01 },
+                { new LootItem(AwakeningOrb.ItemId, 1), 0.01 },
+                { new LootItem(BurglarBoots.ItemId, 1), 0.01 },
+                { new LootItem(GreedyGloves.ItemId, 1), 0.01 },
 
-                { new LootItem(ItemFactory.AgilityReset, 1), 0.05 },
-                { new LootItem(ItemFactory.StrengthReset, 1), 0.05 },
-                { new LootItem(ItemFactory.LuckReset, 1), 0.05 },
-                { new LootItem(ItemFactory.ConstitutionReset, 1), 0.05 },
-                { new LootItem(ItemFactory.StaminaReset, 1), 0.05 }
+                { new LootItem(AgilityReset.ItemId, 1), 0.05 },
+                { new LootItem(StrengthReset.ItemId, 1), 0.05 },
+                { new LootItem(LuckReset.ItemId, 1), 0.05 },
+                { new LootItem(ConstitutionReset.ItemId, 1), 0.05 },
+                { new LootItem(StaminaReset.ItemId, 1), 0.05 }
             };
         }
 

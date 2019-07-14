@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Doug.Items;
+using Doug.Items.Equipment;
 using Doug.Models;
 using Doug.Repositories;
 using Doug.Slack;
@@ -63,13 +64,13 @@ namespace Doug.Services
             var oldRuler = _userRepository.GetUser(government.Ruler);
             var newRuler = _userRepository.GetUser(government.RevolutionLeader);
 
-            if (oldRuler.Loadout.Head == ItemFactory.Crown)
+            if (oldRuler.Loadout.Head == Crown.ItemId)
             {
                 _equipmentRepository.UnequipItem(oldRuler, EquipmentSlot.Head);
             }
             else
             {
-                var crownItem = oldRuler.InventoryItems.SingleOrDefault(inventoryItem => inventoryItem.Item.Id == ItemFactory.Crown);
+                var crownItem = oldRuler.InventoryItems.SingleOrDefault(inventoryItem => inventoryItem.Item.Id == Crown.ItemId);
 
                 if (crownItem != null)
                 {
@@ -77,7 +78,7 @@ namespace Doug.Services
                 }
             }
 
-            _inventoryRepository.AddItem(newRuler, ItemFactory.Crown);
+            _inventoryRepository.AddItem(newRuler, Crown.ItemId);
 
             _slack.BroadcastMessage(string.Format(DougMessages.RevolutionSucceeded, _userService.Mention(oldRuler), _userService.Mention(newRuler)), channel);
 

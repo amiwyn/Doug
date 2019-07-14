@@ -6,13 +6,15 @@ namespace Doug.Items.Consumables
 {
     public class SuicidePill : ConsumableItem
     {
+        public const string ItemId = "suicide_pill";
+
         private readonly IUserService _userService;
         private const int LossAmount = 69696969;
 
         public SuicidePill(IInventoryRepository inventoryRepository, IUserService userService) : base(inventoryRepository)
         {
             _userService = userService;
-            Id = ItemFactory.SuicidePill;
+            Id = ItemId;
             Name = "Suicide Pill";
             Description = "When you want to end it all...";
             Rarity = Rarity.Common;

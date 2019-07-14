@@ -4,9 +4,11 @@ namespace Doug.Items.Equipment
 {
     public class PimentSword : EquipmentItem
     {
+        public const string ItemId = "piment_sword";
+
         public PimentSword()
         {
-            Id = ItemFactory.PimentSword;
+            Id = ItemId;
             Name = "Fucking Sword of Piment";
             Description = "Well.. this sword is really spicy. Still useless, you're kinda dumb of owning it.";
             Rarity = Rarity.Uncommon;

@@ -2,9 +2,11 @@
 {
     public class BurglarBoots : EquipmentItem
     {
+        public const string ItemId = "burglar_boots";
+
         public BurglarBoots()
         {
-            Id = ItemFactory.BurglarBoots;
+            Id = ItemId;
             Name = "Burglar Boots";
             Description = "The boots of a notorious burglar. Indubitably the best tool for a burglary. Increases the chances of success when stealing rupees.";
             Rarity = Rarity.Unique;

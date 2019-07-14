@@ -6,7 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
 using System.Collections.Generic;
-using Doug.Items;
+using Doug.Items.Consumables;
 using Doug.Models;
 
 namespace Test
@@ -127,7 +127,7 @@ namespace Test
 
             _coffeeService.EndCoffee(Channel);
 
-            _inventoryRepository.Verify(repo => repo.AddItemToUsers(It.IsAny<List<User>>(), ItemFactory.CoffeeCup));
+            _inventoryRepository.Verify(repo => repo.AddItemToUsers(It.IsAny<List<User>>(), CoffeeCup.ItemId));
         }
 
         [TestMethod]
