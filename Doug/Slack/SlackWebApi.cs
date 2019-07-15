@@ -21,6 +21,7 @@ namespace Doug.Slack
         Task<List<Reaction>> GetReactions(string timestamp, string channel);
         Task SendAttachments(IEnumerable<Attachment> attachments, string channel);
         Task SendEphemeralMessage(string text, string user, string channel);
+        Task BroadcastBlocks(IEnumerable<Block> blocks, string channel);
         Task SendEphemeralBlocks(IEnumerable<Block> blocks, string user, string channel);
         Task UpdateInteractionMessage(IEnumerable<Block> blocks, string url);
         Task KickUser(string user, string channel);
@@ -155,6 +156,16 @@ namespace Doug.Slack
             keyValues.Add(new KeyValuePair<string, string>("text", text));
 
             await PostToUrlWithoutResponse(EphemeralUrl, keyValues);
+        }
+
+        public async Task BroadcastBlocks(IEnumerable<Block> blocks, string channel)
+        {
+            var blocksString = JsonConvert.SerializeObject(blocks, _jsonSettings);
+
+            var keyValues = CreateBaseRequestPayload(channel);
+            keyValues.Add(new KeyValuePair<string, string>("blocks", blocksString));
+
+            await PostToUrlWithoutResponse(PostMessageUrl, keyValues);
         }
 
         public async Task SendEphemeralBlocks(IEnumerable<Block> blocks, string user, string channel)

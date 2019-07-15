@@ -92,6 +92,7 @@
         public const string ItemStamina = "`Stamina {0:+#;-#}`";
         public const string ItemConstitution = "`Constitution {0:+#;-#}`";
         public const string ItemLuck = "`Luck {0:+#;-#}`";
+        public const string SmallHealthDisplay = "{0} HP";
 
         public const string DougError = "Beep boop, it's not working : {0}";
         public const string NotAnAdmin = "You are not an admin.";

@@ -34,10 +34,16 @@ namespace Doug.Commands
 
         public async Task<DougResponse> Profile(Command command)
         {
-            var user = _userRepository.GetUser(command.UserId);
+            var userId = command.IsUserArgument() ? command.GetTargetUserId() : command.UserId;
+            var user = _userRepository.GetUser(userId);
+
+            if (command.IsUserArgument())
+            {
+                await _slack.SendEphemeralBlocks(new ShortProfileMenu(user).Blocks, command.UserId, command.ChannelId);
+                return NoResponse;
+            }
 
             await _slack.SendEphemeralBlocks(new StatsMenu(user).Blocks, command.UserId, command.ChannelId);
-
             return NoResponse;
         }
 
