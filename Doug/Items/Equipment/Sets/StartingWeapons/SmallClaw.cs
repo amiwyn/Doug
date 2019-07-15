@@ -1,16 +1,16 @@
 ﻿namespace Doug.Items.Equipment.Sets.StartingWeapons
 {
-    public class ShortBow : Weapon
+    public class SmallClaw : Weapon
     {
-        public const string ItemId = "short_bow";
+        public const string ItemId = "small_claw";
 
-        public ShortBow()
+        public SmallClaw()
         {
             Id = ItemId;
-            Name = "Short Bow";
-            Description = "A bow. It shoots arrows.";
+            Name = "Small Claws";
+            Description = "Watch out for bears.";
             Rarity = Rarity.Common;
-            Icon = ":bow1:";
+            Icon = ":claw1:";
             Slot = EquipmentSlot.RightHand;
             Price = 233;
             LevelRequirement = 10;

@@ -12,10 +12,10 @@
             Rarity = Rarity.Common;
             Icon = ":sword1:";
             Slot = EquipmentSlot.RightHand;
-            Price = 210;
+            Price = 190;
             LevelRequirement = 10;
 
-            Attack = 42;
+            Attack = 44;
         }
     }
 }
