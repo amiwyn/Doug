@@ -106,5 +106,10 @@ namespace Doug.Models
         {
             return Equipment.Select(equipment => $"{equipment.Value.Icon} *{equipment.Value.Name}*");
         }
+
+        public bool IsEmpty()
+        {
+            return Equipment.Count == 0;
+        }
     }
 }
