@@ -101,5 +101,10 @@ namespace Doug.Models
         {
             return Equipment.GetValueOrDefault(slot);
         }
+
+        public IEnumerable<string> GetDisplayEquipmentList()
+        {
+            return Equipment.Select(equipment => $"{equipment.Value.Icon} *{equipment.Value.Name}*");
+        }
     }
 }
