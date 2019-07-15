@@ -1,6 +1,6 @@
 ﻿namespace Doug.Items.Equipment.Sets.StartingWeapons
 {
-    public class SmallAxe : EquipmentItem
+    public class SmallAxe : Weapon
     {
         public const string ItemId = "small_axe";
 
