@@ -86,6 +86,7 @@ namespace Doug.Items
 
                 // Starting Weapons
                 case LightSword.ItemId: return new LightSword();
+                case SmallAxe.ItemId: return new SmallAxe();
 
                 // Misc
                 case BachelorsDegree.ItemId: return new BachelorsDegree();
