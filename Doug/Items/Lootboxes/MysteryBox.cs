@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Doug.Items.Consumables;
 using Doug.Items.Consumables.Resets;
 using Doug.Items.Equipment;
@@ -70,7 +71,7 @@ namespace Doug.Items.Lootboxes
 
             var loot = _randomService.RandomFromWeightedTable(_dropTable);
 
-            _inventoryRepository.AddMultipleItems(user, loot.Id, loot.Quantity);
+            _inventoryRepository.AddItems(user, Enumerable.Repeat(loot.Id, loot.Quantity));
 
             var itemName = _itemFactory.CreateItem(loot.Id).Name;
             _slack.BroadcastMessage(string.Format(DougMessages.LootboxAnnouncement, _userService.Mention(user), Name, $"{loot.Quantity}x *{itemName}*"), channel);

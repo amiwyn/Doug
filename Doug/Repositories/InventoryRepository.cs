@@ -7,9 +7,9 @@ namespace Doug.Repositories
     public interface IInventoryRepository
     {
         void AddItem(User user, string itemId);
+        void AddItems(User user, IEnumerable<string> items);
         void RemoveItem(User user, int inventoryPosition);
         void AddItemToUsers(List<User> users, string itemId);
-        void AddMultipleItems(User user, string itemId, int quantity);
     }
 
     public class InventoryRepository : IInventoryRepository
@@ -24,6 +24,16 @@ namespace Doug.Repositories
         public void AddItem(User user, string itemId)
         {
             AddItemToUser(user, itemId);
+
+            _db.SaveChanges();
+        }
+
+        public void AddItems(User user, IEnumerable<string> items)
+        {
+            foreach (var item in items)
+            {
+                AddItemToUser(user, item);
+            }
 
             _db.SaveChanges();
         }
@@ -80,16 +90,6 @@ namespace Doug.Repositories
         public void AddItemToUsers(List<User> users, string itemId)
         {
             users.ForEach(user => AddItemToUser(user, itemId));
-            _db.SaveChanges();
-        }
-
-        public void AddMultipleItems(User user, string itemId, int quantity)
-        {
-            for (int i = 0; i < quantity; i++) // TODO : bad algorithm, do it better
-            {
-                AddItemToUser(user, itemId);         
-            }
-
             _db.SaveChanges();
         }
     }

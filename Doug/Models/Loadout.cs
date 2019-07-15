@@ -52,23 +52,33 @@ namespace Doug.Models
         public int Dodge => Equipment.Sum(equip => equip.Value.Dodge);
         public int Hitrate => Equipment.Sum(equip => equip.Value.Hitrate);
 
-        public void Equip(EquipmentItem item)
+        public List<EquipmentItem> Equip(EquipmentItem item)
         {
+            var unequippedItems = new List<EquipmentItem>();
+            var equipment = GetEquipmentAt(item.Slot);
+
+            if (equipment != null)
+            {
+                unequippedItems.Add(UnEquip(item.Slot));
+            }
+
             Equipment.Add(item.Slot, item);
             SetLoadoutStrings();
+            return unequippedItems;
         }
 
-        public void UnEquip(EquipmentSlot slot)
+        public EquipmentItem UnEquip(EquipmentSlot slot)
         {
             var equipment = Equipment.GetValueOrDefault(slot);
 
             if (equipment == null)
             {
-                return;
+                return null;
             }
 
             Equipment.Remove(slot);
             SetLoadoutStrings();
+            return equipment;
         }
 
         private void SetLoadoutStrings()
