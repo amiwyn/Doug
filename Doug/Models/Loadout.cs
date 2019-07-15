@@ -62,6 +62,11 @@ namespace Doug.Models
                 unequippedItems.Add(UnEquip(item.Slot));
             }
 
+            if (item is Weapon weapon && weapon.IsDualWield)
+            {
+                unequippedItems.Add(UnEquip(EquipmentSlot.LeftHand));
+            }
+
             Equipment.Add(item.Slot, item);
             SetLoadoutStrings();
             return unequippedItems;
