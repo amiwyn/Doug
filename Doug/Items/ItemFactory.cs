@@ -88,6 +88,7 @@ namespace Doug.Items
                 case LightSword.ItemId: return new LightSword();
                 case SmallAxe.ItemId: return new SmallAxe();
                 case LargeSword.ItemId: return new LargeSword();
+                case ShortBow.ItemId: return new ShortBow();
 
                 // Misc
                 case BachelorsDegree.ItemId: return new BachelorsDegree();
