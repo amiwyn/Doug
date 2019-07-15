@@ -56,6 +56,9 @@ namespace Doug.Controllers
                 case Actions.Target:
                     await _inventoryMenuService.Target(interaction);
                     break;
+                case Actions.ShopSwitch:
+                    await _shopMenuService.ShopSwitch(interaction);
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }

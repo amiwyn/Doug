@@ -3,8 +3,6 @@ using Doug.Repositories;
 using Doug.Slack;
 using System.Linq;
 using System.Threading.Tasks;
-using Doug.Items;
-using Doug.Menus;
 using Doug.Services;
 
 namespace Doug.Commands
@@ -23,17 +21,15 @@ namespace Doug.Commands
         private readonly ISlackWebApi _slack;
 
         private static readonly DougResponse NoResponse = new DougResponse();
-        private readonly IItemFactory _itemFactory;
         private readonly IUserService _userService;
-        private readonly IGovernmentService _governmentService;
+        private readonly IShopMenuService _shopMenuService;
 
-        public CreditsCommands(IUserRepository userRepository, ISlackWebApi messageSender, IItemFactory itemFactory, IUserService userService, IGovernmentService governmentService)
+        public CreditsCommands(IUserRepository userRepository, ISlackWebApi messageSender, IUserService userService, IShopMenuService shopMenuService)
         {
             _userRepository = userRepository;
             _slack = messageSender;
-            _itemFactory = itemFactory;
             _userService = userService;
-            _governmentService = governmentService;
+            _shopMenuService = shopMenuService;
         }
 
         public DougResponse Give(Command command)
@@ -96,9 +92,9 @@ namespace Doug.Commands
         {
             var user = _userRepository.GetUser(command.UserId);
 
-            var items = ShopMenuService.ShopItems.Select(itm => _itemFactory.CreateItem(itm));
+            var shopId = command.GetArgumentCount() == 1 ? command.GetArgumentAt(0) : ShopMenuService.GeneralStoreId;
 
-            await _slack.SendEphemeralBlocks(new ShopMenu(items, user, _governmentService).Blocks, command.UserId, command.ChannelId);
+            await _shopMenuService.ShowShop(user, command.ChannelId, shopId);
 
             return NoResponse; 
         }

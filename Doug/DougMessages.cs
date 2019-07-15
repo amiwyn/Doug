@@ -54,7 +54,6 @@
         public const string LevelUp = ":confetti_ball: {0} is now level *{1}*!";
         public const string GainedExp = "You gained {0} experience points.";
         public const string EquippedItem = "You equipped *{0}*.";
-        public const string ShopSpeech = "*Oi!* Welcome to my shop! I sell various stuff from all around the continent.\n\n *Come in, have a look:*";
         public const string BuyFor = "Buy for {0} " + CreditEmoji;
         public const string UserDied = "Oh dear, {0} died!";
         public const string Use = "Use";
@@ -65,6 +64,9 @@
         public const string SoldItem = "You sold *{0}* for {1} " + CreditEmoji;
         public const string Inventory = "Inventory";
         public const string Equipment = "Equipment";
+        public const string GeneralStore = "General Store";
+        public const string ArmorShop = "Armor Shop";
+        public const string WeaponShop = "Weapon Shop";
         public const string Info = "Info";
         public const string UnequippedItem = "You unequipped *{0}*.";
         public const string Target = "Target ...";
@@ -113,6 +115,7 @@
         public const string EmptyInventory = "Oops, yer loot seems empty, buy more at th' shop now.";
         public const string LevelRequirementNotMet = "You need to be at least level {0} to wear this item.";
         public const string CommandOnCooldown = "This command is on cooldown, try again in {0} seconds.";
+        public const string UnknownShop = "Unknown shop. Verify the shop id.";
     }
 }
 
