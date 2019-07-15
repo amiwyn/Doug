@@ -99,6 +99,8 @@ namespace Doug.Models
         public int TotalStamina() => Loadout.Stamina + Stamina + Effects.Sum(userEffect => userEffect.Effect.Stamina);
         public int TotalAttack() => Loadout.Attack + Attack;
         public int TotalDefense() => Loadout.Defense + (int)Math.Floor(2.0 * TotalConstitution());
+        public int TotalDodge() => Loadout.Dodge + TotalAgility();
+        public int TotalHitrate() => Loadout.Hitrate + 10;
 
         public void LoadItems(IItemFactory itemFactory)
         {
@@ -157,12 +159,14 @@ namespace Doug.Models
             Experience = Experience - expLoss <= prevLevelExp ? prevLevelExp : Experience - expLoss;
         }
 
-        public void ApplyPhysicalDamage(int damage)
+        public int ApplyPhysicalDamage(int damage)
         {
             var reducedDamage = damage - TotalDefense();
-            reducedDamage = reducedDamage <= 0 ? 0 : reducedDamage;
+            reducedDamage = reducedDamage <= 0 ? 1 : reducedDamage;
 
             Health -= reducedDamage;
+
+            return reducedDamage;
         }
 
         public int AttackStrike()
@@ -173,6 +177,19 @@ namespace Doug.Models
             }
 
             return TotalAttack();
+        }
+
+        public int AttackUser(User user)
+        {
+            var damage = AttackStrike();
+
+            var missChance = (user.TotalDodge() - TotalHitrate()) * 0.01;
+            if (new Random().NextDouble() < missChance)
+            {
+                return 0;
+            }
+
+            return user.ApplyPhysicalDamage(damage);
         }
 
         public void RegenerateHealth() => Health += (int)(TotalHealth() * 0.2);

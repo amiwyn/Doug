@@ -13,13 +13,13 @@ namespace Doug.Commands
     {
         DougResponse Steal(Command command);
         Task<DougResponse> Attack(Command command);
+        Task<DougResponse> Revolution(Command command);
     }
 
     public class CombatCommands : ICombatCommands
     {
         private const int StealEnergyCost = 1;
         private const int AttackEnergyCost = 1;
-        private const int KillExperienceGain = 100;
         private const int StealCooldown = 30;
         private const int AttackCooldown = 30;
         private static readonly DougResponse NoResponse = new DougResponse();
@@ -31,8 +31,9 @@ namespace Doug.Commands
         private readonly IRandomService _randomService;
         private readonly IUserService _userService;
         private readonly IChannelRepository _channelRepository;
+        private readonly IGovernmentService _governmentService;
 
-        public CombatCommands(IEventDispatcher eventDispatcher, IUserRepository userRepository, ISlackWebApi slack, IStatsRepository statsRepository, IRandomService randomService, IUserService userService, IChannelRepository channelRepository)
+        public CombatCommands(IEventDispatcher eventDispatcher, IUserRepository userRepository, ISlackWebApi slack, IStatsRepository statsRepository, IRandomService randomService, IUserService userService, IChannelRepository channelRepository, IGovernmentService governmentService)
         {
             _eventDispatcher = eventDispatcher;
             _userRepository = userRepository;
@@ -41,6 +42,7 @@ namespace Doug.Commands
             _randomService = randomService;
             _userService = userService;
             _channelRepository = channelRepository;
+            _governmentService = governmentService;
         }
 
         public DougResponse Steal(Command command)
@@ -134,20 +136,25 @@ namespace Doug.Commands
 
             _userRepository.SetAttackCooldown(user.Id, DateTime.UtcNow + TimeSpan.FromSeconds(AttackCooldown));
 
-            var damage = user.AttackStrike();
+            var damageDealt = await _userService.PhysicalAttack(user, target, command.ChannelId);
 
-            var message = string.Format(DougMessages.UserAttackedTarget, _userService.Mention(user), _userService.Mention(target), damage);
-            await _slack.BroadcastMessage(message, command.ChannelId);
-
-            var userIsDead = await _userService.ApplyPhysicalDamage(target, damage, command.ChannelId);
-
-            if (userIsDead)
+            var message = string.Format(DougMessages.UserAttackedTarget, _userService.Mention(user), _userService.Mention(target), damageDealt);
+            if (damageDealt == 0)
             {
-                _eventDispatcher.OnDeathByUser(target, user);
-                await _userService.AddExperience(user, KillExperienceGain, command.ChannelId);
+                message = string.Format(DougMessages.Missed, _userService.Mention(user), _userService.Mention(target));
             }
 
+            await _slack.BroadcastMessage(message, command.ChannelId);
+
+
             return NoResponse;
+        }
+
+        public async Task<DougResponse> Revolution(Command command)
+        {
+            var user = _userRepository.GetUser(command.UserId);
+            await _governmentService.StartRevolutionVote(user, command.ChannelId);
+            return new DougResponse();
         }
     }
 }

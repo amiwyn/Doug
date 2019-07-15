@@ -7,17 +7,19 @@ namespace Doug.Items.Consumables
 {
     public class BigMac : ConsumableItem
     {
+        public const string ItemId = "big_mac";
+
         private readonly IEffectRepository _effectRepository;
         private const int DurationInMinutes = 5;
 
         public BigMac(IInventoryRepository inventoryRepository, IEffectRepository effectRepository) : base(inventoryRepository)
         {
             _effectRepository = effectRepository;
-            Id = ItemFactory.BigMac;
+            Id = ItemId;
             Name = "Big Mac";
             Description = "On va tu au Mc Donald? Gives *Troll's Blessing* for 5 minutes";
             Rarity = Rarity.Uncommon;
-            Icon = ":hamburger:";
+            Icon = ":bigmac:";
             Price = 100;
         }
 

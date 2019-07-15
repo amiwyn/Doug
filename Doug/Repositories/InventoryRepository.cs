@@ -7,6 +7,7 @@ namespace Doug.Repositories
     public interface IInventoryRepository
     {
         void AddItem(User user, string itemId);
+        void AddItems(User user, IEnumerable<string> items);
         void RemoveItem(User user, int inventoryPosition);
         void AddItemToUsers(List<User> users, string itemId);
     }
@@ -23,6 +24,16 @@ namespace Doug.Repositories
         public void AddItem(User user, string itemId)
         {
             AddItemToUser(user, itemId);
+
+            _db.SaveChanges();
+        }
+
+        public void AddItems(User user, IEnumerable<string> items)
+        {
+            foreach (var item in items)
+            {
+                AddItemToUser(user, item);
+            }
 
             _db.SaveChanges();
         }

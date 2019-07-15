@@ -87,6 +87,7 @@ namespace Doug
             services.AddScoped<IEquipmentRepository, EquipmentRepository>();
             services.AddScoped<IEffectRepository, EffectRepository>();
             services.AddScoped<IGovernmentRepository, GovernmentRepository>();
+            services.AddScoped<IShopRepository, ShopRepository>();
 
             var env = Environment.GetEnvironmentVariable("APP_ENV");
 

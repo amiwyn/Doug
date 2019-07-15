@@ -4,7 +4,6 @@
     {
         Head,
         Body,
-        Legs,
         Boots,
         Gloves,
         LeftHand,

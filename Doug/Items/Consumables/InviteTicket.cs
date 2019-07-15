@@ -6,17 +6,19 @@ namespace Doug.Items.Consumables
 {
     public class InviteTicket : ConsumableItem
     {
+        public const string ItemId = "invite_ticket";
+
         private const string CoffeeChannel = "CB6CAU25U";
         private readonly ISlackWebApi _slack;
 
         public InviteTicket(IInventoryRepository inventoryRepository, ISlackWebApi slack) : base(inventoryRepository)
         {
             _slack = slack;
-            Id = ItemFactory.InviteTicket;
+            Id = ItemId;
             Name = "Invite Ticket";
             Description = "A gift by the gods ~ Use this item to join the coffee channel.";
             Rarity = Rarity.Uncommon;
-            Icon = ":credit_card:";
+            Icon = ":join_ticket:";
             Price = 10;
             IsSellable = false;
         }

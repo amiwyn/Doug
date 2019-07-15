@@ -5,16 +5,18 @@ namespace Doug.Items.Consumables.Resets
 {
     public class LuckReset : ConsumableItem
     {
+        public const string ItemId = "luck_reset";
+
         private readonly IStatsRepository _statsRepository;
 
         public LuckReset(IStatsRepository statsRepository, IInventoryRepository inventoryRepository) : base(inventoryRepository)
         {
             _statsRepository = statsRepository;
-            Id = ItemFactory.LuckReset;
+            Id = ItemId;
             Name = "Luck Reset Potion";
             Description = "Reset 1 point of luck.";
             Rarity = Rarity.Rare;
-            Icon = ":tropical_drink:";
+            Icon = ":reset_potion:";
             Price = 25;
         }
 

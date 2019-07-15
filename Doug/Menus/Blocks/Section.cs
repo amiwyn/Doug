@@ -7,6 +7,7 @@ namespace Doug.Menus.Blocks
     {
         public TextBlock Text { get; set; }
         public Accessory Accessory { get; set; }
+        public string BlockId { get; set; }
 
         public Section(TextBlock text) : base("section")
         {
@@ -17,6 +18,13 @@ namespace Doug.Menus.Blocks
         {
             Text = text;
             Accessory = accessory;
+        }
+
+        public Section(TextBlock text, Accessory accessory, string blockId) : base("section")
+        {
+            Text = text;
+            Accessory = accessory;
+            BlockId = blockId;
         }
     }
 }

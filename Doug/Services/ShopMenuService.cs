@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Doug.Items;
 using Doug.Menus;
@@ -11,39 +10,60 @@ namespace Doug.Services
 {
     public interface IShopMenuService
     {
+        Task<DougResponse> ShowShop(User user, string channel, string shopId);
         Task Buy(Interaction interaction);
         Task Sell(Interaction interaction);
+        Task ShopSwitch(Interaction interaction);
     }
 
     public class ShopMenuService : IShopMenuService
     {
+        public const string GeneralStoreId = "default";
+        public const string ArmoryShopId = "armor";
+        public const string WeaponShopId = "weapon";
+
         private readonly IUserRepository _userRepository;
         private readonly ISlackWebApi _slack;
         private readonly IItemFactory _itemFactory;
         private readonly IShopService _shopService;
         private readonly IGovernmentService _governmentService;
+        private readonly IShopRepository _shopRepository;
 
-        public static readonly List<string> ShopItems = new List<string> { ItemFactory.CoffeeCup, ItemFactory.Apple, ItemFactory.Bread, ItemFactory.SteelSword, ItemFactory.ClothArmor }; // TODO: temp. put this in a table somewhere
-
-        public ShopMenuService(IUserRepository userRepository, ISlackWebApi slack, IItemFactory itemFactory, IShopService shopService, IGovernmentService governmentService)
+        public ShopMenuService(IUserRepository userRepository, ISlackWebApi slack, IItemFactory itemFactory, IShopService shopService, IGovernmentService governmentService, IShopRepository shopRepository)
         {
             _userRepository = userRepository;
             _slack = slack;
             _itemFactory = itemFactory;
             _shopService = shopService;
             _governmentService = governmentService;
+            _shopRepository = shopRepository;
+        }
+
+        public async Task<DougResponse> ShowShop(User user, string channel, string shopId)
+        {
+            var shop = _shopRepository.GetShop(shopId);
+
+            if (shop == null)
+            {
+                return new DougResponse(DougMessages.UnknownShop);
+            }
+
+            await _slack.SendEphemeralBlocks(new ShopMenu(shop, user, _itemFactory, _governmentService).Blocks, user.Id, channel);
+
+            return new DougResponse();
         }
 
         public async Task Buy(Interaction interaction) 
         {
             var user = _userRepository.GetUser(interaction.UserId);
+            var shopId = interaction.BlockId.Split(":").First();
+            var shop = _shopRepository.GetShop(shopId);
 
             var response = _shopService.Buy(user, interaction.Value);
 
             await _slack.SendEphemeralMessage(response.Message, user.Id, interaction.ChannelId);
 
-            var items = ShopItems.Select(itm => _itemFactory.CreateItem(itm));
-            await _slack.UpdateInteractionMessage(new ShopMenu(items, user, _governmentService).Blocks, interaction.ResponseUrl);
+            await _slack.UpdateInteractionMessage(new ShopMenu(shop, user, _itemFactory, _governmentService).Blocks, interaction.ResponseUrl);
         }
 
         public async Task Sell(Interaction interaction)
@@ -56,6 +76,14 @@ namespace Doug.Services
             await _slack.SendEphemeralMessage(response.Message, user.Id, interaction.ChannelId);
 
             await _slack.UpdateInteractionMessage(new InventoryMenu(user.InventoryItems).Blocks, interaction.ResponseUrl);
+        }
+
+        public async Task ShopSwitch(Interaction interaction)
+        {
+            var user = _userRepository.GetUser(interaction.UserId);
+            var shop = _shopRepository.GetShop(interaction.Value);
+
+            await _slack.UpdateInteractionMessage(new ShopMenu(shop, user, _itemFactory, _governmentService).Blocks, interaction.ResponseUrl);
         }
     }
 }

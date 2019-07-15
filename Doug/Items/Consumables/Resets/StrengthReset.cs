@@ -5,16 +5,18 @@ namespace Doug.Items.Consumables.Resets
 {
     public class StrengthReset : ConsumableItem
     {
+        public const string ItemId = "str_reset";
+
         private readonly IStatsRepository _statsRepository;
 
         public StrengthReset(IStatsRepository statsRepository, IInventoryRepository inventoryRepository) : base(inventoryRepository)
         {
             _statsRepository = statsRepository;
-            Id = ItemFactory.StrengthReset;
+            Id = ItemId;
             Name = "Strength Reset Potion";
             Description = "Reset 1 point of strength.";
             Rarity = Rarity.Rare;
-            Icon = ":tropical_drink:";
+            Icon = ":reset_potion:";
             Price = 25;
         }
 

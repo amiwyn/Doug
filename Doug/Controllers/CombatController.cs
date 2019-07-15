@@ -30,5 +30,12 @@ namespace Doug.Controllers
             var result = await _combatCommands.Attack(slackCommand.ToCommand());
             return Ok(result.Message);
         }
+
+        [HttpPost("revolution")]
+        public async Task<ActionResult> Revolution([FromForm]SlackCommandDto slackCommand)
+        {
+            var result = await _combatCommands.Revolution(slackCommand.ToCommand());
+            return Ok(result.Message);
+        }
     }
 }

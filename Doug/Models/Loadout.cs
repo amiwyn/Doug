@@ -9,7 +9,6 @@ namespace Doug.Models
         public string Id { get; set; }
         public string Head { get; set; }
         public string Body { get; set; }
-        public string Legs { get; set; }
         public string Boots { get; set; }
         public string Gloves { get; set; }
         public string LeftHand { get; set; }
@@ -27,7 +26,6 @@ namespace Doug.Models
         {
             AddEquipment(Head, itemFactory);
             AddEquipment(Body, itemFactory);
-            AddEquipment(Legs, itemFactory);
             AddEquipment(Boots, itemFactory);
             AddEquipment(Gloves, itemFactory);
             AddEquipment(LeftHand, itemFactory);
@@ -51,31 +49,47 @@ namespace Doug.Models
         public int Stamina => Equipment.Sum(equip => equip.Value.Stamina);
         public int Attack => Equipment.Sum(equip => equip.Value.Attack);
         public int Defense => Equipment.Sum(equip => equip.Value.Defense);
+        public int Dodge => Equipment.Sum(equip => equip.Value.Dodge);
+        public int Hitrate => Equipment.Sum(equip => equip.Value.Hitrate);
 
-        public void Equip(EquipmentItem item)
+        public List<EquipmentItem> Equip(EquipmentItem item)
         {
+            var unequippedItems = new List<EquipmentItem>();
+            var equipment = GetEquipmentAt(item.Slot);
+
+            if (equipment != null)
+            {
+                unequippedItems.Add(UnEquip(item.Slot));
+            }
+
+            if (item is Weapon weapon && weapon.IsDualWield)
+            {
+                unequippedItems.Add(UnEquip(EquipmentSlot.LeftHand));
+            }
+
             Equipment.Add(item.Slot, item);
             SetLoadoutStrings();
+            return unequippedItems;
         }
 
-        public void UnEquip(EquipmentSlot slot)
+        public EquipmentItem UnEquip(EquipmentSlot slot)
         {
             var equipment = Equipment.GetValueOrDefault(slot);
 
             if (equipment == null)
             {
-                return;
+                return null;
             }
 
             Equipment.Remove(slot);
             SetLoadoutStrings();
+            return equipment;
         }
 
         private void SetLoadoutStrings()
         {
             Head = GetEquipmentAt(EquipmentSlot.Head)?.Id;
             Body = GetEquipmentAt(EquipmentSlot.Body)?.Id;
-            Legs = GetEquipmentAt(EquipmentSlot.Legs)?.Id;
             Boots = GetEquipmentAt(EquipmentSlot.Boots)?.Id;
             Gloves = GetEquipmentAt(EquipmentSlot.Gloves)?.Id;
             LeftHand = GetEquipmentAt(EquipmentSlot.LeftHand)?.Id;

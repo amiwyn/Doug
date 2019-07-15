@@ -21,7 +21,6 @@ namespace Doug.Menus
 
             Blocks.AddRange(ItemSection(loadout.GetEquipmentAt(EquipmentSlot.Head), "Head"));
             Blocks.AddRange(ItemSection(loadout.GetEquipmentAt(EquipmentSlot.Body), "Body"));
-            Blocks.AddRange(ItemSection(loadout.GetEquipmentAt(EquipmentSlot.Legs), "Legs"));
             Blocks.AddRange(ItemSection(loadout.GetEquipmentAt(EquipmentSlot.Gloves), "Gloves"));
             Blocks.AddRange(ItemSection(loadout.GetEquipmentAt(EquipmentSlot.Boots), "Boots"));
             Blocks.AddRange(ItemSection(loadout.GetEquipmentAt(EquipmentSlot.LeftHand), "Left Hand"));
