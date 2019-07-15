@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Doug.Services
 {
@@ -29,7 +30,8 @@ namespace Doug.Services
             var roll = new Random().NextDouble();
             var sum = 0.0;
 
-            foreach (var (key, weight) in table)
+            var weightedTable = table.ToList();
+            foreach (var (key, weight) in weightedTable)
             {
                 sum += weight;
                 if (sum >= roll)
@@ -38,7 +40,7 @@ namespace Doug.Services
                 }
             }
 
-            return default;
+            return weightedTable.Last().Key;
         }
     }
 }
