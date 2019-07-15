@@ -17,6 +17,7 @@
             IsDualWield = true;
 
             Attack = 50;
+            Strength = 2;
         }
     }
 }
