@@ -45,7 +45,6 @@ namespace Doug.Services
             var message = _inventoryCommands.Use(command).Message;
 
             await _slack.SendEphemeralMessage(message, interaction.UserId, interaction.ChannelId);
-
             await _slack.UpdateInteractionMessage(new InventoryMenu(user.InventoryItems).Blocks, interaction.ResponseUrl);
         }
 

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Doug.Items;
 using Doug.Models;
 
 namespace Doug.Repositories
@@ -40,20 +41,25 @@ namespace Doug.Repositories
 
         private void AddItemToUser(User user, string itemId)
         {
-            var itemStack = new Stack<InventoryItem>(user.InventoryItems.Where(itm => itm.ItemId == itemId).Reverse());
+            var currentStacks = user.InventoryItems.Where(inv => inv.ItemId == itemId).ToList();
 
-            InventoryItem item;
-            while (itemStack.TryPop(out item) && item.Quantity >= item.Item.MaxStack) { }
-
-            if (item != null && item.Quantity < item.Item.MaxStack)
-            {
-                item.Quantity++;
-            }
-            else
+            if (!currentStacks.Any())
             {
                 var slot = FindNextFreeSlot(user.InventoryItems);
                 user.InventoryItems.Add(new InventoryItem(user.Id, itemId) { InventoryPosition = slot, Quantity = 1 });
+                return;
             }
+
+            var freeStacks = currentStacks.Where(inv => inv.Quantity < inv.Item.MaxStack).ToList();
+
+            if (!freeStacks.Any())
+            {
+                var slot = FindNextFreeSlot(user.InventoryItems);
+                user.InventoryItems.Add(new InventoryItem(user.Id, itemId) { InventoryPosition = slot, Quantity = 1, Item = currentStacks.First().Item });
+                return;
+            }
+
+            freeStacks.First().Quantity++;
         }
 
         private int FindNextFreeSlot(List<InventoryItem> items)
