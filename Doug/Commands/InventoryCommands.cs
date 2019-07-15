@@ -122,7 +122,6 @@ namespace Doug.Commands
             var unequippedItems = _equipmentRepository.EquipItem(user, equipmentItem);
 
             _inventoryRepository.AddItems(user, unequippedItems.Select(item => item.Id));
-
             _inventoryRepository.RemoveItem(user, position);
 
             return new DougResponse(string.Format(DougMessages.EquippedItem, inventoryItem.Item.Name));

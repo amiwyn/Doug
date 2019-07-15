@@ -87,7 +87,7 @@ namespace Test.Inventory
         }
 
         [TestMethod]
-        public void GivenItemLevelisTooHigh_WhenEquipping_ItemLevelTooHighMessageSent()
+        public void GivenItemLevelIsTooHigh_WhenEquipping_ItemLevelTooHighMessageSent()
         {
             var items = new List<InventoryItem>() { new InventoryItem("testuser", "testitem") { InventoryPosition = 6, Item = new CloakOfSpikes() } };
             _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User() { Id = "testuser", InventoryItems = items });
