@@ -2,6 +2,7 @@
 using Doug.Items.Consumables.Resets;
 using Doug.Items.Equipment;
 using Doug.Items.Equipment.Sets.Noob;
+using Doug.Items.Equipment.Sets.StartingWeapons;
 using Doug.Items.Lootboxes;
 using Doug.Items.Misc;
 using Doug.Repositories;
@@ -82,6 +83,9 @@ namespace Doug.Items
                 case ShortBlade.ItemId: return new ShortBlade();
                 case ShortSword.ItemId: return new ShortSword();
                 case WoodenShield.ItemId: return new WoodenShield();
+
+                // Starting Weapons
+                case LightSword.ItemId: return new LightSword();
 
                 // Misc
                 case BachelorsDegree.ItemId: return new BachelorsDegree();
