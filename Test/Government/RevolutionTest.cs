@@ -30,7 +30,7 @@ namespace Test.Government
         public void Setup()
         {
             _governmentRepository.Setup(repo => repo.GetGovernment()).Returns(new Doug.Models.Government { Ruler = "wgf", RevolutionLeader = "gab"});
-            _oldRuler = new User {Loadout = new Loadout() {Head = "crown"}};
+            _oldRuler = new User { Id = "wgf", Loadout = new Loadout() {Head = "crown"}};
             _newRuler = new User();
 
             _userRepository.Setup(repo => repo.GetUser("wgf")).Returns(_oldRuler);
@@ -58,7 +58,7 @@ namespace Test.Government
         [TestMethod]
         public void GivenRulerHasCrownEquipped_WhenRevolting_RulersCrownIsRemoved()
         {
-            _oldRuler = new User { Loadout = new Loadout() { Head = "crown" } };
+            _oldRuler = new User { Id = "wgf", Loadout = new Loadout() { Head = "crown" } };
             _userRepository.Setup(repo => repo.GetUser("wgf")).Returns(_oldRuler);
 
             _governmentService.Revolution(Channel);
@@ -70,7 +70,7 @@ namespace Test.Government
         public void GivenRulerHasCrownNotEquipped_WhenRevolting_RulersCrownIsRemoved()
         {
             var inventory = new List<InventoryItem> { new InventoryItem("wgf", "crown") { Item = new Crown() } };
-            _oldRuler = new User {Loadout = new Loadout(), InventoryItems = inventory};
+            _oldRuler = new User { Id = "wgf", Loadout = new Loadout(), InventoryItems = inventory};
             _userRepository.Setup(repo => repo.GetUser("wgf")).Returns(_oldRuler);
 
             _governmentService.Revolution(Channel);

@@ -13,7 +13,7 @@ namespace Doug.Services
     {
         void CollectSalesTaxes(Item item);
         int GetPriceWithTaxes(Item item);
-        Task StartRevolutionVote(User leader, string channel);
+        Task<DougResponse> StartRevolutionVote(User leader, string channel);
         void Revolution(string channel);
         Task CountVotes(string timestamp, string channel);
     }
@@ -49,13 +49,22 @@ namespace Doug.Services
             return item.Price + taxes;
         }
 
-        public async Task StartRevolutionVote(User leader, string channel)
+        public async Task<DougResponse> StartRevolutionVote(User leader, string channel)
         {
+            var government = _governmentRepository.GetGovernment();
+
+            if (government.IsInRevolutionCooldown())
+            {
+                return new DougResponse(string.Format(DougMessages.RevolutionCooldown, government.CalculateRevolutionCooldown()));
+            }
+
             var timestamp = await _slack.BroadcastMessage(string.Format(DougMessages.RevolutionVote, _userService.Mention(leader)), channel);
             await _slack.AddReaction(DougMessages.UpVote, timestamp, channel);
             await _slack.AddReaction(DougMessages.Downvote, timestamp, channel);
 
             _governmentRepository.StartRevolutionVote(leader.Id, timestamp);
+
+            return new DougResponse();
         }
 
         public void Revolution(string channel)
@@ -69,7 +78,7 @@ namespace Doug.Services
                 return;
             }
 
-            if (government.RevolutionCooldown > DateTime.UtcNow)
+            if (government.IsInRevolutionCooldown())
             {
                 return;
             }

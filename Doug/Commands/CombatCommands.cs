@@ -179,8 +179,7 @@ namespace Doug.Commands
         public async Task<DougResponse> Revolution(Command command)
         {
             var user = _userRepository.GetUser(command.UserId);
-            await _governmentService.StartRevolutionVote(user, command.ChannelId);
-            return new DougResponse();
+            return await _governmentService.StartRevolutionVote(user, command.ChannelId);
         }
     }
 }

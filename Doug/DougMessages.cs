@@ -95,8 +95,6 @@ namespace Doug
         public const string ItemConstitution = "`Constitution {0:+#;-#}`";
         public const string ItemLuck = "`Luck {0:+#;-#}`";
         public const string SmallHealthDisplay = "{0} HP";
-        public const string UserMustBeActive = "The user you are targetting must be active.";
-        public const string YouMustBeActive = "You must be active for this.";
 
         public const string DougError = "Beep boop, it's not working : {0}";
         public const string NotAnAdmin = "You are not an admin.";
@@ -121,6 +119,9 @@ namespace Doug
         public const string LevelRequirementNotMet = "You need to be at least level {0} to wear this item.";
         public const string CommandOnCooldown = "This command is on cooldown, try again in {0} seconds.";
         public const string UnknownShop = "Unknown shop. Verify the shop id.";
+        public const string UserMustBeActive = "The user you are targetting must be active.";
+        public const string YouMustBeActive = "You must be active for this.";
+        public const string RevolutionCooldown = "You must wait {0} minutes until the next revolution";
     }
 }
 
