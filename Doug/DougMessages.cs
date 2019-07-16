@@ -35,6 +35,7 @@ namespace Doug
         public const string StaminaStats = ":male_mage: Stamina : {0}";
         public const string FreeStatPoints = "{0} stats points left";
         public const string AddStatPoint = ":heavy_plus_sign:";
+        public const string AttackStat = ":dagger_knife: Attack : {0}";
         public const string DefenseStat = ":shield: Defense : {0}";
         public const string DodgeStat = ":dizzy: Dodge : {0}";
         public const string HitrateStat = ":anger: Hit Rate : {0}";
