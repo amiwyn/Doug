@@ -16,9 +16,13 @@ namespace Doug.Menus
             {
                 new Section(new MarkdownText($"<@{user.Id}>")),
                 CreateSmallUserInfo(user),
-                new Divider(),
-                CreateEquipmentInfo(user)
+                new Divider()
             };
+
+            if (!user.Loadout.IsEmpty())
+            {
+                Blocks.Add(CreateEquipmentInfo(user));
+            }
         }
 
         private Block CreateEquipmentInfo(User user)

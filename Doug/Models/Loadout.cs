@@ -42,6 +42,8 @@ namespace Doug.Models
             }
         }
 
+        public int Health => Equipment.Sum(equip => equip.Value.Health);
+        public int Energy => Equipment.Sum(equip => equip.Value.Energy);
         public int Luck => Equipment.Sum(equip => equip.Value.Luck);
         public int Agility => Equipment.Sum(equip => equip.Value.Agility);
         public int Strength => Equipment.Sum(equip => equip.Value.Strength);
@@ -105,6 +107,11 @@ namespace Doug.Models
         public IEnumerable<string> GetDisplayEquipmentList()
         {
             return Equipment.Select(equipment => $"{equipment.Value.Icon} *{equipment.Value.Name}*");
+        }
+
+        public bool IsEmpty()
+        {
+            return Equipment.Count == 0;
         }
     }
 }

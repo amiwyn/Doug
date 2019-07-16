@@ -15,6 +15,7 @@ namespace Doug.Services
         Task AddExperience(User user, long experience, string channel);
         Task AddBulkExperience(List<User> users, long experience, string channel);
         Task<int> PhysicalAttack(User user, User target, string channel);
+        Task<bool> IsUserActive(string userId);
     }
 
     public class UserService : IUserService
@@ -100,6 +101,11 @@ namespace Doug.Services
 
             _statsRepository.UpdateHealth(target.Id, target.Health);
             return damageDealt;
+        }
+
+        public Task<bool> IsUserActive(string userId)
+        {
+            return _slack.GetUserPresence(userId);
         }
     }
 }

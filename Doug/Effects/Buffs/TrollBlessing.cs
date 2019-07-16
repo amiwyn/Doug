@@ -5,12 +5,14 @@ namespace Doug.Effects.Buffs
 {
     public class TrollBlessing : Buff
     {
+        public const string EffectId = "troll_blessing";
+
         private readonly ISlackWebApi _slack;
 
         public TrollBlessing(ISlackWebApi slack)
         {
             _slack = slack;
-            Id = EffectFactory.TrollBlessing;
+            Id = EffectId;
             Name = "Troll's Blessing";
             Description = "You are blessed by the gods. Immune to kicks. When someone kicks you, it kicks that person instead.";
             Rank = Rank.Divine;

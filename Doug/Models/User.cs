@@ -97,10 +97,10 @@ namespace Doug.Models
         public int TotalStrength() => Loadout.Strength + Strength + Effects.Sum(userEffect => userEffect.Effect.Strength);
         public int TotalConstitution() => Loadout.Constitution + Constitution + Effects.Sum(userEffect => userEffect.Effect.Constitution);
         public int TotalStamina() => Loadout.Stamina + Stamina + Effects.Sum(userEffect => userEffect.Effect.Stamina);
-        public int TotalAttack() => Loadout.Attack + Attack;
-        public int TotalDefense() => Loadout.Defense + (int)Math.Floor(2.0 * TotalConstitution());
-        public int TotalDodge() => Loadout.Dodge + TotalAgility();
-        public int TotalHitrate() => Loadout.Hitrate + 10;
+        public int TotalAttack() => Loadout.Attack + Attack + Effects.Sum(userEffect => userEffect.Effect.Attack);
+        public int TotalDefense() => Loadout.Defense + (int)Math.Floor(2.0 * TotalConstitution()) + Effects.Sum(userEffect => userEffect.Effect.Stamina);
+        public int TotalDodge() => Loadout.Dodge + TotalAgility() + Effects.Sum(userEffect => userEffect.Effect.Dodge);
+        public int TotalHitrate() => Loadout.Hitrate + 10 + Effects.Sum(userEffect => userEffect.Effect.Hitrate);
 
         public void LoadItems(IItemFactory itemFactory)
         {
@@ -125,14 +125,16 @@ namespace Doug.Models
         {
             var healthFromLevel = (int)Math.Floor(15.0 * Level + 85);
             var healthFromConstitution = (int)Math.Floor(15.0 * TotalConstitution() - 75);
-            return healthFromLevel + healthFromConstitution;
+            var healthFromEffects = Effects.Sum(userEffect => userEffect.Effect.Health);
+            return healthFromLevel + healthFromConstitution + healthFromEffects + Loadout.Health;
         }
 
         public int TotalEnergy()
         {
             var energyFromLevel = (int)Math.Floor(5.0 * Level + 20);
             var energyFromStamina = (int)Math.Floor(5.0 * TotalStamina() - 25);
-            return energyFromLevel + energyFromStamina;
+            var energyFromEffects = Effects.Sum(userEffect => userEffect.Effect.Energy);
+            return energyFromLevel + energyFromStamina + energyFromEffects + Loadout.Energy;
         }
 
         public double BaseGambleChance()

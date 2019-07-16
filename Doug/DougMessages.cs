@@ -1,4 +1,6 @@
-﻿namespace Doug
+﻿using Doug.Models;
+
+namespace Doug
 {
     public static class DougMessages
     {
@@ -93,6 +95,8 @@
         public const string ItemConstitution = "`Constitution {0:+#;-#}`";
         public const string ItemLuck = "`Luck {0:+#;-#}`";
         public const string SmallHealthDisplay = "{0} HP";
+        public const string UserMustBeActive = "The user you are targetting must be active.";
+        public const string YouMustBeActive = "You must be active for this.";
 
         public const string DougError = "Beep boop, it's not working : {0}";
         public const string NotAnAdmin = "You are not an admin.";

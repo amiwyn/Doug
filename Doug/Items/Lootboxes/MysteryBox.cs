@@ -73,8 +73,11 @@ namespace Doug.Items.Lootboxes
 
             _inventoryRepository.AddItems(user, Enumerable.Repeat(loot.Id, loot.Quantity));
 
+            user.LoadItems(_itemFactory);
+            user.InventoryItems.Sort((item1, item2) => item1.InventoryPosition.CompareTo(item2.InventoryPosition));
+
             var itemName = _itemFactory.CreateItem(loot.Id).Name;
-            _slack.BroadcastMessage(string.Format(DougMessages.LootboxAnnouncement, _userService.Mention(user), Name, $"{loot.Quantity}x *{itemName}*"), channel);
+            _slack.BroadcastMessage(string.Format(DougMessages.LootboxAnnouncement, _userService.Mention(user), Name, $"{loot.Quantity}x *{itemName}*"), channel).Wait();
 
             return string.Empty;
         }

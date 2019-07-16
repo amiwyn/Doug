@@ -21,22 +21,16 @@ namespace Doug.Effects
             _userService = userService;
         }
 
-        public const string TrollBlessing = "troll_blessing";
-        public const string NicotineHigh = "nicotine_high";
-        public const string FrenchCurse = "french_curse";
-
         public Effect CreateEffect(string effectId)
         {
             switch (effectId)
             {
-                case TrollBlessing:
-                    return new TrollBlessing(_slack);
-                case NicotineHigh:
-                    return new NicotineHigh();
-                case FrenchCurse:
-                    return new FrenchCurse(_slack, _userService);
-                default:
-                    return new UnknownEffect();
+                case TrollBlessing.EffectId: return new TrollBlessing(_slack);
+                case NicotineHigh.EffectId: return new NicotineHigh();
+                case FrenchCurse.EffectId: return new FrenchCurse(_slack, _userService);
+                case PickleBuff.EffectId: return new PickleBuff();
+                case Luck.EffectId: return new Luck();
+                default: return new UnknownEffect();
             }
         }
     }
