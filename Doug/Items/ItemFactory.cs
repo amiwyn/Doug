@@ -56,6 +56,7 @@ namespace Doug.Items
                 case Cigarette.ItemId: return new Cigarette(_inventoryRepository, _effectRepository);
                 case HolyWater.ItemId: return new HolyWater(_inventoryRepository, _effectRepository);
                 case PicklePickle.ItemId: return new PicklePickle(_inventoryRepository, _effectRepository);
+                case LuckyClover.ItemId: return new LuckyClover(_inventoryRepository, _effectRepository);
 
                 // Resets
                 case AgilityReset.ItemId: return new AgilityReset(_statsRepository, _inventoryRepository);

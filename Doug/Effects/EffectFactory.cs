@@ -29,6 +29,7 @@ namespace Doug.Effects
                 case NicotineHigh.EffectId: return new NicotineHigh();
                 case FrenchCurse.EffectId: return new FrenchCurse(_slack, _userService);
                 case PickleBuff.EffectId: return new PickleBuff();
+                case Luck.EffectId: return new Luck();
                 default: return new UnknownEffect();
             }
         }
