@@ -93,7 +93,7 @@ namespace Doug.Services
             var reactions = await _slack.GetReactions(timestamp, channel);
             var upVote = reactions.SingleOrDefault(reaction => reaction.Name == DougMessages.UpVote);
 
-            if (upVote != null && upVote.Count >= (users.Count - 2) / 2)
+            if (upVote != null && upVote.Count >= users.Count / 2)
             {
                 Revolution(channel);
             }
