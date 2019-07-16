@@ -27,11 +27,15 @@ namespace Doug.Items
             return true;
         }
 
-        public IEnumerable<string> GetDisplayAttributeList()
+        public virtual IEnumerable<string> GetDisplayAttributeList()
         {
-            var attributes =  new List<string>
+            return GetStatsAttributesList().Prepend(DisplayAttribute(DougMessages.ItemLevel, LevelRequirement));
+        }
+
+        protected IEnumerable<string> GetStatsAttributesList()
+        {
+            var attributes = new List<string>
             {
-                DisplayAttribute(DougMessages.ItemLevel, LevelRequirement),
                 DisplayAttribute(DougMessages.ItemAttack, Attack),
                 DisplayAttribute(DougMessages.ItemDefense, Defense),
                 DisplayAttribute(DougMessages.ItemHitrate, Hitrate),
@@ -46,7 +50,7 @@ namespace Doug.Items
             return attributes.Where(attr => !string.IsNullOrEmpty(attr));
         }
 
-        private string DisplayAttribute(string text, int attribute)
+        protected string DisplayAttribute(string text, int attribute)
         {
             return attribute == 0 ? string.Empty : string.Format(text, attribute);
         }

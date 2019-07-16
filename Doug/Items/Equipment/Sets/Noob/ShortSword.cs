@@ -1,6 +1,6 @@
 ﻿namespace Doug.Items.Equipment.Sets.Noob
 {
-    public class ShortSword : EquipmentItem
+    public class ShortSword : Weapon
     {
         public const string ItemId = "short_sword";
 
