@@ -139,7 +139,7 @@ namespace Doug.Models
 
         public double BaseGambleChance()
         {
-            var luckInfluence = Math.Log(TotalLuck() / 5.0) / (Math.Log(2) * 100);
+            var luckInfluence = Math.Log(TotalLuck() / 5.0) / (Math.Log(1.4) * 100);
             return 0.5 + luckInfluence;
         }
 
