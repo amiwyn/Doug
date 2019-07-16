@@ -69,6 +69,11 @@ namespace Doug.Services
                 return;
             }
 
+            if (government.RevolutionCooldown > DateTime.UtcNow)
+            {
+                return;
+            }
+
             if (oldRuler.Loadout.Head == Crown.ItemId)
             {
                 _equipmentRepository.UnequipItem(oldRuler, EquipmentSlot.Head);
