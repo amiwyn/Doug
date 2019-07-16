@@ -16,7 +16,7 @@ namespace Doug.Items.Consumables
             _effectRepository = effectRepository;
             Id = ItemId;
             Name = "Pickle's pickle";
-            Description = "Nice, a pickle! Gives +100 HP and +15 Def for 15 minutes";
+            Description = "Dill with it. Gives +100 HP and +15 Def for 15 minutes";
             Rarity = Rarity.Uncommon;
             Icon = ":pickle:";
             Price = 100;
