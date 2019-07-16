@@ -64,6 +64,11 @@ namespace Doug.Services
             var oldRuler = _userRepository.GetUser(government.Ruler);
             var newRuler = _userRepository.GetUser(government.RevolutionLeader);
 
+            if (oldRuler.Id == newRuler.Id)
+            {
+                return;
+            }
+
             if (oldRuler.Loadout.Head == Crown.ItemId)
             {
                 _equipmentRepository.UnequipItem(oldRuler, EquipmentSlot.Head);
