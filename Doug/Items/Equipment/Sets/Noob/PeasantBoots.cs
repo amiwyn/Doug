@@ -12,10 +12,11 @@
             Rarity = Rarity.Common;
             Icon = ":noob_boots1:";
             Slot = EquipmentSlot.Boots;
-            Price = 45;
+            Price = 30;
             LevelRequirement = 1;
 
-            Defense = 7;
+            Defense = 3;
+            Dodge = 2;
         }
     }
 }

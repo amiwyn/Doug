@@ -12,10 +12,11 @@
             Rarity = Rarity.Common;
             Icon = ":noob_gloves:";
             Slot = EquipmentSlot.Gloves;
-            Price = 95;
+            Price = 55;
             LevelRequirement = 5;
 
-            Defense = 15;
+            Defense = 4;
+            Hitrate = 7;
         }
     }
 }

@@ -1,6 +1,4 @@
-﻿using Doug.Models;
-
-namespace Doug
+﻿namespace Doug
 {
     public static class DougMessages
     {

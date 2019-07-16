@@ -22,6 +22,7 @@
             Agility = 5;
             Constitution = 5;
             Stamina = 5;
+            Health = 100;
         }
     }
 }
