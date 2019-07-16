@@ -27,6 +27,7 @@ namespace Doug.Slack
         Task KickUser(string user, string channel);
         Task InviteUser(string user, string channel);
         Task<List<string>> GetUsersInChannel(string channel);
+        Task<bool> GetUserPresence(string userId);
     }
 
     public class SlackWebApi : ISlackWebApi
@@ -39,6 +40,7 @@ namespace Doug.Slack
         private const string KickUrl = "https://slack.com/api/conversations.kick";
         private const string InviteUrl = "https://slack.com/api/conversations.invite";
         private const string ChannelInfoUrl = "https://slack.com/api/conversations.members";
+        private const string PresenceInfoUrl = "https://slack.com/api/users.getPresence";
 
 
         private readonly HttpClient _client;
@@ -222,6 +224,19 @@ namespace Doug.Slack
             var response = await PostToUrl(ChannelInfoUrl, keyValues);
 
             return JsonConvert.DeserializeObject<ChannelMembersResponse>(response, _jsonSettings).Members;
+        }
+
+        public async Task<bool> GetUserPresence(string userId)
+        {
+            var keyValues = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("token", _botToken),
+                new KeyValuePair<string, string>("user", userId)
+            };
+
+            var response = await PostToUrl(PresenceInfoUrl, keyValues);
+
+            return JsonConvert.DeserializeObject<UserPresenceResponse>(response, _jsonSettings).IsPresent();
         }
     }
 }

@@ -11,7 +11,7 @@ namespace Doug.Commands
 {
     public interface ICombatCommands
     {
-        DougResponse Steal(Command command);
+        Task<DougResponse> Steal(Command command);
         Task<DougResponse> Attack(Command command);
         Task<DougResponse> Revolution(Command command);
     }
@@ -45,8 +45,11 @@ namespace Doug.Commands
             _governmentService = governmentService;
         }
 
-        public DougResponse Steal(Command command)
+        public async Task<DougResponse> Steal(Command command)
         {
+            var userIsActive = _userService.IsUserActive(command.UserId);
+            var targetIsActive = _userService.IsUserActive(command.GetTargetUserId());
+
             var user = _userRepository.GetUser(command.UserId);
             var target = _userRepository.GetUser(command.GetTargetUserId());
 
@@ -67,6 +70,16 @@ namespace Doug.Commands
             if (energy < 0)
             {
                 return new DougResponse(DougMessages.NotEnoughEnergy);
+            }
+
+            if (!await targetIsActive)
+            {
+                return new DougResponse(DougMessages.UserMustBeActive);
+            }
+
+            if (!await userIsActive)
+            {
+                return new DougResponse(DougMessages.YouMustBeActive);
             }
 
             _statsRepository.UpdateEnergy(command.UserId, energy);
@@ -91,12 +104,12 @@ namespace Doug.Commands
                 _userRepository.AddCredits(command.UserId, amount);
 
                 var message = string.Format(DougMessages.StealCredits, _userService.Mention(user), amount, _userService.Mention(target));
-                _slack.BroadcastMessage(message, command.ChannelId);
+                await _slack.BroadcastMessage(message, command.ChannelId);
             }
             else
             {
                 var message = string.Format(DougMessages.StealFail, _userService.Mention(user), _userService.Mention(target));
-                _slack.BroadcastMessage(message, command.ChannelId);
+                await _slack.BroadcastMessage(message, command.ChannelId);
             }
 
             return NoResponse;
@@ -104,6 +117,9 @@ namespace Doug.Commands
 
         public async Task<DougResponse> Attack(Command command)
         {
+            var userIsActive = _userService.IsUserActive(command.UserId);
+            var targetIsActive = _userService.IsUserActive(command.GetTargetUserId());
+
             var user = _userRepository.GetUser(command.UserId);
             var target = _userRepository.GetUser(command.GetTargetUserId());
             var energy = user.Energy - AttackEnergyCost;
@@ -130,6 +146,16 @@ namespace Doug.Commands
             if (flaggedUsers.All(usr => usr != target.Id))
             {
                 return new DougResponse(DougMessages.UserIsNotInPvp);
+            }
+
+            if (!await targetIsActive)
+            {
+                return new DougResponse(DougMessages.UserMustBeActive);
+            }
+
+            if (!await userIsActive)
+            {
+                return new DougResponse(DougMessages.YouMustBeActive);
             }
 
             _statsRepository.UpdateEnergy(command.UserId, energy);
