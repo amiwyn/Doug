@@ -29,7 +29,7 @@ namespace Doug.Items.Consumables
 
             var effect = new NicotineHigh();
 
-            _effectRepository.AddEffect(user, EffectFactory.NicotineHigh, DurationInMinutes);
+            _effectRepository.AddEffect(user, NicotineHigh.EffectId, DurationInMinutes);
 
             return string.Format(DougMessages.AddedEffect, effect.Name, DurationInMinutes);
         }

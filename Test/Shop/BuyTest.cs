@@ -26,7 +26,7 @@ namespace Test.Shop
         public void Setup()
         {
             _governmentService.Setup(repo => repo.GetPriceWithTaxes(It.IsAny<Item>())).Returns((Item item) => item.Price);
-            _itemFactory.Setup(factory => factory.CreateItem(It.IsAny<string>())).Returns(new LuckyDice());
+            _itemFactory.Setup(factory => factory.CreateItem(It.IsAny<string>())).Returns(new LuckyCoin());
             _user = new User() {Id = "testuser", Credits = 431279};
             _userRepository.Setup(repo => repo.GetUser(User)).Returns(_user);
 
@@ -38,7 +38,7 @@ namespace Test.Shop
         {
             _shopService.Buy(_user, "lucky_dice");
 
-            _inventoryRepository.Verify(repo => repo.AddItem(_user, "lucky_dice"));
+            _inventoryRepository.Verify(repo => repo.AddItem(_user, "lucky_coin"));
         }
 
         [TestMethod]

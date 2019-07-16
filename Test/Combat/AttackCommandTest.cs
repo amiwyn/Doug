@@ -42,6 +42,7 @@ namespace Test.Combat
         [TestInitialize]
         public void Setup()
         {
+            _userService.Setup(service => service.IsUserActive(It.IsAny<string>())).Returns(Task.FromResult(true));
             _slack.Setup(slack => slack.GetUsersInChannel("coco-channel")).Returns(Task.FromResult(new List<string> {"robert"}));
             _channelRepository.Setup(repo => repo.GetChannelType("coco-channel")).Returns(ChannelType.Pvp);
             _userRepository.Setup(repo => repo.GetUser(User)).Returns(_user);

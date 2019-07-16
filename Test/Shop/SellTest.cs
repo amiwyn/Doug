@@ -29,7 +29,7 @@ namespace Test.Shop
         {
             var items = new List<InventoryItem>()
             {
-                new InventoryItem("testuser", "testitem") { InventoryPosition = 4, Item = new LuckyDice() },
+                new InventoryItem("testuser", "testitem") { InventoryPosition = 4, Item = new LuckyCoin() },
                 new InventoryItem("testuser", "testitem") { InventoryPosition = 3, Item = new KickTicket(null, null, null, null) }
             };
 

@@ -29,7 +29,7 @@ namespace Doug.Items.Consumables
 
             var effect = new TrollBlessing(null);
 
-            _effectRepository.AddEffect(user, EffectFactory.TrollBlessing, DurationInMinutes);
+            _effectRepository.AddEffect(user, TrollBlessing.EffectId, DurationInMinutes);
 
             return string.Format(DougMessages.AddedEffect, effect.Name, DurationInMinutes);
         }

@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Doug;
 using Doug.Commands;
 using Doug.Items;
@@ -36,10 +37,10 @@ namespace Test.Combat
         private readonly Mock<IGovernmentService> _governmentService = new Mock<IGovernmentService>();
 
 
-
         [TestInitialize]
         public void Setup()
         {
+            _userService.Setup(service => service.IsUserActive(It.IsAny<string>())).Returns(Task.FromResult(true));
             _channelRepository.Setup(repo => repo.GetChannelType("coco-channel")).Returns(ChannelType.Common);
             _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User { Energy = 10 });
             _userRepository.Setup(repo => repo.GetUser("robert")).Returns(new User { Id = "robert", Credits = 10 });
@@ -49,71 +50,71 @@ namespace Test.Combat
         }
 
         [TestMethod]
-        public void WhenStealingSucceed_AmountIsRemovedFromTheTarget()
+        public async Task WhenStealingSucceed_AmountIsRemovedFromTheTarget()
         {
             _randomService.Setup(rnd => rnd.RollAgainstOpponent(It.IsAny<double>(), It.IsAny<double>())).Returns(true);
 
-            _combatCommands.Steal(_command);
+            await _combatCommands.Steal(_command);
 
             _userRepository.Verify(repo => repo.RemoveCredits("robert", 1));
         }
 
         [TestMethod]
-        public void WhenStealingSucceed_AmountIsAddedToTheStealer()
+        public async Task WhenStealingSucceed_AmountIsAddedToTheStealer()
         {
             _randomService.Setup(rnd => rnd.RollAgainstOpponent(It.IsAny<double>(), It.IsAny<double>())).Returns(true);
 
-            _combatCommands.Steal(_command);
+            await _combatCommands.Steal(_command);
 
             _userRepository.Verify(repo => repo.AddCredits(User, 1));
         }
 
         [TestMethod]
-        public void GivenUserHasNoEnergy_WhenStealing_NotEnoughEnergyMessage()
+        public async Task GivenUserHasNoEnergy_WhenStealing_NotEnoughEnergyMessage()
         {
             _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User { Energy = 0 });
 
-            var result = _combatCommands.Steal(_command);
+            var result = await _combatCommands.Steal(_command);
 
             Assert.AreEqual(DougMessages.NotEnoughEnergy, result.Message);
         }
 
         [TestMethod]
-        public void GivenTargetHasNotEnoughCredits_WhenStealing_UserLoseAllHisCredits()
+        public async Task GivenTargetHasNotEnoughCredits_WhenStealing_UserLoseAllHisCredits()
         {
             _randomService.Setup(rnd => rnd.RollAgainstOpponent(It.IsAny<double>(), It.IsAny<double>())).Returns(true);
             _itemEventDispatcher.Setup(disp => disp.OnStealingAmount(It.IsAny<User>(), It.IsAny<int>())).Returns(77);
             _userRepository.Setup(repo => repo.GetUser("robert")).Returns(new User { Id = "robert", Credits = 3 });
 
-            _combatCommands.Steal(_command);
+            await _combatCommands.Steal(_command);
 
             _userRepository.Verify(repo => repo.RemoveCredits("robert", 3));
         }
 
         [TestMethod]
-        public void WhenStealing_ObtainChancesFromItems()
+        public async Task WhenStealing_ObtainChancesFromItems()
         {
-            _combatCommands.Steal(_command);
+            await _combatCommands.Steal(_command);
 
             _itemEventDispatcher.Verify(dispatcher => dispatcher.OnStealingChance(It.IsAny<User>(), It.IsAny<double>()));
         }
 
         [TestMethod]
-        public void WhenStealing_ObtainAmountFromItems()
+        public async Task WhenStealing_ObtainAmountFromItems()
         {
             _itemEventDispatcher.Setup(disp => disp.OnStealingChance(It.IsAny<User>(), It.IsAny<double>())).Returns(1);
 
-            _combatCommands.Steal(_command);
+            await _combatCommands.Steal(_command);
 
             _itemEventDispatcher.Verify(dispatcher => dispatcher.OnStealingAmount(It.IsAny<User>(), It.IsAny<int>()));
         }
 
         [TestMethod]
-        public void GivenUserIsInWrongChannel_WhenStealing_WrongChannelMessage()
+        public async Task GivenUserIsInWrongChannel_WhenStealing_WrongChannelMessage()
         {
             _channelRepository.Setup(repo => repo.GetChannelType("coco-channel")).Returns(ChannelType.Casino);
 
-            var result = _combatCommands.Steal(_command);
+            var result = await _combatCommands.Steal(_command);
 
             Assert.AreEqual(DougMessages.NotInRightChannel, result.Message);
         }
