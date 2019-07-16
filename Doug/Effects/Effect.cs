@@ -10,6 +10,12 @@ namespace Doug.Effects
         public Rank Rank { get; set; }
         public string Icon { get; set; }
 
+        public int Health { get; set; }
+        public int Energy { get; set; }
+        public int Attack { get; set; }
+        public int Defense { get; set; }
+        public int Dodge { get; set; }
+        public int Hitrate { get; set; }
         public int Luck { get; set; }
         public int Agility { get; set; }
         public int Strength { get; set; }

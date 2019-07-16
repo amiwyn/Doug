@@ -6,6 +6,8 @@ namespace Doug.Effects.Debuffs
 {
     public class FrenchCurse : Buff
     {
+        public const string EffectId = "french_curse";
+
         private readonly ISlackWebApi _slack;
         private readonly IUserService _userService;
 
@@ -13,7 +15,7 @@ namespace Doug.Effects.Debuffs
         {
             _slack = slack;
             _userService = userService;
-            Id = EffectFactory.FrenchCurse;
+            Id = EffectId;
             Name = "French Blood";
             Description = "You have French blood, vive la république!";
             Rank = Rank.Common;

@@ -6,6 +6,8 @@ namespace Doug.Items
 {
     public class EquipmentItem : Item
     {
+        public int Health { get; set; }
+        public int Energy { get; set; }
         public int Attack { get; set; }
         public int Defense { get; set; }
         public int Dodge { get; set; }
