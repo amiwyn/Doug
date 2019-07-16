@@ -66,7 +66,7 @@ namespace Doug.Items
 
                 // Special Equipment
                 case AwakeningOrb.ItemId: return new AwakeningOrb(_slack, _userService);
-                case LuckyDice.ItemId: return new LuckyDice();
+                case LuckyCoin.ItemId: return new LuckyCoin();
                 case BurglarBoots.ItemId: return new BurglarBoots();
                 case GreedyGloves.ItemId: return new GreedyGloves();
                 case DevilsContract.ItemId: return new DevilsContract();
