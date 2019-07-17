@@ -133,10 +133,10 @@ namespace Doug.Commands
 
             var channelType = _channelRepository.GetChannelType(command.ChannelId);
 
-            //if (channelType != ChannelType.Pvp)
-            //{
-            //    return new DougResponse(DougMessages.NotInRightChannel);
-            //}
+            if (channelType != ChannelType.Pvp)
+            {
+                return new DougResponse(DougMessages.NotInRightChannel);
+            }
 
             var flaggedUsers = await _slack.GetUsersInChannel(command.ChannelId);
 
