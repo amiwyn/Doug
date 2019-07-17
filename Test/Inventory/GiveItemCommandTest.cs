@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Doug.Commands;
+using Doug.Items;
 using Doug.Items.Consumables;
 using Doug.Items.Misc;
 using Doug.Models;
@@ -67,7 +68,7 @@ namespace Test.Inventory
         {
             _inventoryCommands.Give(_command);
 
-            _inventoryRepository.Verify(repo => repo.AddItem(_target, "testitem"));
+            _inventoryRepository.Verify(repo => repo.AddItem(_target, It.IsAny<Item>()));
         }
 
         [TestMethod]

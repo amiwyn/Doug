@@ -83,7 +83,7 @@ namespace Test.Government
         {
             _governmentService.Revolution(Channel);
 
-            _inventoryRepository.Verify(repo => repo.AddItem(_newRuler, "crown"));
+            _inventoryRepository.Verify(repo => repo.AddItem(_newRuler, It.IsAny<Crown>()));
         }
     }
 }

@@ -71,13 +71,14 @@ namespace Doug.Items.Lootboxes
 
             var loot = _randomService.RandomFromWeightedTable(_dropTable);
 
-            _inventoryRepository.AddItems(user, Enumerable.Repeat(loot.Id, loot.Quantity));
+            var item = _itemFactory.CreateItem(loot.Id);
+
+            _inventoryRepository.AddItems(user, Enumerable.Repeat(item, loot.Quantity));
 
             user.LoadItems(_itemFactory);
             user.InventoryItems.Sort((item1, item2) => item1.InventoryPosition.CompareTo(item2.InventoryPosition));
 
-            var itemName = _itemFactory.CreateItem(loot.Id).Name;
-            _slack.BroadcastMessage(string.Format(DougMessages.LootboxAnnouncement, _userService.Mention(user), Name, $"{loot.Quantity}x *{itemName}*"), channel).Wait();
+            _slack.BroadcastMessage(string.Format(DougMessages.LootboxAnnouncement, _userService.Mention(user), Name, $"{loot.Quantity}x *{item.Name}*"), channel).Wait();
 
             return string.Empty;
         }

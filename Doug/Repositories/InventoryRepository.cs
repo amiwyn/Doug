@@ -1,15 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Doug.Items;
 using Doug.Models;
 
 namespace Doug.Repositories
 {
     public interface IInventoryRepository
     {
-        void AddItem(User user, string itemId);
-        void AddItems(User user, IEnumerable<string> items);
+        void AddItem(User user, Item item);
+        void AddItems(User user, IEnumerable<Item> items);
         void RemoveItem(User user, int inventoryPosition);
-        void AddItemToUsers(List<User> users, string itemId);
+        void AddItemToUsers(List<User> users, Item item);
     }
 
     public class InventoryRepository : IInventoryRepository
@@ -21,14 +22,14 @@ namespace Doug.Repositories
             _db = dougContext;
         }
 
-        public void AddItem(User user, string itemId)
+        public void AddItem(User user, Item item)
         {
-            AddItemToUser(user, itemId);
+            AddItemToUser(user, item);
 
             _db.SaveChanges();
         }
 
-        public void AddItems(User user, IEnumerable<string> items)
+        public void AddItems(User user, IEnumerable<Item> items)
         {
             foreach (var item in items)
             {
@@ -38,27 +39,22 @@ namespace Doug.Repositories
             _db.SaveChanges();
         }
 
-        private void AddItemToUser(User user, string itemId)
+        private void AddItemToUser(User user, Item item)
         {
-            var currentStacks = user.InventoryItems.Where(inv => inv.ItemId == itemId).ToList();
+            var currentStacks = user.InventoryItems.Where(inv => inv.ItemId == item.Id).ToList();
 
-            if (!currentStacks.Any())
+            if (currentStacks.Any())
             {
-                var slot = FindNextFreeSlot(user.InventoryItems);
-                user.InventoryItems.Add(new InventoryItem(user.Id, itemId) { InventoryPosition = slot, Quantity = 1 });
-                return;
+                var freeStacks = currentStacks.Where(inv => inv.Quantity < inv.Item.MaxStack).ToList();
+
+                if (freeStacks.Any())
+                {
+                    freeStacks.First().Quantity++;
+                }
             }
 
-            var freeStacks = currentStacks.Where(inv => inv.Quantity < inv.Item.MaxStack).ToList();
-
-            if (!freeStacks.Any())
-            {
-                var slot = FindNextFreeSlot(user.InventoryItems);
-                user.InventoryItems.Add(new InventoryItem(user.Id, itemId) { InventoryPosition = slot, Quantity = 1, Item = currentStacks.First().Item });
-                return;
-            }
-
-            freeStacks.First().Quantity++;
+            var slot = FindNextFreeSlot(user.InventoryItems);
+            user.InventoryItems.Add(new InventoryItem(user.Id, item.Id) { InventoryPosition = slot, Quantity = 1, Item = item });
         }
 
         private int FindNextFreeSlot(List<InventoryItem> items)
@@ -92,9 +88,9 @@ namespace Doug.Repositories
             _db.SaveChanges();
         }
 
-        public void AddItemToUsers(List<User> users, string itemId)
+        public void AddItemToUsers(List<User> users, Item item)
         {
-            users.ForEach(user => AddItemToUser(user, itemId));
+            users.ForEach(user => AddItemToUser(user, item));
             _db.SaveChanges();
         }
     }

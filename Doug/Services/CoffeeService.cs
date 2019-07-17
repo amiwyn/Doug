@@ -120,7 +120,7 @@ namespace Doug.Services
 
             _statsRepository.RegenerateUsersHealth(participantsId);
             _userRepository.AddCreditsToUsers(participantsId, CoffeeBreakAward);
-            _inventoryRepository.AddItemToUsers(participants, CoffeeCup.ItemId);
+            _inventoryRepository.AddItemToUsers(participants, new CoffeeCup(_statsRepository, _inventoryRepository));
 
             _userService.AddBulkExperience(participants, CoffeeExperienceAward, channelId).Wait();
 

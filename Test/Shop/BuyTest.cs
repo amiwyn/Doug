@@ -38,7 +38,7 @@ namespace Test.Shop
         {
             _shopService.Buy(_user, "lucky_dice");
 
-            _inventoryRepository.Verify(repo => repo.AddItem(_user, "lucky_coin"));
+            _inventoryRepository.Verify(repo => repo.AddItem(_user, It.IsAny<LuckyCoin>()));
         }
 
         [TestMethod]
