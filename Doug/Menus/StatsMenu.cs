@@ -90,6 +90,7 @@ namespace Doug.Menus
             {
                 string.Format(DougMessages.HealthStats, $"*{user.Health}*/{user.TotalHealth()}"),
                 string.Format(DougMessages.EnergyStats, $"*{user.Energy}*/{user.TotalEnergy()}"),
+                string.Format(DougMessages.AttackStat, user.TotalAttack()),
                 string.Format(DougMessages.DefenseStat, user.TotalDefense()),
                 string.Format(DougMessages.DodgeStat, user.TotalDodge()),
                 string.Format(DougMessages.GambleStat, user.BaseGambleChance()*100),

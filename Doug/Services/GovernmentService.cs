@@ -13,7 +13,7 @@ namespace Doug.Services
     {
         void CollectSalesTaxes(Item item);
         int GetPriceWithTaxes(Item item);
-        Task StartRevolutionVote(User leader, string channel);
+        Task<DougResponse> StartRevolutionVote(User leader, string channel);
         void Revolution(string channel);
         Task CountVotes(string timestamp, string channel);
     }
@@ -49,13 +49,22 @@ namespace Doug.Services
             return item.Price + taxes;
         }
 
-        public async Task StartRevolutionVote(User leader, string channel)
+        public async Task<DougResponse> StartRevolutionVote(User leader, string channel)
         {
+            var government = _governmentRepository.GetGovernment();
+
+            if (government.IsInRevolutionCooldown())
+            {
+                return new DougResponse(string.Format(DougMessages.RevolutionCooldown, government.CalculateRevolutionCooldown()));
+            }
+
             var timestamp = await _slack.BroadcastMessage(string.Format(DougMessages.RevolutionVote, _userService.Mention(leader)), channel);
             await _slack.AddReaction(DougMessages.UpVote, timestamp, channel);
             await _slack.AddReaction(DougMessages.Downvote, timestamp, channel);
 
             _governmentRepository.StartRevolutionVote(leader.Id, timestamp);
+
+            return new DougResponse();
         }
 
         public void Revolution(string channel)
@@ -63,6 +72,16 @@ namespace Doug.Services
             var government = _governmentRepository.GetGovernment();
             var oldRuler = _userRepository.GetUser(government.Ruler);
             var newRuler = _userRepository.GetUser(government.RevolutionLeader);
+
+            if (oldRuler.Id == newRuler.Id)
+            {
+                return;
+            }
+
+            if (government.IsInRevolutionCooldown())
+            {
+                return;
+            }
 
             if (oldRuler.Loadout.Head == Crown.ItemId)
             {
@@ -93,7 +112,7 @@ namespace Doug.Services
             var reactions = await _slack.GetReactions(timestamp, channel);
             var upVote = reactions.SingleOrDefault(reaction => reaction.Name == DougMessages.UpVote);
 
-            if (upVote != null && upVote.Count >= (users.Count - 2) / 2)
+            if (upVote != null && upVote.Count >= users.Count / 2)
             {
                 Revolution(channel);
             }

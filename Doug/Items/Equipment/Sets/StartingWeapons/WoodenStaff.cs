@@ -17,7 +17,7 @@
             IsDualWield = true;
             DamageType = DamageType.Magic;
 
-            Attack = 24;
+            Attack = 34;
         }
     }
 }

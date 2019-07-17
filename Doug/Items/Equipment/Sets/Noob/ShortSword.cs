@@ -1,6 +1,6 @@
 ﻿namespace Doug.Items.Equipment.Sets.Noob
 {
-    public class ShortSword : EquipmentItem
+    public class ShortSword : Weapon
     {
         public const string ItemId = "short_sword";
 
@@ -15,7 +15,7 @@
             Price = 105;
             LevelRequirement = 5;
 
-            Attack = 26;
+            Attack = 32;
         }
     }
 }

@@ -40,5 +40,15 @@ namespace Doug.Effects
         {
             return slur;
         }
+
+        public virtual int OnGettingAttacked(User attacker, User target, int damage)
+        {
+            return damage;
+        }
+
+        public virtual int OnAttacking(User attacker, User target, int damage)
+        {
+            return damage;
+        }
     }
 }

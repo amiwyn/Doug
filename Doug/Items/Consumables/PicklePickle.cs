@@ -9,11 +9,13 @@ namespace Doug.Items.Consumables
         public const string ItemId = "pickle_pickle";
 
         private readonly IEffectRepository _effectRepository;
+        private readonly IStatsRepository _statsRepository;
         private const int DurationInMinutes = 15;
 
-        public PicklePickle(IInventoryRepository inventoryRepository, IEffectRepository effectRepository) : base(inventoryRepository)
+        public PicklePickle(IInventoryRepository inventoryRepository, IEffectRepository effectRepository, IStatsRepository statsRepository) : base(inventoryRepository)
         {
             _effectRepository = effectRepository;
+            _statsRepository = statsRepository;
             Id = ItemId;
             Name = "Pickle's pickle";
             Description = "Dill with it. Gives +100 HP and +15 Def for 15 minutes";
@@ -29,6 +31,9 @@ namespace Doug.Items.Consumables
             var effect = new PickleBuff();
 
             _effectRepository.AddEffect(user, PickleBuff.EffectId, DurationInMinutes);
+
+            user.Health += 100;
+            _statsRepository.UpdateHealth(user.Id, user.Health);
 
             return string.Format(DougMessages.AddedEffect, effect.Name, DurationInMinutes);
         }

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Doug.Models;
 
 namespace Doug.Repositories
@@ -52,6 +53,7 @@ namespace Doug.Repositories
         {
             var government = _db.Government.Single();
             government.Ruler = government.RevolutionLeader;
+            government.RevolutionCooldown = DateTime.UtcNow + TimeSpan.FromHours(23);
             _db.SaveChanges();
         }
 

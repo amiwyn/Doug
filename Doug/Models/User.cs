@@ -139,7 +139,7 @@ namespace Doug.Models
 
         public double BaseGambleChance()
         {
-            var luckInfluence = Math.Log(TotalLuck() / 5.0) / (Math.Log(2) * 100);
+            var luckInfluence = Math.Log(TotalLuck() / 5.0) / (Math.Log(1.4) * 100);
             return 0.5 + luckInfluence;
         }
 
@@ -181,9 +181,11 @@ namespace Doug.Models
             return TotalAttack();
         }
 
-        public int AttackUser(User user)
+        public int AttackUser(User user, IEventDispatcher eventDispatcher)
         {
             var damage = AttackStrike();
+
+            damage = eventDispatcher.OnAttacking(this, user, damage);
 
             var missChance = (user.TotalDodge() - TotalHitrate()) * 0.01;
             if (new Random().NextDouble() < missChance)

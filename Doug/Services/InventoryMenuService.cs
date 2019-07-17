@@ -50,13 +50,13 @@ namespace Doug.Services
 
         public async Task Equip(Interaction interaction)
         {
-            var user = _userRepository.GetUser(interaction.UserId);
             var command = new Command { ChannelId = interaction.ChannelId, Text = interaction.Value.Split(":").Last(), UserId = interaction.UserId };
 
             var message = _inventoryCommands.Equip(command).Message;
 
             await _slack.SendEphemeralMessage(message, interaction.UserId, interaction.ChannelId);
 
+            var user = _userRepository.GetUser(interaction.UserId);
             await _slack.UpdateInteractionMessage(new InventoryMenu(user.InventoryItems).Blocks, interaction.ResponseUrl);
         }
 

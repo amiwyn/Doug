@@ -1,6 +1,4 @@
-﻿using Doug.Models;
-
-namespace Doug
+﻿namespace Doug
 {
     public static class DougMessages
     {
@@ -35,6 +33,7 @@ namespace Doug
         public const string StaminaStats = ":male_mage: Stamina : {0}";
         public const string FreeStatPoints = "{0} stats points left";
         public const string AddStatPoint = ":heavy_plus_sign:";
+        public const string AttackStat = ":dagger_knife: Attack : {0}";
         public const string DefenseStat = ":shield: Defense : {0}";
         public const string DodgeStat = ":dizzy: Dodge : {0}";
         public const string HitrateStat = ":anger: Hit Rate : {0}";
@@ -95,8 +94,6 @@ namespace Doug
         public const string ItemConstitution = "`Constitution {0:+#;-#}`";
         public const string ItemLuck = "`Luck {0:+#;-#}`";
         public const string SmallHealthDisplay = "{0} HP";
-        public const string UserMustBeActive = "The user you are targetting must be active.";
-        public const string YouMustBeActive = "You must be active for this.";
 
         public const string DougError = "Beep boop, it's not working : {0}";
         public const string NotAnAdmin = "You are not an admin.";
@@ -121,6 +118,9 @@ namespace Doug
         public const string LevelRequirementNotMet = "You need to be at least level {0} to wear this item.";
         public const string CommandOnCooldown = "This command is on cooldown, try again in {0} seconds.";
         public const string UnknownShop = "Unknown shop. Verify the shop id.";
+        public const string UserMustBeActive = "The user you are targetting must be active.";
+        public const string YouMustBeActive = "You must be active for this.";
+        public const string RevolutionCooldown = "You must wait {0} minutes until the next revolution";
     }
 }
 

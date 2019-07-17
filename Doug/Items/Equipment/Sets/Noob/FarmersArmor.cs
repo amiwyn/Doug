@@ -15,7 +15,7 @@
             Price = 155;
             LevelRequirement = 5;
 
-            Defense = 25;
+            Defense = 10;
         }
     }
 }
