@@ -117,9 +117,6 @@ namespace Doug.Commands
 
         public async Task<DougResponse> Attack(Command command)
         {
-            var userIsActive = _userService.IsUserActive(command.UserId);
-            var targetIsActive = _userService.IsUserActive(command.GetTargetUserId());
-
             var user = _userRepository.GetUser(command.UserId);
             var target = _userRepository.GetUser(command.GetTargetUserId());
             var energy = user.Energy - AttackEnergyCost;
@@ -136,10 +133,10 @@ namespace Doug.Commands
 
             var channelType = _channelRepository.GetChannelType(command.ChannelId);
 
-            if (channelType != ChannelType.Pvp)
-            {
-                return new DougResponse(DougMessages.NotInRightChannel);
-            }
+            //if (channelType != ChannelType.Pvp)
+            //{
+            //    return new DougResponse(DougMessages.NotInRightChannel);
+            //}
 
             var flaggedUsers = await _slack.GetUsersInChannel(command.ChannelId);
 
@@ -148,18 +145,7 @@ namespace Doug.Commands
                 return new DougResponse(DougMessages.UserIsNotInPvp);
             }
 
-            if (!await targetIsActive)
-            {
-                return new DougResponse(DougMessages.UserMustBeActive);
-            }
-
-            if (!await userIsActive)
-            {
-                return new DougResponse(DougMessages.YouMustBeActive);
-            }
-
             _statsRepository.UpdateEnergy(command.UserId, energy);
-
             _userRepository.SetAttackCooldown(user.Id, DateTime.UtcNow + TimeSpan.FromSeconds(AttackCooldown));
 
             var damageDealt = await _userService.PhysicalAttack(user, target, command.ChannelId);
@@ -171,7 +157,6 @@ namespace Doug.Commands
             }
 
             await _slack.BroadcastMessage(message, command.ChannelId);
-
 
             return NoResponse;
         }

@@ -181,9 +181,11 @@ namespace Doug.Models
             return TotalAttack();
         }
 
-        public int AttackUser(User user)
+        public int AttackUser(User user, IEventDispatcher eventDispatcher)
         {
             var damage = AttackStrike();
+
+            damage = eventDispatcher.OnAttacking(this, user, damage);
 
             var missChance = (user.TotalDodge() - TotalHitrate()) * 0.01;
             if (new Random().NextDouble() < missChance)

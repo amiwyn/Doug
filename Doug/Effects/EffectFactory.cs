@@ -1,5 +1,6 @@
 ﻿using Doug.Effects.Buffs;
 using Doug.Effects.Debuffs;
+using Doug.Repositories;
 using Doug.Services;
 using Doug.Slack;
 
@@ -14,11 +15,13 @@ namespace Doug.Effects
     {
         private readonly ISlackWebApi _slack;
         private readonly IUserService _userService;
+        private readonly IEffectRepository _effectRepository;
 
-        public EffectFactory(ISlackWebApi slack, IUserService userService)
+        public EffectFactory(ISlackWebApi slack, IUserService userService, IEffectRepository effectRepository)
         {
             _slack = slack;
             _userService = userService;
+            _effectRepository = effectRepository;
         }
 
         public Effect CreateEffect(string effectId)
@@ -30,6 +33,7 @@ namespace Doug.Effects
                 case FrenchCurse.EffectId: return new FrenchCurse(_slack, _userService);
                 case PickleBuff.EffectId: return new PickleBuff();
                 case Luck.EffectId: return new Luck();
+                case MortuaryGrace.EffectId: return new MortuaryGrace(_effectRepository);
                 default: return new UnknownEffect();
             }
         }

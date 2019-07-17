@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Doug.Effects.Buffs;
 using Doug.Items;
 using Doug.Models;
 using Doug.Repositories;
@@ -25,12 +26,14 @@ namespace Doug.Services
         private readonly ISlackWebApi _slack;
         private readonly IStatsRepository _statsRepository;
         private readonly IEventDispatcher _eventDispatcher;
+        private readonly IEffectRepository _effectRepository;
 
-        public UserService(ISlackWebApi slack, IStatsRepository statsRepository, IEventDispatcher eventDispatcher)
+        public UserService(ISlackWebApi slack, IStatsRepository statsRepository, IEventDispatcher eventDispatcher, IEffectRepository effectRepository)
         {
             _slack = slack;
             _statsRepository = statsRepository;
             _eventDispatcher = eventDispatcher;
+            _effectRepository = effectRepository;
         }
 
         public string Mention(User user)
@@ -59,10 +62,11 @@ namespace Doug.Services
             }
 
             _statsRepository.KillUser(user.Id);
+            _effectRepository.AddEffect(user, MortuaryGrace.EffectId, 15);
+
             await _slack.BroadcastMessage(string.Format(DougMessages.UserDied, Mention(user)), channel);
             await _slack.KickUser(user.Id, channel);
             return true;
-
         }
 
         public async Task AddExperience(User user, long experience, string channel)
@@ -91,7 +95,7 @@ namespace Doug.Services
 
         public async Task<int> PhysicalAttack(User user, User target, string channel)
         {
-            var damageDealt = user.AttackUser(target);
+            var damageDealt = user.AttackUser(target, _eventDispatcher);
 
             if (target.IsDead() && await HandleDeath(target, channel))
             {

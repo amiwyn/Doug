@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Doug.Effects;
 using Doug.Models;
 
 namespace Doug.Repositories
@@ -8,6 +9,7 @@ namespace Doug.Repositories
     {
         void AddEffect(User user, string effectId, int durationMinutes);
         void RemoveAllEffects(User user);
+        void RemoveEffect(User user, string effectId);
     }
 
     public class EffectRepository : IEffectRepository
@@ -32,6 +34,7 @@ namespace Doug.Repositories
             {
                 EffectId = effectId,
                 UserId = user.Id,
+                Effect = new UnknownEffect(),
                 EndTime = DateTime.UtcNow.AddMinutes(durationMinutes)
             });
 
@@ -41,6 +44,18 @@ namespace Doug.Repositories
         public void RemoveAllEffects(User user)
         {
             user.Effects.Clear();
+            _db.SaveChanges();
+        }
+
+        public void RemoveEffect(User user, string effectId)
+        {
+            var effect = user.Effects.SingleOrDefault(eff => eff.EffectId == effectId);
+
+            if (effect != null)
+            {
+                user.Effects.Remove(effect);
+            }
+
             _db.SaveChanges();
         }
     }
