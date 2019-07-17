@@ -185,14 +185,17 @@ namespace Doug.Models
         {
             var damage = AttackStrike();
 
-            damage = eventDispatcher.OnAttacking(this, user, damage);
-
             var missChance = (user.TotalDodge() - TotalHitrate()) * 0.01;
             if (new Random().NextDouble() < missChance)
             {
                 return 0;
             }
-
+            
+            damage = eventDispatcher.OnAttacking(this, user, damage);
+            if (damage == 0) {
+                return 0;
+            }
+            
             return user.ApplyPhysicalDamage(damage);
         }
 

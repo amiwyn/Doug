@@ -79,7 +79,7 @@
         public const string AddedEffect = "You obtained the *{0}* effect for {1} minutes";
         public const string Surrendered = "{0} has surrendered :fr:";
         public const string Missed = "{0} missed their attack on {1}!";
-        public const string RevolutionVote = "{0} want to lead the revolution :fire: who's with em?";
+        public const string RevolutionVote = "{0} wants to lead the revolution :fire: who's with em?";
         public const string RevolutionSucceeded = "<!here> - Off with {0}'s head! {1} is the new emperor!";
         public const string Cleansed = "You are cleansed of all your effects.";
         public const string LootboxAnnouncement = "{0} opened *{1}* and received {2}";
