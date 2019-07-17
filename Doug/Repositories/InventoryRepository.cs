@@ -50,6 +50,7 @@ namespace Doug.Repositories
                 if (freeStacks.Any())
                 {
                     freeStacks.First().Quantity++;
+                    return;
                 }
             }
 
