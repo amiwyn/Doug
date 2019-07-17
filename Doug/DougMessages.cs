@@ -93,6 +93,9 @@
         public const string ItemStamina = "`Stamina {0:+#;-#}`";
         public const string ItemConstitution = "`Constitution {0:+#;-#}`";
         public const string ItemLuck = "`Luck {0:+#;-#}`";
+        public const string ItemDualWield = "*Dual Wield*";
+        public const string ItemLeftHand = "*Left Handed*";
+        public const string ItemRightHand = "*Right Handed*";
         public const string SmallHealthDisplay = "{0} HP";
 
         public const string DougError = "Beep boop, it's not working : {0}";
