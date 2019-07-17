@@ -190,10 +190,13 @@ namespace Doug.Models
             {
                 return 0;
             }
-
-            damage = user.ApplyPhysicalDamage(damage);
             
-            return eventDispatcher.OnAttacking(this, user, damage);
+            damage = eventDispatcher.OnAttacking(this, user, damage);
+            if (damage == 0) {
+                return 0;
+            }
+            
+            return user.ApplyPhysicalDamage(damage);
         }
 
         public void RegenerateHealth() => Health += (int)(TotalHealth() * 0.2);
