@@ -69,6 +69,7 @@ namespace Doug
             services.AddScoped<IInventoryMenuService, InventoryMenuService>();
             services.AddScoped<IShopService, ShopService>();
             services.AddScoped<IGovernmentService, GovernmentService>();
+            services.AddScoped<ICombatService, CombatService>();
 
             services.AddScoped<ICoffeeCommands, CoffeeCommands>();
             services.AddScoped<ISlursCommands, SlursCommands>();

@@ -13,22 +13,14 @@ using Moq;
 namespace Test.Combat
 {
     [TestClass]
-    public class AttackCommandTest
+    public class AttackTest
     {
-        private const string CommandText = "<@robert|asdas>";
         private const string Channel = "coco-channel";
-        private const string User = "testuser";
-
-        private readonly Command _command = new Command()
-        {
-            ChannelId = Channel,
-            Text = CommandText,
-            UserId = User
-        };
 
         private readonly User _user = new User {Energy = 10};
+        private readonly User _target = new User { Id = "robert", Credits = 10 };
 
-        private CombatCommands _combatCommands;
+        private CombatService _combatService;
 
         private readonly Mock<IUserRepository> _userRepository = new Mock<IUserRepository>();
         private readonly Mock<ISlackWebApi> _slack = new Mock<ISlackWebApi>();
@@ -37,7 +29,6 @@ namespace Test.Combat
         private readonly Mock<IRandomService> _randomService = new Mock<IRandomService>();
         private readonly Mock<IUserService> _userService = new Mock<IUserService>();
         private readonly Mock<IChannelRepository> _channelRepository = new Mock<IChannelRepository>();
-        private readonly Mock<IGovernmentService> _governmentService = new Mock<IGovernmentService>();
 
         [TestInitialize]
         public void Setup()
@@ -45,17 +36,15 @@ namespace Test.Combat
             _userService.Setup(service => service.IsUserActive(It.IsAny<string>())).Returns(Task.FromResult(true));
             _slack.Setup(slack => slack.GetUsersInChannel("coco-channel")).Returns(Task.FromResult(new List<string> {"robert"}));
             _channelRepository.Setup(repo => repo.GetChannelType("coco-channel")).Returns(ChannelType.Pvp);
-            _userRepository.Setup(repo => repo.GetUser(User)).Returns(_user);
-            _userRepository.Setup(repo => repo.GetUser("robert")).Returns(new User { Id = "robert", Credits = 10 });
             _itemEventDispatcher.Setup(disp => disp.OnStealingAmount(It.IsAny<User>(), It.IsAny<int>())).Returns(1);
 
-            _combatCommands = new CombatCommands(_itemEventDispatcher.Object, _userRepository.Object, _slack.Object, _statsRepository.Object, _randomService.Object, _userService.Object, _channelRepository.Object, _governmentService.Object);
+            _combatService = new CombatService(_itemEventDispatcher.Object, _userRepository.Object, _slack.Object, _statsRepository.Object, _randomService.Object, _userService.Object, _channelRepository.Object);
         }
 
         [TestMethod]
         public async Task WhenAttacking_HealthIsRemovedFromTheTarget()
         {
-            await _combatCommands.Attack(_command);
+            await _combatService.Attack(_user, _target, Channel);
 
             _userService.Verify(service => service.PhysicalAttack(It.IsAny<User>(), It.IsAny<User>(), Channel));
         }
@@ -63,9 +52,9 @@ namespace Test.Combat
         [TestMethod]
         public async Task GivenUserHasNoEnergy_WhenAttacking_NotEnoughEnergyMessage()
         {
-            _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User { Energy = 0 });
+            var user = new User { Energy = 0 };
 
-            var result = await _combatCommands.Attack(_command);
+            var result = await _combatService.Attack(user, _target, Channel);
 
             Assert.AreEqual(DougMessages.NotEnoughEnergy, result.Message);
         }
@@ -75,7 +64,7 @@ namespace Test.Combat
         {
             _channelRepository.Setup(repo => repo.GetChannelType("coco-channel")).Returns(ChannelType.Common);
 
-            var result = await _combatCommands.Attack(_command);
+            var result = await _combatService.Attack(_user, _target, Channel);
 
             Assert.AreEqual(DougMessages.NotInRightChannel, result.Message);
         }
@@ -85,7 +74,7 @@ namespace Test.Combat
         {
             _slack.Setup(slack => slack.GetUsersInChannel("coco-channel")).Returns(Task.FromResult(new List<string> { "not robert" }));
 
-            var result = await _combatCommands.Attack(_command);
+            var result = await _combatService.Attack(_user, _target, Channel);
 
             Assert.AreEqual(DougMessages.UserIsNotInPvp, result.Message);
         }
