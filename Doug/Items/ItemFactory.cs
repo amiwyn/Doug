@@ -63,7 +63,7 @@ namespace Doug.Items
                 case StrengthReset.ItemId: return new StrengthReset(_statsRepository, _inventoryRepository);
                 case ConstitutionReset.ItemId: return new ConstitutionReset(_statsRepository, _inventoryRepository);
                 case LuckReset.ItemId: return new LuckReset(_statsRepository, _inventoryRepository);
-                case StaminaReset.ItemId: return new StaminaReset(_statsRepository, _inventoryRepository);
+                case IntelligenceReset.ItemId: return new IntelligenceReset(_statsRepository, _inventoryRepository);
 
                 // Special Equipment
                 case AwakeningOrb.ItemId: return new AwakeningOrb(_slack, _userService);

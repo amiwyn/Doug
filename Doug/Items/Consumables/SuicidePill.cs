@@ -9,7 +9,6 @@ namespace Doug.Items.Consumables
         public const string ItemId = "suicide_pill";
 
         private readonly IUserService _userService;
-        private const int LossAmount = 69696969;
 
         public SuicidePill(IInventoryRepository inventoryRepository, IUserService userService) : base(inventoryRepository)
         {
@@ -24,7 +23,7 @@ namespace Doug.Items.Consumables
 
         public override string Use(int itemPos, User user, string channel)
         {
-            _userService.ApplyMagicalDamage(user, LossAmount, channel);
+            _userService.KillUser(user, channel);
 
             return base.Use(itemPos, user, channel);
         }

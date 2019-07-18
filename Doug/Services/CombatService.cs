@@ -18,8 +18,7 @@ namespace Doug.Services
     {
         private const int StealEnergyCost = 1;
         private const int AttackEnergyCost = 1;
-        private const int StealCooldown = 30;
-        private const int AttackCooldown = 30;
+        private const int KillExperienceGain = 100;
 
         private readonly IEventDispatcher _eventDispatcher;
         private readonly IUserRepository _userRepository;
@@ -75,8 +74,7 @@ namespace Doug.Services
             }
 
             _statsRepository.UpdateEnergy(channel, energy);
-
-            _userRepository.SetStealCooldown(user.Id, DateTime.UtcNow + TimeSpan.FromSeconds(StealCooldown));
+            _userRepository.SetStealCooldown(user.Id, user.GetStealCooldown());
 
             var userChance = _eventDispatcher.OnStealingChance(user, user.BaseStealSuccessRate());
             var targetChance = _eventDispatcher.OnGettingStolenChance(target, target.BaseOpponentStealSuccessRate());
@@ -136,19 +134,42 @@ namespace Doug.Services
             }
 
             _statsRepository.UpdateEnergy(user.Id, energy);
-            _userRepository.SetAttackCooldown(user.Id, DateTime.UtcNow + TimeSpan.FromSeconds(AttackCooldown));
+            _userRepository.SetAttackCooldown(user.Id, user.GetAttackCooldown());
 
-            var damageDealt = await _userService.PhysicalAttack(user, target, channel);
-
-            var message = string.Format(DougMessages.UserAttackedTarget, _userService.Mention(user), _userService.Mention(target), damageDealt);
-            if (damageDealt == 0)
+            if (_eventDispatcher.OnAttackedInvincibility(user, target))
             {
-                message = string.Format(DougMessages.Missed, _userService.Mention(user), _userService.Mention(target));
+                return new DougResponse(DougMessages.UserIsInvincible);
             }
 
+            var message = await DealDamage(user, target, channel);
             await _slack.BroadcastMessage(message, channel);
 
             return new DougResponse();
+        }
+
+        private async Task<string> DealDamage(User user, User target, string channel)
+        {
+            var attackStatus = user.AttackUser(target, out var damageDealt, _eventDispatcher);
+
+            if (target.IsDead() && await _userService.HandleDeath(target, channel))
+            {
+                _eventDispatcher.OnDeathByUser(target, user);
+                await _userService.AddExperience(user, KillExperienceGain, channel);
+            }
+
+            _statsRepository.UpdateHealth(target.Id, target.Health);
+
+            switch (attackStatus) // In the tostring maybe?
+            {
+                case AttackStatus.Normal:
+                    return string.Format(DougMessages.UserAttackedTarget, _userService.Mention(user), _userService.Mention(target), damageDealt);
+                case AttackStatus.Critical:
+                    return string.Format(DougMessages.CriticalHit, _userService.Mention(user), _userService.Mention(target), damageDealt);
+                case AttackStatus.Missed:
+                    return string.Format(DougMessages.Missed, _userService.Mention(user), _userService.Mention(target));
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
     }
 }

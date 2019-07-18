@@ -1,6 +1,5 @@
 using System.Threading.Tasks;
 using Doug;
-using Doug.Commands;
 using Doug.Items;
 using Doug.Models;
 using Doug.Repositories;
@@ -28,7 +27,6 @@ namespace Test.Combat
         private readonly Mock<IRandomService> _randomService = new Mock<IRandomService>();
         private readonly Mock<IUserService> _userService = new Mock<IUserService>();
         private readonly Mock<IChannelRepository> _channelRepository = new Mock<IChannelRepository>();
-        private readonly Mock<IGovernmentService> _governmentService = new Mock<IGovernmentService>();
 
 
         [TestInitialize]

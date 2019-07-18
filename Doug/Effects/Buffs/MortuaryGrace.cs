@@ -18,9 +18,9 @@ namespace Doug.Effects.Buffs
             Icon = ":skull:";
         }
 
-        public override int OnGettingAttacked(User attacker, User target, int damage)
+        public override bool OnAttackedInvincibility(User attacker, User target)
         {
-            return 0;
+            return true;
         }
 
         public override int OnAttacking(User attacker, User target, int damage)

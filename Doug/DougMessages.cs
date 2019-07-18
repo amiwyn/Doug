@@ -30,7 +30,7 @@
         public const string AgilityStats = ":runner: Agility : {0}";
         public const string LuckStats = ":four_leaf_clover: Luck : {0}";
         public const string ConstitutionStats = ":heart: Constitution : {0}";
-        public const string StaminaStats = ":male_mage: Stamina : {0}";
+        public const string IntelligenceStats = ":male_mage: Intelligence : {0}";
         public const string FreeStatPoints = "{0} stats points left";
         public const string AddStatPoint = ":heavy_plus_sign:";
         public const string AttackStat = ":dagger_knife: Attack : {0}";
@@ -79,6 +79,7 @@
         public const string AddedEffect = "You obtained the *{0}* effect for {1} minutes";
         public const string Surrendered = "{0} has surrendered :fr:";
         public const string Missed = "{0} missed their attack on {1}!";
+        public const string CriticalHit = "{0} dealt *{2}* critical damage to {1}!";
         public const string RevolutionVote = "{0} wants to lead the revolution :fire: who's with em?";
         public const string RevolutionSucceeded = "<!here> - Off with {0}'s head! {1} is the new emperor!";
         public const string Cleansed = "You are cleansed of all your effects.";
@@ -90,13 +91,15 @@
         public const string ItemDodge = "`Dodge {0:+#;-#}`";
         public const string ItemStrength = "`Strength {0:+#;-#}`";
         public const string ItemAgility = "`Agility {0:+#;-#}`";
-        public const string ItemStamina = "`Stamina {0:+#;-#}`";
+        public const string ItemIntelligence = "`Intelligence {0:+#;-#}`";
         public const string ItemConstitution = "`Constitution {0:+#;-#}`";
         public const string ItemLuck = "`Luck {0:+#;-#}`";
+        public const string AttackSpeed = "`Attack Speed {0:+#;-#}`";
         public const string ItemDualWield = "*Dual Wield*";
         public const string ItemLeftHand = "*Left Handed*";
         public const string ItemRightHand = "*Right Handed*";
         public const string SmallHealthDisplay = "{0} HP";
+        public const string UserIsInvincible = "This user is invincible!";
 
         public const string DougError = "Beep boop, it's not working : {0}";
         public const string NotAnAdmin = "You are not an admin.";

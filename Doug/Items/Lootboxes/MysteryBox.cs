@@ -61,7 +61,7 @@ namespace Doug.Items.Lootboxes
                 { new LootItem(StrengthReset.ItemId, 1), 0.05 },
                 { new LootItem(LuckReset.ItemId, 1), 0.05 },
                 { new LootItem(ConstitutionReset.ItemId, 1), 0.05 },
-                { new LootItem(StaminaReset.ItemId, 1), 0.05 }
+                { new LootItem(IntelligenceReset.ItemId, 1), 0.05 }
             };
         }
 

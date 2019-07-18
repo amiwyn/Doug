@@ -12,11 +12,12 @@ namespace Doug.Items
         public int Defense { get; set; }
         public int Dodge { get; set; }
         public int Hitrate { get; set; }
+        public double AttackSpeed { get; set; }
         public int Luck { get; set; }
         public int Agility { get; set; }
         public int Strength { get; set; }
         public int Constitution { get; set; }
-        public int Stamina { get; set; }
+        public int Intelligence { get; set; }
         public EquipmentSlot Slot { get; set; }
         public int LevelRequirement { get; set; }
 
@@ -42,7 +43,7 @@ namespace Doug.Items
                 DisplayAttribute(DougMessages.ItemDodge, Dodge),
                 DisplayAttribute(DougMessages.ItemStrength, Strength),
                 DisplayAttribute(DougMessages.ItemAgility, Agility),
-                DisplayAttribute(DougMessages.ItemStamina, Stamina),
+                DisplayAttribute(DougMessages.ItemIntelligence, Intelligence),
                 DisplayAttribute(DougMessages.ItemConstitution, Constitution),
                 DisplayAttribute(DougMessages.ItemLuck, Luck)
             };

@@ -12,17 +12,16 @@ namespace Doug.Services
     public interface IUserService
     {
         string Mention(User user);
-        Task<bool> ApplyMagicalDamage(User user, int damage, string channel);
+        Task<bool> ApplyTrueDamage(User user, int damage, string channel);
         Task AddExperience(User user, long experience, string channel);
         Task AddBulkExperience(List<User> users, long experience, string channel);
-        Task<int> PhysicalAttack(User user, User target, string channel);
         Task<bool> IsUserActive(string userId);
+        Task KillUser(User user, string channel);
+        Task<bool> HandleDeath(User user, string channel);
     }
 
     public class UserService : IUserService
     {
-        private const int KillExperienceGain = 100;
-
         private readonly ISlackWebApi _slack;
         private readonly IStatsRepository _statsRepository;
         private readonly IEventDispatcher _eventDispatcher;
@@ -41,7 +40,7 @@ namespace Doug.Services
             return _eventDispatcher.OnMention(user, $"<@{user.Id}>");
         }
 
-        public async Task<bool> ApplyMagicalDamage(User user, int damage, string channel)
+        public async Task<bool> ApplyTrueDamage(User user, int damage, string channel)
         {
             user.Health -= damage;
 
@@ -54,7 +53,7 @@ namespace Doug.Services
             return false;
         }
 
-        private async Task<bool> HandleDeath(User user, string channel)
+        public async Task<bool> HandleDeath(User user, string channel)
         {
             if (!_eventDispatcher.OnDeath(user))
             {
@@ -93,23 +92,14 @@ namespace Doug.Services
             await Task.WhenAll(levelUpMessageTasks);
         }
 
-        public async Task<int> PhysicalAttack(User user, User target, string channel)
-        {
-            var damageDealt = user.AttackUser(target, _eventDispatcher);
-
-            if (target.IsDead() && await HandleDeath(target, channel))
-            {
-                _eventDispatcher.OnDeathByUser(target, user);
-                await AddExperience(user, KillExperienceGain, channel);
-            }
-
-            _statsRepository.UpdateHealth(target.Id, target.Health);
-            return damageDealt;
-        }
-
         public Task<bool> IsUserActive(string userId)
         {
             return _slack.GetUserPresence(userId);
+        }
+
+        public async Task KillUser(User user, string channel)
+        {
+            await HandleDeath(user, channel);
         }
     }
 }

@@ -3,18 +3,18 @@ using Doug.Repositories;
 
 namespace Doug.Items.Consumables.Resets
 {
-    public class StaminaReset : ConsumableItem
+    public class IntelligenceReset : ConsumableItem
     {
-        public const string ItemId = "stam_reset";
+        public const string ItemId = "int_reset";
 
         private readonly IStatsRepository _statsRepository;
 
-        public StaminaReset(IStatsRepository statsRepository, IInventoryRepository inventoryRepository) : base(inventoryRepository)
+        public IntelligenceReset(IStatsRepository statsRepository, IInventoryRepository inventoryRepository) : base(inventoryRepository)
         {
             _statsRepository = statsRepository;
             Id = ItemId;
-            Name = "Stamina Reset Potion";
-            Description = "Reset 1 point of stamina.";
+            Name = "Intelligence Reset Potion";
+            Description = "Reset 1 point of intelligence.";
             Rarity = Rarity.Rare;
             Icon = ":reset_potion:";
             Price = 25;
@@ -24,7 +24,7 @@ namespace Doug.Items.Consumables.Resets
         {
             base.Use(itemPos, user, channel);
 
-            _statsRepository.FreeStatPoint(user.Id, Stats.Stamina);
+            _statsRepository.FreeStatPoint(user.Id, Stats.Intelligence);
 
             return string.Empty;
         }

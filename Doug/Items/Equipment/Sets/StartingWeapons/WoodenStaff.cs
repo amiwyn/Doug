@@ -15,7 +15,7 @@
             Price = 215;
             LevelRequirement = 10;
             IsDualWield = true;
-            DamageType = DamageType.Magic;
+            DamageType = DamageType.Magical;
 
             Attack = 34;
         }

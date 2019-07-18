@@ -66,7 +66,7 @@ namespace Doug.Menus
                 StatSection(DougMessages.StrengthStats, user.TotalStrength(), Stats.Strength, buttonDisplayed),
                 StatSection(DougMessages.AgilityStats, user.TotalAgility(), Stats.Agility, buttonDisplayed),
                 StatSection(DougMessages.ConstitutionStats, user.TotalConstitution(), Stats.Constitution, buttonDisplayed),
-                StatSection(DougMessages.StaminaStats, user.TotalStamina(), Stats.Stamina, buttonDisplayed),
+                StatSection(DougMessages.IntelligenceStats, user.TotalIntelligence(), Stats.Intelligence, buttonDisplayed),
                 StatSection(DougMessages.LuckStats, user.TotalLuck(), Stats.Luck, buttonDisplayed)
             };
         }

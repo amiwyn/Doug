@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Doug;
-using Doug.Commands;
 using Doug.Items;
 using Doug.Models;
 using Doug.Repositories;
@@ -46,7 +45,7 @@ namespace Test.Combat
         {
             await _combatService.Attack(_user, _target, Channel);
 
-            _userService.Verify(service => service.PhysicalAttack(It.IsAny<User>(), It.IsAny<User>(), Channel));
+            _statsRepository.Verify(repo => repo.UpdateHealth(_target.Id, It.IsAny<int>()));
         }
 
         [TestMethod]
