@@ -103,7 +103,7 @@ namespace Doug.Models
         public int TotalAttack() => Loadout.Attack + Attack + Effects.Sum(userEffect => userEffect.Effect.Attack);
         public int TotalDefense() => Loadout.Defense + (int)Math.Floor(2.0 * TotalConstitution()) + Effects.Sum(userEffect => userEffect.Effect.Intelligence);
         public int TotalDodge() => Loadout.Dodge + TotalAgility() + Effects.Sum(userEffect => userEffect.Effect.Dodge);
-        public int TotalHitrate() => Loadout.Hitrate + 10 + Effects.Sum(userEffect => userEffect.Effect.Hitrate);
+        public int TotalHitrate() => Loadout.Hitrate + 5 + Effects.Sum(userEffect => userEffect.Effect.Hitrate);
 
         public void LoadItems(IItemFactory itemFactory)
         {
