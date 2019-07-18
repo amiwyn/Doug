@@ -17,7 +17,7 @@
             IsDualWield = true;
 
             Attack = 56;
-            AttackSpeed = 0.5;
+            AttackSpeed = 2;
         }
     }
 }
