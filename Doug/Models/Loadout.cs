@@ -54,6 +54,7 @@ namespace Doug.Models
         public int Dodge => Equipment.Sum(equip => equip.Value.Dodge);
         public int Hitrate => Equipment.Sum(equip => equip.Value.Hitrate);
         public double AttackSpeed => Equipment.Sum(equip => equip.Value.AttackSpeed);
+        public int Resistance => Equipment.Sum(equip => equip.Value.Resistance);
 
         public List<EquipmentItem> Equip(EquipmentItem item)
         {

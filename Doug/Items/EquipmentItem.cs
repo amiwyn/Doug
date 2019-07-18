@@ -13,6 +13,7 @@ namespace Doug.Items
         public int Dodge { get; set; }
         public int Hitrate { get; set; }
         public double AttackSpeed { get; set; }
+        public int Resistance { get; set; }
         public int Luck { get; set; }
         public int Agility { get; set; }
         public int Strength { get; set; }
