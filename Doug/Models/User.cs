@@ -166,7 +166,7 @@ namespace Doug.Models
 
         public int ApplyPhysicalDamage(int damage)
         {
-            var reducedDamage = damage - (damage * Loadout.Resistance + TotalDefense());
+            var reducedDamage = damage - (damage * (Loadout.Resistance / 100) + TotalDefense());
             reducedDamage = reducedDamage <= 0 ? 1 : reducedDamage;
 
             Health -= reducedDamage;
