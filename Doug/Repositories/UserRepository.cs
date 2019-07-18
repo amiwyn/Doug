@@ -16,8 +16,8 @@ namespace Doug.Repositories
         void RemoveCredits(string userId, int amount);
         void AddCredits(string userId, int amount);
         void AddCreditsToUsers(List<string> users, int amount);
-        void SetAttackCooldown(string userId, DateTime cooldownExpiration);
-        void SetStealCooldown(string userId, DateTime cooldownExpiration);
+        void SetAttackCooldown(string userId, TimeSpan cooldown);
+        void SetStealCooldown(string userId, TimeSpan cooldown);
     }
 
     public class UserRepository : IUserRepository
@@ -51,20 +51,20 @@ namespace Doug.Repositories
             _db.SaveChanges();
         }
 
-        public void SetAttackCooldown(string userId, DateTime cooldownExpiration)
+        public void SetAttackCooldown(string userId, TimeSpan cooldown)
         {
             var user = _db.Users.Single(usr => usr.Id == userId);
 
-            user.AttackCooldown = cooldownExpiration;
+            user.AttackCooldown = DateTime.UtcNow + cooldown;
 
             _db.SaveChanges();
         }
 
-        public void SetStealCooldown(string userId, DateTime cooldownExpiration)
+        public void SetStealCooldown(string userId, TimeSpan cooldown)
         {
             var user = _db.Users.Single(usr => usr.Id == userId);
 
-            user.StealCooldown = cooldownExpiration;
+            user.StealCooldown = DateTime.UtcNow + cooldown;
 
             _db.SaveChanges();
         }

@@ -21,7 +21,7 @@
             Luck = 5;
             Agility = 5;
             Constitution = 5;
-            Stamina = 5;
+            Intelligence = 5;
             Health = 100;
         }
     }

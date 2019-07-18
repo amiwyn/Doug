@@ -16,6 +16,7 @@
             LevelRequirement = 5;
 
             Defense = 8;
+            Resistance = 4;
         }
     }
 }

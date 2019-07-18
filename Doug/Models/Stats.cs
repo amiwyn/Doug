@@ -6,6 +6,6 @@
         public const string Agility = "agility";
         public const string Strength = "strength";
         public const string Constitution = "constitution";
-        public const string Stamina = "stamina";
+        public const string Intelligence = "intelligence";
     }
 }

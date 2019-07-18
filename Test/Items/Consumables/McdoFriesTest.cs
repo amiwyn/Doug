@@ -38,7 +38,7 @@ namespace Test.Items.Consumables
         {
             _fries.Use(0, _user, Channel);
 
-            _userService.Verify(repo => repo.ApplyMagicalDamage(It.IsAny<User>(), 25, Channel));
+            _userService.Verify(repo => repo.ApplyTrueDamage(It.IsAny<User>(), 25, Channel));
         }
 
         [TestMethod]

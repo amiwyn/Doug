@@ -97,11 +97,11 @@ namespace Doug.Services
                 }
             }
 
-            _inventoryRepository.AddItem(newRuler, Crown.ItemId);
+            _inventoryRepository.AddItem(newRuler, new Crown());
 
             _slack.BroadcastMessage(string.Format(DougMessages.RevolutionSucceeded, _userService.Mention(oldRuler), _userService.Mention(newRuler)), channel);
 
-            _userService.ApplyMagicalDamage(oldRuler, 69696969, channel);
+            _userService.KillUser(oldRuler, channel);
 
             _governmentRepository.Revolution();
         }

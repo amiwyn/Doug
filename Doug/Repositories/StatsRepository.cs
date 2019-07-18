@@ -113,8 +113,8 @@ namespace Doug.Repositories
                 case Stats.Constitution:
                     user.Constitution += modifier;
                     break;
-                case Stats.Stamina:
-                    user.Stamina += modifier;
+                case Stats.Intelligence:
+                    user.Intelligence += modifier;
                     break;
             }
         }

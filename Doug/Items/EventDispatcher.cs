@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Doug.Models;
 using System.Linq;
+using Doug.Effects;
 
 namespace Doug.Items
 {
@@ -17,6 +18,7 @@ namespace Doug.Items
         void OnDeathByUser(User user, User killer);
         bool OnKick(User user, User kicker, string channel);
         int OnAttacking(User attacker, User target, int damage);
+        bool OnAttackedInvincibility(User attacker, User target);
     }
 
     public class EventDispatcher : IEventDispatcher
@@ -28,9 +30,9 @@ namespace Doug.Items
             return equipment.Aggregate(baseValue, aggregateFunction);
         }
 
-        private T PropagateEffectEvents<T>(User user, T baseValue, Func<T, UserEffect, T> aggregateFunction)
+        private T PropagateEffectEvents<T>(User user, T baseValue, Func<T, Effect, T> aggregateFunction)
         {
-            var effects = new List<UserEffect>(user.Effects);
+            var effects = new List<Effect>(user.Effects.Select(effect => effect.Effect));
 
             return effects.Aggregate(baseValue, aggregateFunction);
         }
@@ -48,19 +50,24 @@ namespace Doug.Items
 
         public bool OnKick(User user, User kicker, string channel)
         {
-            return PropagateEffectEvents(user, true, (isKicked, effect) => effect.Effect.OnKick(kicker, channel) && isKicked);
+            return PropagateEffectEvents(user, true, (isKicked, effect) => effect.OnKick(kicker, channel) && isKicked);
         }
 
         public int OnAttacking(User attacker, User target, int damage)
         {
-            var attackerDamage = PropagateEffectEvents(attacker, damage, (damageSum, effect) => effect.Effect.OnAttacking(attacker, target, damageSum));
-            return PropagateEffectEvents(target, attackerDamage, (damageSum, effect) => effect.Effect.OnGettingAttacked(attacker, target, damageSum));
+            var attackerDamage = PropagateEffectEvents(attacker, damage, (damageSum, effect) => effect.OnAttacking(attacker, target, damageSum));
+            return PropagateEffectEvents(target, attackerDamage, (damageSum, effect) => effect.OnGettingAttacked(attacker, target, damageSum));
+        }
+
+        public bool OnAttackedInvincibility(User attacker, User target)
+        {
+            return PropagateEffectEvents(target, false, (isInvincible, effect) => effect.OnAttackedInvincibility(attacker, target) && isInvincible);
         }
 
         public string OnFlaming(User caller, User target, Command command, string slur)
         {
             slur = PropagateItemEvents(target, slur, (acc, item) => item.OnGettingFlamed(command, acc));
-            slur = PropagateEffectEvents(target, slur, (acc, effect) => effect.Effect.OnGettingFlamed(command, acc));
+            slur = PropagateEffectEvents(target, slur, (acc, effect) => effect.OnGettingFlamed(command, acc));
 
             return PropagateItemEvents(caller, slur, (acc, item) => item.OnFlaming(command, acc));
         }

@@ -33,7 +33,7 @@ namespace Doug.Items.Consumables
 
             _statsRepository.UpdateEnergy(user.Id, user.Energy);
 
-            _userService.ApplyMagicalDamage(user, LossAmount, channel);
+            _userService.ApplyTrueDamage(user, LossAmount, channel);
 
             return string.Format(DougMessages.RecoverItem, Name, RecoverAmount, "energy");
         }

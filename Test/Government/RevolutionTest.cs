@@ -52,7 +52,7 @@ namespace Test.Government
         {
             _governmentService.Revolution(Channel);
 
-            _userService.Verify(service => service.ApplyMagicalDamage(It.IsAny<User>(), 69696969, Channel));
+            _userService.Verify(service => service.KillUser(It.IsAny<User>(), Channel));
         }
 
         [TestMethod]
@@ -83,7 +83,7 @@ namespace Test.Government
         {
             _governmentService.Revolution(Channel);
 
-            _inventoryRepository.Verify(repo => repo.AddItem(_newRuler, "crown"));
+            _inventoryRepository.Verify(repo => repo.AddItem(_newRuler, It.IsAny<Crown>()));
         }
     }
 }

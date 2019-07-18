@@ -20,7 +20,7 @@ namespace Doug.Effects
         public int Agility { get; set; }
         public int Strength { get; set; }
         public int Constitution { get; set; }
-        public int Stamina { get; set; }
+        public int Intelligence { get; set; }
 
         public virtual bool IsBuff()
         {
@@ -49,6 +49,11 @@ namespace Doug.Effects
         public virtual int OnAttacking(User attacker, User target, int damage)
         {
             return damage;
+        }
+
+        public virtual bool OnAttackedInvincibility(User attacker, User target)
+        {
+            return false;
         }
     }
 }

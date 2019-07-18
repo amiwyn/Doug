@@ -40,7 +40,7 @@ namespace Doug.Services
 
             _userRepository.RemoveCredits(user.Id, price);
 
-            _inventoryRepository.AddItem(user, item.Id);
+            _inventoryRepository.AddItem(user, item);
 
             _governmentService.CollectSalesTaxes(item);
 

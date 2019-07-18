@@ -127,7 +127,7 @@ namespace Test
 
             _coffeeService.EndCoffee(Channel);
 
-            _inventoryRepository.Verify(repo => repo.AddItemToUsers(It.IsAny<List<User>>(), CoffeeCup.ItemId));
+            _inventoryRepository.Verify(repo => repo.AddItemToUsers(It.IsAny<List<User>>(), It.IsAny<CoffeeCup>()));
         }
 
         [TestMethod]
