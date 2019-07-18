@@ -87,6 +87,7 @@
         public const string ItemLevel = "*Level {0}*";
         public const string ItemAttack = "`Attack {0:+#;-#}`";
         public const string ItemDefense = "`Defense {0:+#;-#}`";
+        public const string ItemResistance = "`Resistance {0:+#;-#}`";
         public const string ItemHitrate = "`Hitrate {0:+#;-#}`";
         public const string ItemDodge = "`Dodge {0:+#;-#}`";
         public const string ItemStrength = "`Strength {0:+#;-#}`";

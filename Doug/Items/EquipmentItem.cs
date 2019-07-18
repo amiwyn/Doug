@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Doug.Models;
 
@@ -40,6 +41,8 @@ namespace Doug.Items
             {
                 DisplayAttribute(DougMessages.ItemAttack, Attack),
                 DisplayAttribute(DougMessages.ItemDefense, Defense),
+                DisplayAttribute(DougMessages.ItemResistance, Resistance),
+                Math.Abs(AttackSpeed) < 0.0001 ? string.Empty : string.Format(DougMessages.AttackSpeed, AttackSpeed),
                 DisplayAttribute(DougMessages.ItemHitrate, Hitrate),
                 DisplayAttribute(DougMessages.ItemDodge, Dodge),
                 DisplayAttribute(DougMessages.ItemStrength, Strength),

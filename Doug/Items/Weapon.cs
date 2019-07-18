@@ -19,7 +19,6 @@ namespace Doug.Items
 
             return GetStatsAttributesList()
                 .Prepend(IsDualWield ? DougMessages.ItemDualWield : itemSlot)
-                .Prepend(DougMessages.AttackSpeed)
                 .Prepend(DisplayAttribute(DougMessages.ItemLevel, LevelRequirement));
         }
     }
