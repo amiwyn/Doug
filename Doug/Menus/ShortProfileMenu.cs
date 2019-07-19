@@ -16,6 +16,8 @@ namespace Doug.Menus
             {
                 new Section(new MarkdownText($"<@{user.Id}>")),
                 CreateSmallUserInfo(user),
+                new Divider(),
+                CreateEffectFields(user),
                 new Divider()
             };
 
@@ -41,5 +43,12 @@ namespace Doug.Menus
 
             return new Context(userMiscInfo);
         }
+
+        private Block CreateEffectFields(User user)
+        {
+            var fields = user.Effects.Select(ef => $"{ef.Effect.Icon} - {ef.Effect.Name} ({ef.GetDurationString()})").ToList();
+            return new FieldsSection(fields);
+        }
+
     }
 }
