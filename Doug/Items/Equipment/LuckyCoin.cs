@@ -8,7 +8,7 @@
         {
             Id = ItemId;
             Name = "Lucky Coin";
-            Description = "A mysterious coin, people say it was carved with bones of our ancestors, creepy. This dice will increase your luck at gambling.";
+            Description = "A mysterious coin, people say it was carved with bones of our ancestors, creepy. This coin will increase your luck at gambling.";
             Rarity = Rarity.Unique;
             Icon = ":coin:";
             Slot = EquipmentSlot.Neck;
