@@ -66,13 +66,37 @@ namespace Doug.Models
                 unequippedItems.Add(UnEquip(item.Slot));
             }
 
-            if (item is Weapon weapon && weapon.IsDualWield)
+            if (item.IsHandSlot())
             {
-                unequippedItems.Add(UnEquip(EquipmentSlot.LeftHand));
+                unequippedItems.AddRange(EquipWeapon(item));
             }
 
             Equipment.Add(item.Slot, item);
             SetLoadoutStrings();
+            return unequippedItems;
+        }
+
+        private List<EquipmentItem> EquipWeapon(EquipmentItem item)
+        {
+            var unequippedItems = new List<EquipmentItem>();
+
+            if (item.Slot == EquipmentSlot.LeftHand)
+            {
+                if (GetEquipmentAt(EquipmentSlot.RightHand) is Weapon rightHand && rightHand.IsDualWield)
+                {
+                    unequippedItems.Add(UnEquip(EquipmentSlot.RightHand));
+                }
+            }
+
+            if (item is Weapon weapon && weapon.IsDualWield)
+            {
+                var leftHandWeapon = UnEquip(EquipmentSlot.LeftHand);
+                if (leftHandWeapon != null)
+                {
+                    unequippedItems.Add(leftHandWeapon);
+                }
+            }
+
             return unequippedItems;
         }
 

@@ -16,7 +16,7 @@
             LevelRequirement = 5;
 
             Defense = 4;
-            Dodge = 4;
+            Dodge = 6;
         }
     }
 }
