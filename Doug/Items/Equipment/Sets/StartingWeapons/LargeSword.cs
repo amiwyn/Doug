@@ -16,7 +16,7 @@
             LevelRequirement = 10;
             IsDualWield = true;
 
-            Attack = 88;
+            Attack = 66;
             Strength = 2;
         }
     }
