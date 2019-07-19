@@ -224,6 +224,6 @@ namespace Doug.Models
         public int CalculateAttackCooldownRemaining() => (int)(AttackCooldown - DateTime.UtcNow).TotalSeconds;
         public int CalculateStealCooldownRemaining() => (int)(StealCooldown - DateTime.UtcNow).TotalSeconds;
         public TimeSpan GetStealCooldown() => TimeSpan.FromSeconds(BaseStealCooldown);
-        public TimeSpan GetAttackCooldown() => TimeSpan.FromSeconds(BaseAttackCooldown / Loadout.AttackSpeed);
+        public TimeSpan GetAttackCooldown() => TimeSpan.FromSeconds(BaseAttackCooldown / (Math.Abs(Loadout.AttackSpeed) < 0.001 ? 1 : Loadout.AttackSpeed));
     }
 }
