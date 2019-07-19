@@ -17,5 +17,10 @@ namespace Doug.Models
         {
             Effect = effectFactory.CreateEffect(EffectId);
         }
+
+        public string GetDurationString()
+        {
+            return (EndTime - DateTime.UtcNow).ToString(@"mm\:ss");
+        }
     }
 }
