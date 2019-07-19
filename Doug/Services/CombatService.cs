@@ -73,7 +73,7 @@ namespace Doug.Services
                 return new DougResponse(DougMessages.YouMustBeActive);
             }
 
-            _statsRepository.UpdateEnergy(channel, energy);
+            _statsRepository.UpdateEnergy(user.Id, energy);
             _userRepository.SetStealCooldown(user.Id, user.GetStealCooldown());
 
             var userChance = _eventDispatcher.OnStealingChance(user, user.BaseStealSuccessRate());
