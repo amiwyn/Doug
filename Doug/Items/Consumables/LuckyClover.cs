@@ -26,9 +26,9 @@ namespace Doug.Items.Consumables
         {
             base.Use(itemPos, user, channel);
 
-            var effect = new PickleBuff();
+            var effect = new Luck();
 
-            _effectRepository.AddEffect(user, PickleBuff.EffectId, DurationInMinutes);
+            _effectRepository.AddEffect(user, Luck.EffectId, DurationInMinutes);
 
             return string.Format(DougMessages.AddedEffect, effect.Name, DurationInMinutes);
         }
