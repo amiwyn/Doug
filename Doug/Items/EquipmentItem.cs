@@ -60,6 +60,11 @@ namespace Doug.Items
             return attribute == 0 ? string.Empty : string.Format(text, attribute);
         }
 
+        public bool IsHandSlot()
+        {
+            return Slot == EquipmentSlot.LeftHand || Slot == EquipmentSlot.RightHand;
+        }
+
         public virtual string OnGettingFlamed(Command command, string slur)
         {
             return slur;

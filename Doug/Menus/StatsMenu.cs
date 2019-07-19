@@ -41,7 +41,7 @@ namespace Doug.Menus
 
         private Block CreateEffectFields(User user)
         {
-            var fields = user.Effects.Select(ef => $"{ef.Effect.Icon} - {ef.Effect.Name}").ToList();
+            var fields = user.Effects.Select(ef => $"{ef.Effect.Icon} - {ef.Effect.Name} ({ef.GetDurationString()})").ToList();
             return new FieldsSection(fields);
         }
 

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Doug.Items;
 using Doug.Models;
@@ -73,7 +72,7 @@ namespace Doug.Services
                 return new DougResponse(DougMessages.YouMustBeActive);
             }
 
-            _statsRepository.UpdateEnergy(channel, energy);
+            _statsRepository.UpdateEnergy(user.Id, energy);
             _userRepository.SetStealCooldown(user.Id, user.GetStealCooldown());
 
             var userChance = _eventDispatcher.OnStealingChance(user, user.BaseStealSuccessRate());
@@ -141,15 +140,18 @@ namespace Doug.Services
                 return new DougResponse(DougMessages.UserIsInvincible);
             }
 
-            var message = await DealDamage(user, target, channel);
-            await _slack.BroadcastMessage(message, channel);
+            await DealDamage(user, target, channel);
 
             return new DougResponse();
         }
 
-        private async Task<string> DealDamage(User user, User target, string channel)
+        private async Task DealDamage(User user, User target, string channel)
         {
             var attackStatus = user.AttackUser(target, out var damageDealt, _eventDispatcher);
+
+            var message = attackStatus.ToMessage(_userService.Mention(user), _userService.Mention(target), damageDealt);
+
+            await _slack.BroadcastMessage(message, channel);
 
             if (target.IsDead() && await _userService.HandleDeath(target, channel))
             {
@@ -158,18 +160,6 @@ namespace Doug.Services
             }
 
             _statsRepository.UpdateHealth(target.Id, target.Health);
-
-            switch (attackStatus) // In the tostring maybe?
-            {
-                case AttackStatus.Normal:
-                    return string.Format(DougMessages.UserAttackedTarget, _userService.Mention(user), _userService.Mention(target), damageDealt);
-                case AttackStatus.Critical:
-                    return string.Format(DougMessages.CriticalHit, _userService.Mention(user), _userService.Mention(target), damageDealt);
-                case AttackStatus.Missed:
-                    return string.Format(DougMessages.Missed, _userService.Mention(user), _userService.Mention(target));
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
         }
     }
 }
