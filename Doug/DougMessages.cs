@@ -96,7 +96,7 @@
         public const string ItemConstitution = "`Constitution {0:+#;-#}`";
         public const string ItemLuck = "`Luck {0:+#;-#}`";
         public const string AttackSpeed = "`Speed: {0:0.##}`";
-        public const string ItemDualWield = "*Dual Wield*";
+        public const string ItemDualWield = "*Two Handed*";
         public const string ItemLeftHand = "*Left Handed*";
         public const string ItemRightHand = "*Right Handed*";
         public const string SmallHealthDisplay = "{0} HP";
