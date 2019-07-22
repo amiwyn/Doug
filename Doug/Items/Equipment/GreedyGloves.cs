@@ -15,7 +15,7 @@
             Price = 2250;
             LevelRequirement = 20;
 
-            Attack = 5;
+            MaxAttack = 5;
             Strength = 5;
         }
 

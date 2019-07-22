@@ -15,7 +15,8 @@
             Price = 65;
             LevelRequirement = 1;
 
-            Attack = 16;
+            MinAttack = 14;
+            MaxAttack = 18;
         }
     }
 }

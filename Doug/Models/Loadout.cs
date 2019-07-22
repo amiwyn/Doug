@@ -49,7 +49,8 @@ namespace Doug.Models
         public int Strength => Equipment.Sum(equip => equip.Value.Strength);
         public int Constitution => Equipment.Sum(equip => equip.Value.Constitution);
         public int Intelligence => Equipment.Sum(equip => equip.Value.Intelligence);
-        public int Attack => Equipment.Sum(equip => equip.Value.Attack);
+        public int MaxAttack => Equipment.Sum(equip => equip.Value.MaxAttack);
+        public int MinAttack => Equipment.Sum(equip => equip.Value.MinAttack);
         public int Defense => Equipment.Sum(equip => equip.Value.Defense);
         public int Dodge => Equipment.Sum(equip => equip.Value.Dodge);
         public int Hitrate => Equipment.Sum(equip => equip.Value.Hitrate);

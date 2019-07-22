@@ -16,8 +16,8 @@ namespace Doug.Items.Equipment
             Slot = EquipmentSlot.RightHand;
             Price = 224;
             LevelRequirement = 5;
-
-            Attack = 24;
+            MinAttack = 18;
+            MaxAttack = 24;
         }
 
         public override string OnFlaming(Command command, string slur)

@@ -16,7 +16,8 @@
             LevelRequirement = 10;
             IsDualWield = true;
 
-            Attack = 40;
+            MinAttack = 40;
+            MaxAttack = 60;
             AttackSpeed = 2;
         }
     }

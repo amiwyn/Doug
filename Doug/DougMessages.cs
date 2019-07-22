@@ -85,7 +85,7 @@
         public const string Cleansed = "You are cleansed of all your effects.";
         public const string LootboxAnnouncement = "{0} opened *{1}* and received {2}";
         public const string ItemLevel = "*Level {0}*";
-        public const string ItemAttack = "`Attack {0:+#;-#}`";
+        public const string ItemAttack = "`Attack {0}-{1}`";
         public const string ItemDefense = "`Defense {0:+#;-#}`";
         public const string ItemResistance = "`Resistance {0:+#;-#}`";
         public const string ItemHitrate = "`Hitrate {0:+#;-#}`";

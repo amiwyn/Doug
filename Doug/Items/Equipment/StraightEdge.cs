@@ -15,7 +15,8 @@
             Price = 820;
             LevelRequirement = 20;
 
-            Attack = 69;
+            MinAttack = 69;
+            MaxAttack = 69;
             Constitution = 4;
         }
     }

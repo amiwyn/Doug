@@ -100,10 +100,12 @@ namespace Doug.Models
         public int TotalStrength() => Loadout.Strength + Strength + Effects.Sum(userEffect => userEffect.Effect.Strength);
         public int TotalConstitution() => Loadout.Constitution + Constitution + Effects.Sum(userEffect => userEffect.Effect.Constitution);
         public int TotalIntelligence() => Loadout.Intelligence + Intelligence + Effects.Sum(userEffect => userEffect.Effect.Intelligence);
-        public int TotalAttack() => Loadout.Attack + Attack + Effects.Sum(userEffect => userEffect.Effect.Attack);
         public int TotalDefense() => Loadout.Defense + (int)Math.Floor(2.0 * TotalConstitution()) + Effects.Sum(userEffect => userEffect.Effect.Intelligence);
         public int TotalDodge() => Loadout.Dodge + TotalAgility() + Effects.Sum(userEffect => userEffect.Effect.Dodge);
         public int TotalHitrate() => Loadout.Hitrate + 5 + Effects.Sum(userEffect => userEffect.Effect.Hitrate);
+        public int MaxAttack() => Loadout.MaxAttack + Attack + Effects.Sum(userEffect => userEffect.Effect.Attack);
+        public int MinAttack() => Loadout.MinAttack + Attack + Effects.Sum(userEffect => userEffect.Effect.Attack);
+
 
         public void LoadItems(IItemFactory itemFactory)
         {
@@ -166,7 +168,7 @@ namespace Doug.Models
 
         public int ApplyPhysicalDamage(int damage)
         {
-            var reducedDamage = damage - (damage * Loadout.Resistance + TotalDefense());
+            var reducedDamage = damage - (damage * (Loadout.Resistance / 100) + TotalDefense());
             reducedDamage = reducedDamage <= 0 ? 1 : reducedDamage;
 
             Health -= reducedDamage;
@@ -193,10 +195,11 @@ namespace Doug.Models
                 return status;
             }
 
-            damage = TotalAttack();
+            damage = random.Next(MinAttack(), MaxAttack());
+
             if (random.NextDouble() < 0.1)
             {
-                damage = TotalAttack() * 2;
+                damage *= 2;
                 status = AttackStatus.Critical;
             }
 
