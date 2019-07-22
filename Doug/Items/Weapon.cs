@@ -10,16 +10,16 @@ namespace Doug.Items
 
         protected Weapon()
         {
-            AttackSpeed = 1;
+            Stats.AttackSpeed = 1;
         }
 
         public override IEnumerable<string> GetDisplayAttributeList()
         {
             var itemSlot = Slot == EquipmentSlot.RightHand ? DougMessages.ItemRightHand : DougMessages.ItemLeftHand;
 
-            return GetStatsAttributesList()
+            return Stats.ToStringList()
                 .Prepend(IsDualWield ? DougMessages.ItemDualWield : itemSlot)
-                .Prepend(DisplayAttribute(DougMessages.ItemLevel, LevelRequirement));
+                .Prepend(LevelRequirement == 0 ? string.Empty : string.Format(DougMessages.ItemLevel, LevelRequirement));
         }
     }
 }

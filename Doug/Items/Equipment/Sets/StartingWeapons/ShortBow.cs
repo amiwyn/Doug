@@ -16,9 +16,9 @@
             LevelRequirement = 10;
             IsDualWield = true;
 
-            MinAttack = 40;
-            MaxAttack = 60;
-            AttackSpeed = 2;
+            Stats.MinAttack = 40;
+            Stats.MaxAttack = 60;
+            Stats.AttackSpeed = 2;
         }
     }
 }

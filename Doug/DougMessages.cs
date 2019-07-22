@@ -90,6 +90,8 @@
         public const string ItemResistance = "`Resistance {0:+#;-#}`";
         public const string ItemHitrate = "`Hitrate {0:+#;-#}`";
         public const string ItemDodge = "`Dodge {0:+#;-#}`";
+        public const string ItemHealth = "`Health {0:+#;-#}`";
+        public const string ItemEnergy = "`Energy {0:+#;-#}`";
         public const string ItemStrength = "`Strength {0:+#;-#}`";
         public const string ItemAgility = "`Agility {0:+#;-#}`";
         public const string ItemIntelligence = "`Intelligence {0:+#;-#}`";

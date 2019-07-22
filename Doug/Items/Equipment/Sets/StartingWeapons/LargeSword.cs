@@ -16,9 +16,9 @@
             LevelRequirement = 10;
             IsDualWield = true;
 
-            MinAttack = 38;
-            MaxAttack = 70;
-            Strength = 2;
+            Stats.MinAttack = 38;
+            Stats.MaxAttack = 70;
+            Stats.Strength = 2;
         }
     }
 }

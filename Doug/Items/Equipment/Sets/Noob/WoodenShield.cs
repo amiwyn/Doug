@@ -15,8 +15,8 @@
             Price = 105;
             LevelRequirement = 5;
 
-            Defense = 8;
-            Resistance = 4;
+            Stats.Defense = 8;
+            Stats.Resistance = 4;
         }
     }
 }

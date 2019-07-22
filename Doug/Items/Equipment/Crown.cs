@@ -17,12 +17,12 @@
             IsSellable = false;
             IsTradable = false;
 
-            Strength = 5;
-            Luck = 5;
-            Agility = 5;
-            Constitution = 5;
-            Intelligence = 5;
-            Health = 100;
+            Stats.Strength = 5;
+            Stats.Luck = 5;
+            Stats.Agility = 5;
+            Stats.Constitution = 5;
+            Stats.Intelligence = 5;
+            Stats.Health = 100;
         }
     }
 }

@@ -15,8 +15,8 @@
             Price = 55;
             LevelRequirement = 5;
 
-            Defense = 4;
-            Hitrate = 7;
+            Stats.Defense = 4;
+            Stats.Hitrate = 7;
         }
     }
 }

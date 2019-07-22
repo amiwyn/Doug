@@ -42,20 +42,20 @@ namespace Doug.Models
             }
         }
 
-        public int Health => Equipment.Sum(equip => equip.Value.Health);
-        public int Energy => Equipment.Sum(equip => equip.Value.Energy);
-        public int Luck => Equipment.Sum(equip => equip.Value.Luck);
-        public int Agility => Equipment.Sum(equip => equip.Value.Agility);
-        public int Strength => Equipment.Sum(equip => equip.Value.Strength);
-        public int Constitution => Equipment.Sum(equip => equip.Value.Constitution);
-        public int Intelligence => Equipment.Sum(equip => equip.Value.Intelligence);
-        public int MaxAttack => Equipment.Sum(equip => equip.Value.MaxAttack);
-        public int MinAttack => Equipment.Sum(equip => equip.Value.MinAttack);
-        public int Defense => Equipment.Sum(equip => equip.Value.Defense);
-        public int Dodge => Equipment.Sum(equip => equip.Value.Dodge);
-        public int Hitrate => Equipment.Sum(equip => equip.Value.Hitrate);
-        public double AttackSpeed => Equipment.Sum(equip => equip.Value.AttackSpeed);
-        public int Resistance => Equipment.Sum(equip => equip.Value.Resistance);
+        public int Health => Equipment.Sum(equip => equip.Value.Stats.Health);
+        public int Energy => Equipment.Sum(equip => equip.Value.Stats.Energy);
+        public int Luck => Equipment.Sum(equip => equip.Value.Stats.Luck);
+        public int Agility => Equipment.Sum(equip => equip.Value.Stats.Agility);
+        public int Strength => Equipment.Sum(equip => equip.Value.Stats.Strength);
+        public int Constitution => Equipment.Sum(equip => equip.Value.Stats.Constitution);
+        public int Intelligence => Equipment.Sum(equip => equip.Value.Stats.Intelligence);
+        public int MaxAttack => Equipment.Sum(equip => equip.Value.Stats.MaxAttack);
+        public int MinAttack => Equipment.Sum(equip => equip.Value.Stats.MinAttack);
+        public int Defense => Equipment.Sum(equip => equip.Value.Stats.Defense);
+        public int Dodge => Equipment.Sum(equip => equip.Value.Stats.Dodge);
+        public int Hitrate => Equipment.Sum(equip => equip.Value.Stats.Hitrate);
+        public double AttackSpeed => Equipment.Sum(equip => equip.Value.Stats.AttackSpeed);
+        public int Resistance => Equipment.Sum(equip => equip.Value.Stats.Resistance);
 
         public List<EquipmentItem> Equip(EquipmentItem item)
         {
