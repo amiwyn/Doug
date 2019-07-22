@@ -15,7 +15,7 @@
             Price = 255;
             LevelRequirement = 10;
 
-            Attack = 56;
+            Attack = 46;
         }
     }
 }
