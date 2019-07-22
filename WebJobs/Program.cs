@@ -14,7 +14,7 @@ namespace WebJobs
 
             var serviceProvider = new ServiceCollection()
                 .AddLogging()
-                .AddDbContext<DougContext>(options => options.UseSqlServer(connectionString))
+                .AddDbContext<DougContext>(options => options.UseSqlServer(connectionString ?? throw new InvalidOperationException()))
                 .BuildServiceProvider();
 
             var db = serviceProvider.GetService<DougContext>();
