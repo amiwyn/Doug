@@ -28,7 +28,7 @@ namespace Doug.Items
                 MaxAttack == 0 ? string.Empty : string.Format(DougMessages.ItemAttack, MinAttack, MaxAttack),
                 DisplayAttribute(DougMessages.ItemDefense, Defense),
                 DisplayAttribute(DougMessages.ItemResistance, Resistance),
-                Math.Abs(AttackSpeed) < 0.0001 ? string.Empty : string.Format(DougMessages.AttackSpeed, AttackSpeed),
+                Math.Abs(AttackSpeed) <= 1 ? string.Empty : string.Format(DougMessages.AttackSpeed, AttackSpeed),
                 DisplayAttribute(DougMessages.ItemHitrate, Hitrate),
                 DisplayAttribute(DougMessages.ItemDodge, Dodge),
                 DisplayAttribute(DougMessages.ItemHealth, Health),

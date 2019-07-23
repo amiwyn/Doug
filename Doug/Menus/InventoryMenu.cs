@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Doug.Items;
 using Doug.Menus.Blocks;
 using Doug.Menus.Blocks.Accessories;
 using Doug.Menus.Blocks.Text;
@@ -32,15 +33,21 @@ namespace Doug.Menus
 
         private List<Block> ItemSection(InventoryItem item)
         {
-            var textBlock = new MarkdownText($"{item.Item.Icon} *{item.Item.Name}* \n {item.Item.Description}");
+            var quantity = item.Quantity == 1 ? string.Empty : $"`×{item.Quantity}`";
+            var textBlock = new MarkdownText($"{item.Item.Icon} *{item.Item.Name}* {quantity} \n {item.Item.Description}");
             var itemOptions = ItemActionsAccessory(item.InventoryPosition, item.Item.Price / 2);
 
-            return new List<Block>
+            var blocks = new List<Block> { new Section(textBlock, itemOptions) };
+
+            if (item.Item is EquipmentItem equipmentItem)
             {
-                new Section(textBlock, itemOptions),
-                new Context(new List<string> {string.Format(DougMessages.Quantity, item.Quantity)}),
-                new Divider()
-            };
+                var attributes = equipmentItem.GetDisplayAttributeList();
+                blocks.Add(new Context(attributes));
+            }
+
+            blocks.Add(new Divider()); 
+
+            return blocks;
         }
 
         private Accessory ItemActionsAccessory(int position, int sellValue)
