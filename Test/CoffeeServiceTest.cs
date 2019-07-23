@@ -30,6 +30,7 @@ namespace Test
         [TestInitialize]
         public void Setup()
         {
+            _coffeeRepository.Setup(repo => repo.GetCoffeeBreak()).Returns(new CoffeeBreak());
             _userRepository.Setup(repo => repo.GetUser(It.IsAny<string>())).Returns(new User());
             _coffeeService = new CoffeeService(_slack.Object, _coffeeRepository.Object, _backgroundJobClient.Object, _userRepository.Object, _inventoryRepository.Object, _userService.Object, _statsRepository.Object);
         }

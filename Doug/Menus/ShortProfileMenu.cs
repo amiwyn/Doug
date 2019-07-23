@@ -16,10 +16,14 @@ namespace Doug.Menus
             {
                 new Section(new MarkdownText($"<@{user.Id}>")),
                 CreateSmallUserInfo(user),
-                new Divider(),
-                CreateEffectFields(user),
                 new Divider()
             };
+            
+            if (user.Effects.Count > 0)
+            {
+                Blocks.Add(CreateEffectFields(user));
+                Blocks.Add(new Divider());
+            }
 
             if (!user.Loadout.IsEmpty())
             {
