@@ -8,6 +8,7 @@ namespace Doug.Repositories
 {
     public interface ICoffeeRepository
     {
+        CoffeeBreak GetCoffeeBreak();
         void AddToRoster(string userId);
         void RemoveFromRoster(string userId);
         void SkipUser(string userId);
@@ -15,11 +16,11 @@ namespace Doug.Repositories
         ICollection<User> GetReadyParticipants();
         ICollection<User> GetMissingParticipants();
         void ResetRoster();
-        bool IsCoffeeBreak();
         void EndCoffeeBreak();
         void StartCoffeeBreak();
         string GetRemindJob();
         void SetRemindJob(string jobId);
+        void SwapBreakCompletionFlags();
     }
 
     public class CoffeeRepository : ICoffeeRepository
@@ -31,6 +32,11 @@ namespace Doug.Repositories
         {
             _db = dougContext;
             _itemFactory = itemFactory;
+        }
+
+        public CoffeeBreak GetCoffeeBreak()
+        {
+            return _db.CoffeeBreak.Single();
         }
 
         public void AddToRoster(string userId)
@@ -99,15 +105,10 @@ namespace Doug.Repositories
             _db.SaveChanges();
         }
 
-        public bool IsCoffeeBreak()
-        {
-            return _db.CoffeeBreak.Single().IsCoffee;
-        }
-
         public void EndCoffeeBreak()
         {
             var channel = _db.CoffeeBreak.Single();
-            channel.IsCoffee = false;
+            channel.IsCoffeeBreak = false;
 
             _db.SaveChanges();
         }
@@ -115,7 +116,7 @@ namespace Doug.Repositories
         public void StartCoffeeBreak()
         {
             var channel = _db.CoffeeBreak.Single();
-            channel.IsCoffee = true;
+            channel.IsCoffeeBreak = true;
 
             _db.SaveChanges();
         }
@@ -128,6 +129,16 @@ namespace Doug.Repositories
         public void SetRemindJob(string jobId)
         {
             _db.CoffeeBreak.Single().CoffeeRemindJobId = jobId;
+            _db.SaveChanges();
+        }
+
+        public void SwapBreakCompletionFlags()
+        {
+            var coffee = _db.CoffeeBreak.Single();
+
+            coffee.MorningBreakCompleted ^= true;
+            coffee.AfternoonBreakCompleted ^= true;
+
             _db.SaveChanges();
         }
 

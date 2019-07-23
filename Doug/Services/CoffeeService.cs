@@ -44,13 +44,20 @@ namespace Doug.Services
 
         public void CountParrot(string userId, string channelId, DateTime currentTime)
         {
-            if (!IsInTimespan(currentTime, TimeSpan.FromHours(MorningBreak), Tolerance) &&
-                !IsInTimespan(currentTime, TimeSpan.FromHours(AfternoonBreak), Tolerance))
+            var coffeeBreak = _coffeeRepository.GetCoffeeBreak();
+
+            var morningBreakIsPossible = IsInTimespan(currentTime, TimeSpan.FromHours(MorningBreak), Tolerance) &&
+                                          !coffeeBreak.MorningBreakCompleted;
+
+            var afternoonBreakIsPossible = IsInTimespan(currentTime, TimeSpan.FromHours(AfternoonBreak), Tolerance) &&
+                                          !coffeeBreak.AfternoonBreakCompleted;
+
+            if (!morningBreakIsPossible && !afternoonBreakIsPossible)
             {
                 return;
             }
 
-            if (_coffeeRepository.IsCoffeeBreak())
+            if (coffeeBreak.IsCoffeeBreak)
             {
                 return;
             }
@@ -111,6 +118,8 @@ namespace Doug.Services
             _slack.BroadcastMessage(DougMessages.CoffeeStart, channelId);
 
             _backgroundJobClient.Schedule(() => EndCoffee(channelId), TimeSpan.FromMinutes(CoffeeBreakDurationMinutes));
+
+            _coffeeRepository.SwapBreakCompletionFlags();
         }
 
         public void EndCoffee(string channelId)
