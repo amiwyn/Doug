@@ -15,8 +15,8 @@
             Price = 50;
             LevelRequirement = 5;
 
-            Defense = 4;
-            Dodge = 6;
+            Stats.Defense = 4;
+            Stats.Dodge = 6;
         }
     }
 }

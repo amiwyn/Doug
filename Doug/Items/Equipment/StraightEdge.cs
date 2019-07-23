@@ -15,8 +15,9 @@
             Price = 820;
             LevelRequirement = 20;
 
-            Attack = 69;
-            Constitution = 4;
+            Stats.MinAttack = 69;
+            Stats.MaxAttack = 69;
+            Stats.Constitution = 4;
         }
     }
 }

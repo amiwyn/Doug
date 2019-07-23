@@ -15,7 +15,7 @@
             Price = 2674;
             LevelRequirement = 5;
 
-            Luck = 15;
+            Stats.Luck = 15;
         }
 
         public override double OnGambling(double chance)

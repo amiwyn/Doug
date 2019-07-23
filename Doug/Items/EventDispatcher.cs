@@ -61,7 +61,7 @@ namespace Doug.Items
 
         public bool OnAttackedInvincibility(User attacker, User target)
         {
-            return PropagateEffectEvents(target, false, (isInvincible, effect) => effect.OnAttackedInvincibility(attacker, target) && isInvincible);
+            return PropagateEffectEvents(target, false, (isInvincible, effect) => effect.OnAttackedInvincibility(attacker, target) || isInvincible);
         }
 
         public string OnFlaming(User caller, User target, Command command, string slur)

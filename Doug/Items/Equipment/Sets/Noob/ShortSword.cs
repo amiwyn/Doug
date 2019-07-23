@@ -15,7 +15,8 @@
             Price = 105;
             LevelRequirement = 5;
 
-            Attack = 34;
+            Stats.MinAttack = 28;
+            Stats.MaxAttack = 36;
         }
     }
 }

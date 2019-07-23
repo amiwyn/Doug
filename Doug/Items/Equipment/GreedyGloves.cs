@@ -15,8 +15,8 @@
             Price = 2250;
             LevelRequirement = 20;
 
-            Attack = 5;
-            Strength = 5;
+            Stats.MaxAttack = 5;
+            Stats.Strength = 5;
         }
 
         public override int OnStealingAmount(int amount)
