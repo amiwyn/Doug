@@ -23,6 +23,17 @@ namespace Doug.Models
         public DateTime AttackCooldown { get; set; }
         public DateTime StealCooldown { get; set; }
 
+        public int Luck { get; set; }
+        public int Agility { get; set; }
+        public int Strength { get; set; }
+        public int Constitution { get; set; }
+        public int Intelligence { get; set; }
+
+        public int Level => (int)Math.Floor(Math.Sqrt(Experience) * 0.1 + 1);
+        public int TotalStatsPoints => (int)Math.Floor(Level + 5 * Math.Floor(Level * 0.1)) + 4;
+        public int FreeStatsPoints => TotalStatsPoints + 25 - (Luck + Agility + Strength + Constitution + Intelligence);
+        public int Attack => (int)Math.Floor(Strength * 3.0);
+
         public int Health
         {
             get => _health;
@@ -65,17 +76,6 @@ namespace Doug.Models
             }
         }
 
-        public int Luck { get; set; }
-        public int Agility { get; set; }
-        public int Strength { get; set; }
-        public int Constitution { get; set; }
-        public int Intelligence { get; set; }
-
-        public int Level => (int)Math.Floor(Math.Sqrt(Experience) * 0.1 + 1);
-        public int TotalStatsPoints => (int)Math.Floor(Level + 5 * Math.Floor(Level * 0.1)) + 4;
-        public int FreeStatsPoints => TotalStatsPoints + 25 - (Luck + Agility + Strength + Constitution + Intelligence);
-        public int Attack => (int)Math.Floor(Strength * 3.0);
-
         public User()
         {
             InventoryItems = new List<InventoryItem>();
@@ -89,12 +89,6 @@ namespace Doug.Models
             Intelligence = 5;
         }
 
-        public void LevelUp()
-        {
-            Health = TotalHealth();
-            Energy = TotalEnergy();
-        }
-
         public int TotalLuck() => Loadout.Luck + Luck + Effects.Sum(userEffect => userEffect.Effect.Luck);
         public int TotalAgility() => Loadout.Agility + Agility + Effects.Sum(userEffect => userEffect.Effect.Agility);
         public int TotalStrength() => Loadout.Strength + Strength + Effects.Sum(userEffect => userEffect.Effect.Strength);
@@ -106,6 +100,25 @@ namespace Doug.Models
         public int MaxAttack() => Loadout.MaxAttack + Attack + Effects.Sum(userEffect => userEffect.Effect.Attack);
         public int MinAttack() => Loadout.MinAttack + Attack + Effects.Sum(userEffect => userEffect.Effect.Attack);
 
+        public void RegenerateHealth() => Health += (int)(TotalHealth() * 0.2);
+        public double BaseOpponentStealSuccessRate() => 0.75;
+        public int BaseStealAmount() => (int)Math.Floor(3 * (Math.Sqrt(TotalAgility()) - Math.Sqrt(5)) + 1);
+        public bool HasEnoughCreditsForAmount(int amount) => Credits - amount >= 0;
+        public string NotEnoughCreditsForAmountResponse(int amount) => string.Format(DougMessages.NotEnoughCredits, amount, Credits);
+        public bool HasEmptyInventory() => !InventoryItems.Any();
+        public bool IsDead() => Health <= 0;
+        public bool IsAttackOnCooldown() => DateTime.UtcNow <= AttackCooldown;
+        public bool IsStealOnCooldown() => DateTime.UtcNow <= StealCooldown;
+        public int CalculateAttackCooldownRemaining() => (int)(AttackCooldown - DateTime.UtcNow).TotalSeconds;
+        public int CalculateStealCooldownRemaining() => (int)(StealCooldown - DateTime.UtcNow).TotalSeconds;
+        public TimeSpan GetStealCooldown() => TimeSpan.FromSeconds(BaseStealCooldown);
+        public TimeSpan GetAttackCooldown() => TimeSpan.FromSeconds(BaseAttackCooldown / (Math.Abs(Loadout.AttackSpeed) < 0.001 ? 1 : Loadout.AttackSpeed));
+
+        public void LevelUp()
+        {
+            Health = TotalHealth();
+            Energy = TotalEnergy();
+        }
 
         public void LoadItems(IItemFactory itemFactory)
         {
@@ -215,18 +228,18 @@ namespace Doug.Models
             return status;
         }
 
-        public void RegenerateHealth() => Health += (int)(TotalHealth() * 0.2);
-        public double BaseOpponentStealSuccessRate() => 0.75;
-        public int BaseStealAmount() => (int)Math.Floor(3 * (Math.Sqrt(TotalAgility()) - Math.Sqrt(5)) + 1);
-        public bool HasEnoughCreditsForAmount(int amount) => Credits - amount >= 0;
-        public string NotEnoughCreditsForAmountResponse(int amount) => string.Format(DougMessages.NotEnoughCredits, amount, Credits);
-        public bool HasEmptyInventory() => !InventoryItems.Any();
-        public bool IsDead() => Health <= 0;
-        public bool IsAttackOnCooldown() => DateTime.UtcNow <= AttackCooldown;
-        public bool IsStealOnCooldown() => DateTime.UtcNow <= StealCooldown;
-        public int CalculateAttackCooldownRemaining() => (int)(AttackCooldown - DateTime.UtcNow).TotalSeconds;
-        public int CalculateStealCooldownRemaining() => (int)(StealCooldown - DateTime.UtcNow).TotalSeconds;
-        public TimeSpan GetStealCooldown() => TimeSpan.FromSeconds(BaseStealCooldown);
-        public TimeSpan GetAttackCooldown() => TimeSpan.FromSeconds(BaseAttackCooldown / (Math.Abs(Loadout.AttackSpeed) < 0.001 ? 1 : Loadout.AttackSpeed));
+        public List<EquipmentItem> Equip(EquipmentItem item)
+        {
+            return CanEquip(item) ? Loadout.Equip(item) : new List<EquipmentItem>();
+        }
+
+        public bool CanEquip(EquipmentItem item)
+        {
+            return Level >= item.LevelRequirement &&
+                   TotalStrength() >= item.StrengthRequirement &&
+                   TotalAgility() >= item.AgilityRequirement &&
+                   TotalIntelligence() >= item.IntelligenceRequirement &&
+                   TotalLuck() >= item.LuckRequirement;
+        }
     }
 }

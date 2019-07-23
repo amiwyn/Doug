@@ -94,7 +94,7 @@ namespace Test.Inventory
 
             var result = _inventoryCommands.Equip(_command);
 
-            Assert.AreEqual("You need to be at least level 10 to wear this item.", result.Message);
+            Assert.AreEqual("You do not meet the level requirements to equip this item.", result.Message);
         }
     }
 }

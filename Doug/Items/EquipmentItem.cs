@@ -6,6 +6,11 @@ namespace Doug.Items
 {
     public class EquipmentItem : Item
     {
+        public int LuckRequirement { get; set; }
+        public int AgilityRequirement { get; set; }
+        public int StrengthRequirement { get; set; }
+        public int IntelligenceRequirement { get; set; }
+
         public ItemStats Stats { get; set; }
         public EquipmentSlot Slot { get; set; }
         public int LevelRequirement { get; set; }

@@ -124,7 +124,7 @@
         public const string UserIsNotInPvp = "The target user is not in the pvp channel.";
         public const string ItemNotTradable = "This item is not tradable.";
         public const string EmptyInventory = "Oops, yer loot seems empty, buy more at th' shop now.";
-        public const string LevelRequirementNotMet = "You need to be at least level {0} to wear this item.";
+        public const string LevelRequirementNotMet = "You do not meet the level requirements to equip this item.";
         public const string CommandOnCooldown = "This command is on cooldown, try again in {0} seconds.";
         public const string UnknownShop = "Unknown shop. Verify the shop id.";
         public const string UserMustBeActive = "The user you are targetting must be active.";

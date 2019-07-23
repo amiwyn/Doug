@@ -114,9 +114,9 @@ namespace Doug.Commands
 
             var equipmentItem = (EquipmentItem)inventoryItem.Item;
 
-            if (equipmentItem.LevelRequirement > user.Level)
+            if (!user.CanEquip(equipmentItem))
             {
-                return new DougResponse(string.Format(DougMessages.LevelRequirementNotMet, equipmentItem.LevelRequirement));
+                return new DougResponse(DougMessages.LevelRequirementNotMet);
             }
 
             var unequippedItems = _equipmentRepository.EquipItem(user, equipmentItem);

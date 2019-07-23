@@ -21,7 +21,7 @@ namespace Doug.Repositories
 
         public List<EquipmentItem> EquipItem(User user, EquipmentItem item)
         {
-            var equipment = user.Loadout.Equip(item);
+            var equipment = user.Equip(item);
 
             _db.SaveChanges();
 
