@@ -8,6 +8,7 @@ namespace Doug.Repositories
     public interface IMonsterRepository
     {
         IEnumerable<Monster> GetMonsters();
+        void SpawnMonster(Monster monster);
     }
 
     public class MonsterRepository : IMonsterRepository
@@ -22,6 +23,12 @@ namespace Doug.Repositories
         public IEnumerable<Monster> GetMonsters()
         {
             return _db.Monsters.ToList();
+        }
+
+        public void SpawnMonster(Monster monster)
+        {
+            _db.Monsters.Add(monster);
+            _db.SaveChanges();
         }
     }
 }
