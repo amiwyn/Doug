@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Doug.Items;
 using Doug.Models;
+using Doug.Models.Combat;
 using Doug.Repositories;
 using Doug.Slack;
 
@@ -147,9 +148,9 @@ namespace Doug.Services
 
         private async Task DealDamage(User user, User target, string channel)
         {
-            var attackStatus = user.AttackUser(target, out var damageDealt, _eventDispatcher);
+            var attack = user.AttackTarget(target, _eventDispatcher);
 
-            var message = attackStatus.ToMessage(_userService.Mention(user), _userService.Mention(target), damageDealt);
+            var message = attack.Status.ToMessage(_userService.Mention(user), _userService.Mention(target), attack.Damage);
 
             await _slack.BroadcastMessage(message, channel);
 

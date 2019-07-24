@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Doug.Items;
+using Doug.Models.Combat;
 
 namespace Doug.Models
 {

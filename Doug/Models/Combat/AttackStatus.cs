@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Doug.Models
+namespace Doug.Models.Combat
 {
     public enum AttackStatus
     {
