@@ -1,4 +1,6 @@
-﻿namespace Doug.Monsters
+﻿using Doug.Monsters.Seagulls;
+
+namespace Doug.Monsters
 {
     public interface IMonsterFactory
     {
@@ -9,7 +11,11 @@
     {
         public Monster CreateMonster(string monsterId)
         {
-            throw new System.NotImplementedException();
+            switch (monsterId)
+            {
+                case Seagull.MonsterId: return new Seagull();
+                default: return new Seagull();
+            }
         }
     }
 }

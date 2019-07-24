@@ -1,12 +1,21 @@
 ﻿using System;
+using System.Collections.Generic;
 using Doug.Items;
+using Doug.Models;
 using Doug.Models.Combat;
 
 namespace Doug.Monsters
 {
-    public class Monster : ICombatable
+    public abstract class Monster : ICombatable
     {
+        public string Id { get; set; }
+        public int Level { get; set; }
+        public int ExperienceValue { get; set; }
+        public DamageType DamageType { get; set; }
+        public Dictionary<LootItem, double> DropTable { get; set; }
+
         public int Health { get; set; }
+        public int MaxHealth { get; set; }
         public int MinAttack { get; set; }
         public int MaxAttack { get; set; }
         public int Hitrate { get; set; }
@@ -20,7 +29,10 @@ namespace Doug.Monsters
         public int Constitution { get; set; }
         public int Intelligence { get; set; }
 
-        public DamageType DamageType { get; set; }
+        protected Monster()
+        {
+            Health = MaxHealth;
+        }
 
         public Attack AttackTarget(ICombatable target, IEventDispatcher eventDispatcher)
         {
