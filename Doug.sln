@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Doug", "Doug\Doug.csproj", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test", "Test\Test.csproj", "{E90F085F-07F2-41F6-9E0B-7C85D352590E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebJobs", "WebJobs\WebJobs.csproj", "{3B02046C-DEC8-448E-A4ED-3555E0781A3F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ResetWebJob", "WebJobs\ResetWebJob.csproj", "{3B02046C-DEC8-448E-A4ED-3555E0781A3F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonsterSpawnWebJob", "MonsterSpawnWebJob\MonsterSpawnWebJob.csproj", "{694E2B2B-1E91-4EC5-83D1-0E42A746E55E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{3B02046C-DEC8-448E-A4ED-3555E0781A3F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3B02046C-DEC8-448E-A4ED-3555E0781A3F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3B02046C-DEC8-448E-A4ED-3555E0781A3F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{694E2B2B-1E91-4EC5-83D1-0E42A746E55E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{694E2B2B-1E91-4EC5-83D1-0E42A746E55E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{694E2B2B-1E91-4EC5-83D1-0E42A746E55E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{694E2B2B-1E91-4EC5-83D1-0E42A746E55E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

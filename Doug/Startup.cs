@@ -9,6 +9,7 @@ using Doug.Commands;
 using Doug.Effects;
 using Doug.Items;
 using Doug.Models;
+using Doug.Monsters;
 using Doug.Repositories;
 using Doug.Services;
 using Doug.Slack;
@@ -53,42 +54,7 @@ namespace Doug
 
             services.AddSingleton(new HttpClient(new HttpClientHandler(), false));
 
-            
-            services.AddScoped<ISlackWebApi, SlackWebApi>();
-            services.AddScoped<IEventDispatcher, EventDispatcher>();
-            services.AddScoped<IItemFactory, ItemFactory>();
-            services.AddScoped<IEffectFactory, EffectFactory>();
-
-            services.AddScoped<IEventService, EventService>();
-            services.AddScoped<IAuthorizationService, AuthorizationService>();
-            services.AddScoped<ICoffeeService, CoffeeService>();
-            services.AddScoped<IRandomService, RandomService>();
-            services.AddScoped<IShopMenuService, ShopMenuService>();
-            services.AddScoped<IUserService, UserService>();
-            services.AddScoped<IStatsMenuService, StatsMenuService>();
-            services.AddScoped<IInventoryMenuService, InventoryMenuService>();
-            services.AddScoped<IShopService, ShopService>();
-            services.AddScoped<IGovernmentService, GovernmentService>();
-            services.AddScoped<ICombatService, CombatService>();
-
-            services.AddScoped<ICoffeeCommands, CoffeeCommands>();
-            services.AddScoped<ISlursCommands, SlursCommands>();
-            services.AddScoped<ICreditsCommands, CreditsCommands>();
-            services.AddScoped<ICasinoCommands, CasinoCommands>();
-            services.AddScoped<ICombatCommands, CombatCommands>();
-            services.AddScoped<IInventoryCommands, InventoryCommands>();
-            services.AddScoped<IStatsCommands, StatsCommands>();
-
-            services.AddScoped<IChannelRepository, ChannelRepository>();
-            services.AddScoped<IUserRepository, UserRepository>();
-            services.AddScoped<ICoffeeRepository, CoffeeRepository>();
-            services.AddScoped<ISlurRepository, SlurRepository>();
-            services.AddScoped<IStatsRepository, StatsRepository>();
-            services.AddScoped<IInventoryRepository, InventoryRepository>();
-            services.AddScoped<IEquipmentRepository, EquipmentRepository>();
-            services.AddScoped<IEffectRepository, EffectRepository>();
-            services.AddScoped<IGovernmentRepository, GovernmentRepository>();
-            services.AddScoped<IShopRepository, ShopRepository>();
+            RegisterDougServices(services);
 
             var env = Environment.GetEnvironmentVariable("APP_ENV");
 
@@ -114,6 +80,47 @@ namespace Doug
                 services.AddDbContext<DougContext>(options => options.UseSqlite("Data Source=doug.db"));
             }
 
+        }
+
+        public static void RegisterDougServices(IServiceCollection services)
+        {
+            services.AddScoped<ISlackWebApi, SlackWebApi>();
+            services.AddScoped<IEventDispatcher, EventDispatcher>();
+            services.AddScoped<IItemFactory, ItemFactory>();
+            services.AddScoped<IEffectFactory, EffectFactory>();
+            services.AddScoped<IMonsterFactory, MonsterFactory>();
+
+            services.AddScoped<IEventService, EventService>();
+            services.AddScoped<IAuthorizationService, AuthorizationService>();
+            services.AddScoped<ICoffeeService, CoffeeService>();
+            services.AddScoped<IRandomService, RandomService>();
+            services.AddScoped<IShopMenuService, ShopMenuService>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IStatsMenuService, StatsMenuService>();
+            services.AddScoped<IInventoryMenuService, InventoryMenuService>();
+            services.AddScoped<IShopService, ShopService>();
+            services.AddScoped<IGovernmentService, GovernmentService>();
+            services.AddScoped<ICombatService, CombatService>();
+            services.AddScoped<IMonsterService, MonsterService>();
+
+            services.AddScoped<ICoffeeCommands, CoffeeCommands>();
+            services.AddScoped<ISlursCommands, SlursCommands>();
+            services.AddScoped<ICreditsCommands, CreditsCommands>();
+            services.AddScoped<ICasinoCommands, CasinoCommands>();
+            services.AddScoped<ICombatCommands, CombatCommands>();
+            services.AddScoped<IInventoryCommands, InventoryCommands>();
+            services.AddScoped<IStatsCommands, StatsCommands>();
+
+            services.AddScoped<IChannelRepository, ChannelRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<ICoffeeRepository, CoffeeRepository>();
+            services.AddScoped<ISlurRepository, SlurRepository>();
+            services.AddScoped<IStatsRepository, StatsRepository>();
+            services.AddScoped<IInventoryRepository, InventoryRepository>();
+            services.AddScoped<IEquipmentRepository, EquipmentRepository>();
+            services.AddScoped<IEffectRepository, EffectRepository>();
+            services.AddScoped<IGovernmentRepository, GovernmentRepository>();
+            services.AddScoped<IShopRepository, ShopRepository>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

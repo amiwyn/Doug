@@ -4,7 +4,7 @@ using Doug.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace WebJobs
+namespace ResetWebJob
 {
     class Program
     {
