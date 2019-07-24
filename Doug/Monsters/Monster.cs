@@ -9,12 +9,12 @@ namespace Doug.Monsters
     public abstract class Monster : ICombatable
     {
         public string Id { get; set; }
+        public int Health { get; set; }
         public int Level { get; set; }
         public int ExperienceValue { get; set; }
         public DamageType DamageType { get; set; }
         public Dictionary<LootItem, double> DropTable { get; set; }
 
-        public int Health { get; set; }
         public int MaxHealth { get; set; }
         public int MinAttack { get; set; }
         public int MaxAttack { get; set; }
