@@ -103,6 +103,7 @@
         public const string ItemRightHand = "*Right Handed*";
         public const string SmallHealthDisplay = "{0} HP";
         public const string UserIsInvincible = "This user is invincible!";
+        public const string MonsterSpawned = "*{0}* has spawned!";
 
         public const string DougError = "Beep boop, it's not working : {0}";
         public const string NotAnAdmin = "You are not an admin.";

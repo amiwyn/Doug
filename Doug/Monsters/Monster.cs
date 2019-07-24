@@ -15,6 +15,9 @@ namespace Doug.Monsters
         public DamageType DamageType { get; set; }
         public Dictionary<LootItem, double> DropTable { get; set; }
 
+        public string Name { get; set; }
+        public string Description { get; set; }
+
         public int MaxHealth { get; set; }
         public int MinAttack { get; set; }
         public int MaxAttack { get; set; }
