@@ -6,7 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
 using System.Collections.Generic;
-using Doug.Items;
+using Doug.Items.Consumables;
 using Doug.Models;
 
 namespace Test
@@ -25,12 +25,14 @@ namespace Test
         private readonly Mock<IUserRepository> _userRepository = new Mock<IUserRepository>();
         private readonly Mock<IInventoryRepository> _inventoryRepository = new Mock<IInventoryRepository>();
         private readonly Mock<IUserService> _userService = new Mock<IUserService>();
+        private readonly Mock<IStatsRepository> _statsRepository = new Mock<IStatsRepository>();
 
         [TestInitialize]
         public void Setup()
         {
+            _coffeeRepository.Setup(repo => repo.GetCoffeeBreak()).Returns(new CoffeeBreak());
             _userRepository.Setup(repo => repo.GetUser(It.IsAny<string>())).Returns(new User());
-            _coffeeService = new CoffeeService(_slack.Object, _coffeeRepository.Object, _backgroundJobClient.Object, _userRepository.Object, _inventoryRepository.Object, _userService.Object);
+            _coffeeService = new CoffeeService(_slack.Object, _coffeeRepository.Object, _backgroundJobClient.Object, _userRepository.Object, _inventoryRepository.Object, _userService.Object, _statsRepository.Object);
         }
 
         [TestMethod]
@@ -126,7 +128,7 @@ namespace Test
 
             _coffeeService.EndCoffee(Channel);
 
-            _inventoryRepository.Verify(repo => repo.AddItemToUsers(It.IsAny<List<User>>(), ItemFactory.CoffeeCup));
+            _inventoryRepository.Verify(repo => repo.AddItemToUsers(It.IsAny<List<User>>(), It.IsAny<CoffeeCup>()));
         }
 
         [TestMethod]

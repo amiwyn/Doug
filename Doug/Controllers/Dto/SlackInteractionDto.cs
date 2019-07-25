@@ -43,6 +43,7 @@ namespace Doug.Controllers.Dto
             {
                 Action = slackInteraction.Actions.SingleOrDefault()?.ActionId,
                 Value = value,
+                BlockId = slackInteraction.Actions.SingleOrDefault()?.BlockId,
                 ChannelId = slackInteraction.Channel.Id,
                 UserId = slackInteraction.User.Id,
                 Timestamp = slackInteraction.Container.MessageTs,
@@ -78,6 +79,7 @@ namespace Doug.Controllers.Dto
     public class SlackInteractionAction
     {
         public string Type { get; set; }
+        public string BlockId { get; set; }
         public string ActionId { get; set; }
         public string Value { get; set; }
         public SlackInteractionOption SelectedOption { get; set; }

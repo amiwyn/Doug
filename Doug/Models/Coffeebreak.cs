@@ -7,6 +7,8 @@
         public string UserToken { get; set; }
         public string CoffeeRemindJobId { get; set; }
         public int FatCounter { get; set; }
-        public bool IsCoffee { get; set; }
+        public bool IsCoffeeBreak { get; set; }
+        public bool MorningBreakCompleted { get; set; }
+        public bool AfternoonBreakCompleted { get; set; }
     }
 }

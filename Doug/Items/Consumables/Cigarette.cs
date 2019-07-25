@@ -1,5 +1,4 @@
-﻿using Doug.Effects;
-using Doug.Effects.Buffs;
+﻿using Doug.Effects.Buffs;
 using Doug.Models;
 using Doug.Repositories;
 
@@ -7,13 +6,15 @@ namespace Doug.Items.Consumables
 {
     public class Cigarette : ConsumableItem
     {
+        public const string ItemId = "cigarette";
+
         private readonly IEffectRepository _effectRepository;
         private const int DurationInMinutes = 5;
 
         public Cigarette(IInventoryRepository inventoryRepository, IEffectRepository effectRepository) : base(inventoryRepository)
         {
             _effectRepository = effectRepository;
-            Id = ItemFactory.Cigarette;
+            Id = ItemId;
             Name = "Cigarette";
             Description = "A cigarette that probably belonged to Vapane. Gives *Nicotine High* for 5 minutes";
             Rarity = Rarity.Uncommon;
@@ -27,7 +28,7 @@ namespace Doug.Items.Consumables
 
             var effect = new NicotineHigh();
 
-            _effectRepository.AddEffect(user, EffectFactory.NicotineHigh, DurationInMinutes);
+            _effectRepository.AddEffect(user, NicotineHigh.EffectId, DurationInMinutes);
 
             return string.Format(DougMessages.AddedEffect, effect.Name, DurationInMinutes);
         }

@@ -5,16 +5,18 @@ namespace Doug.Items.Consumables.Resets
 {
     public class ConstitutionReset : ConsumableItem
     {
+        public const string ItemId = "con_reset";
+
         private readonly IStatsRepository _statsRepository;
 
         public ConstitutionReset(IStatsRepository statsRepository, IInventoryRepository inventoryRepository) : base(inventoryRepository)
         {
             _statsRepository = statsRepository;
-            Id = ItemFactory.ConstitutionReset;
+            Id = ItemId;
             Name = "Constitution Reset Potion";
             Description = "Reset 1 point of constitution.";
             Rarity = Rarity.Rare;
-            Icon = ":tropical_drink:";
+            Icon = ":reset_potion:";
             Price = 25;
         }
 

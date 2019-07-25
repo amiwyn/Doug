@@ -3,18 +3,20 @@ using Doug.Repositories;
 
 namespace Doug.Items.Consumables.Resets
 {
-    public class CharismaReset : ConsumableItem
+    public class StrengthReset : ConsumableItem
     {
+        public const string ItemId = "str_reset";
+
         private readonly IStatsRepository _statsRepository;
 
-        public CharismaReset(IStatsRepository statsRepository, IInventoryRepository inventoryRepository) : base(inventoryRepository)
+        public StrengthReset(IStatsRepository statsRepository, IInventoryRepository inventoryRepository) : base(inventoryRepository)
         {
             _statsRepository = statsRepository;
-            Id = ItemFactory.CharismaReset;
-            Name = "Charisma Reset Potion";
-            Description = "Reset 1 point of charisma.";
+            Id = ItemId;
+            Name = "Strength Reset Potion";
+            Description = "Reset 1 point of strength.";
             Rarity = Rarity.Rare;
-            Icon = ":tropical_drink:";
+            Icon = ":reset_potion:";
             Price = 25;
         }
 
@@ -22,7 +24,7 @@ namespace Doug.Items.Consumables.Resets
         {
             base.Use(itemPos, user, channel);
 
-            _statsRepository.FreeStatPoint(user.Id, Stats.Charisma);
+            _statsRepository.FreeStatPoint(user.Id, Stats.Strength);
 
             return string.Empty;
         }

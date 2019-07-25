@@ -1,11 +1,12 @@
-﻿using Doug.Items;
+﻿using System.Collections.Generic;
+using Doug.Items;
 using Doug.Models;
 
 namespace Doug.Repositories
 {
     public interface IEquipmentRepository
     {
-        void EquipItem(User user, EquipmentItem item);
+        List<EquipmentItem> EquipItem(User user, EquipmentItem item);
         EquipmentItem UnequipItem(User user, EquipmentSlot slot);
         void DeleteEquippedItem(User user, EquipmentSlot slot);
     }
@@ -19,18 +20,18 @@ namespace Doug.Repositories
             _db = dougContext;
         }
 
-        public void EquipItem(User user, EquipmentItem item)
+        public List<EquipmentItem> EquipItem(User user, EquipmentItem item)
         {
-            user.Loadout.Equip(item);
+            var equipment = user.Equip(item);
 
             _db.SaveChanges();
+
+            return equipment;
         }
 
         public EquipmentItem UnequipItem(User user, EquipmentSlot slot)
         {
-            var equipment = user.Loadout.GetEquipmentAt(slot);
-
-            user.Loadout.UnEquip(slot);
+            var equipment = user.Loadout.UnEquip(slot);
 
             _db.SaveChanges();
 

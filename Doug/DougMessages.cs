@@ -24,15 +24,20 @@
         public const string CreditStats = CreditEmoji + " {0}";
         public const string LevelStats = "Level {0}";
         public const string ExperienceStats = "{0:0.##}%";
-        public const string HealthStats = "Health Points :";
-        public const string EnergyStats = "Energy Points :";
-        public const string CharismaStats = ":information_desk_person: Charisma : {0}";
+        public const string HealthStats = ":hp: Health : {0}";
+        public const string EnergyStats = ":mp: Mana : {0}";
+        public const string StrengthStats = ":information_desk_person: Strength : {0}";
         public const string AgilityStats = ":runner: Agility : {0}";
         public const string LuckStats = ":four_leaf_clover: Luck : {0}";
         public const string ConstitutionStats = ":heart: Constitution : {0}";
-        public const string StaminaStats = ":male_mage: Stamina : {0}";
+        public const string IntelligenceStats = ":male_mage: Intelligence : {0}";
         public const string FreeStatPoints = "{0} stats points left";
         public const string AddStatPoint = ":heavy_plus_sign:";
+        public const string AttackStat = ":dagger_knife: Attack : {0}";
+        public const string DefenseStat = ":shield: Defense : {0}";
+        public const string DodgeStat = ":dizzy: Dodge : {0}";
+        public const string HitrateStat = ":anger: Hit Rate : {0}";
+        public const string GambleStat = ":money_with_wings: Gamble Chance : {0:0.##}%";
         public const string WonGamble = "{0} flipped a coin and won {1} " + CreditEmoji;
         public const string LostGamble = "{0} flipped a coin and lost {1} " + CreditEmoji;
         public const string ChallengeSent = "{0} challenged {1} to a coinflip for {2} " + CreditEmoji;
@@ -50,7 +55,6 @@
         public const string LevelUp = ":confetti_ball: {0} is now level *{1}*!";
         public const string GainedExp = "You gained {0} experience points.";
         public const string EquippedItem = "You equipped *{0}*.";
-        public const string ShopSpeech = "*Oi!* Welcome to my shop! I sell various stuff from all around the continent.\n\n *Come in, have a look:*";
         public const string BuyFor = "Buy for {0} " + CreditEmoji;
         public const string UserDied = "Oh dear, {0} died!";
         public const string Use = "Use";
@@ -61,6 +65,9 @@
         public const string SoldItem = "You sold *{0}* for {1} " + CreditEmoji;
         public const string Inventory = "Inventory";
         public const string Equipment = "Equipment";
+        public const string GeneralStore = "General Store";
+        public const string ArmorShop = "Armor Shop";
+        public const string WeaponShop = "Weapon Shop";
         public const string Info = "Info";
         public const string UnequippedItem = "You unequipped *{0}*.";
         public const string Target = "Target ...";
@@ -71,6 +78,31 @@
         public const string UsedItemOnTarget = "{0} used a *{1}* on {2}";
         public const string AddedEffect = "You obtained the *{0}* effect for {1} minutes";
         public const string Surrendered = "{0} has surrendered :fr:";
+        public const string Missed = "{0} missed their attack on {1}!";
+        public const string CriticalHit = "{0} dealt *{2}* critical damage to {1}!";
+        public const string RevolutionVote = "{0} wants to lead the revolution :fire: who's with em?";
+        public const string RevolutionSucceeded = "<!here> - Off with {0}'s head! {1} is the new emperor!";
+        public const string Cleansed = "You are cleansed of all your effects.";
+        public const string LootboxAnnouncement = "{0} opened *{1}* and received {2}";
+        public const string ItemLevel = "*Level {0}*";
+        public const string ItemAttack = "`Attack {0}-{1}`";
+        public const string ItemDefense = "`Defense {0:+#;-#}`";
+        public const string ItemResistance = "`Resistance {0:+#;-#}`";
+        public const string ItemHitrate = "`Hitrate {0:+#;-#}`";
+        public const string ItemDodge = "`Dodge {0:+#;-#}`";
+        public const string ItemHealth = "`Health {0:+#;-#}`";
+        public const string ItemEnergy = "`Energy {0:+#;-#}`";
+        public const string ItemStrength = "`Strength {0:+#;-#}`";
+        public const string ItemAgility = "`Agility {0:+#;-#}`";
+        public const string ItemIntelligence = "`Intelligence {0:+#;-#}`";
+        public const string ItemConstitution = "`Constitution {0:+#;-#}`";
+        public const string ItemLuck = "`Luck {0:+#;-#}`";
+        public const string AttackSpeed = "`Speed: {0:0.##}`";
+        public const string ItemDualWield = "*Two Handed*";
+        public const string ItemLeftHand = "*Left Handed*";
+        public const string ItemRightHand = "*Right Handed*";
+        public const string SmallHealthDisplay = "{0} HP";
+        public const string UserIsInvincible = "This user is invincible!";
 
         public const string DougError = "Beep boop, it's not working : {0}";
         public const string NotAnAdmin = "You are not an admin.";
@@ -92,7 +124,12 @@
         public const string UserIsNotInPvp = "The target user is not in the pvp channel.";
         public const string ItemNotTradable = "This item is not tradable.";
         public const string EmptyInventory = "Oops, yer loot seems empty, buy more at th' shop now.";
-        public const string LevelRequirementNotMet = "You need to be at least level {0} to wear this item.";
+        public const string LevelRequirementNotMet = "You do not meet the level requirements to equip this item.";
+        public const string CommandOnCooldown = "This command is on cooldown, try again in {0} seconds.";
+        public const string UnknownShop = "Unknown shop. Verify the shop id.";
+        public const string UserMustBeActive = "The user you are targetting must be active.";
+        public const string YouMustBeActive = "You must be active for this.";
+        public const string RevolutionCooldown = "You must wait {0} minutes until the next revolution";
     }
 }
 

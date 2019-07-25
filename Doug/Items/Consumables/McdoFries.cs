@@ -6,6 +6,8 @@ namespace Doug.Items.Consumables
 {
     public class McdoFries : ConsumableItem
     {
+        public const string ItemId = "mcdo_fries";
+
         private readonly IStatsRepository _statsRepository;
         private readonly IUserService _userService;
         private const int RecoverAmount = 50;
@@ -15,7 +17,7 @@ namespace Doug.Items.Consumables
         {
             _statsRepository = statsRepository;
             _userService = userService;
-            Id = ItemFactory.McdoFries;
+            Id = ItemId;
             Name = "Mc Donald fries";
             Description = "Whats this? Salty stale fried potato sticks?! One must be crazy to even consider buying those. Restores 50 energy but lose 25 health.";
             Rarity = Rarity.Uncommon;
@@ -31,7 +33,7 @@ namespace Doug.Items.Consumables
 
             _statsRepository.UpdateEnergy(user.Id, user.Energy);
 
-            _userService.RemoveHealth(user, LossAmount, channel);
+            _userService.ApplyTrueDamage(user, LossAmount, channel);
 
             return string.Format(DougMessages.RecoverItem, Name, RecoverAmount, "energy");
         }

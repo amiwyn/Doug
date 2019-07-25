@@ -2,14 +2,15 @@
 {
     public class NicotineHigh : Buff
     {
+        public const string EffectId = "nicotine_high";
         public NicotineHigh()
         {
-            Id = EffectFactory.TrollBlessing;
+            Id = EffectId;
             Name = "Nicotine High";
-            Description = "You gain +15 charisma for 5 minutes.";
+            Description = "You gain +15 strength.";
             Rank = Rank.Common;
             Icon = ":smoking:";
-            Charisma = 15;
+            Strength = 15;
         }
     }
 }

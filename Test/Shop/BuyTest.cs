@@ -19,16 +19,18 @@ namespace Test.Shop
         private readonly Mock<IUserRepository> _userRepository = new Mock<IUserRepository>();
         private readonly Mock<IInventoryRepository>  _inventoryRepository = new Mock<IInventoryRepository>();
         private readonly Mock<IItemFactory> _itemFactory = new Mock<IItemFactory>();
+        private readonly Mock<IGovernmentService> _governmentService = new Mock<IGovernmentService>();
         private User _user;
 
         [TestInitialize]
         public void Setup()
         {
-            _itemFactory.Setup(factory => factory.CreateItem(It.IsAny<string>())).Returns(new LuckyDice());
+            _governmentService.Setup(repo => repo.GetPriceWithTaxes(It.IsAny<Item>())).Returns((Item item) => item.Price);
+            _itemFactory.Setup(factory => factory.CreateItem(It.IsAny<string>())).Returns(new LuckyCoin());
             _user = new User() {Id = "testuser", Credits = 431279};
             _userRepository.Setup(repo => repo.GetUser(User)).Returns(_user);
 
-            _shopService = new ShopService(_userRepository.Object, _inventoryRepository.Object, _itemFactory.Object);
+            _shopService = new ShopService(_userRepository.Object, _inventoryRepository.Object, _itemFactory.Object, _governmentService.Object);
         }
 
         [TestMethod]
@@ -36,7 +38,7 @@ namespace Test.Shop
         {
             _shopService.Buy(_user, "lucky_dice");
 
-            _inventoryRepository.Verify(repo => repo.AddItem(_user, "lucky_dice"));
+            _inventoryRepository.Verify(repo => repo.AddItem(_user, It.IsAny<LuckyCoin>()));
         }
 
         [TestMethod]

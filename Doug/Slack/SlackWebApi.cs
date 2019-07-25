@@ -21,11 +21,13 @@ namespace Doug.Slack
         Task<List<Reaction>> GetReactions(string timestamp, string channel);
         Task SendAttachments(IEnumerable<Attachment> attachments, string channel);
         Task SendEphemeralMessage(string text, string user, string channel);
+        Task BroadcastBlocks(IEnumerable<Block> blocks, string channel);
         Task SendEphemeralBlocks(IEnumerable<Block> blocks, string user, string channel);
         Task UpdateInteractionMessage(IEnumerable<Block> blocks, string url);
         Task KickUser(string user, string channel);
         Task InviteUser(string user, string channel);
         Task<List<string>> GetUsersInChannel(string channel);
+        Task<bool> GetUserPresence(string userId);
     }
 
     public class SlackWebApi : ISlackWebApi
@@ -38,6 +40,7 @@ namespace Doug.Slack
         private const string KickUrl = "https://slack.com/api/conversations.kick";
         private const string InviteUrl = "https://slack.com/api/conversations.invite";
         private const string ChannelInfoUrl = "https://slack.com/api/conversations.members";
+        private const string PresenceInfoUrl = "https://slack.com/api/users.getPresence";
 
 
         private readonly HttpClient _client;
@@ -157,6 +160,16 @@ namespace Doug.Slack
             await PostToUrlWithoutResponse(EphemeralUrl, keyValues);
         }
 
+        public async Task BroadcastBlocks(IEnumerable<Block> blocks, string channel)
+        {
+            var blocksString = JsonConvert.SerializeObject(blocks, _jsonSettings);
+
+            var keyValues = CreateBaseRequestPayload(channel);
+            keyValues.Add(new KeyValuePair<string, string>("blocks", blocksString));
+
+            await PostToUrlWithoutResponse(PostMessageUrl, keyValues);
+        }
+
         public async Task SendEphemeralBlocks(IEnumerable<Block> blocks, string user, string channel)
         {
             var blocksString = JsonConvert.SerializeObject(blocks, _jsonSettings);
@@ -211,6 +224,19 @@ namespace Doug.Slack
             var response = await PostToUrl(ChannelInfoUrl, keyValues);
 
             return JsonConvert.DeserializeObject<ChannelMembersResponse>(response, _jsonSettings).Members;
+        }
+
+        public async Task<bool> GetUserPresence(string userId)
+        {
+            var keyValues = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("token", _botToken),
+                new KeyValuePair<string, string>("user", userId)
+            };
+
+            var response = await PostToUrl(PresenceInfoUrl, keyValues);
+
+            return JsonConvert.DeserializeObject<UserPresenceResponse>(response, _jsonSettings).IsPresent();
         }
     }
 }

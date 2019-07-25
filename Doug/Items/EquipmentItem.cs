@@ -1,23 +1,38 @@
-﻿using Doug.Models;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Doug.Models;
 
 namespace Doug.Items
 {
     public class EquipmentItem : Item
     {
-        public int Attack { get; set; }
-        public int Luck { get; set; }
-        public int Agility { get; set; }
-        public int Charisma { get; set; }
-        public int Constitution { get; set; }
-        public int Stamina { get; set; }
+        public int LuckRequirement { get; set; }
+        public int AgilityRequirement { get; set; }
+        public int StrengthRequirement { get; set; }
+        public int IntelligenceRequirement { get; set; }
+
+        public ItemStats Stats { get; set; }
         public EquipmentSlot Slot { get; set; }
         public int LevelRequirement { get; set; }
 
-        protected EquipmentItem() { }
+        protected EquipmentItem()
+        {
+            Stats = new ItemStats();
+        }
 
         public override bool IsEquipable()
         {
             return true;
+        }
+
+        public virtual IEnumerable<string> GetDisplayAttributeList()
+        {
+            return Stats.ToStringList().Prepend(string.Format(DougMessages.ItemLevel, LevelRequirement));
+        }
+
+        public bool IsHandSlot()
+        {
+            return Slot == EquipmentSlot.LeftHand || Slot == EquipmentSlot.RightHand;
         }
 
         public virtual string OnGettingFlamed(Command command, string slur)

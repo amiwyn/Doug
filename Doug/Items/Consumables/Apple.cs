@@ -5,17 +5,19 @@ namespace Doug.Items.Consumables
 {
     public class Apple : ConsumableItem
     {
+        public const string ItemId = "apple";
+
         private readonly IStatsRepository _statsRepository;
         private const int RecoverAmount = 25;
 
         public Apple(IStatsRepository statsRepository, IInventoryRepository inventoryRepository) : base(inventoryRepository)
         {
             _statsRepository = statsRepository;
-            Id = ItemFactory.Apple;
+            Id = ItemId;
             Name = "Apple";
             Description = "Ahhh, a fresh apple. So healthy. Restores 25 health.";
             Rarity = Rarity.Common;
-            Icon = ":apple:";
+            Icon = ":apple_food:";
             Price = 25;
         }
 

@@ -6,12 +6,12 @@ namespace Test.Items
     [TestClass]
     public class LuckyDiceTest
     {
-        private LuckyDice _luckyDice;
+        private LuckyCoin _luckyDice;
 
         [TestMethod]
         public void WhenGambling_ChancesIncreasesByFivePercent()
         {
-            _luckyDice = new LuckyDice();
+            _luckyDice = new LuckyCoin();
 
             var result = _luckyDice.OnGambling(0.5);
 

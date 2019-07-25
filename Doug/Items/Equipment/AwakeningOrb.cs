@@ -6,6 +6,8 @@ namespace Doug.Items.Equipment
 {
     public class AwakeningOrb : EquipmentItem
     {
+        public const string ItemId = "awakening_orb";
+
         private readonly ISlackWebApi _slack;
         private readonly IUserService _userService;
 
@@ -14,12 +16,12 @@ namespace Doug.Items.Equipment
             _slack = slack;
             _userService = userService;
 
-            Id = ItemFactory.AwakeningOrb;
+            Id = ItemId;
             Name = "Orb of Awakening";
             Description = "When equipped, this strange orb will notify you privately who flamed you. You must be active to receive the notification.";
             Rarity = Rarity.Rare;
-            Icon = ":crystal_ball:";
-            Slot = EquipmentSlot.LeftHand;
+            Icon = ":awakening_orb:";
+            Slot = EquipmentSlot.Neck;
             Price = 2100;
             LevelRequirement = 5;
         }

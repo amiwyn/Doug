@@ -6,14 +6,14 @@ namespace Test.Items
     [TestClass]
     public class DevilContractTest
     {
-        private DevilContract _devilContract;
+        private DevilsContract _devilsContract;
 
         [TestMethod]
         public void WhenStealing_DecreaseChancesEnormously()
         {
-            _devilContract = new DevilContract();
+            _devilsContract = new DevilsContract();
 
-            var result = _devilContract.OnStealingChance(0.25);
+            var result = _devilsContract.OnStealingChance(0.25);
 
             Assert.AreEqual(-69, result);
         }
@@ -21,9 +21,9 @@ namespace Test.Items
         [TestMethod]
         public void WhenGettingStolen_DecreaseChancesEnormously()
         {
-            _devilContract = new DevilContract();
+            _devilsContract = new DevilsContract();
 
-            var result = _devilContract.OnGettingStolenChance(0.75);
+            var result = _devilsContract.OnGettingStolenChance(0.75);
 
             Assert.AreEqual(-69, result);
         }

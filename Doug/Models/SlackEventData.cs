@@ -2,7 +2,7 @@
 
 namespace Doug.Models
 {
-    public class MessageEvent
+    public class SlackEventData
     {
         private const string GroupType = "channel";
         private const string GabId = "UB619L16W";
@@ -17,6 +17,7 @@ namespace Doug.Models
         public string Channel { get; set; }
         public string EventTs { get; set; }
         public string ChannelType { get; set; }
+        public SlackEventItem Item { get; set; }
 
         public bool IsValidChannel()
         {
@@ -32,5 +33,11 @@ namespace Doug.Models
         {
             return User == GabId && Words.Any(Text.ToLower().Contains);
         }
+    }
+
+    public class SlackEventItem
+    {
+        public string Ts { get; set; }
+        public string Channel { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Doug.Effects.Buffs;
 using Doug.Effects.Debuffs;
+using Doug.Repositories;
 using Doug.Services;
 using Doug.Slack;
 
@@ -14,29 +15,26 @@ namespace Doug.Effects
     {
         private readonly ISlackWebApi _slack;
         private readonly IUserService _userService;
+        private readonly IEffectRepository _effectRepository;
 
-        public EffectFactory(ISlackWebApi slack, IUserService userService)
+        public EffectFactory(ISlackWebApi slack, IUserService userService, IEffectRepository effectRepository)
         {
             _slack = slack;
             _userService = userService;
+            _effectRepository = effectRepository;
         }
-
-        public const string TrollBlessing = "troll_blessing";
-        public const string NicotineHigh = "nicotine_high";
-        public const string FrenchCurse = "french_curse";
 
         public Effect CreateEffect(string effectId)
         {
             switch (effectId)
             {
-                case TrollBlessing:
-                    return new TrollBlessing(_slack);
-                case NicotineHigh:
-                    return new NicotineHigh();
-                case FrenchCurse:
-                    return new FrenchCurse(_slack, _userService);
-                default:
-                    return new UnknownEffect();
+                case TrollBlessing.EffectId: return new TrollBlessing(_slack);
+                case NicotineHigh.EffectId: return new NicotineHigh();
+                case FrenchCurse.EffectId: return new FrenchCurse(_slack, _userService);
+                case PickleBuff.EffectId: return new PickleBuff();
+                case Luck.EffectId: return new Luck();
+                case MortuaryGrace.EffectId: return new MortuaryGrace(_effectRepository);
+                default: return new UnknownEffect();
             }
         }
     }

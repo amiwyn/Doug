@@ -7,6 +7,7 @@
         Attribution,
         InventorySwitch,
         EquipmentSwitch,
+        ShopSwitch,
         Equipment,
         Give,
         Target

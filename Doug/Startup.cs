@@ -68,6 +68,8 @@ namespace Doug
             services.AddScoped<IStatsMenuService, StatsMenuService>();
             services.AddScoped<IInventoryMenuService, InventoryMenuService>();
             services.AddScoped<IShopService, ShopService>();
+            services.AddScoped<IGovernmentService, GovernmentService>();
+            services.AddScoped<ICombatService, CombatService>();
 
             services.AddScoped<ICoffeeCommands, CoffeeCommands>();
             services.AddScoped<ISlursCommands, SlursCommands>();
@@ -85,6 +87,8 @@ namespace Doug
             services.AddScoped<IInventoryRepository, InventoryRepository>();
             services.AddScoped<IEquipmentRepository, EquipmentRepository>();
             services.AddScoped<IEffectRepository, EffectRepository>();
+            services.AddScoped<IGovernmentRepository, GovernmentRepository>();
+            services.AddScoped<IShopRepository, ShopRepository>();
 
             var env = Environment.GetEnvironmentVariable("APP_ENV");
 

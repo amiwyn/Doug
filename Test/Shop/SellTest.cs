@@ -20,6 +20,8 @@ namespace Test.Shop
         private readonly Mock<IUserRepository> _userRepository = new Mock<IUserRepository>();
         private readonly Mock<IInventoryRepository>  _inventoryRepository = new Mock<IInventoryRepository>();
         private readonly Mock<IItemFactory> _itemFactory = new Mock<IItemFactory>();
+        private readonly Mock<IGovernmentService> _governmentService = new Mock<IGovernmentService>();
+
         private User _user;
 
         [TestInitialize]
@@ -27,14 +29,14 @@ namespace Test.Shop
         {
             var items = new List<InventoryItem>()
             {
-                new InventoryItem("testuser", "testitem") { InventoryPosition = 4, Item = new LuckyDice() },
+                new InventoryItem("testuser", "testitem") { InventoryPosition = 4, Item = new LuckyCoin() },
                 new InventoryItem("testuser", "testitem") { InventoryPosition = 3, Item = new KickTicket(null, null, null, null) }
             };
 
             _user = new User() { Id = "testuser", InventoryItems = items };
             _userRepository.Setup(repo => repo.GetUser(User)).Returns(_user);
 
-            _shopService = new ShopService(_userRepository.Object, _inventoryRepository.Object, _itemFactory.Object);
+            _shopService = new ShopService(_userRepository.Object, _inventoryRepository.Object, _itemFactory.Object, _governmentService.Object);
         }
 
         [TestMethod]
