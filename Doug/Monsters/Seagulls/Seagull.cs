@@ -12,7 +12,7 @@ namespace Doug.Monsters.Seagulls
         public Seagull()
         {
             Id = MonsterId;
-            Name = "A Seagull";
+            Name = "Seagull";
             Description = "A fierce animal with a razor sharp beak.";
             Level = 5;
             ExperienceValue = 50;
