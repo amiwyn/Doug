@@ -19,6 +19,7 @@ namespace ResetWebJob
 
             var db = serviceProvider.GetService<DougContext>();
             AddCreditsToRuler(db);
+            ResetRecentSlurs(db);
 
             db.SaveChanges();
         }
@@ -29,6 +30,11 @@ namespace ResetWebJob
 
             var ruler = db.Users.Single(usr => usr.Id == government.Ruler);
             ruler.Credits += 100;
+        }
+
+        private static void ResetRecentSlurs(DougContext db)
+        {
+            db.RecentSlurs.RemoveRange(db.RecentSlurs);
         }
     }
 }
