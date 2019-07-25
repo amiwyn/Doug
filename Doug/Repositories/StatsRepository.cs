@@ -102,19 +102,19 @@ namespace Doug.Repositories
             switch (stat)
             {
                 case Stats.Luck:
-                    user.Luck += modifier;
+                    user.Luck += user.Luck + modifier < 1 ? 0 : modifier;
                     break;
                 case Stats.Agility:
-                    user.Agility += modifier;
+                    user.Agility += user.Agility + modifier < 1 ? 0 : modifier;
                     break;
                 case Stats.Strength:
-                    user.Strength += modifier;
+                    user.Strength += user.Strength + modifier < 1 ? 0 : modifier;
                     break;
                 case Stats.Constitution:
-                    user.Constitution += modifier;
+                    user.Constitution += user.Constitution + modifier < 1 ? 0 : modifier;
                     break;
                 case Stats.Intelligence:
-                    user.Intelligence += modifier;
+                    user.Intelligence += user.Intelligence + modifier < 1 ? 0 : modifier;
                     break;
             }
         }
