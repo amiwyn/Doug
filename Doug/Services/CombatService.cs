@@ -47,9 +47,6 @@ namespace Doug.Services
 
         public async Task<DougResponse> Steal(User user, User target, string channel)
         {
-            var userIsActive = _userService.IsUserActive(user.Id);
-            var targetIsActive = _userService.IsUserActive(target.Id);
-
             if (user.IsStealOnCooldown())
             {
                 return new DougResponse(string.Format(DougMessages.CommandOnCooldown, user.CalculateStealCooldownRemaining()));
