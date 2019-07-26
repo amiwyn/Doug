@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
+using Doug.Items;
 using Doug.Models;
+using Doug.Monsters;
 using Doug.Monsters.Seagulls;
 using Doug.Repositories;
 using Doug.Slack;
@@ -22,13 +25,19 @@ namespace Doug.Services
         private readonly ISlackWebApi _slack;
         private readonly IUserService _userService;
         private readonly IUserRepository _userRepository;
+        private readonly IInventoryRepository _inventoryRepository;
+        private readonly IRandomService _randomService;
+        private readonly IItemFactory _itemFactory;
 
-        public MonsterService(IMonsterRepository monsterRepository, ISlackWebApi slack, IUserService userService, IUserRepository userRepository)
+        public MonsterService(IMonsterRepository monsterRepository, ISlackWebApi slack, IUserService userService, IUserRepository userRepository, IInventoryRepository inventoryRepository, IRandomService randomService, IItemFactory itemFactory)
         {
             _monsterRepository = monsterRepository;
             _slack = slack;
             _userService = userService;
             _userRepository = userRepository;
+            _inventoryRepository = inventoryRepository;
+            _randomService = randomService;
+            _itemFactory = itemFactory;
         }
 
         public void RollMonsterSpawn()
@@ -47,15 +56,22 @@ namespace Doug.Services
         public async Task HandleMonsterDeathByUser(User user, SpawnedMonster spawnedMonster, string channel)
         {
             var monster = spawnedMonster.Monster;
-
             var userIds = await _slack.GetUsersInChannel(channel);
             var users = _userRepository.GetUsers(userIds);
+
+            AddMonsterLootToUser(user, monster);
 
             _monsterRepository.RemoveMonster(spawnedMonster.Id);
 
             await _slack.BroadcastMessage(string.Format(DougMessages.MonsterDied, monster.Name), channel);
 
             await _userService.AddBulkExperience(users, monster.ExperienceValue, channel);
+        }
+
+        private void AddMonsterLootToUser(User user, Monster monster)
+        {
+            var droppedItems = _randomService.RandomTableDrop(monster.DropTable, user.ExtraDropChance()).Select(drop => _itemFactory.CreateItem(drop.Id));
+            _inventoryRepository.AddItems(user, droppedItems);
         }
     }
 }

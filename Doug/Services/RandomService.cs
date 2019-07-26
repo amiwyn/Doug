@@ -8,6 +8,7 @@ namespace Doug.Services
     {
         bool RollAgainstOpponent(double userChances, double opponentChances);
         T RandomFromWeightedTable<T>(IEnumerable<KeyValuePair<T, double>> table);
+        IEnumerable<T> RandomTableDrop<T>(IEnumerable<KeyValuePair<T, double>> table, double modifier);
     }
 
     public class RandomService : IRandomService

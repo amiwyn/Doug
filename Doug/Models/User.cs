@@ -169,6 +169,11 @@ namespace Doug.Models
             return 0.25 + luckInfluence;
         }
 
+        public double ExtraDropChance()
+        {
+            return Math.Log(TotalLuck() / 5.0) / (Math.Log(1.2) * 100);
+        }
+
         public void Dies()
         {
             Health = 1;
