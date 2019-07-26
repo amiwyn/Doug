@@ -106,6 +106,7 @@
         public const string MonsterSpawned = "*{0}* has spawned!";
         public const string AttackAction = "Attack";
         public const string MonsterDied = "*{0}* Died!";
+        public const string UserObtained = "{0} obtained {1}";
 
         public const string DougError = "Beep boop, it's not working : {0}";
         public const string NotAnAdmin = "You are not an admin.";
