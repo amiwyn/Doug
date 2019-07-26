@@ -12,7 +12,7 @@ namespace Doug.Services
 {
     public interface IMonsterService
     {
-        void RollMonsterSpawn();
+        Task RollMonsterSpawn();
         Task HandleMonsterDeathByUser(User user, SpawnedMonster spawnedMonster, string channel);
     }
 
@@ -40,7 +40,7 @@ namespace Doug.Services
             _itemFactory = itemFactory;
         }
 
-        public void RollMonsterSpawn()
+        public async Task RollMonsterSpawn()
         {
             if (new Random().NextDouble() >= SpawnChance)
             {
@@ -50,7 +50,7 @@ namespace Doug.Services
             var monster = new Seagull(); //TODO add more monster variety and pick them randomly (or based on present players levels)
 
             _monsterRepository.SpawnMonster(monster, PvpChannel); 
-            _slack.BroadcastMessage(string.Format(DougMessages.MonsterSpawned, monster.Name), PvpChannel);
+            await _slack.BroadcastMessage(string.Format(DougMessages.MonsterSpawned, monster.Name), PvpChannel);
         }
 
         public async Task HandleMonsterDeathByUser(User user, SpawnedMonster spawnedMonster, string channel)

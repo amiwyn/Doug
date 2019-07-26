@@ -23,7 +23,7 @@ namespace MonsterSpawnWebJob
 
             var monsterService = serviceProvider.GetService<IMonsterService>();
 
-            monsterService.RollMonsterSpawn();
+            monsterService.RollMonsterSpawn().Wait();
         }
     }
 }
