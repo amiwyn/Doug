@@ -1,4 +1,6 @@
-﻿namespace Doug.Items.Equipment.Sets.StartingWeapons
+﻿using Doug.Models.Combat;
+
+namespace Doug.Items.Equipment.Sets.StartingWeapons
 {
     public class WoodenStaff : Weapon
     {

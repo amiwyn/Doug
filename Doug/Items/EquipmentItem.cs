@@ -4,7 +4,7 @@ using Doug.Models;
 
 namespace Doug.Items
 {
-    public class EquipmentItem : Item
+    public abstract class EquipmentItem : Item
     {
         public int LuckRequirement { get; set; }
         public int AgilityRequirement { get; set; }

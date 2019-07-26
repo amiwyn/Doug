@@ -2,6 +2,8 @@
 using System.Threading.Tasks;
 using Doug.Items;
 using Doug.Models;
+using Doug.Models.Combat;
+using Doug.Monsters;
 using Doug.Repositories;
 using Doug.Slack;
 
@@ -11,6 +13,7 @@ namespace Doug.Services
     {
         Task<DougResponse> Steal(User user, User target, string channel);
         Task<DougResponse> Attack(User user, User target, string channel);
+        Task<DougResponse> AttackMonster(User user, SpawnedMonster spawnedMonster, string channel);
     }
 
     public class CombatService : ICombatService
@@ -26,8 +29,10 @@ namespace Doug.Services
         private readonly IRandomService _randomService;
         private readonly IUserService _userService;
         private readonly IChannelRepository _channelRepository;
+        private readonly IMonsterRepository _monsterRepository;
+        private readonly IMonsterService _monsterService;
 
-        public CombatService(IEventDispatcher eventDispatcher, IUserRepository userRepository, ISlackWebApi slack, IStatsRepository statsRepository, IRandomService randomService, IUserService userService, IChannelRepository channelRepository)
+        public CombatService(IEventDispatcher eventDispatcher, IUserRepository userRepository, ISlackWebApi slack, IStatsRepository statsRepository, IRandomService randomService, IUserService userService, IChannelRepository channelRepository, IMonsterRepository monsterRepository, IMonsterService monsterService)
         {
             _eventDispatcher = eventDispatcher;
             _userRepository = userRepository;
@@ -36,23 +41,27 @@ namespace Doug.Services
             _randomService = randomService;
             _userService = userService;
             _channelRepository = channelRepository;
+            _monsterRepository = monsterRepository;
+            _monsterService = monsterService;
         }
 
         public async Task<DougResponse> Steal(User user, User target, string channel)
         {
-            var userIsActive = _userService.IsUserActive(user.Id);
-            var targetIsActive = _userService.IsUserActive(target.Id);
-
             if (user.IsStealOnCooldown())
             {
                 return new DougResponse(string.Format(DougMessages.CommandOnCooldown, user.CalculateStealCooldownRemaining()));
             }
 
             var channelType = _channelRepository.GetChannelType(channel);
-
             if (channelType != ChannelType.Common && channelType != ChannelType.Pvp)
             {
                 return new DougResponse(DougMessages.NotInRightChannel);
+            }
+
+            var usersInChannel = await _slack.GetUsersInChannel(channel);
+            if (usersInChannel.All(usr => usr != target.Id))
+            {
+                return new DougResponse(DougMessages.UserIsNotInPvp);
             }
 
             var energy = user.Energy - StealEnergyCost;
@@ -60,16 +69,6 @@ namespace Doug.Services
             if (energy < 0)
             {
                 return new DougResponse(DougMessages.NotEnoughEnergy);
-            }
-
-            if (!await targetIsActive)
-            {
-                return new DougResponse(DougMessages.UserMustBeActive);
-            }
-
-            if (!await userIsActive)
-            {
-                return new DougResponse(DougMessages.YouMustBeActive);
             }
 
             _statsRepository.UpdateEnergy(user.Id, energy);
@@ -119,15 +118,13 @@ namespace Doug.Services
             }
 
             var channelType = _channelRepository.GetChannelType(channel);
-
             if (channelType != ChannelType.Pvp)
             {
                 return new DougResponse(DougMessages.NotInRightChannel);
             }
 
-            var flaggedUsers = await _slack.GetUsersInChannel(channel);
-
-            if (flaggedUsers.All(usr => usr != target.Id))
+            var usersInChannel = await _slack.GetUsersInChannel(channel);
+            if (usersInChannel.All(usr => usr != target.Id))
             {
                 return new DougResponse(DougMessages.UserIsNotInPvp);
             }
@@ -147,9 +144,9 @@ namespace Doug.Services
 
         private async Task DealDamage(User user, User target, string channel)
         {
-            var attackStatus = user.AttackUser(target, out var damageDealt, _eventDispatcher);
+            var attack = user.AttackTarget(target, _eventDispatcher);
 
-            var message = attackStatus.ToMessage(_userService.Mention(user), _userService.Mention(target), damageDealt);
+            var message = attack.Status.ToMessage(_userService.Mention(user), _userService.Mention(target), attack.Damage);
 
             await _slack.BroadcastMessage(message, channel);
 
@@ -160,6 +157,59 @@ namespace Doug.Services
             }
 
             _statsRepository.UpdateHealth(target.Id, target.Health);
+        }
+
+
+        public async Task<DougResponse> AttackMonster(User user, SpawnedMonster spawnedMonster, string channel)
+        {
+            var energy = user.Energy - AttackEnergyCost;
+            var monster = spawnedMonster.Monster;
+
+            if (user.IsAttackOnCooldown())
+            {
+                return new DougResponse(string.Format(DougMessages.CommandOnCooldown, user.CalculateAttackCooldownRemaining()));
+            }
+
+            if (energy < 0)
+            {
+                return new DougResponse(DougMessages.NotEnoughEnergy);
+            }
+
+            _statsRepository.UpdateEnergy(user.Id, energy);
+            _userRepository.SetAttackCooldown(user.Id, user.GetAttackCooldown());
+
+            var attack = user.AttackTarget(monster, _eventDispatcher);
+
+            var message = attack.Status.ToMessage(_userService.Mention(user), $"*{monster.Name}*", attack.Damage);
+            await _slack.BroadcastMessage(message, channel);
+
+            _monsterRepository.UpdateHealth(spawnedMonster.Id, monster.Health);
+
+            if (monster.IsDead())
+            {
+                await _monsterService.HandleMonsterDeathByUser(user, spawnedMonster, channel);
+            }
+            else if (!spawnedMonster.IsAttackOnCooldown())
+            {
+                await MonsterAttackUser(monster, user, channel);
+            }
+
+            return new DougResponse();
+        }
+
+        private async Task MonsterAttackUser(Monster monster, User user, string channel)
+        {
+            var retaliationAttack = monster.AttackTarget(user, _eventDispatcher);
+
+            var retaliationMessage = retaliationAttack.Status.ToMessage($"*{monster.Name}*", _userService.Mention(user), retaliationAttack.Damage);
+            await _slack.BroadcastMessage(retaliationMessage, channel);
+
+            if (user.IsDead())
+            {
+                await _userService.HandleDeath(user, channel);
+            }
+
+            _statsRepository.UpdateHealth(user.Id, user.Health);
         }
     }
 }

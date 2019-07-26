@@ -2,6 +2,7 @@
 using Doug.Models;
 using Doug.Repositories;
 using Doug.Services;
+using Doug.Services.MenuServices;
 
 namespace Doug.Commands
 {
@@ -10,6 +11,7 @@ namespace Doug.Commands
         Task<DougResponse> Steal(Command command);
         Task<DougResponse> Attack(Command command);
         Task<DougResponse> Revolution(Command command);
+        Task<DougResponse> ListMonsters(Command command);
     }
 
     public class CombatCommands : ICombatCommands
@@ -17,12 +19,14 @@ namespace Doug.Commands
         private readonly IUserRepository _userRepository;
         private readonly ICombatService _combatService;
         private readonly IGovernmentService _governmentService;
+        private readonly IMonsterMenuService _monsterMenuService;
 
-        public CombatCommands(IUserRepository userRepository, ICombatService combatService, IGovernmentService governmentService)
+        public CombatCommands(IUserRepository userRepository, ICombatService combatService, IGovernmentService governmentService, IMonsterMenuService monsterMenuService)
         {
             _userRepository = userRepository;
             _combatService = combatService;
             _governmentService = governmentService;
+            _monsterMenuService = monsterMenuService;
         }
 
         public async Task<DougResponse> Steal(Command command)
@@ -45,6 +49,12 @@ namespace Doug.Commands
         {
             var user = _userRepository.GetUser(command.UserId);
             return await _governmentService.StartRevolutionVote(user, command.ChannelId);
+        }
+
+        public async Task<DougResponse> ListMonsters(Command command)
+        {
+            await _monsterMenuService.ShowMonsters(command.ChannelId);
+            return new DougResponse();
         }
     }
 }

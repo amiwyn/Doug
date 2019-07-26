@@ -12,6 +12,7 @@ namespace Doug.Repositories
     {
         void AddUser(string userId);
         List<User> GetUsers();
+        List<User> GetUsers(List<string> users);
         User GetUser(string userId);
         void RemoveCredits(string userId, int amount);
         void AddCredits(string userId, int amount);
@@ -82,6 +83,11 @@ namespace Doug.Repositories
                 _db.Users.Add(user);
                 _db.SaveChanges();
             }
+        }
+
+        public List<User> GetUsers(List<string> users)
+        {
+            return _db.Users.Where(user => users.Any(usr => usr == user.Id)).ToList();
         }
 
         public User GetUser(string userId)

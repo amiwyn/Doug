@@ -19,7 +19,7 @@ namespace Doug.Services
         private const int CoffeeBreakDurationMinutes = 15;
         private const int MorningBreak = 9 + 4;
         private const int AfternoonBreak = 14 + 4;
-        private const int Tolerance = 30;
+        private const int Tolerance = 15;
         private const int CoffeeBreakAward = 10;
         private const int CoffeeExperienceAward = 300;
 

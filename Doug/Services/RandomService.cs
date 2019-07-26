@@ -8,6 +8,7 @@ namespace Doug.Services
     {
         bool RollAgainstOpponent(double userChances, double opponentChances);
         T RandomFromWeightedTable<T>(IEnumerable<KeyValuePair<T, double>> table);
+        IEnumerable<T> RandomTableDrop<T>(IEnumerable<KeyValuePair<T, double>> table, double modifier);
     }
 
     public class RandomService : IRandomService
@@ -41,6 +42,12 @@ namespace Doug.Services
             }
 
             return weightedTable.Last().Key;
+        }
+
+        public IEnumerable<T> RandomTableDrop<T>(IEnumerable<KeyValuePair<T, double>> table, double modifier)
+        {
+            var random = new Random();
+            return table.Where(elem => random.NextDouble() < elem.Value + modifier).Select(elem => elem.Key);
         }
     }
 }

@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using Doug.Items;
 using System.Linq;
 using Doug.Effects;
+using Doug.Models.Combat;
 
 namespace Doug.Models
 {
-    public class User
+    public class User : ICombatable
     {
         private const int BaseAttackCooldown = 30;
         private const int BaseStealCooldown = 30;
@@ -99,6 +100,7 @@ namespace Doug.Models
         public int TotalHitrate() => Loadout.Hitrate + 5 + Effects.Sum(userEffect => userEffect.Effect.Hitrate);
         public int MaxAttack() => Loadout.MaxAttack + Attack + Effects.Sum(userEffect => userEffect.Effect.Attack);
         public int MinAttack() => Loadout.MinAttack + Attack + Effects.Sum(userEffect => userEffect.Effect.Attack);
+        public int TotalAttackSpeed() => Loadout.AttackSpeed + TotalAgility();
 
         public void RegenerateHealth() => Health += (int)(TotalHealth() * 0.2);
         public double BaseOpponentStealSuccessRate() => 0.75;
@@ -112,7 +114,7 @@ namespace Doug.Models
         public int CalculateAttackCooldownRemaining() => (int)(AttackCooldown - DateTime.UtcNow).TotalSeconds;
         public int CalculateStealCooldownRemaining() => (int)(StealCooldown - DateTime.UtcNow).TotalSeconds;
         public TimeSpan GetStealCooldown() => TimeSpan.FromSeconds(BaseStealCooldown);
-        public TimeSpan GetAttackCooldown() => TimeSpan.FromSeconds(BaseAttackCooldown / (Math.Abs(Loadout.AttackSpeed) < 0.001 ? 1 : Loadout.AttackSpeed));
+        public TimeSpan GetAttackCooldown() => TimeSpan.FromSeconds(BaseAttackCooldown * 100.0 / TotalAttackSpeed());
 
         public void LevelUp()
         {
@@ -167,6 +169,11 @@ namespace Doug.Models
             return 0.25 + luckInfluence;
         }
 
+        public double ExtraDropChance()
+        {
+            return Math.Log(TotalLuck() / 5.0) / (Math.Log(1.2) * 100);
+        }
+
         public void Dies()
         {
             Health = 1;
@@ -177,55 +184,6 @@ namespace Doug.Models
 
             var expLoss = (long)(0.1 * (nextLevelExp - prevLevelExp));
             Experience = Experience - expLoss <= prevLevelExp ? prevLevelExp : Experience - expLoss;
-        }
-
-        public int ApplyPhysicalDamage(int damage)
-        {
-            var reducedDamage = damage - (damage * (Loadout.Resistance / 100) + TotalDefense());
-            reducedDamage = reducedDamage <= 0 ? 1 : reducedDamage;
-
-            Health -= reducedDamage;
-
-            return reducedDamage;
-        }
-
-        public int ApplyMagicalDamage(int damage)
-        {
-            Health -= damage;
-            return damage;
-        }
-
-        public AttackStatus AttackUser(User user, out int damage, IEventDispatcher eventDispatcher)
-        {
-            var random = new Random();
-            var status = AttackStatus.Normal;
-
-            if (Loadout.GetDamageType() == DamageType.Magical)
-            {
-                damage = TotalIntelligence() * 2;
-                damage = eventDispatcher.OnAttacking(this, user, damage);
-                damage = user.ApplyMagicalDamage(damage);
-                return status;
-            }
-
-            damage = random.Next(MinAttack(), MaxAttack());
-
-            if (random.NextDouble() < 0.1)
-            {
-                damage *= 2;
-                status = AttackStatus.Critical;
-            }
-
-            var missChance = (user.TotalDodge() - TotalHitrate()) * 0.01;
-            if (random.NextDouble() < missChance)
-            {
-                return AttackStatus.Missed;
-            }
-            
-            damage = eventDispatcher.OnAttacking(this, user, damage);
-
-            damage = user.ApplyPhysicalDamage(damage);
-            return status;
         }
 
         public List<EquipmentItem> Equip(EquipmentItem item)
@@ -240,6 +198,57 @@ namespace Doug.Models
                    TotalAgility() >= item.AgilityRequirement &&
                    TotalIntelligence() >= item.IntelligenceRequirement &&
                    TotalLuck() >= item.LuckRequirement;
+        }
+
+        public Attack AttackTarget(ICombatable target, IEventDispatcher eventDispatcher)
+        {
+            Attack attack = new PhysicalAttack(MinAttack(), MaxAttack(), TotalHitrate(), TotalLuck());
+
+            if (Loadout.GetDamageType() == DamageType.Magical)
+            {
+                attack = new MagicAttack(TotalIntelligence());
+            }
+
+            if (target is User user)
+            {
+                attack.Damage = eventDispatcher.OnAttacking(this, user, attack.Damage);
+            }
+
+            return target.ReceiveAttack(attack);
+        }
+
+        public Attack ReceiveAttack(Attack attack)
+        {
+            if (attack is PhysicalAttack physicalAttack)
+            {
+                return ApplyPhysicalDamage(physicalAttack);
+            }
+
+            ApplyMagicalDamage(attack.Damage);
+            return attack;
+        }
+
+        private PhysicalAttack ApplyPhysicalDamage(PhysicalAttack attack)
+        {
+            var missChance = (TotalDodge() - attack.AttackersHitrate) * 0.01;
+            if (new Random().NextDouble() < missChance)
+            {
+                attack.Status = AttackStatus.Missed;
+                return attack;
+            }
+
+            var reducedDamage = attack.Damage - (attack.Damage * (Loadout.Resistance / 100) + TotalDefense());
+            reducedDamage = reducedDamage <= 0 ? 1 : reducedDamage;
+
+            attack.Damage = reducedDamage;
+            Health -= reducedDamage;
+
+            return attack;
+        }
+
+        private void ApplyMagicalDamage(int damage)
+        {
+            Health -= damage;
         }
     }
 }

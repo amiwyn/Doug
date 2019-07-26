@@ -4,7 +4,7 @@ using Doug.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace WebJobs
+namespace ResetWebJob
 {
     class Program
     {
@@ -19,6 +19,7 @@ namespace WebJobs
 
             var db = serviceProvider.GetService<DougContext>();
             AddCreditsToRuler(db);
+            ResetRecentSlurs(db);
 
             db.SaveChanges();
         }
@@ -28,7 +29,12 @@ namespace WebJobs
             var government = db.Government.Single();
 
             var ruler = db.Users.Single(usr => usr.Id == government.Ruler);
-            ruler.Credits += 100;
+            ruler.Credits += 200;
+        }
+
+        private static void ResetRecentSlurs(DougContext db)
+        {
+            db.RecentSlurs.RemoveRange(db.RecentSlurs);
         }
     }
 }

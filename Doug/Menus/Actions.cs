@@ -10,7 +10,8 @@
         ShopSwitch,
         Equipment,
         Give,
-        Target
+        Target,
+        Attack
     }
 
     public enum InventoryActions

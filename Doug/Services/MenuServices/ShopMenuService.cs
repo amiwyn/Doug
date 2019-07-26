@@ -6,7 +6,7 @@ using Doug.Models;
 using Doug.Repositories;
 using Doug.Slack;
 
-namespace Doug.Services
+namespace Doug.Services.MenuServices
 {
     public interface IShopMenuService
     {

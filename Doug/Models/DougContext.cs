@@ -14,6 +14,7 @@ namespace Doug.Models
         public DbSet<UserEffect> UserEffect { get; set; }
         public DbSet<Government> Government { get; set; }
         public DbSet<Shop> Shops { get; set; }
+        public DbSet<SpawnedMonster> SpawnedMonsters { get; set; }
 
         public DougContext(DbContextOptions<DougContext> options) : base(options)
         {

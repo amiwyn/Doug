@@ -1,4 +1,4 @@
-﻿namespace Doug.Items
+﻿namespace Doug.Models.Combat
 {
     public enum DamageType
     {

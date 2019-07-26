@@ -4,6 +4,7 @@ using Doug.Slack;
 using System.Linq;
 using System.Threading.Tasks;
 using Doug.Services;
+using Doug.Services.MenuServices;
 
 namespace Doug.Commands
 {
