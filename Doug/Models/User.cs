@@ -100,7 +100,7 @@ namespace Doug.Models
         public int TotalHitrate() => Loadout.Hitrate + 5 + Effects.Sum(userEffect => userEffect.Effect.Hitrate);
         public int MaxAttack() => Loadout.MaxAttack + Attack + Effects.Sum(userEffect => userEffect.Effect.Attack);
         public int MinAttack() => Loadout.MinAttack + Attack + Effects.Sum(userEffect => userEffect.Effect.Attack);
-        public int TotalAttackSpeed() => Loadout.AttackSpeed + TotalAgility();
+        public int TotalAttackSpeed() => Loadout.AttackSpeed + TotalAgility() / 2;
 
         public void RegenerateHealth() => Health += (int)(TotalHealth() * 0.2);
         public double BaseOpponentStealSuccessRate() => 0.75;

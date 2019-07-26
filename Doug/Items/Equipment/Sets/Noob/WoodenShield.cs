@@ -1,6 +1,6 @@
 ﻿namespace Doug.Items.Equipment.Sets.Noob
 {
-    public class WoodenShield : Weapon
+    public class WoodenShield : EquipmentItem
     {
         public const string ItemId = "wooden_shield";
 
