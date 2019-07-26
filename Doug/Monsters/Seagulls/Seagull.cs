@@ -18,7 +18,7 @@ namespace Doug.Monsters.Seagulls
             Level = 10;
             ExperienceValue = 50;
 
-            MaxHealth = Health = 180;
+            MaxHealth = Health = 480;
             MinAttack = 78;
             MaxAttack = 96;
             Hitrate = 18;
