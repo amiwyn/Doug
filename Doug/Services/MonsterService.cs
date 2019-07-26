@@ -71,10 +71,13 @@ namespace Doug.Services
         private async Task AddMonsterLootToUser(User user, Monster monster, string channel)
         {
             var droppedItems = _randomService.RandomTableDrop(monster.DropTable, user.ExtraDropChance()).Select(drop => _itemFactory.CreateItem(drop.Id)).ToList();
-            _inventoryRepository.AddItems(user, droppedItems);
 
-            var itemsMessage = string.Join(", ", droppedItems.Select(item => $"*{item.Name}*"));
-            await _slack.SendEphemeralMessage(string.Format(DougMessages.UserObtained, _userService.Mention(user), itemsMessage), user.Id, channel);
+            if (!droppedItems.Any())
+            {
+                _inventoryRepository.AddItems(user, droppedItems);
+                var itemsMessage = string.Join(", ", droppedItems.Select(item => $"*{item.Name}*"));
+                await _slack.SendEphemeralMessage(string.Format(DougMessages.UserObtained, _userService.Mention(user), itemsMessage), user.Id, channel);
+            }
         }
     }
 }
