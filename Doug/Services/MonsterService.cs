@@ -70,7 +70,7 @@ namespace Doug.Services
 
         private async Task AddMonsterLootToUser(User user, Monster monster, string channel)
         {
-            var droppedItems = _randomService.RandomTableDrop(monster.DropTable, user.ExtraDropChance()).Select(drop => _itemFactory.CreateItem(drop.Id));
+            var droppedItems = _randomService.RandomTableDrop(monster.DropTable, user.ExtraDropChance()).Select(drop => _itemFactory.CreateItem(drop.Id)).ToList();
             _inventoryRepository.AddItems(user, droppedItems);
 
             var itemsMessage = string.Join(", ", droppedItems.Select(item => $"*{item.Name}*"));

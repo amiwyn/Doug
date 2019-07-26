@@ -34,7 +34,7 @@ namespace Doug.Repositories
 
         public SpawnedMonster GetMonster(int monsterId)
         {
-            var monster = _db.SpawnedMonsters.Single();
+            var monster = _db.SpawnedMonsters.Single(monsta => monsta.Id == monsterId);
             monster.LoadMonster(_monsterFactory);
             return monster;
         }
