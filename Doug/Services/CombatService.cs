@@ -56,10 +56,15 @@ namespace Doug.Services
             }
 
             var channelType = _channelRepository.GetChannelType(channel);
-
             if (channelType != ChannelType.Common && channelType != ChannelType.Pvp)
             {
                 return new DougResponse(DougMessages.NotInRightChannel);
+            }
+
+            var usersInChannel = await _slack.GetUsersInChannel(channel);
+            if (usersInChannel.All(usr => usr != target.Id))
+            {
+                return new DougResponse(DougMessages.UserIsNotInPvp);
             }
 
             var energy = user.Energy - StealEnergyCost;
@@ -126,15 +131,13 @@ namespace Doug.Services
             }
 
             var channelType = _channelRepository.GetChannelType(channel);
-
             if (channelType != ChannelType.Pvp)
             {
                 return new DougResponse(DougMessages.NotInRightChannel);
             }
 
-            var flaggedUsers = await _slack.GetUsersInChannel(channel);
-
-            if (flaggedUsers.All(usr => usr != target.Id))
+            var usersInChannel = await _slack.GetUsersInChannel(channel);
+            if (usersInChannel.All(usr => usr != target.Id))
             {
                 return new DougResponse(DougMessages.UserIsNotInPvp);
             }
