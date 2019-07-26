@@ -14,12 +14,13 @@ namespace Doug.Monsters.Seagulls
             Id = MonsterId;
             Name = "Seagull";
             Description = "A fierce animal with a razor sharp beak.";
-            Level = 5;
+            Image = "https://upload.wikimedia.org/wikipedia/commons/f/fb/Seagull_in_flight_by_Jiyang_Chen.jpg";
+            Level = 10;
             ExperienceValue = 50;
 
-            MaxHealth = 180;
-            MinAttack = 28;
-            MaxAttack = 42;
+            MaxHealth = Health = 180;
+            MinAttack = 78;
+            MaxAttack = 96;
             Hitrate = 18;
             Dodge = 18;
             Defense = 20;

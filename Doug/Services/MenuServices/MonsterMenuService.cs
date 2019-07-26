@@ -1,0 +1,51 @@
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Doug.Menus;
+using Doug.Menus.Blocks;
+using Doug.Models;
+using Doug.Repositories;
+using Doug.Slack;
+
+namespace Doug.Services.MenuServices
+{
+    public interface IMonsterMenuService
+    {
+        Task Attack(Interaction interaction);
+        Task ShowMonsters(string channel);
+    }
+
+    public class MonsterMenuService : IMonsterMenuService
+    {
+        private readonly IUserRepository _userRepository;
+        private readonly ICombatService _combatService;
+        private readonly IMonsterRepository _monsterRepository;
+        private readonly ISlackWebApi _slack;
+
+        public MonsterMenuService(IUserRepository userRepository, ICombatService combatService, IMonsterRepository monsterRepository, ISlackWebApi slack)
+        {
+            _userRepository = userRepository;
+            _combatService = combatService;
+            _monsterRepository = monsterRepository;
+            _slack = slack;
+        }
+
+        public async Task Attack(Interaction interaction)
+        {
+            var user = _userRepository.GetUser(interaction.UserId);
+            var monster = _monsterRepository.GetMonster(int.Parse(interaction.Value));
+
+            var response = await _combatService.AttackMonster(user, monster, interaction.ChannelId);
+
+            await _slack.SendEphemeralMessage(response.Message, user.Id, interaction.ChannelId);
+            await _slack.UpdateInteractionMessage(new MonsterMenu(monster).Blocks, interaction.ResponseUrl);
+        }
+
+        public async Task ShowMonsters(string channel)
+        {
+            var monsters = _monsterRepository.GetMonsters(channel);
+            var monsterBlocks = monsters.Aggregate(new List<Block>(), (blocks, monster) => blocks.Concat(new MonsterMenu(monster).Blocks).ToList());
+            await _slack.BroadcastBlocks(monsterBlocks, channel);
+        }
+    }
+}

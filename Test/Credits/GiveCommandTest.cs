@@ -2,6 +2,7 @@ using Doug.Commands;
 using Doug.Models;
 using Doug.Repositories;
 using Doug.Services;
+using Doug.Services.MenuServices;
 using Doug.Slack;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;

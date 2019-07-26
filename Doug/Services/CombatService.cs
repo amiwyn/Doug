@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Doug.Items;
 using Doug.Models;
 using Doug.Models.Combat;
+using Doug.Monsters;
 using Doug.Repositories;
 using Doug.Slack;
 
@@ -12,6 +13,7 @@ namespace Doug.Services
     {
         Task<DougResponse> Steal(User user, User target, string channel);
         Task<DougResponse> Attack(User user, User target, string channel);
+        Task<DougResponse> AttackMonster(User user, SpawnedMonster spawnedMonster, string channel);
     }
 
     public class CombatService : ICombatService
@@ -27,8 +29,10 @@ namespace Doug.Services
         private readonly IRandomService _randomService;
         private readonly IUserService _userService;
         private readonly IChannelRepository _channelRepository;
+        private readonly IMonsterRepository _monsterRepository;
+        private readonly IMonsterService _monsterService;
 
-        public CombatService(IEventDispatcher eventDispatcher, IUserRepository userRepository, ISlackWebApi slack, IStatsRepository statsRepository, IRandomService randomService, IUserService userService, IChannelRepository channelRepository)
+        public CombatService(IEventDispatcher eventDispatcher, IUserRepository userRepository, ISlackWebApi slack, IStatsRepository statsRepository, IRandomService randomService, IUserService userService, IChannelRepository channelRepository, IMonsterRepository monsterRepository, IMonsterService monsterService)
         {
             _eventDispatcher = eventDispatcher;
             _userRepository = userRepository;
@@ -37,6 +41,8 @@ namespace Doug.Services
             _randomService = randomService;
             _userService = userService;
             _channelRepository = channelRepository;
+            _monsterRepository = monsterRepository;
+            _monsterService = monsterService;
         }
 
         public async Task<DougResponse> Steal(User user, User target, string channel)
@@ -161,6 +167,59 @@ namespace Doug.Services
             }
 
             _statsRepository.UpdateHealth(target.Id, target.Health);
+        }
+
+
+        public async Task<DougResponse> AttackMonster(User user, SpawnedMonster spawnedMonster, string channel)
+        {
+            var energy = user.Energy - AttackEnergyCost;
+            var monster = spawnedMonster.Monster;
+
+            if (user.IsAttackOnCooldown())
+            {
+                return new DougResponse(string.Format(DougMessages.CommandOnCooldown, user.CalculateAttackCooldownRemaining()));
+            }
+
+            if (energy < 0)
+            {
+                return new DougResponse(DougMessages.NotEnoughEnergy);
+            }
+
+            _statsRepository.UpdateEnergy(user.Id, energy);
+            _userRepository.SetAttackCooldown(user.Id, user.GetAttackCooldown());
+
+            var attack = user.AttackTarget(monster, _eventDispatcher);
+
+            var message = attack.Status.ToMessage(_userService.Mention(user), $"*{monster.Name}*", attack.Damage);
+            await _slack.BroadcastMessage(message, channel);
+
+            _monsterRepository.UpdateHealth(spawnedMonster.Id, monster.Health);
+
+            if (monster.IsDead())
+            {
+                await _monsterService.HandleMonsterDeathByUser(user, spawnedMonster, channel);
+            }
+            else if (!spawnedMonster.IsAttackOnCooldown())
+            {
+                await MonsterAttackUser(monster, user, channel);
+            }
+
+            return new DougResponse();
+        }
+
+        private async Task MonsterAttackUser(Monster monster, User user, string channel)
+        {
+            var retaliationAttack = monster.AttackTarget(user, _eventDispatcher);
+
+            var retaliationMessage = retaliationAttack.Status.ToMessage($"*{monster.Name}*", _userService.Mention(user), retaliationAttack.Damage);
+            await _slack.BroadcastMessage(retaliationMessage, channel);
+
+            if (user.IsDead())
+            {
+                await _userService.HandleDeath(user, channel);
+            }
+
+            _statsRepository.UpdateHealth(user.Id, user.Health);
         }
     }
 }

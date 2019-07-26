@@ -1,5 +1,4 @@
-﻿using Doug.Monsters;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace Doug.Models
 {
@@ -15,7 +14,7 @@ namespace Doug.Models
         public DbSet<UserEffect> UserEffect { get; set; }
         public DbSet<Government> Government { get; set; }
         public DbSet<Shop> Shops { get; set; }
-        public DbSet<Monster> Monsters { get; set; }
+        public DbSet<SpawnedMonster> SpawnedMonsters { get; set; }
 
         public DougContext(DbContextOptions<DougContext> options) : base(options)
         {

@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Doug.Controllers.Dto;
 using Doug.Menus;
 using Doug.Models;
-using Doug.Services;
+using Doug.Services.MenuServices;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Doug.Controllers
@@ -16,12 +16,14 @@ namespace Doug.Controllers
         private readonly IShopMenuService _shopMenuService;
         private readonly IStatsMenuService _statsMenuService;
         private readonly IInventoryMenuService _inventoryMenuService;
+        private readonly IMonsterMenuService _monsterMenuservice;
 
-        public InteractionsController(IShopMenuService shopMenuService, IStatsMenuService statsMenuService, IInventoryMenuService inventoryMenuService)
+        public InteractionsController(IShopMenuService shopMenuService, IStatsMenuService statsMenuService, IInventoryMenuService inventoryMenuService, IMonsterMenuService monsterMenuservice)
         {
             _shopMenuService = shopMenuService;
             _statsMenuService = statsMenuService;
             _inventoryMenuService = inventoryMenuService;
+            _monsterMenuservice = monsterMenuservice;
         }
 
         [HttpPost]
@@ -58,6 +60,9 @@ namespace Doug.Controllers
                     break;
                 case Actions.ShopSwitch:
                     await _shopMenuService.ShopSwitch(interaction);
+                    break;
+                case Actions.Attack:
+                    await _monsterMenuservice.Attack(interaction);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

@@ -12,6 +12,7 @@ namespace Doug.Monsters
         public int Health { get; set; }
         public int Level { get; set; }
         public int ExperienceValue { get; set; }
+        public string Image { get; set; }
         public DamageType DamageType { get; set; }
         public Dictionary<LootItem, double> DropTable { get; set; }
 
@@ -81,6 +82,11 @@ namespace Doug.Monsters
         private void ApplyMagicalDamage(int damage)
         {
             Health -= damage;
+        }
+
+        public bool IsDead()
+        {
+            return Health <= 0;
         }
     }
 }

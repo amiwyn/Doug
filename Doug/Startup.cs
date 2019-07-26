@@ -12,6 +12,7 @@ using Doug.Models;
 using Doug.Monsters;
 using Doug.Repositories;
 using Doug.Services;
+using Doug.Services.MenuServices;
 using Doug.Slack;
 using Hangfire;
 using Hangfire.SQLite;
@@ -102,6 +103,7 @@ namespace Doug
             services.AddScoped<IGovernmentService, GovernmentService>();
             services.AddScoped<ICombatService, CombatService>();
             services.AddScoped<IMonsterService, MonsterService>();
+            services.AddScoped<IMonsterMenuService, MonsterMenuService>();
 
             services.AddScoped<ICoffeeCommands, CoffeeCommands>();
             services.AddScoped<ISlursCommands, SlursCommands>();

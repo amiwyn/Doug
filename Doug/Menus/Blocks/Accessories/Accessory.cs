@@ -3,12 +3,10 @@
     public abstract class Accessory
     {
         public string Type { get; set; }
-        public string ActionId { get; set; }
 
-        protected Accessory(string type, string action)
+        protected Accessory(string type)
         {
             Type = type;
-            ActionId = action;
         }
     }
 }
