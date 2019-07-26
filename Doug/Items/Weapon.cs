@@ -11,7 +11,7 @@ namespace Doug.Items
 
         protected Weapon()
         {
-            Stats.AttackSpeed = 1;
+            Stats.AttackSpeed = 100;
         }
 
         public override IEnumerable<string> GetDisplayAttributeList()

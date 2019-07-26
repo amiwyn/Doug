@@ -100,6 +100,7 @@ namespace Doug.Models
         public int TotalHitrate() => Loadout.Hitrate + 5 + Effects.Sum(userEffect => userEffect.Effect.Hitrate);
         public int MaxAttack() => Loadout.MaxAttack + Attack + Effects.Sum(userEffect => userEffect.Effect.Attack);
         public int MinAttack() => Loadout.MinAttack + Attack + Effects.Sum(userEffect => userEffect.Effect.Attack);
+        public int TotalAttackSpeed() => Loadout.AttackSpeed + TotalAgility();
 
         public void RegenerateHealth() => Health += (int)(TotalHealth() * 0.2);
         public double BaseOpponentStealSuccessRate() => 0.75;
@@ -113,7 +114,7 @@ namespace Doug.Models
         public int CalculateAttackCooldownRemaining() => (int)(AttackCooldown - DateTime.UtcNow).TotalSeconds;
         public int CalculateStealCooldownRemaining() => (int)(StealCooldown - DateTime.UtcNow).TotalSeconds;
         public TimeSpan GetStealCooldown() => TimeSpan.FromSeconds(BaseStealCooldown);
-        public TimeSpan GetAttackCooldown() => TimeSpan.FromSeconds(BaseAttackCooldown / (Math.Abs(Loadout.AttackSpeed) < 0.001 ? 1 : Loadout.AttackSpeed));
+        public TimeSpan GetAttackCooldown() => TimeSpan.FromSeconds(BaseAttackCooldown * 100.0 / TotalAttackSpeed());
 
         public void LevelUp()
         {
