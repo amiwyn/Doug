@@ -74,16 +74,6 @@ namespace Doug.Services
                 return new DougResponse(DougMessages.NotEnoughEnergy);
             }
 
-            if (!await targetIsActive)
-            {
-                return new DougResponse(DougMessages.UserMustBeActive);
-            }
-
-            if (!await userIsActive)
-            {
-                return new DougResponse(DougMessages.YouMustBeActive);
-            }
-
             _statsRepository.UpdateEnergy(user.Id, energy);
             _userRepository.SetStealCooldown(user.Id, user.GetStealCooldown());
 
