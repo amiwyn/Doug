@@ -9,7 +9,7 @@ namespace Doug.Items.Consumables
         public const string ItemId = "lucky_clover";
 
         private readonly IEffectRepository _effectRepository;
-        private const int DurationInMinutes = 5;
+        private const int DurationInMinutes = 10;
 
         public LuckyClover(IInventoryRepository inventoryRepository, IEffectRepository effectRepository) : base(inventoryRepository)
         {
