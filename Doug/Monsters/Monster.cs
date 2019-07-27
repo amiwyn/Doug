@@ -88,5 +88,10 @@ namespace Doug.Monsters
         {
             return Health <= 0;
         }
+
+        public TimeSpan GetAttackCooldown()
+        {
+            return TimeSpan.FromSeconds(3000.0 / (100 + Agility / 2));
+        }
     }
 }

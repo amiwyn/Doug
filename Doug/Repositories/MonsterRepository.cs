@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Doug.Models;
 using Doug.Monsters;
@@ -12,6 +13,7 @@ namespace Doug.Repositories
         void SpawnMonster(Monster monster, string channel);
         void RemoveMonster(int id);
         void UpdateHealth(int id, int health);
+        void SetAttackCooldown(int id, TimeSpan cooldown);
     }
 
     public class MonsterRepository : IMonsterRepository
@@ -56,6 +58,13 @@ namespace Doug.Repositories
         {
             var monster = _db.SpawnedMonsters.Single(monsta => monsta.Id == id);
             monster.Health = health;
+            _db.SaveChanges();
+        }
+
+        public void SetAttackCooldown(int id, TimeSpan cooldown)
+        {
+            var monster = _db.SpawnedMonsters.Single(monsta => monsta.Id == id);
+            monster.AttackCooldown = DateTime.UtcNow + cooldown;
             _db.SaveChanges();
         }
     }

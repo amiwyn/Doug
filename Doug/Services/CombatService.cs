@@ -191,18 +191,19 @@ namespace Doug.Services
             }
             else if (!spawnedMonster.IsAttackOnCooldown())
             {
-                await MonsterAttackUser(monster, user, channel);
+                await MonsterAttackUser(monster, user, spawnedMonster.Id, channel);
             }
 
             return new DougResponse();
         }
 
-        private async Task MonsterAttackUser(Monster monster, User user, string channel)
+        private async Task MonsterAttackUser(Monster monster, User user, int spawnedMonsterId, string channel)
         {
             var retaliationAttack = monster.AttackTarget(user, _eventDispatcher);
 
             var retaliationMessage = retaliationAttack.Status.ToMessage($"*{monster.Name}*", _userService.Mention(user), retaliationAttack.Damage);
             await _slack.BroadcastMessage(retaliationMessage, channel);
+            _monsterRepository.SetAttackCooldown(spawnedMonsterId, monster.GetAttackCooldown());
 
             if (user.IsDead())
             {
