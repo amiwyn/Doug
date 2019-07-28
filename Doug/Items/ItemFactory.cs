@@ -1,10 +1,12 @@
 ﻿using Doug.Items.Consumables;
 using Doug.Items.Consumables.Resets;
 using Doug.Items.Equipment;
+using Doug.Items.Equipment.Necklaces;
 using Doug.Items.Equipment.Sets.Noob;
 using Doug.Items.Equipment.Sets.StartingWeapons;
 using Doug.Items.Lootboxes;
 using Doug.Items.Misc;
+using Doug.Items.Misc.Drops;
 using Doug.Repositories;
 using Doug.Services;
 using Doug.Slack;
@@ -94,9 +96,18 @@ namespace Doug.Items
                 case SmallClaw.ItemId: return new SmallClaw();
                 case WoodenStaff.ItemId: return new WoodenStaff();
 
+                // Necklaces
+                case EmeraldAmulet.ItemId: return new EmeraldAmulet();
+
                 // Misc
                 case BachelorsDegree.ItemId: return new BachelorsDegree();
                 case MysteryBox.ItemId: return new MysteryBox(_inventoryRepository, _randomService, _slack, _userService, this);
+
+                // Monster Drops
+                case GullFeather.ItemId: return new GullFeather();
+                case SharpBeak.ItemId: return new SharpBeak();
+                case IronIngot.ItemId: return new IronIngot();
+                case BikerCocaine.ItemId: return new BikerCocaine();
                 default: return new Default();
             }
         }
