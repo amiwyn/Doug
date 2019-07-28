@@ -135,8 +135,8 @@ namespace Doug.Models
 
         public double GetExperienceAdvancement()
         {
-            var nextLevelExp = Math.Pow((Level + 1) * 10 - 10, 2);
-            var prevLevelExp = Math.Pow((Level - 1) * 10, 2);
+            var nextLevelExp = Math.Pow((Level + 1) * 20 - 20, 2);
+            var prevLevelExp = Math.Pow((Level - 1) * 20, 2);
 
             return (Experience - prevLevelExp) / (nextLevelExp - prevLevelExp);
         }
