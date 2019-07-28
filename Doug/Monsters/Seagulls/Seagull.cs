@@ -31,6 +31,7 @@ namespace Doug.Monsters.Seagulls
             {
                 { new LootItem(Apple.ItemId, 1), 0.05 },
                 { new LootItem(GullFeather.ItemId, 1), 0.4 },
+                { new LootItem(SharpBeak.ItemId, 1), 0.3 }
             };
         }
     }
