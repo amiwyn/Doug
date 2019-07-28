@@ -30,7 +30,7 @@ namespace Doug.Models
         public int Constitution { get; set; }
         public int Intelligence { get; set; }
 
-        public int Level => (int)Math.Floor(Math.Sqrt(Experience) * 0.1 + 1);
+        public int Level => (int)Math.Floor(Math.Sqrt(Experience) * 0.05 + 1);
         public int TotalStatsPoints => (int)Math.Floor(Level + 5 * Math.Floor(Level * 0.1)) + 4;
         public int FreeStatsPoints => TotalStatsPoints + 25 - (Luck + Agility + Strength + Constitution + Intelligence);
         public int Attack => (int)Math.Floor(Strength * 3.0);
