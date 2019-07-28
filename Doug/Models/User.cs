@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Doug.Items;
 using System.Linq;
 using Doug.Effects;
+using Doug.Items.Lootboxes;
 using Doug.Models.Combat;
 
 namespace Doug.Models
@@ -120,6 +121,7 @@ namespace Doug.Models
         {
             Health = TotalHealth();
             Energy = TotalEnergy();
+            InventoryItems.Add(new InventoryItem(Id, MysteryBox.ItemId));
         }
 
         public void LoadItems(IItemFactory itemFactory)
