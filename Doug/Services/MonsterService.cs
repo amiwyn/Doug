@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Doug.Items;
 using Doug.Models;
 using Doug.Monsters;
-using Doug.Monsters.Seagulls;
 using Doug.Repositories;
 using Doug.Slack;
 
@@ -20,6 +19,7 @@ namespace Doug.Services
     {
         private const double SpawnChance = 0.2;
         private const string PvpChannel = "CL2TYGE1E";
+        private const int MaximumMonsterTypeInChannel = 3;
 
         private readonly IMonsterRepository _monsterRepository;
         private readonly ISlackWebApi _slack;
@@ -28,8 +28,10 @@ namespace Doug.Services
         private readonly IInventoryRepository _inventoryRepository;
         private readonly IRandomService _randomService;
         private readonly IItemFactory _itemFactory;
+        private readonly IChannelRepository _channelRepository;
+        private readonly IMonsterFactory _monsterFactory;
 
-        public MonsterService(IMonsterRepository monsterRepository, ISlackWebApi slack, IUserService userService, IUserRepository userRepository, IInventoryRepository inventoryRepository, IRandomService randomService, IItemFactory itemFactory)
+        public MonsterService(IMonsterRepository monsterRepository, ISlackWebApi slack, IUserService userService, IUserRepository userRepository, IInventoryRepository inventoryRepository, IRandomService randomService, IItemFactory itemFactory, IChannelRepository channelRepository, IMonsterFactory monsterFactory)
         {
             _monsterRepository = monsterRepository;
             _slack = slack;
@@ -38,19 +40,41 @@ namespace Doug.Services
             _inventoryRepository = inventoryRepository;
             _randomService = randomService;
             _itemFactory = itemFactory;
+            _channelRepository = channelRepository;
+            _monsterFactory = monsterFactory;
         }
 
         public async Task RollMonsterSpawn()
         {
-            if (new Random().NextDouble() >= SpawnChance)
+            var random = new Random();
+            if (random.NextDouble() >= SpawnChance)
             {
                 return;
             }
 
-            var monster = new Seagull(); //TODO add more monster variety and pick them randomly (or based on present players levels)
+            var channel = PvpChannel;
+            if (random.Next(2) == 0)
+            {
+                channel = PickRandomChannel(random).Id;
+            }
 
-            _monsterRepository.SpawnMonster(monster, PvpChannel); 
-            await _slack.BroadcastMessage(string.Format(DougMessages.MonsterSpawned, monster.Name), PvpChannel);
+            var monster = _monsterFactory.CreateRandomMonster(random);
+            var monstersInChannel = _monsterRepository.GetMonsters(channel);
+
+            if (monstersInChannel.Count(monsta => monsta.MonsterId == monster.Id) >= MaximumMonsterTypeInChannel)
+            {
+                return;
+            }
+
+            _monsterRepository.SpawnMonster(monster, channel); 
+            await _slack.BroadcastMessage(string.Format(DougMessages.MonsterSpawned, monster.Name), channel);
+        }
+
+        private Channel PickRandomChannel(Random random)
+        {
+            var channels = _channelRepository.GetChannels().ToList();
+            var index = random.Next(0, channels.Count);
+            return channels.ElementAt(index);
         }
 
         public async Task HandleMonsterDeathByUser(User user, SpawnedMonster spawnedMonster, string channel)
