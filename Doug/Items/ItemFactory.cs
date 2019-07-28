@@ -5,6 +5,7 @@ using Doug.Items.Equipment.Sets.Noob;
 using Doug.Items.Equipment.Sets.StartingWeapons;
 using Doug.Items.Lootboxes;
 using Doug.Items.Misc;
+using Doug.Items.Misc.Drops;
 using Doug.Repositories;
 using Doug.Services;
 using Doug.Slack;
@@ -97,6 +98,9 @@ namespace Doug.Items
                 // Misc
                 case BachelorsDegree.ItemId: return new BachelorsDegree();
                 case MysteryBox.ItemId: return new MysteryBox(_inventoryRepository, _randomService, _slack, _userService, this);
+
+                // Monster Drops
+                case GullFeather.ItemId: return new GullFeather();
                 default: return new Default();
             }
         }

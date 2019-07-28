@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Doug.Items.Consumables;
 using Doug.Items.Misc;
+using Doug.Items.Misc.Drops;
 using Doug.Models;
 
 namespace Doug.Monsters.Seagulls
@@ -29,10 +30,7 @@ namespace Doug.Monsters.Seagulls
             DropTable = new Dictionary<LootItem, double>
             {
                 { new LootItem(Apple.ItemId, 1), 0.05 },
-                { new LootItem(CoffeeCup.ItemId, 1), 0.05 },
-                { new LootItem(SuicidePill.ItemId, 1), 0.05 },
-                { new LootItem(Cigarette.ItemId, 1), 0.05 },
-                { new LootItem(BachelorsDegree.ItemId, 1), 0.05 }
+                { new LootItem(GullFeather.ItemId, 1), 0.4 },
             };
         }
     }
