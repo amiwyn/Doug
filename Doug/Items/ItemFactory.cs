@@ -102,6 +102,7 @@ namespace Doug.Items
                 // Misc
                 case BachelorsDegree.ItemId: return new BachelorsDegree();
                 case MysteryBox.ItemId: return new MysteryBox(_inventoryRepository, _randomService, _slack, _userService, this);
+                case PeasantBox.ItemId: return new PeasantBox(_inventoryRepository, _slack, this);
 
                 // Monster Drops
                 case GullFeather.ItemId: return new GullFeather();

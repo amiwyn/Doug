@@ -4,6 +4,7 @@ using Doug.Items.Consumables;
 using Doug.Items.Consumables.Resets;
 using Doug.Items.Equipment;
 using Doug.Items.Misc;
+using Doug.Items.Misc.Drops;
 using Doug.Models;
 using Doug.Repositories;
 using Doug.Services;
@@ -44,24 +45,27 @@ namespace Doug.Items.Lootboxes
                 { new LootItem(CoffeeCup.ItemId, 5), 0.1 },
                 { new LootItem(Bread.ItemId, 5), 0.1 },
                 { new LootItem(McdoFries.ItemId, 2), 0.05 },
-                { new LootItem(KickTicket.ItemId, 3), 0.05 },
+                { new LootItem(KickTicket.ItemId, 3), 0.01 },
                 { new LootItem(InviteTicket.ItemId, 3), 0.1 },
                 { new LootItem(HolyWater.ItemId, 1), 0.05 },
                 { new LootItem(SuicidePill.ItemId, 1), 0.05 },
                 { new LootItem(Cigarette.ItemId, 1), 0.05 },
+                { new LootItem(PicklePickle.ItemId, 1), 0.05 },
                 { new LootItem(BachelorsDegree.ItemId, 1), 0.05 },
+                { new LootItem(IronIngot.ItemId, 1), 0.05 },
 
                 { new LootItem(StraightEdge.ItemId, 1), 0.01 },
                 { new LootItem(CloakOfSpikes.ItemId, 1), 0.01 },
                 { new LootItem(AwakeningOrb.ItemId, 1), 0.01 },
                 { new LootItem(BurglarBoots.ItemId, 1), 0.01 },
-                { new LootItem(GreedyGloves.ItemId, 1), 0.01 },
+                { new LootItem(GreedyGloves.ItemId, 1), 0.005 },
+                { new LootItem(LuckyCoin.ItemId, 1), 0.005 },
 
-                { new LootItem(AgilityReset.ItemId, 1), 0.05 },
-                { new LootItem(StrengthReset.ItemId, 1), 0.05 },
-                { new LootItem(LuckReset.ItemId, 1), 0.05 },
-                { new LootItem(ConstitutionReset.ItemId, 1), 0.05 },
-                { new LootItem(IntelligenceReset.ItemId, 1), 0.05 }
+                { new LootItem(AgilityReset.ItemId, 1), 0.02 },
+                { new LootItem(StrengthReset.ItemId, 1), 0.02 },
+                { new LootItem(LuckReset.ItemId, 1), 0.02 },
+                { new LootItem(ConstitutionReset.ItemId, 1), 0.02 },
+                { new LootItem(IntelligenceReset.ItemId, 1), 0.02 }
             };
         }
 
