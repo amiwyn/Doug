@@ -10,7 +10,7 @@
             Description = "Its a pristine white feather.";
             Rarity = Rarity.Common;
             Icon = ":feather:";
-            Price = 153;
+            Price = 88;
         }
     }
 }

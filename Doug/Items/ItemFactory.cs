@@ -101,6 +101,8 @@ namespace Doug.Items
 
                 // Monster Drops
                 case GullFeather.ItemId: return new GullFeather();
+                case SharpBeak.ItemId: return new SharpBeak();
+                case IronIngot.ItemId: return new IronIngot();
                 default: return new Default();
             }
         }

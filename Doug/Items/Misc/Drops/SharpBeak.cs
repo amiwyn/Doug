@@ -10,7 +10,7 @@
             Description = "Its razor sharp";
             Rarity = Rarity.Common;
             Icon = ":beak:";
-            Price = 224;
+            Price = 134;
         }
     }
 }
