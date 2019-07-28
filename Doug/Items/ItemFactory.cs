@@ -1,6 +1,7 @@
 ﻿using Doug.Items.Consumables;
 using Doug.Items.Consumables.Resets;
 using Doug.Items.Equipment;
+using Doug.Items.Equipment.Necklaces;
 using Doug.Items.Equipment.Sets.Noob;
 using Doug.Items.Equipment.Sets.StartingWeapons;
 using Doug.Items.Lootboxes;
@@ -94,6 +95,9 @@ namespace Doug.Items
                 case ShortBow.ItemId: return new ShortBow();
                 case SmallClaw.ItemId: return new SmallClaw();
                 case WoodenStaff.ItemId: return new WoodenStaff();
+
+                // Necklaces
+                case EmeraldAmulet.ItemId: return new EmeraldAmulet();
 
                 // Misc
                 case BachelorsDegree.ItemId: return new BachelorsDegree();
