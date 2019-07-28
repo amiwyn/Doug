@@ -103,6 +103,7 @@ namespace Doug.Items
                 case GullFeather.ItemId: return new GullFeather();
                 case SharpBeak.ItemId: return new SharpBeak();
                 case IronIngot.ItemId: return new IronIngot();
+                case BikerCocaine.ItemId: return new BikerCocaine();
                 default: return new Default();
             }
         }
