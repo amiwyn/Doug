@@ -125,7 +125,6 @@ namespace Doug.Models
         {
             Health = TotalHealth();
             Energy = TotalEnergy();
-            InventoryItems.Add(new InventoryItem(Id, MysteryBox.ItemId));
         }
 
         public void LoadItems(IItemFactory itemFactory)
