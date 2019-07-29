@@ -66,8 +66,10 @@
         public const string Inventory = "Inventory";
         public const string Equipment = "Equipment";
         public const string GeneralStore = "General Store";
-        public const string ArmorShop = "Armor Shop";
-        public const string WeaponShop = "Weapon Shop";
+        public const string ArmoryShop = "Armory";
+        public const string MagicShop = "Diagon Alley";
+        public const string RogueShop = "Rogue Emporium";
+        public const string PeasantShop = "Peasant Supplies";
         public const string Info = "Info";
         public const string UnequippedItem = "You unequipped *{0}*.";
         public const string Target = "Target ...";

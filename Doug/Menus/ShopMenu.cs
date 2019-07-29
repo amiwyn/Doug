@@ -36,10 +36,12 @@ namespace Doug.Menus
         private Block ShopHeader()
         {
             var generalStoreButton = new Button(DougMessages.GeneralStore, ShopMenuService.GeneralStoreId, $"{Actions.ShopSwitch.ToString()}:0");
-            var armorShopButton = new Button(DougMessages.ArmorShop, ShopMenuService.ArmoryShopId, $"{Actions.ShopSwitch.ToString()}:1");
-            var weaponShopButton = new Button(DougMessages.WeaponShop, ShopMenuService.WeaponShopId, $"{Actions.ShopSwitch.ToString()}:2");
+            var peasantShop = new Button(DougMessages.PeasantShop, ShopMenuService.PeasantShopId, $"{Actions.ShopSwitch.ToString()}:1");
+            var armoryShopButton = new Button(DougMessages.ArmoryShop, ShopMenuService.ArmoryShopId, $"{Actions.ShopSwitch.ToString()}:2");
+            var rogueShopButton = new Button(DougMessages.RogueShop, ShopMenuService.RogueShop, $"{Actions.ShopSwitch.ToString()}:3");
+            var magicShopButton = new Button(DougMessages.MagicShop, ShopMenuService.MagicShop, $"{Actions.ShopSwitch.ToString()}:4");
 
-            return new ActionList(new List<Accessory> { generalStoreButton, armorShopButton, weaponShopButton }, Actions.ShopSwitch.ToString());
+            return new ActionList(new List<Accessory> { generalStoreButton, peasantShop, armoryShopButton, rogueShopButton, magicShopButton }, Actions.ShopSwitch.ToString());
         }
 
         private List<Block> ShopItemSection(Item item, string shopId)

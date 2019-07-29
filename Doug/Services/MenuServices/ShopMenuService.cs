@@ -19,8 +19,10 @@ namespace Doug.Services.MenuServices
     public class ShopMenuService : IShopMenuService
     {
         public const string GeneralStoreId = "default";
-        public const string ArmoryShopId = "armor";
-        public const string WeaponShopId = "weapon";
+        public const string PeasantShopId = "peasant";
+        public const string ArmoryShopId = "armory";
+        public const string RogueShop = "rogue";
+        public const string MagicShop = "magic";
 
         private readonly IUserRepository _userRepository;
         private readonly ISlackWebApi _slack;
