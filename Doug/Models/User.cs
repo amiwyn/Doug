@@ -205,23 +205,26 @@ namespace Doug.Models
 
         public Attack AttackTarget(ICombatable target, IEventDispatcher eventDispatcher)
         {
-            Attack attack = new PhysicalAttack(MinAttack(), MaxAttack(), TotalHitrate(), TotalLuck());
+            Attack attack = new PhysicalAttack(this, MinAttack(), MaxAttack(), TotalHitrate(), TotalLuck());
 
             if (Loadout.GetDamageType() == DamageType.Magical)
             {
-                attack = new MagicAttack(TotalIntelligence());
+                attack = new MagicAttack(this, TotalIntelligence());
             }
 
-            if (target is User user)
-            {
-                attack.Damage = eventDispatcher.OnAttacking(this, user, attack.Damage);
-            }
+            attack.Damage = eventDispatcher.OnAttacking(this, target, attack.Damage);
 
-            return target.ReceiveAttack(attack);
+            return target.ReceiveAttack(attack, eventDispatcher);
         }
 
-        public Attack ReceiveAttack(Attack attack)
+        public Attack ReceiveAttack(Attack attack, IEventDispatcher eventDispatcher)
         {
+            if (eventDispatcher.OnAttackedInvincibility(attack.Attacker, this))
+            {
+                attack.Status = AttackStatus.Invincible;
+                return attack;
+            }
+
             if (attack is PhysicalAttack physicalAttack)
             {
                 return ApplyPhysicalDamage(physicalAttack);

@@ -40,17 +40,17 @@ namespace Doug.Monsters
 
         public Attack AttackTarget(ICombatable target, IEventDispatcher eventDispatcher)
         {
-            Attack attack = new PhysicalAttack(MinAttack, MaxAttack, Hitrate, Luck);
+            Attack attack = new PhysicalAttack(this, MinAttack, MaxAttack, Hitrate, Luck);
 
             if (DamageType == DamageType.Magical)
             {
-                attack = new MagicAttack(Intelligence);
+                attack = new MagicAttack(this, Intelligence);
             }
 
-            return target.ReceiveAttack(attack);
+            return target.ReceiveAttack(attack, eventDispatcher);
         }
 
-        public Attack ReceiveAttack(Attack attack)
+        public Attack ReceiveAttack(Attack attack, IEventDispatcher eventDispatcher)
         {
             if (attack is PhysicalAttack physicalAttack)
             {

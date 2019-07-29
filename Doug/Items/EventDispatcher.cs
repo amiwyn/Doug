@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Doug.Models;
 using System.Linq;
 using Doug.Effects;
+using Doug.Models.Combat;
 
 namespace Doug.Items
 {
@@ -17,8 +18,8 @@ namespace Doug.Items
         bool OnDeath(User user);
         void OnDeathByUser(User user, User killer);
         bool OnKick(User user, User kicker, string channel);
-        int OnAttacking(User attacker, User target, int damage);
-        bool OnAttackedInvincibility(User attacker, User target);
+        int OnAttacking(ICombatable attacker, ICombatable target, int damage);
+        bool OnAttackedInvincibility(ICombatable attacker, User target);
     }
 
     public class EventDispatcher : IEventDispatcher
@@ -53,13 +54,22 @@ namespace Doug.Items
             return PropagateEffectEvents(user, true, (isKicked, effect) => effect.OnKick(kicker, channel) && isKicked);
         }
 
-        public int OnAttacking(User attacker, User target, int damage)
+        public int OnAttacking(ICombatable attacker, ICombatable target, int damage)
         {
-            var attackerDamage = PropagateEffectEvents(attacker, damage, (damageSum, effect) => effect.OnAttacking(attacker, target, damageSum));
-            return PropagateEffectEvents(target, attackerDamage, (damageSum, effect) => effect.OnGettingAttacked(attacker, target, damageSum));
+            if (attacker is User userAttacker)
+            {
+                damage = PropagateEffectEvents(userAttacker, damage, (damageSum, effect) => effect.OnAttacking(userAttacker, target, damageSum));
+            }
+
+            if (target is User userTarget)
+            {
+                damage = PropagateEffectEvents(userTarget, damage, (damageSum, effect) => effect.OnGettingAttacked(attacker, userTarget, damageSum));
+            }
+
+            return damage;
         }
 
-        public bool OnAttackedInvincibility(User attacker, User target)
+        public bool OnAttackedInvincibility(ICombatable attacker, User target)
         {
             return PropagateEffectEvents(target, false, (isInvincible, effect) => effect.OnAttackedInvincibility(attacker, target) || isInvincible);
         }

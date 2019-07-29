@@ -104,7 +104,7 @@
         public const string ItemLeftHand = "*Left Handed*";
         public const string ItemRightHand = "*Right Handed*";
         public const string SmallHealthDisplay = "{0} HP";
-        public const string UserIsInvincible = "This user is invincible!";
+        public const string UserIsInvincible = "{0} is invincible!";
         public const string MonsterSpawned = "*{0}* has spawned!";
         public const string AttackAction = "Attack";
         public const string MonsterDied = "*{0}* Died!";

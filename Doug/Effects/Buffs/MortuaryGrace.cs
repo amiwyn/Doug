@@ -1,4 +1,5 @@
 ﻿using Doug.Models;
+using Doug.Models.Combat;
 using Doug.Repositories;
 
 namespace Doug.Effects.Buffs
@@ -18,12 +19,12 @@ namespace Doug.Effects.Buffs
             Icon = ":skull:";
         }
 
-        public override bool OnAttackedInvincibility(User attacker, User target)
+        public override bool OnAttackedInvincibility(ICombatable attacker, ICombatable target)
         {
             return true;
         }
 
-        public override int OnAttacking(User attacker, User target, int damage)
+        public override int OnAttacking(User attacker, ICombatable target, int damage)
         {
             _effectRepository.RemoveEffect(attacker, EffectId);
             return base.OnAttacking(attacker, target, damage);
