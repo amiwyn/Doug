@@ -17,6 +17,7 @@
 
             Stats.MinAttack = 42;
             Stats.MaxAttack = 55;
+            Stats.AttackSpeed = 20;
         }
     }
 }
