@@ -13,10 +13,10 @@ namespace Doug.Monsters.Brigands
         {
             Id = MonsterId;
             Name = "Pont Rouge Biker";
-            Description = "Attention les fifs quand la nuit tombe, y deviens un loup. Ctun Biker, Pont Rouge Panache.";
+            Description = "Attention les fifs quand la nuit tombe, y deviens un loup. C'tun Biker, Pont Rouge Panache.";
             Image = "https://i1.sndcdn.com/artworks-000008396349-n1h5ec-t500x500.jpg";
             Level = 15;
-            ExperienceValue = 450;
+            ExperienceValue = 2150;
 
             MaxHealth = Health = 666;
             MinAttack = 98;
