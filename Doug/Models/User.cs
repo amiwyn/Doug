@@ -12,6 +12,7 @@ namespace Doug.Models
     {
         private const int BaseAttackCooldown = 30;
         private const int BaseStealCooldown = 30;
+        private const int BaseAttackSpeed = 100;
 
         private int _health;
         private int _energy;
@@ -101,7 +102,7 @@ namespace Doug.Models
         public int TotalHitrate() => Loadout.Hitrate + 5 + Effects.Sum(userEffect => userEffect.Effect.Hitrate);
         public int MaxAttack() => Loadout.MaxAttack + Attack + Effects.Sum(userEffect => userEffect.Effect.Attack);
         public int MinAttack() => Loadout.MinAttack + Attack + Effects.Sum(userEffect => userEffect.Effect.Attack);
-        public int TotalAttackSpeed() => Loadout.AttackSpeed + TotalAgility() / 2;
+        public int TotalAttackSpeed() => BaseAttackSpeed + Loadout.AttackSpeed + TotalAgility() / 2;
 
         public void RegenerateHealth() => Health += (int)(TotalHealth() * 0.2);
         public double BaseOpponentStealSuccessRate() => 0.75;
