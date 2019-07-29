@@ -10,7 +10,7 @@
             Name = "Fur hat";
             Description = "You feel 120% fancier.";
             Rarity = Rarity.Common;
-            Icon = ":hat_1:";
+            Icon = ":fur_hat:";
             Slot = EquipmentSlot.Head;
             Price = 250;
             LevelRequirement = 10;

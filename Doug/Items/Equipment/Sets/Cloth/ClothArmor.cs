@@ -10,7 +10,7 @@
             Name = "Cloth Armor";
             Description = "An armor made of cloth.";
             Rarity = Rarity.Common;
-            Icon = ":cloth_Armor:";
+            Icon = ":cloth_armor:";
             Slot = EquipmentSlot.Body;
             Price = 387;
             LevelRequirement = 10;
