@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Doug.Models;
+using Doug.Models.Combat;
 
 namespace Doug.Items
 {
@@ -85,6 +86,11 @@ namespace Doug.Items
         /// <returns></returns>
         public virtual void OnDeathByUser(User killer)
         {
+        }
+
+        public virtual int OnGettingAttacked(ICombatable attacker, User target, int damage)
+        {
+            return damage;
         }
     }
 }

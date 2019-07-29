@@ -1,4 +1,5 @@
 ﻿using Doug.Models;
+using Doug.Models.Combat;
 
 namespace Doug.Effects
 {
@@ -41,17 +42,17 @@ namespace Doug.Effects
             return slur;
         }
 
-        public virtual int OnGettingAttacked(User attacker, User target, int damage)
+        public virtual int OnGettingAttacked(ICombatable attacker, User target, int damage)
         {
             return damage;
         }
 
-        public virtual int OnAttacking(User attacker, User target, int damage)
+        public virtual int OnAttacking(User attacker, ICombatable target, int damage)
         {
             return damage;
         }
 
-        public virtual bool OnAttackedInvincibility(User attacker, User target)
+        public virtual bool OnAttackedInvincibility(ICombatable attacker, ICombatable target)
         {
             return false;
         }

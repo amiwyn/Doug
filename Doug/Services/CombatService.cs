@@ -132,11 +132,6 @@ namespace Doug.Services
             _statsRepository.UpdateEnergy(user.Id, energy);
             _userRepository.SetAttackCooldown(user.Id, user.GetAttackCooldown());
 
-            if (_eventDispatcher.OnAttackedInvincibility(user, target))
-            {
-                return new DougResponse(DougMessages.UserIsInvincible);
-            }
-
             await DealDamage(user, target, channel);
 
             return new DougResponse();

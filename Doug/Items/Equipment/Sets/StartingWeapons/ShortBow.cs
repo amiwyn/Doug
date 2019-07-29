@@ -18,7 +18,8 @@
 
             Stats.MinAttack = 40;
             Stats.MaxAttack = 60;
-            Stats.AttackSpeed = 180;
+            Stats.AttackSpeed = 50;
+            Stats.Hitrate = 10;
         }
     }
 }

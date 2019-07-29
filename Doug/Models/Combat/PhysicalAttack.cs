@@ -6,7 +6,7 @@ namespace Doug.Models.Combat
     {
         public int AttackersHitrate { get; set; }
 
-        public PhysicalAttack(int minDamage, int maxDamage, int attackersHitrate, int attackersLuck) : base(RollAttack(minDamage, maxDamage))
+        public PhysicalAttack(ICombatable attacker, int minDamage, int maxDamage, int attackersHitrate, int attackersLuck) : base(RollAttack(minDamage, maxDamage), attacker)
         {
             AttackersHitrate = attackersHitrate;
 

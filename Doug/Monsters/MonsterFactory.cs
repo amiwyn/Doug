@@ -1,21 +1,40 @@
-﻿using Doug.Monsters.Seagulls;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Doug.Monsters.Brigands;
+using Doug.Monsters.Seagulls;
 
 namespace Doug.Monsters
 {
     public interface IMonsterFactory
     {
         Monster CreateMonster(string monsterId);
+        Monster CreateRandomMonster(Random random);
     }
 
     public class MonsterFactory : IMonsterFactory
     {
+        private Dictionary<string, Monster> _monsters;
+
+        public MonsterFactory()
+        {
+            _monsters = new Dictionary<string, Monster> // Its ok, everything should be stateless
+            {
+                { Seagull.MonsterId, new Seagull() },
+                { Biker.MonsterId, new Biker() }
+            };
+        }
+
         public Monster CreateMonster(string monsterId)
         {
-            switch (monsterId)
-            {
-                case Seagull.MonsterId: return new Seagull();
-                default: return new Seagull();
-            }
+            return _monsters.GetValueOrDefault(monsterId);
+        }
+
+        public Monster CreateRandomMonster(Random random)
+        {
+            var list = _monsters.ToList();
+            var index = random.Next(0, list.Count);
+            return list.ElementAt(index).Value;
         }
     }
 }

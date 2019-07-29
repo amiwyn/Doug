@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Doug.Models;
 using System.Linq;
 
@@ -6,6 +7,7 @@ namespace Doug.Repositories
 {
     public interface IChannelRepository
     {
+        IEnumerable<Channel> GetChannels();
         void GetAccessTokens(out string bot, out string user);
         void SendGambleChallenge(GambleChallenge challenge);
         GambleChallenge GetGambleChallenge(string target);
@@ -42,6 +44,11 @@ namespace Doug.Repositories
             var typeString = _db.Channels.SingleOrDefault(channel => channel.Id == channelId)?.Type;
             Enum.TryParse(typeString, out ChannelType channelType);
             return channelType;
+        }
+
+        public IEnumerable<Channel> GetChannels()
+        {
+            return _db.Channels;
         }
 
         public void GetAccessTokens(out string bot, out string user)

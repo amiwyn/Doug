@@ -13,7 +13,7 @@
             Icon = ":straight_edge:";
             Slot = EquipmentSlot.RightHand;
             Price = 820;
-            LevelRequirement = 20;
+            LevelRequirement = 1;
 
             Stats.MinAttack = 69;
             Stats.MaxAttack = 69;

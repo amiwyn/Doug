@@ -2,7 +2,7 @@
 {
     public class MagicAttack : Attack
     {
-        public MagicAttack(int intelligence) : base(intelligence * 2)
+        public MagicAttack(ICombatable attacker, int intelligence) : base(intelligence * 2, attacker)
         {
         }
     }

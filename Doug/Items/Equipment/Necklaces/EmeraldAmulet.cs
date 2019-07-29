@@ -13,7 +13,7 @@
             Icon = ":necklace_1:";
             Slot = EquipmentSlot.Neck;
             Price = 3200;
-            LevelRequirement = 10;
+            LevelRequirement = 15;
 
             Stats.Constitution = 4;
             Stats.Energy = 100;

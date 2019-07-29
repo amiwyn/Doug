@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Doug.Items;
 using System.Linq;
 using Doug.Effects;
+using Doug.Items.Lootboxes;
 using Doug.Models.Combat;
 
 namespace Doug.Models
@@ -11,6 +12,7 @@ namespace Doug.Models
     {
         private const int BaseAttackCooldown = 30;
         private const int BaseStealCooldown = 30;
+        private const int BaseAttackSpeed = 100;
 
         private int _health;
         private int _energy;
@@ -100,7 +102,7 @@ namespace Doug.Models
         public int TotalHitrate() => Loadout.Hitrate + 5 + Effects.Sum(userEffect => userEffect.Effect.Hitrate);
         public int MaxAttack() => Loadout.MaxAttack + Attack + Effects.Sum(userEffect => userEffect.Effect.Attack);
         public int MinAttack() => Loadout.MinAttack + Attack + Effects.Sum(userEffect => userEffect.Effect.Attack);
-        public int TotalAttackSpeed() => Loadout.AttackSpeed + TotalAgility() / 2;
+        public int TotalAttackSpeed() => BaseAttackSpeed + Loadout.AttackSpeed + TotalAgility() / 2;
 
         public void RegenerateHealth() => Health += (int)(TotalHealth() * 0.2);
         public double BaseOpponentStealSuccessRate() => 0.75;
@@ -115,11 +117,15 @@ namespace Doug.Models
         public int CalculateStealCooldownRemaining() => (int)(StealCooldown - DateTime.UtcNow).TotalSeconds;
         public TimeSpan GetStealCooldown() => TimeSpan.FromSeconds(BaseStealCooldown);
         public TimeSpan GetAttackCooldown() => TimeSpan.FromSeconds(BaseAttackCooldown * 100.0 / TotalAttackSpeed());
+        public double GetExperienceAdvancement() => (Experience - PrevLevelExp()) / (NextLevelExp() - PrevLevelExp());
+        private double NextLevelExp() => Math.Pow((Level + 1) * 20 - 20, 2);
+        private double PrevLevelExp() => Math.Pow((Level - 1) * 20, 2);
 
         public void LevelUp()
         {
             Health = TotalHealth();
             Energy = TotalEnergy();
+            InventoryItems.Add(new InventoryItem(Id, MysteryBox.ItemId));
         }
 
         public void LoadItems(IItemFactory itemFactory)
@@ -132,15 +138,6 @@ namespace Doug.Models
         {
             Effects.ForEach(effect => effect.CreateEffect(effectFactory));
         }
-
-        public double GetExperienceAdvancement()
-        {
-            var nextLevelExp = Math.Pow((Level + 1) * 10 - 10, 2);
-            var prevLevelExp = Math.Pow((Level - 1) * 10, 2);
-
-            return (Experience - prevLevelExp) / (nextLevelExp - prevLevelExp);
-        }
-
         public int TotalHealth()
         {
             var healthFromLevel = (int)Math.Floor(15.0 * Level + 85);
@@ -179,11 +176,8 @@ namespace Doug.Models
             Health = 1;
             Energy = 0;
 
-            var nextLevelExp = (long)Math.Pow((Level + 1) * 10 - 10, 2);
-            var prevLevelExp = (long)Math.Pow((Level - 1) * 10, 2);
-
-            var expLoss = (long)(0.1 * (nextLevelExp - prevLevelExp));
-            Experience = Experience - expLoss <= prevLevelExp ? prevLevelExp : Experience - expLoss;
+            var expLoss = (long)(0.1 * (NextLevelExp() - PrevLevelExp()));
+            Experience = Experience - expLoss <= PrevLevelExp() ? (long)PrevLevelExp() : Experience - expLoss;
         }
 
         public List<EquipmentItem> Equip(EquipmentItem item)
@@ -202,23 +196,26 @@ namespace Doug.Models
 
         public Attack AttackTarget(ICombatable target, IEventDispatcher eventDispatcher)
         {
-            Attack attack = new PhysicalAttack(MinAttack(), MaxAttack(), TotalHitrate(), TotalLuck());
+            Attack attack = new PhysicalAttack(this, MinAttack(), MaxAttack(), TotalHitrate(), TotalLuck());
 
             if (Loadout.GetDamageType() == DamageType.Magical)
             {
-                attack = new MagicAttack(TotalIntelligence());
+                attack = new MagicAttack(this, TotalIntelligence());
             }
 
-            if (target is User user)
-            {
-                attack.Damage = eventDispatcher.OnAttacking(this, user, attack.Damage);
-            }
+            attack.Damage = eventDispatcher.OnAttacking(this, target, attack.Damage);
 
-            return target.ReceiveAttack(attack);
+            return target.ReceiveAttack(attack, eventDispatcher);
         }
 
-        public Attack ReceiveAttack(Attack attack)
+        public Attack ReceiveAttack(Attack attack, IEventDispatcher eventDispatcher)
         {
+            if (eventDispatcher.OnAttackedInvincibility(attack.Attacker, this))
+            {
+                attack.Status = AttackStatus.Invincible;
+                return attack;
+            }
+
             if (attack is PhysicalAttack physicalAttack)
             {
                 return ApplyPhysicalDamage(physicalAttack);

@@ -66,8 +66,10 @@
         public const string Inventory = "Inventory";
         public const string Equipment = "Equipment";
         public const string GeneralStore = "General Store";
-        public const string ArmorShop = "Armor Shop";
-        public const string WeaponShop = "Weapon Shop";
+        public const string ArmoryShop = "Armory";
+        public const string MagicShop = "Diagon Alley";
+        public const string RogueShop = "Rogue Emporium";
+        public const string PeasantShop = "Peasant Supplies";
         public const string Info = "Info";
         public const string UnequippedItem = "You unequipped *{0}*.";
         public const string Target = "Target ...";
@@ -102,11 +104,12 @@
         public const string ItemLeftHand = "*Left Handed*";
         public const string ItemRightHand = "*Right Handed*";
         public const string SmallHealthDisplay = "{0} HP";
-        public const string UserIsInvincible = "This user is invincible!";
+        public const string UserIsInvincible = "{0} is invincible!";
         public const string MonsterSpawned = "*{0}* has spawned!";
         public const string AttackAction = "Attack";
         public const string MonsterDied = "*{0}* Died!";
         public const string UserObtained = "{0} obtained {1}";
+        public const string YouObtained = "You obtained {0}";
 
         public const string DougError = "Beep boop, it's not working : {0}";
         public const string NotAnAdmin = "You are not an admin.";
