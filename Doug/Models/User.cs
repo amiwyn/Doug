@@ -117,6 +117,9 @@ namespace Doug.Models
         public int CalculateStealCooldownRemaining() => (int)(StealCooldown - DateTime.UtcNow).TotalSeconds;
         public TimeSpan GetStealCooldown() => TimeSpan.FromSeconds(BaseStealCooldown);
         public TimeSpan GetAttackCooldown() => TimeSpan.FromSeconds(BaseAttackCooldown * 100.0 / TotalAttackSpeed());
+        public double GetExperienceAdvancement() => (Experience - PrevLevelExp()) / (NextLevelExp() - PrevLevelExp());
+        private double NextLevelExp() => Math.Pow((Level + 1) * 20 - 20, 2);
+        private double PrevLevelExp() => Math.Pow((Level - 1) * 20, 2);
 
         public void LevelUp()
         {
@@ -135,15 +138,6 @@ namespace Doug.Models
         {
             Effects.ForEach(effect => effect.CreateEffect(effectFactory));
         }
-
-        public double GetExperienceAdvancement()
-        {
-            var nextLevelExp = Math.Pow((Level + 1) * 20 - 20, 2);
-            var prevLevelExp = Math.Pow((Level - 1) * 20, 2);
-
-            return (Experience - prevLevelExp) / (nextLevelExp - prevLevelExp);
-        }
-
         public int TotalHealth()
         {
             var healthFromLevel = (int)Math.Floor(15.0 * Level + 85);
@@ -182,11 +176,8 @@ namespace Doug.Models
             Health = 1;
             Energy = 0;
 
-            var nextLevelExp = (long)Math.Pow((Level + 1) * 10 - 10, 2);
-            var prevLevelExp = (long)Math.Pow((Level - 1) * 10, 2);
-
-            var expLoss = (long)(0.1 * (nextLevelExp - prevLevelExp));
-            Experience = Experience - expLoss <= prevLevelExp ? prevLevelExp : Experience - expLoss;
+            var expLoss = (long)(0.1 * (NextLevelExp() - PrevLevelExp()));
+            Experience = Experience - expLoss <= PrevLevelExp() ? (long)PrevLevelExp() : Experience - expLoss;
         }
 
         public List<EquipmentItem> Equip(EquipmentItem item)
