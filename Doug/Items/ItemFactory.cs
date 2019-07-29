@@ -2,8 +2,11 @@
 using Doug.Items.Consumables.Resets;
 using Doug.Items.Equipment;
 using Doug.Items.Equipment.Necklaces;
+using Doug.Items.Equipment.Sets.Cloth;
+using Doug.Items.Equipment.Sets.Leather;
 using Doug.Items.Equipment.Sets.Noob;
 using Doug.Items.Equipment.Sets.StartingWeapons;
+using Doug.Items.Equipment.Sets.Thick;
 using Doug.Items.Lootboxes;
 using Doug.Items.Misc;
 using Doug.Items.Misc.Drops;
@@ -78,16 +81,6 @@ namespace Doug.Items
                 case StraightEdge.ItemId: return new StraightEdge();
                 case Crown.ItemId: return new Crown();
 
-                // Noob Set
-                case FarmersArmor.ItemId: return new FarmersArmor();
-                case FarmersBoots.ItemId: return new FarmersBoots();
-                case FarmersGloves.ItemId: return new FarmersGloves();
-                case PeasantBoots.ItemId: return new PeasantBoots();
-                case PeasantShirt.ItemId: return new PeasantShirt();
-                case ShortBlade.ItemId: return new ShortBlade();
-                case ShortSword.ItemId: return new ShortSword();
-                case WoodenShield.ItemId: return new WoodenShield();
-
                 // Starting Weapons
                 case LightSword.ItemId: return new LightSword();
                 case SmallAxe.ItemId: return new SmallAxe();
@@ -109,6 +102,34 @@ namespace Doug.Items
                 case SharpBeak.ItemId: return new SharpBeak();
                 case IronIngot.ItemId: return new IronIngot();
                 case BikerCocaine.ItemId: return new BikerCocaine();
+
+
+                // Noob Set
+                case FarmersArmor.ItemId: return new FarmersArmor();
+                case FarmersBoots.ItemId: return new FarmersBoots();
+                case FarmersGloves.ItemId: return new FarmersGloves();
+                case PeasantBoots.ItemId: return new PeasantBoots();
+                case PeasantShirt.ItemId: return new PeasantShirt();
+                case ShortBlade.ItemId: return new ShortBlade();
+                case ShortSword.ItemId: return new ShortSword();
+                case WoodenShield.ItemId: return new WoodenShield();
+
+                // Cloth Set
+                case ClothArmor.ItemId: return new ClothArmor();
+                case ClothBoots.ItemId: return new ClothBoots();
+                case ClothGloves.ItemId: return new ClothGloves();
+                case FurHat.ItemId: return new FurHat();
+
+                // Leather Set
+                case LeatherArmor.ItemId: return new LeatherArmor();
+                case LeatherBoots.ItemId: return new LeatherBoots();
+                case LeatherGloves.ItemId: return new LeatherGloves();
+
+                // Thick Set
+                case ThickArmor.ItemId: return new ThickArmor();
+                case ThickBoots.ItemId: return new ThickBoots();
+                case ThickGloves.ItemId: return new ThickGloves();
+
                 default: return new Default();
             }
         }
