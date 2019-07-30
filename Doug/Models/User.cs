@@ -237,6 +237,12 @@ namespace Doug.Models
             reducedDamage = reducedDamage <= 0 ? 1 : reducedDamage;
 
             attack.Damage = reducedDamage;
+
+            if (attack.Status == AttackStatus.Critical)
+            {
+                attack.Damage *= 2;
+            }
+
             Health -= reducedDamage;
 
             return attack;
