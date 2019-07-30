@@ -47,6 +47,8 @@ namespace Doug.Services
 
         public async Task<DougResponse> Steal(User user, User target, string channel)
         {
+            string response = string.Format(DougMessages.StealFail, _userService.Mention(target));
+
             if (user.IsStealOnCooldown())
             {
                 return new DougResponse(string.Format(DougMessages.CommandOnCooldown, user.CalculateStealCooldownRemaining()));
@@ -78,6 +80,7 @@ namespace Doug.Services
             var targetChance = _eventDispatcher.OnGettingStolenChance(target, target.BaseOpponentStealSuccessRate());
 
             var rollSuccessful = _randomService.RollAgainstOpponent(userChance, targetChance);
+            var detected = _randomService.RollAgainstOpponent(user.BaseDetectionAvoidance(), target.BaseDetectionChance());
 
             var amount = _eventDispatcher.OnStealingAmount(user, user.BaseStealAmount());
 
@@ -91,16 +94,25 @@ namespace Doug.Services
                 _userRepository.RemoveCredits(target.Id, amount);
                 _userRepository.AddCredits(user.Id, amount);
 
-                var message = string.Format(DougMessages.StealCredits, _userService.Mention(user), amount, _userService.Mention(target));
-                await _slack.BroadcastMessage(message, channel);
+                var message = string.Format(DougMessages.StealCreditsCaught, _userService.Mention(user), amount, _userService.Mention(target));
+                response = string.Format(DougMessages.StealCredits, amount, _userService.Mention(target));
+                if (detected)
+                {
+                    await _slack.BroadcastMessage(message, channel);
+                }
+                
             }
             else
             {
-                var message = string.Format(DougMessages.StealFail, _userService.Mention(user), _userService.Mention(target));
-                await _slack.BroadcastMessage(message, channel);
+                var message = string.Format(DougMessages.StealFailCaught, _userService.Mention(user), _userService.Mention(target));
+                if (detected)
+                {
+                    await _slack.BroadcastMessage(message, channel);
+                }
+                
             }
 
-            return new DougResponse();
+            return new DougResponse(response);
         }
 
         public async Task<DougResponse> Attack(User user, User target, string channel)
