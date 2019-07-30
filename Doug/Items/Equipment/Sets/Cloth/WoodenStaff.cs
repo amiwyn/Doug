@@ -1,6 +1,6 @@
 ﻿using Doug.Models.Combat;
 
-namespace Doug.Items.Equipment.Sets.StartingWeapons
+namespace Doug.Items.Equipment.Sets.Cloth
 {
     public class WoodenStaff : Weapon
     {
@@ -19,8 +19,7 @@ namespace Doug.Items.Equipment.Sets.StartingWeapons
             IsDualWield = true;
             DamageType = DamageType.Magical;
 
-            Stats.MinAttack = 28;
-            Stats.MaxAttack = 34;
+            Stats.Intelligence = 4;
         }
     }
 }

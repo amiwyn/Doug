@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Doug.Menus;
-using Doug.Menus.Blocks;
 using Doug.Models;
 using Doug.Repositories;
 using Doug.Slack;
@@ -44,8 +42,8 @@ namespace Doug.Services.MenuServices
         public async Task ShowMonsters(string channel)
         {
             var monsters = _monsterRepository.GetMonsters(channel);
-            var monsterBlocks = monsters.Aggregate(new List<Block>(), (blocks, monster) => blocks.Concat(new MonsterMenu(monster).Blocks).ToList());
-            await _slack.BroadcastBlocks(monsterBlocks, channel);
+            var blocks = monsters.SelectMany(monster => new MonsterMenu(monster).Blocks);
+            await _slack.BroadcastBlocks(blocks, channel);
         }
     }
 }

@@ -16,7 +16,7 @@ namespace Doug.Monsters.Brigands
             Description = "Attention les fifs quand la nuit tombe, y deviens un loup. C'tun Biker, Pont Rouge Panache.";
             Image = "https://i1.sndcdn.com/artworks-000008396349-n1h5ec-t500x500.jpg";
             Level = 15;
-            ExperienceValue = 2150;
+            ExperienceValue = 850;
 
             MaxHealth = Health = 666;
             MinAttack = 98;

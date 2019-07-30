@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Doug.Items;
 using System.Linq;
 using Doug.Effects;
-using Doug.Items.Lootboxes;
 using Doug.Models.Combat;
 
 namespace Doug.Models
@@ -35,7 +34,7 @@ namespace Doug.Models
         public int Level => (int)Math.Floor(Math.Sqrt(Experience) * 0.05 + 1);
         public int TotalStatsPoints => (int)Math.Floor(Level + 5 * Math.Floor(Level * 0.1)) + 4;
         public int FreeStatsPoints => TotalStatsPoints + 25 - (Luck + Agility + Strength + Constitution + Intelligence);
-        public int Attack => (int)Math.Floor(Strength * 3.0);
+        public int Attack => (int)Math.Floor(Strength * 2.0);
 
         public int Health
         {
@@ -125,7 +124,6 @@ namespace Doug.Models
         {
             Health = TotalHealth();
             Energy = TotalEnergy();
-            InventoryItems.Add(new InventoryItem(Id, MysteryBox.ItemId));
         }
 
         public void LoadItems(IItemFactory itemFactory)
@@ -238,6 +236,12 @@ namespace Doug.Models
             reducedDamage = reducedDamage <= 0 ? 1 : reducedDamage;
 
             attack.Damage = reducedDamage;
+
+            if (attack.Status == AttackStatus.Critical)
+            {
+                attack.Damage *= 2;
+            }
+
             Health -= reducedDamage;
 
             return attack;

@@ -92,5 +92,10 @@ namespace Doug.Items
         {
             return damage;
         }
+
+        public virtual int OnAttacking(User attacker, ICombatable target, int damage)
+        {
+            return damage;
+        }
     }
 }

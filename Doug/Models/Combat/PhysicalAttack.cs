@@ -12,7 +12,6 @@ namespace Doug.Models.Combat
 
             if (new Random().NextDouble() < Math.Sqrt(attackersLuck) * 0.04)
             {
-                Damage *= 2;
                 Status = AttackStatus.Critical;
             }
         }

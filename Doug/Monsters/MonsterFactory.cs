@@ -14,27 +14,27 @@ namespace Doug.Monsters
 
     public class MonsterFactory : IMonsterFactory
     {
-        private Dictionary<string, Monster> _monsters;
+        private Dictionary<string, Func<Monster>> _monsters;
 
         public MonsterFactory()
         {
-            _monsters = new Dictionary<string, Monster> // Its ok, everything should be stateless
+            _monsters = new Dictionary<string, Func<Monster>> 
             {
-                { Seagull.MonsterId, new Seagull() },
-                { Biker.MonsterId, new Biker() }
+                { Seagull.MonsterId, () => new Seagull() },
+                { Biker.MonsterId, () => new Biker() }
             };
         }
 
         public Monster CreateMonster(string monsterId)
         {
-            return _monsters.GetValueOrDefault(monsterId);
+            return _monsters.GetValueOrDefault(monsterId)();
         }
 
         public Monster CreateRandomMonster(Random random)
         {
             var list = _monsters.ToList();
             var index = random.Next(0, list.Count);
-            return list.ElementAt(index).Value;
+            return list.ElementAt(index).Value();
         }
     }
 }

@@ -5,7 +5,6 @@ using Doug.Items.Equipment.Necklaces;
 using Doug.Items.Equipment.Sets.Cloth;
 using Doug.Items.Equipment.Sets.Leather;
 using Doug.Items.Equipment.Sets.Noob;
-using Doug.Items.Equipment.Sets.StartingWeapons;
 using Doug.Items.Equipment.Sets.Thick;
 using Doug.Items.Lootboxes;
 using Doug.Items.Misc;

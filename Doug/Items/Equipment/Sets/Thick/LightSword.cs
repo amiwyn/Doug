@@ -1,4 +1,4 @@
-﻿namespace Doug.Items.Equipment.Sets.StartingWeapons
+﻿namespace Doug.Items.Equipment.Sets.Thick
 {
     public class LightSword : Weapon
     {
