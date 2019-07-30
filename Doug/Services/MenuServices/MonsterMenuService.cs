@@ -44,8 +44,8 @@ namespace Doug.Services.MenuServices
         public async Task ShowMonsters(string channel)
         {
             var monsters = _monsterRepository.GetMonsters(channel);
-            var monsterBlocks = monsters.Aggregate(new List<Block>(), (blocks, monster) => blocks.Concat(new MonsterMenu(monster).Blocks).ToList());
-            await _slack.BroadcastBlocks(monsterBlocks, channel);
+            var blocks = monsters.SelectMany(monster => new MonsterMenu(monster).Blocks);
+            await _slack.BroadcastBlocks(blocks, channel);
         }
     }
 }
