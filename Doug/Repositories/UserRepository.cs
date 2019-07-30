@@ -87,7 +87,17 @@ namespace Doug.Repositories
 
         public List<User> GetUsers(List<string> users)
         {
-            return _db.Users.Where(user => users.Any(usr => usr == user.Id)).ToList();
+            var loadedUsers = _db.Users
+                .Where(user => users.Any(usr => usr == user.Id))
+                .IncludeFilter(usr => usr.Effects.Where(effect => effect.EndTime >= DateTime.UtcNow))
+                .IncludeFilter(usr => usr.InventoryItems)
+                .IncludeFilter(usr => usr.Loadout)
+                .ToList();
+
+            loadedUsers.ForEach(usr => usr.LoadItems(_itemFactory));
+            loadedUsers.ForEach(usr => usr.LoadEffects(_effectFactory));
+
+            return loadedUsers;
         }
 
         public User GetUser(string userId)
