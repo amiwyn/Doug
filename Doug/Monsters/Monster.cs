@@ -79,7 +79,7 @@ namespace Doug.Monsters
                 attack.Damage *= 2;
             }
 
-            Health -= reducedDamage;
+            Health -= attack.Damage;
 
             return attack;
         }
