@@ -22,7 +22,7 @@ namespace Doug.Monsters.Seagulls
             MinAttack = 78;
             MaxAttack = 96;
             Hitrate = 18;
-            Dodge = 18;
+            Dodge = 198;
             Defense = 20;
             Resistance = 10;
 
