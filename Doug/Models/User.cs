@@ -189,7 +189,8 @@ namespace Doug.Models
                    TotalStrength() >= item.StrengthRequirement &&
                    TotalAgility() >= item.AgilityRequirement &&
                    TotalIntelligence() >= item.IntelligenceRequirement &&
-                   TotalLuck() >= item.LuckRequirement;
+                   TotalLuck() >= item.LuckRequirement &&
+                   TotalConstitution() >= item.ConstitutionRequirement;
         }
 
         public Attack AttackTarget(ICombatable target, IEventDispatcher eventDispatcher)
