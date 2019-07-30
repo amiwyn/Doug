@@ -11,6 +11,7 @@
             Rarity = Rarity.Common;
             Icon = ":feather:";
             Price = 88;
+            MaxStack = 99;
         }
     }
 }
