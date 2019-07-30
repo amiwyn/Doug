@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Doug.Items;
 using System.Linq;
 using Doug.Effects;
-using Doug.Items.Lootboxes;
 using Doug.Models.Combat;
 
 namespace Doug.Models

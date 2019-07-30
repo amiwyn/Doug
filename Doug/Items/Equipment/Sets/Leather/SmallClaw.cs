@@ -1,4 +1,4 @@
-﻿namespace Doug.Items.Equipment.Sets.StartingWeapons
+﻿namespace Doug.Items.Equipment.Sets.Leather
 {
     public class SmallClaw : Weapon
     {
