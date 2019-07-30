@@ -96,7 +96,7 @@ namespace Doug.Services
         {
             var droppedItems = _randomService.RandomTableDrop(monster.DropTable, user.ExtraDropChance()).Select(drop => _itemFactory.CreateItem(drop.Id)).ToList();
 
-            if (!droppedItems.Any())
+            if (droppedItems.Any())
             {
                 _inventoryRepository.AddItems(user, droppedItems);
                 var itemsMessage = string.Join(", ", droppedItems.Select(item => $"*{item.Name}*"));
