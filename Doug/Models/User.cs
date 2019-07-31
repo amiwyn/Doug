@@ -234,7 +234,7 @@ namespace Doug.Models
                 return attack;
             }
 
-            var reducedDamage = attack.Damage - (attack.Damage * (Loadout.Resistance / 100) + TotalDefense());
+            var reducedDamage = attack.Damage - (int)Math.Ceiling(attack.Damage * Loadout.Resistance * 0.01 + TotalDefense());
             reducedDamage = reducedDamage <= 0 ? 1 : reducedDamage;
 
             attack.Damage = reducedDamage;
