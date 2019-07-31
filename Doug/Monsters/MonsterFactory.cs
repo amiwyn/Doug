@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Doug.Monsters.Brigands;
 using Doug.Monsters.Seagulls;
-using Doug.Monsters.Hobos;
+
 
 namespace Doug.Monsters
 {
