@@ -90,7 +90,8 @@ namespace Doug.Services
 
             await _slack.BroadcastMessage(string.Format(DougMessages.MonsterDied, monster.Name), channel);
 
-            await _userService.AddBulkExperience(users, monster.ExperienceValue, channel);
+            var experiencePerUser = monster.ExperienceValue / users.Count;
+            await _userService.AddBulkExperience(users, experiencePerUser, channel);
         }
 
         private async Task AddMonsterLootToUser(User user, Monster monster, string channel)
