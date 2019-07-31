@@ -80,7 +80,7 @@ namespace Doug.Services
             var targetChance = _eventDispatcher.OnGettingStolenChance(target, target.BaseOpponentStealSuccessRate());
 
             var rollSuccessful = _randomService.RollAgainstOpponent(userChance, targetChance);
-            var detected = _randomService.RollAgainstOpponent(user.BaseDetectionAvoidance(), target.BaseDetectionChance());
+            var detected = !_randomService.RollAgainstOpponent(user.BaseDetectionAvoidance(), target.BaseDetectionChance());
 
             var amount = _eventDispatcher.OnStealingAmount(user, user.BaseStealAmount());
 
