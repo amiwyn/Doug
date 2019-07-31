@@ -8,7 +8,6 @@ namespace Doug.Commands
 {
     public interface ICombatCommands
     {
-        Task<DougResponse> Steal(Command command);
         Task<DougResponse> Attack(Command command);
         Task<DougResponse> Revolution(Command command);
         Task<DougResponse> ListMonsters(Command command);
@@ -28,14 +27,6 @@ namespace Doug.Commands
             _combatService = combatService;
             _governmentService = governmentService;
             _monsterMenuService = monsterMenuService;
-        }
-
-        public async Task<DougResponse> Steal(Command command)
-        {
-            var user = _userRepository.GetUser(command.UserId);
-            var target = _userRepository.GetUser(command.GetTargetUserId());
-
-            return await _combatService.Steal(user, target, command.ChannelId);
         }
 
         public async Task<DougResponse> Attack(Command command)

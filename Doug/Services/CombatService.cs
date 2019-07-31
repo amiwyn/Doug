@@ -11,7 +11,6 @@ namespace Doug.Services
 {
     public interface ICombatService
     {
-        Task<DougResponse> Steal(User user, User target, string channel);
         Task<DougResponse> Attack(User user, User target, string channel);
         Task<DougResponse> AttackMonster(User user, SpawnedMonster spawnedMonster, string channel);
         DougResponse ActivateSkill(User user, ICombatable target, string channel);
@@ -19,7 +18,6 @@ namespace Doug.Services
 
     public class CombatService : ICombatService
     {
-        private const int StealEnergyCost = 1;
         private const int AttackEnergyCost = 1;
         private const int KillExperienceGain = 100;
 
@@ -27,93 +25,21 @@ namespace Doug.Services
         private readonly IUserRepository _userRepository;
         private readonly ISlackWebApi _slack;
         private readonly IStatsRepository _statsRepository;
-        private readonly IRandomService _randomService;
         private readonly IUserService _userService;
         private readonly IChannelRepository _channelRepository;
         private readonly IMonsterRepository _monsterRepository;
         private readonly IMonsterService _monsterService;
 
-        public CombatService(IEventDispatcher eventDispatcher, IUserRepository userRepository, ISlackWebApi slack, IStatsRepository statsRepository, IRandomService randomService, IUserService userService, IChannelRepository channelRepository, IMonsterRepository monsterRepository, IMonsterService monsterService)
+        public CombatService(IEventDispatcher eventDispatcher, IUserRepository userRepository, ISlackWebApi slack, IStatsRepository statsRepository, IUserService userService, IChannelRepository channelRepository, IMonsterRepository monsterRepository, IMonsterService monsterService)
         {
             _eventDispatcher = eventDispatcher;
             _userRepository = userRepository;
             _slack = slack;
             _statsRepository = statsRepository;
-            _randomService = randomService;
             _userService = userService;
             _channelRepository = channelRepository;
             _monsterRepository = monsterRepository;
             _monsterService = monsterService;
-        }
-
-        public async Task<DougResponse> Steal(User user, User target, string channel)
-        {
-            string response = string.Format(DougMessages.StealFail, _userService.Mention(target));
-
-            if (user.IsStealOnCooldown())
-            {
-                return new DougResponse(string.Format(DougMessages.CommandOnCooldown, user.CalculateStealCooldownRemaining()));
-            }
-
-            var channelType = _channelRepository.GetChannelType(channel);
-            if (channelType != ChannelType.Common && channelType != ChannelType.Pvp)
-            {
-                return new DougResponse(DougMessages.NotInRightChannel);
-            }
-
-            var usersInChannel = await _slack.GetUsersInChannel(channel);
-            if (usersInChannel.All(usr => usr != target.Id))
-            {
-                return new DougResponse(DougMessages.UserIsNotInPvp);
-            }
-
-            var energy = user.Energy - StealEnergyCost;
-
-            if (energy < 0)
-            {
-                return new DougResponse(DougMessages.NotEnoughEnergy);
-            }
-
-            _statsRepository.UpdateEnergy(user.Id, energy);
-            _userRepository.SetStealCooldown(user.Id, user.GetStealCooldown());
-
-            var userChance = _eventDispatcher.OnStealingChance(user, user.BaseStealSuccessRate());
-            var targetChance = _eventDispatcher.OnGettingStolenChance(target, target.BaseOpponentStealSuccessRate());
-
-            var rollSuccessful = _randomService.RollAgainstOpponent(userChance, targetChance);
-            var detected = !_randomService.RollAgainstOpponent(user.BaseDetectionAvoidance(), target.BaseDetectionChance());
-
-            var amount = _eventDispatcher.OnStealingAmount(user, user.BaseStealAmount());
-
-            if (target.Credits - amount < 0)
-            {
-                amount = target.Credits;
-            }
-
-            if (rollSuccessful)
-            {
-                _userRepository.RemoveCredits(target.Id, amount);
-                _userRepository.AddCredits(user.Id, amount);
-
-                var message = string.Format(DougMessages.StealCreditsCaught, _userService.Mention(user), amount, _userService.Mention(target));
-                response = string.Format(DougMessages.StealCredits, amount, _userService.Mention(target));
-                if (detected)
-                {
-                    await _slack.BroadcastMessage(message, channel);
-                }
-                
-            }
-            else
-            {
-                var message = string.Format(DougMessages.StealFailCaught, _userService.Mention(user), _userService.Mention(target));
-                if (detected)
-                {
-                    await _slack.BroadcastMessage(message, channel);
-                }
-                
-            }
-
-            return new DougResponse(response);
         }
 
         public async Task<DougResponse> Attack(User user, User target, string channel)

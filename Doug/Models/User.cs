@@ -215,6 +215,7 @@ namespace Doug.Models
             if (eventDispatcher.OnAttackedInvincibility(attack.Attacker, this))
             {
                 attack.Status = AttackStatus.Invincible;
+                attack.Damage = 0;
                 return attack;
             }
 
@@ -233,10 +234,11 @@ namespace Doug.Models
             if (new Random().NextDouble() < missChance)
             {
                 attack.Status = AttackStatus.Missed;
+                attack.Damage = 0;
                 return attack;
             }
 
-            var reducedDamage = attack.Damage - (attack.Damage * (Loadout.Resistance / 100) + TotalDefense());
+            var reducedDamage = attack.Damage - (int)Math.Ceiling(attack.Damage * Loadout.Resistance * 0.01 + TotalDefense());
             reducedDamage = reducedDamage <= 0 ? 1 : reducedDamage;
 
             attack.Damage = reducedDamage;
