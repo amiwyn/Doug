@@ -22,7 +22,7 @@ namespace Doug.Skills
 
         public Steal(IStatsRepository statsRepository, ISlackWebApi slack, IUserService userService, IChannelRepository channelRepository, IEventDispatcher eventDispatcher, IRandomService randomService, ICreditsRepository creditsRepository) : base(statsRepository)
         {
-            EnergyCost = 5;
+            EnergyCost = 1;
             Cooldown = 30;
 
             _statsRepository = statsRepository;
