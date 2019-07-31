@@ -14,11 +14,6 @@ namespace Doug.Repositories
         List<User> GetUsers();
         List<User> GetUsers(List<string> users);
         User GetUser(string userId);
-        void RemoveCredits(string userId, int amount);
-        void AddCredits(string userId, int amount);
-        void AddCreditsToUsers(List<string> users, int amount);
-        void SetAttackCooldown(string userId, TimeSpan cooldown);
-        void SetStealCooldown(string userId, TimeSpan cooldown);
     }
 
     public class UserRepository : IUserRepository
@@ -32,42 +27,6 @@ namespace Doug.Repositories
             _db = dougContext;
             _itemFactory = itemFactory;
             _effectFactory = effectFactory;
-        }
-
-        public void AddCredits(string userId, int amount)
-        {
-            var user = _db.Users.Single(usr => usr.Id == userId);
-
-            user.Credits += amount;
-
-            _db.SaveChanges();
-        }
-
-        public void AddCreditsToUsers(List<string> userIds, int amount)
-        {
-            var users = _db.Users.Where(usr => userIds.Contains(usr.Id)).ToList();
-
-            users.ForEach(usr => usr.Credits += amount);
-
-            _db.SaveChanges();
-        }
-
-        public void SetAttackCooldown(string userId, TimeSpan cooldown)
-        {
-            var user = _db.Users.Single(usr => usr.Id == userId);
-
-            user.AttackCooldown = DateTime.UtcNow + cooldown;
-
-            _db.SaveChanges();
-        }
-
-        public void SetStealCooldown(string userId, TimeSpan cooldown)
-        {
-            var user = _db.Users.Single(usr => usr.Id == userId);
-
-            user.StealCooldown = DateTime.UtcNow + cooldown;
-
-            _db.SaveChanges();
         }
 
         public void AddUser(string userId)
@@ -127,14 +86,6 @@ namespace Doug.Repositories
             users.ForEach(usr => usr.LoadEffects(_effectFactory));
 
             return users;
-        }
-
-        public void RemoveCredits(string userId, int amount)
-        {
-            var user = _db.Users.Single(usr => usr.Id == userId);
-
-            user.Credits -= amount;
-            _db.SaveChanges();
         }
     }
 }

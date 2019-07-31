@@ -36,8 +36,9 @@ namespace Doug.Commands
 
         private static readonly DougResponse NoResponse = new DougResponse();
         private readonly IUserService _userService;
+        public ICreditsRepository _creditsRepository;
 
-        public SlursCommands(ISlurRepository slursRepository, IUserRepository userRepository, ISlackWebApi messageSender, IAuthorizationService adminValidator, IEventDispatcher eventDispatcher, IUserService userService)
+        public SlursCommands(ISlurRepository slursRepository, IUserRepository userRepository, ISlackWebApi messageSender, IAuthorizationService adminValidator, IEventDispatcher eventDispatcher, IUserService userService, ICreditsRepository creditsRepository)
         {
             _slurRepository = slursRepository;
             _userRepository = userRepository;
@@ -45,6 +46,7 @@ namespace Doug.Commands
             _adminValidator = adminValidator;
             _eventDispatcher = eventDispatcher;
             _userService = userService;
+            _creditsRepository = creditsRepository;
         }
 
         public DougResponse AddSlur(Command command)
@@ -60,7 +62,7 @@ namespace Doug.Commands
 
             _slurRepository.AddSlur(slur);
 
-            _userRepository.AddCredits(command.UserId, AddSlurCredit);
+            _creditsRepository.AddCredits(command.UserId, AddSlurCredit);
 
             return new DougResponse(string.Format(DougMessages.GainedCredit, AddSlurCredit));
         }
@@ -88,7 +90,7 @@ namespace Doug.Commands
 
             _slurRepository.ClearRecentSlurs();
 
-            slurs.ForEach(slur => _userRepository.RemoveCredits(slur.CreatedBy, AddSlurCredit));
+            slurs.ForEach(slur => _creditsRepository.RemoveCredits(slur.CreatedBy, AddSlurCredit));
 
             return NoResponse;
         }
@@ -141,7 +143,7 @@ namespace Doug.Commands
                 return new DougResponse(user.NotEnoughCreditsForAmountResponse(SpecificFlameCost));
             }
 
-            _userRepository.RemoveCredits(command.UserId, SpecificFlameCost);
+            _creditsRepository.RemoveCredits(command.UserId, SpecificFlameCost);
 
             var slur = _slurRepository.GetSlur(slurId);
 
@@ -214,7 +216,7 @@ namespace Doug.Commands
                 return new DougResponse(user.NotEnoughCreditsForAmountResponse(WholastCost));
             }
 
-            _userRepository.RemoveCredits(command.UserId, WholastCost);
+            _creditsRepository.RemoveCredits(command.UserId, WholastCost);
             var recentSlurs = _slurRepository.GetRecentSlurs().ToList();
             recentSlurs.Sort((e1, e2) => e1.Id.CompareTo(e2.Id));
 

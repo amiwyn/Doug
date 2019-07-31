@@ -21,6 +21,7 @@ namespace Test.Shop
         private readonly Mock<IInventoryRepository>  _inventoryRepository = new Mock<IInventoryRepository>();
         private readonly Mock<IItemFactory> _itemFactory = new Mock<IItemFactory>();
         private readonly Mock<IGovernmentService> _governmentService = new Mock<IGovernmentService>();
+        private readonly Mock<ICreditsRepository> _creditsRepository = new Mock<ICreditsRepository>();
 
         private User _user;
 
@@ -36,7 +37,7 @@ namespace Test.Shop
             _user = new User() { Id = "testuser", InventoryItems = items };
             _userRepository.Setup(repo => repo.GetUser(User)).Returns(_user);
 
-            _shopService = new ShopService(_userRepository.Object, _inventoryRepository.Object, _itemFactory.Object, _governmentService.Object);
+            _shopService = new ShopService(_inventoryRepository.Object, _itemFactory.Object, _governmentService.Object, _creditsRepository.Object);
         }
 
         [TestMethod]
@@ -44,7 +45,7 @@ namespace Test.Shop
         {
             _shopService.Sell(_user, 4);
 
-            _userRepository.Verify(repo => repo.AddCredits(User, 1337));
+            _creditsRepository.Verify(repo => repo.AddCredits(User, 1337));
         }
 
         [TestMethod]

@@ -22,7 +22,6 @@ namespace Doug.Services
         private const int KillExperienceGain = 100;
 
         private readonly IEventDispatcher _eventDispatcher;
-        private readonly IUserRepository _userRepository;
         private readonly ISlackWebApi _slack;
         private readonly IStatsRepository _statsRepository;
         private readonly IUserService _userService;
@@ -30,10 +29,9 @@ namespace Doug.Services
         private readonly IMonsterRepository _monsterRepository;
         private readonly IMonsterService _monsterService;
 
-        public CombatService(IEventDispatcher eventDispatcher, IUserRepository userRepository, ISlackWebApi slack, IStatsRepository statsRepository, IUserService userService, IChannelRepository channelRepository, IMonsterRepository monsterRepository, IMonsterService monsterService)
+        public CombatService(IEventDispatcher eventDispatcher, ISlackWebApi slack, IStatsRepository statsRepository, IUserService userService, IChannelRepository channelRepository, IMonsterRepository monsterRepository, IMonsterService monsterService)
         {
             _eventDispatcher = eventDispatcher;
-            _userRepository = userRepository;
             _slack = slack;
             _statsRepository = statsRepository;
             _userService = userService;
@@ -69,7 +67,7 @@ namespace Doug.Services
             }
 
             _statsRepository.UpdateEnergy(user.Id, energy);
-            _userRepository.SetAttackCooldown(user.Id, user.GetAttackCooldown());
+            _statsRepository.SetAttackCooldown(user.Id, user.GetAttackCooldown());
 
             await DealDamage(user, target, channel);
 
@@ -110,7 +108,7 @@ namespace Doug.Services
             }
 
             _statsRepository.UpdateEnergy(user.Id, energy);
-            _userRepository.SetAttackCooldown(user.Id, user.GetAttackCooldown());
+            _statsRepository.SetAttackCooldown(user.Id, user.GetAttackCooldown());
 
             var attack = user.AttackTarget(monster, _eventDispatcher);
 

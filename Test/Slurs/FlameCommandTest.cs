@@ -33,6 +33,7 @@ namespace Test.Slurs
         private readonly Mock<IAuthorizationService> _adminValidator = new Mock<IAuthorizationService>();
         private readonly Mock<IEventDispatcher> _eventDispatcher = new Mock<IEventDispatcher>();
         private readonly Mock<IUserService> _userService = new Mock<IUserService>();
+        private readonly Mock<ICreditsRepository> _creditsRepository = new Mock<ICreditsRepository>();
 
         [TestInitialize]
         public void Setup()
@@ -42,7 +43,7 @@ namespace Test.Slurs
             _slurRepository.Setup(repo => repo.GetSlurs()).Returns(new List<Slur>() { new Slur("{user} is a {random} 350++ bitch", "asdf") });
             _userRepository.Setup(repo => repo.GetUsers()).Returns(new List<User>() { new User { Id = "testuser" }, new User { Id = "otherUserid" } });
 
-            _slursCommands = new SlursCommands(_slurRepository.Object, _userRepository.Object, _slack.Object, _adminValidator.Object, _eventDispatcher.Object, _userService.Object);
+            _slursCommands = new SlursCommands(_slurRepository.Object, _userRepository.Object, _slack.Object, _adminValidator.Object, _eventDispatcher.Object, _userService.Object, _creditsRepository.Object);
         }
 
         [TestMethod]
@@ -103,7 +104,7 @@ namespace Test.Slurs
 
             await _slursCommands.Flame(command);
 
-            _userRepository.Verify(repo => repo.RemoveCredits(User, 5));
+            _creditsRepository.Verify(repo => repo.RemoveCredits(User, 5));
         }
 
         [TestMethod]

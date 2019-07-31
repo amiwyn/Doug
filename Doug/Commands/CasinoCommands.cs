@@ -29,8 +29,9 @@ namespace Doug.Commands
         private static readonly DougResponse NoResponse = new DougResponse();
         private readonly IStatsRepository _statsRepository;
         private readonly IUserService _userService;
+        private readonly ICreditsRepository _creditsRepository;
 
-        public CasinoCommands(IUserRepository userRepository, ISlackWebApi messageSender, IChannelRepository channelRepository, IBackgroundJobClient backgroundJobClient, IEventDispatcher eventDispatcher, IStatsRepository statsRepository, IRandomService randomService, IUserService userService)
+        public CasinoCommands(IUserRepository userRepository, ISlackWebApi messageSender, IChannelRepository channelRepository, IBackgroundJobClient backgroundJobClient, IEventDispatcher eventDispatcher, IStatsRepository statsRepository, IRandomService randomService, IUserService userService, ICreditsRepository creditsRepository)
         {
             _userRepository = userRepository;
             _slack = messageSender;
@@ -40,6 +41,7 @@ namespace Doug.Commands
             _statsRepository = statsRepository;
             _randomService = randomService;
             _userService = userService;
+            _creditsRepository = creditsRepository;
         }
 
         public DougResponse Gamble(Command command)
@@ -71,12 +73,12 @@ namespace Doug.Commands
             if (UserCoinFlipWin(user))
             {
                 baseMessage = DougMessages.WonGamble;
-                _userRepository.AddCredits(command.UserId, amount);
+                _creditsRepository.AddCredits(command.UserId, amount);
             }
             else
             {
                 baseMessage = DougMessages.LostGamble;
-                _userRepository.RemoveCredits(command.UserId, amount);
+                _creditsRepository.RemoveCredits(command.UserId, amount);
             }
 
             var message = string.Format(baseMessage, _userService.Mention(user), amount);
@@ -188,8 +190,8 @@ namespace Doug.Commands
                 loser = target;
             }
 
-            _userRepository.RemoveCredits(loser.Id, challenge.Amount);
-            _userRepository.AddCredits(winner.Id, challenge.Amount);
+            _creditsRepository.RemoveCredits(loser.Id, challenge.Amount);
+            _creditsRepository.AddCredits(winner.Id, challenge.Amount);
 
             _channelRepository.RemoveGambleChallenge(challenge.TargetId);
 
