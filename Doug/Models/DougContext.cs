@@ -60,7 +60,7 @@ namespace Doug.Models
 
             modelBuilder.Entity<MonsterAttacker>()
                 .HasOne(m => m.Monster)
-                .WithMany(m => m.Attackers)
+                .WithMany(m => m.MonsterAttackers)
                 .HasForeignKey(m => m.SpawnedMonsterId);
 
             base.OnModelCreating(modelBuilder);

@@ -80,7 +80,7 @@ namespace Doug.Services
         public async Task HandleMonsterDeathByUser(User user, SpawnedMonster spawnedMonster, string channel)
         {
             var monster = spawnedMonster.Monster;
-            var userIds = spawnedMonster.Attackers.Select(attacker => attacker.UserId).ToList();
+            var userIds = spawnedMonster.MonsterAttackers.Select(attacker => attacker.UserId).ToList();
             var users = _userRepository.GetUsers(userIds);
             var lootWinner = _userRepository.GetUser(spawnedMonster.FindHighestDamageDealer());
 

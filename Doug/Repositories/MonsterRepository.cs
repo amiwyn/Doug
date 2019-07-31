@@ -32,7 +32,7 @@ namespace Doug.Repositories
         {
             var monsters = _db.SpawnedMonsters
                 .Where(monsta => monsta.Channel == channel)
-                .Include(monsta => monsta.Attackers)
+                .Include(monsta => monsta.MonsterAttackers)
                 .ToList();
             monsters.ForEach(monster => monster.LoadMonster(_monsterFactory));
             return monsters;
@@ -41,7 +41,7 @@ namespace Doug.Repositories
         public SpawnedMonster GetMonster(int monsterId)
         {
             var monster = _db.SpawnedMonsters
-                .Include(monsta => monsta.Attackers)
+                .Include(monsta => monsta.MonsterAttackers)
                 .Single(monsta => monsta.Id == monsterId);
 
             monster.LoadMonster(_monsterFactory);
@@ -71,14 +71,14 @@ namespace Doug.Repositories
         public void RegisterUserDamage(int id, string userId, int damage)
         {
             var monster = _db.SpawnedMonsters
-                .Include(monsta => monsta.Attackers)
+                .Include(monsta => monsta.MonsterAttackers)
                 .Single(monsta => monsta.Id == id);
 
-            var attacker = monster.Attackers.SingleOrDefault(user => user.UserId == userId);
+            var attacker = monster.MonsterAttackers.SingleOrDefault(user => user.UserId == userId);
 
             if (attacker == null)
             {
-                monster.Attackers.Add(new MonsterAttacker(id, userId, damage));
+                monster.MonsterAttackers.Add(new MonsterAttacker(id, userId, damage));
             }
             else
             {
