@@ -80,6 +80,7 @@ namespace Doug.Skills
             var targetChance = _eventDispatcher.OnGettingStolenChance(target, target.BaseOpponentStealSuccessRate());
 
             var rollSuccessful = _randomService.RollAgainstOpponent(userChance, targetChance);
+            var detected = !_randomService.RollAgainstOpponent(user.BaseDetectionAvoidance(), target.BaseDetectionChance());
 
             var amount = _eventDispatcher.OnStealingAmount(user, user.BaseStealAmount());
 
@@ -93,13 +94,30 @@ namespace Doug.Skills
                 _creditsRepository.RemoveCredits(target.Id, amount);
                 _creditsRepository.AddCredits(user.Id, amount);
 
-                var message = string.Format(DougMessages.StealCredits, _userService.Mention(user), amount, _userService.Mention(target));
-                await _slack.BroadcastMessage(message, channel);
+                if (detected)
+                {
+                    var message = string.Format(DougMessages.StealCreditsCaught, _userService.Mention(user), amount, _userService.Mention(target));
+                    await _slack.BroadcastMessage(message, channel);
+                }
+                else
+                {
+                    var message = string.Format(DougMessages.StealCredits, _userService.Mention(target));
+                    await _slack.SendEphemeralMessage(message, $"<@{user.Id}>", channel); // TODO: TrueMention() method
+                }
             }
             else
             {
-                var message = string.Format(DougMessages.StealFail, _userService.Mention(user), _userService.Mention(target));
-                await _slack.BroadcastMessage(message, channel);
+               if (detected)
+                {
+                    var message = string.Format(DougMessages.StealFailCaught, _userService.Mention(user), _userService.Mention(target));
+                    await _slack.BroadcastMessage(message, channel);
+                }
+                else
+                {
+                    var message = string.Format(DougMessages.StealFail, _userService.Mention(target));
+                    await _slack.SendEphemeralMessage(message, $"<@{user.Id}>", channel);
+                }
+                
             }
         }
     }
