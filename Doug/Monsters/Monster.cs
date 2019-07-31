@@ -67,10 +67,11 @@ namespace Doug.Monsters
             if (new Random().NextDouble() < missChance)
             {
                 attack.Status = AttackStatus.Missed;
+                attack.Damage = 0;
                 return attack;
             }
 
-            var reducedDamage = attack.Damage - (attack.Damage * (Resistance / 100) + Defense);
+            var reducedDamage = attack.Damage - (int)Math.Ceiling(attack.Damage * Resistance * 0.01 + Defense);
             reducedDamage = reducedDamage <= 0 ? 1 : reducedDamage;
 
             attack.Damage = reducedDamage;

@@ -5,6 +5,7 @@ using Doug.Items;
 using Doug.Models;
 using Doug.Repositories;
 using Doug.Services;
+using Doug.Skills;
 using Doug.Slack;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -19,7 +20,7 @@ namespace Test.Combat
         private readonly User _user = new User { Id = "bebebobo", Energy = 10 };
         private readonly User _target = new User { Id = "robert", Credits = 10 };
 
-        private CombatService _combatService;
+        private Steal _steal;
 
         private readonly Mock<IUserRepository> _userRepository = new Mock<IUserRepository>();
         private readonly Mock<ISlackWebApi> _slack = new Mock<ISlackWebApi>();
@@ -28,8 +29,6 @@ namespace Test.Combat
         private readonly Mock<IRandomService> _randomService = new Mock<IRandomService>();
         private readonly Mock<IUserService> _userService = new Mock<IUserService>();
         private readonly Mock<IChannelRepository> _channelRepository = new Mock<IChannelRepository>();
-        private readonly Mock<IMonsterRepository> _monsterRepository = new Mock<IMonsterRepository>();
-        private readonly Mock<IMonsterService> _monsterService = new Mock<IMonsterService>();
 
         [TestInitialize]
         public void Setup()
@@ -39,75 +38,76 @@ namespace Test.Combat
             _channelRepository.Setup(repo => repo.GetChannelType("coco-channel")).Returns(ChannelType.Common);
             _itemEventDispatcher.Setup(disp => disp.OnStealingAmount(It.IsAny<User>(), It.IsAny<int>())).Returns(1);
 
-            _combatService = new CombatService(_itemEventDispatcher.Object, _userRepository.Object, _slack.Object, _statsRepository.Object, _randomService.Object, _userService.Object, _channelRepository.Object, _monsterRepository.Object, _monsterService.Object);
+            _steal = new Steal(_statsRepository.Object, _slack.Object, _userService.Object, _userRepository.Object,
+                _channelRepository.Object, _itemEventDispatcher.Object, _randomService.Object);
         }
 
         [TestMethod]
-        public async Task WhenStealingSucceed_AmountIsRemovedFromTheTarget()
+        public void WhenStealingSucceed_AmountIsRemovedFromTheTarget()
         {
             _randomService.Setup(rnd => rnd.RollAgainstOpponent(It.IsAny<double>(), It.IsAny<double>())).Returns(true);
 
-            await _combatService.Steal(_user, _target, Channel);
+            _steal.Activate(_user, _target, Channel);
 
             _userRepository.Verify(repo => repo.RemoveCredits("robert", 1));
         }
 
         [TestMethod]
-        public async Task WhenStealingSucceed_AmountIsAddedToTheStealer()
+        public void WhenStealingSucceed_AmountIsAddedToTheStealer()
         {
             _randomService.Setup(rnd => rnd.RollAgainstOpponent(It.IsAny<double>(), It.IsAny<double>())).Returns(true);
 
-            await _combatService.Steal(_user, _target, Channel);
+            _steal.Activate(_user, _target, Channel);
 
             _userRepository.Verify(repo => repo.AddCredits(_user.Id, 1));
         }
 
         [TestMethod]
-        public async Task GivenUserHasNoEnergy_WhenStealing_NotEnoughEnergyMessage()
+        public void GivenUserHasNoEnergy_WhenStealing_NotEnoughEnergyMessage()
         {
             var user = new User { Energy = 0 };
 
-            var result = await _combatService.Steal(user, _target, Channel);
+            var result = _steal.Activate(user, _target, Channel);
 
             Assert.AreEqual(DougMessages.NotEnoughEnergy, result.Message);
         }
 
         [TestMethod]
-        public async Task GivenTargetHasNotEnoughCredits_WhenStealing_UserLoseAllHisCredits()
+        public void GivenTargetHasNotEnoughCredits_WhenStealing_UserLoseAllHisCredits()
         {
             _randomService.Setup(rnd => rnd.RollAgainstOpponent(It.IsAny<double>(), It.IsAny<double>())).Returns(true);
             _itemEventDispatcher.Setup(disp => disp.OnStealingAmount(It.IsAny<User>(), It.IsAny<int>())).Returns(77);
             var target = new User { Id = "robert", Credits = 3 };
 
-            await _combatService.Steal(_user, target, Channel);
+            _steal.Activate(_user, target, Channel);
 
             _userRepository.Verify(repo => repo.RemoveCredits("robert", 3));
         }
 
         [TestMethod]
-        public async Task WhenStealing_ObtainChancesFromItems()
+        public void WhenStealing_ObtainChancesFromItems()
         {
-            await _combatService.Steal(_user, _target, Channel);
+            _steal.Activate(_user, _target, Channel);
 
             _itemEventDispatcher.Verify(dispatcher => dispatcher.OnStealingChance(It.IsAny<User>(), It.IsAny<double>()));
         }
 
         [TestMethod]
-        public async Task WhenStealing_ObtainAmountFromItems()
+        public void WhenStealing_ObtainAmountFromItems()
         {
             _itemEventDispatcher.Setup(disp => disp.OnStealingChance(It.IsAny<User>(), It.IsAny<double>())).Returns(1);
 
-            await _combatService.Steal(_user, _target, Channel);
+            _steal.Activate(_user, _target, Channel);
 
             _itemEventDispatcher.Verify(dispatcher => dispatcher.OnStealingAmount(It.IsAny<User>(), It.IsAny<int>()));
         }
 
         [TestMethod]
-        public async Task GivenUserIsInWrongChannel_WhenStealing_WrongChannelMessage()
+        public void GivenUserIsInWrongChannel_WhenStealing_WrongChannelMessage()
         {
             _channelRepository.Setup(repo => repo.GetChannelType("coco-channel")).Returns(ChannelType.Casino);
 
-            var result = await _combatService.Steal(_user, _target, Channel);
+            var result = _steal.Activate(_user, _target, Channel);
 
             Assert.AreEqual(DougMessages.NotInRightChannel, result.Message);
         }
