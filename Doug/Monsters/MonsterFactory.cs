@@ -23,7 +23,7 @@ namespace Doug.Monsters
             {
                 { Seagull.MonsterId, () => new Seagull() },
                 { Biker.MonsterId, () => new Biker() },
-                { Hobo.MonsterId, () => new Biker() }
+                { Hobo.MonsterId, () => new Hobo() }
             };
         }
 

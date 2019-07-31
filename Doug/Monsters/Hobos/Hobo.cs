@@ -13,7 +13,7 @@ namespace Doug.Monsters.Hobos
         {
             Id = MonsterId;
             Name = "Hobo";
-            Description = "Little vapoting punk. Watch outm he can spit on you";
+            Description = "Little vapoting punk. Watch out, he can spit on you !!";
             Image = "https://imgur.com/a/ovnZdsK";
             Level = 10;
             ExperienceValue = 250;
