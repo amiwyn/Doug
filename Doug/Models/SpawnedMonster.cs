@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using Doug.Monsters;
 
@@ -11,6 +12,7 @@ namespace Doug.Models
         public string Channel { get; set; }
         public int Health { get; set; }
         public DateTime AttackCooldown { get; set; }
+        public List<MonsterAttacker> Attackers { get; set; }
 
         [NotMapped]
         public Monster Monster { get; set; }
