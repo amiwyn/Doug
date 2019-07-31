@@ -16,13 +16,6 @@ namespace Doug.Controllers
             _combatCommands = combatCommands;
         }
 
-        [HttpPost("steal")]
-        public async Task<ActionResult> Steal([FromForm]SlackCommandDto slackCommand)
-        {
-            var result = await _combatCommands.Steal(slackCommand.ToCommand());
-            return Ok(result.Message);
-        }
-
         [HttpPost("attack")]
         public async Task<ActionResult> Attack([FromForm]SlackCommandDto slackCommand)
         {

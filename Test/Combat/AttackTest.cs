@@ -25,7 +25,6 @@ namespace Test.Combat
         private readonly Mock<ISlackWebApi> _slack = new Mock<ISlackWebApi>();
         private readonly Mock<IEventDispatcher> _itemEventDispatcher = new Mock<IEventDispatcher>();
         private readonly Mock<IStatsRepository> _statsRepository = new Mock<IStatsRepository>();
-        private readonly Mock<IRandomService> _randomService = new Mock<IRandomService>();
         private readonly Mock<IUserService> _userService = new Mock<IUserService>();
         private readonly Mock<IChannelRepository> _channelRepository = new Mock<IChannelRepository>();
         private readonly Mock<IMonsterRepository> _monsterRepository = new Mock<IMonsterRepository>();
@@ -39,7 +38,7 @@ namespace Test.Combat
             _channelRepository.Setup(repo => repo.GetChannelType("coco-channel")).Returns(ChannelType.Pvp);
             _itemEventDispatcher.Setup(disp => disp.OnStealingAmount(It.IsAny<User>(), It.IsAny<int>())).Returns(1);
 
-            _combatService = new CombatService(_itemEventDispatcher.Object, _userRepository.Object, _slack.Object, _statsRepository.Object, _randomService.Object, _userService.Object, _channelRepository.Object, _monsterRepository.Object, _monsterService.Object);
+            _combatService = new CombatService(_itemEventDispatcher.Object, _userRepository.Object, _slack.Object, _statsRepository.Object, _userService.Object, _channelRepository.Object, _monsterRepository.Object, _monsterService.Object);
         }
 
         [TestMethod]
