@@ -15,7 +15,7 @@ namespace Doug.Monsters.Brigands
             Name = "Hobo";
             Description = "Little vapoting punk. Watch out, he can spit on you !!";
             Image = "https://imgur.com/a/ovnZdsK";
-            Level = 10;
+            Level = 8;
             ExperienceValue = 100;
 
             MaxHealth = Health = 269;
