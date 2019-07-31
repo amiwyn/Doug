@@ -22,6 +22,9 @@ namespace Doug.Skills
 
         public Steal(IStatsRepository statsRepository, ISlackWebApi slack, IUserService userService, IChannelRepository channelRepository, IEventDispatcher eventDispatcher, IRandomService randomService, ICreditsRepository creditsRepository) : base(statsRepository)
         {
+            EnergyCost = 5;
+            Cooldown = 30;
+
             _statsRepository = statsRepository;
             _slack = slack;
             _userService = userService;
@@ -29,14 +32,13 @@ namespace Doug.Skills
             _eventDispatcher = eventDispatcher;
             _randomService = randomService;
             _creditsRepository = creditsRepository;
-            EnergyCost = 5;
         }
 
         public override DougResponse Activate(User user, ICombatable target, string channel)
         {
-            if (user.IsStealOnCooldown())
+            if (!CanActivateSkill(user, out var response))
             {
-                return new DougResponse(string.Format(DougMessages.CommandOnCooldown, user.CalculateStealCooldownRemaining()));
+                return response;
             }
 
             if (target == null)
@@ -58,23 +60,15 @@ namespace Doug.Skills
                     return new DougResponse(DougMessages.UserIsNotInPvp);
                 }
 
-                var energy = user.Energy - EnergyCost;
-
-                if (energy < 0)
-                {
-                    return new DougResponse(DougMessages.NotEnoughEnergy);
-                }
-
-                StealFromUser(user, targetUser, energy, channel).Wait();
+                StealFromUser(user, targetUser, channel).Wait();
             }
 
-            return new DougResponse();
+            return response;
         }
 
-        private async Task StealFromUser(User user, User target, int energyCost, string channel)
+        private async Task StealFromUser(User user, User target, string channel)
         {
-            _statsRepository.UpdateEnergy(user.Id, energyCost);
-            _statsRepository.SetSkillCooldown(user.Id, TimeSpan.FromSeconds(30)); // TODO uhdiuyqwdb
+            _statsRepository.SetSkillCooldown(user.Id, TimeSpan.FromSeconds(Cooldown));
 
             var userChance = _eventDispatcher.OnStealingChance(user, user.BaseStealSuccessRate());
             var targetChance = _eventDispatcher.OnGettingStolenChance(target, target.BaseOpponentStealSuccessRate());
