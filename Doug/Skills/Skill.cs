@@ -36,7 +36,8 @@ namespace Doug.Skills
                 return false;
             }
 
-            StatsRepository.UpdateEnergy(user.Id, EnergyCost);
+            user.Energy -= EnergyCost;
+            StatsRepository.UpdateEnergy(user.Id, user.Energy);
             StatsRepository.SetSkillCooldown(user.Id, TimeSpan.FromSeconds(Cooldown));
             response = new DougResponse();
             return true;
