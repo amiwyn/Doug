@@ -22,8 +22,8 @@ namespace Doug.Items.Equipment
             Rarity = Rarity.Rare;
             Icon = ":dark_sunglasses:";
             Slot = EquipmentSlot.Neck;
-            Price = 2600;
-            LevelRequirement = 10;
+            Price = 1990;
+            LevelRequirement = 5;
 
             Stats.Luck = 4;
         }
