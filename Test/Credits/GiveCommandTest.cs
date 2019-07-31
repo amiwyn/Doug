@@ -29,6 +29,7 @@ namespace Test.Credits
         private readonly Mock<ISlackWebApi> _slack = new Mock<ISlackWebApi>();
         private readonly Mock<IUserService> _userService = new Mock<IUserService>();
         private readonly Mock<IShopMenuService> _shopMenuService = new Mock<IShopMenuService>();
+        private readonly Mock<ICreditsRepository> _creditsRepository = new Mock<ICreditsRepository>();
 
         [TestInitialize]
         public void Setup()
@@ -36,7 +37,7 @@ namespace Test.Credits
             _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User() { Id = "testuser", Credits = 79});
             _userRepository.Setup(repo => repo.GetUser("otherUserid")).Returns(new User() { Id = "otherUserid", Credits = 79});
 
-            _creditsCommands = new CreditsCommands(_userRepository.Object, _slack.Object, _userService.Object, _shopMenuService.Object);
+            _creditsCommands = new CreditsCommands(_userRepository.Object, _slack.Object, _userService.Object, _shopMenuService.Object, _creditsRepository.Object);
         }
 
         [TestMethod]
@@ -44,7 +45,7 @@ namespace Test.Credits
         {
             _creditsCommands.Give(_command);
 
-            _userRepository.Verify(repo => repo.RemoveCredits(User, 10));
+            _creditsRepository.Verify(repo => repo.RemoveCredits(User, 10));
         }
 
         [TestMethod]
@@ -52,7 +53,7 @@ namespace Test.Credits
         {
             _creditsCommands.Give(_command);
 
-            _userRepository.Verify(repo => repo.AddCredits("otherUserid", 10));
+            _creditsRepository.Verify(repo => repo.AddCredits("otherUserid", 10));
         }
 
         [TestMethod]
@@ -60,7 +61,7 @@ namespace Test.Credits
         {
             _creditsCommands.Give(_command);
 
-            _userRepository.Verify(repo => repo.AddCredits(User, It.IsAny<int>()), Times.Never);
+            _creditsRepository.Verify(repo => repo.AddCredits(User, It.IsAny<int>()), Times.Never);
         }
 
         [TestMethod]

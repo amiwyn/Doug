@@ -22,13 +22,14 @@ namespace Test.Credits
         private readonly Mock<ISlackWebApi> _slack = new Mock<ISlackWebApi>();
         private readonly Mock<IUserService> _userService = new Mock<IUserService>();
         private readonly Mock<IShopMenuService> _shopMenuService = new Mock<IShopMenuService>();
+        private readonly Mock<ICreditsRepository> _creditsRepository = new Mock<ICreditsRepository>();
 
         [TestInitialize]
         public void Setup()
         {
             _userRepository.Setup(repo => repo.GetUsers()).Returns(new List<User>() { new User { Id = "test1", Credits = 23 }, new User { Id = "test2", Credits = 19 }, new User { Id = "test3", Credits = 69 }, new User { Id = "test4", Credits = 43 }, new User { Id = "DESS", Credits = 0 } });
 
-            _creditsCommands = new CreditsCommands(_userRepository.Object, _slack.Object, _userService.Object, _shopMenuService.Object);
+            _creditsCommands = new CreditsCommands(_userRepository.Object, _slack.Object, _userService.Object, _shopMenuService.Object, _creditsRepository.Object);
         }
 
         [TestMethod]

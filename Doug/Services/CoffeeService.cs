@@ -26,20 +26,20 @@ namespace Doug.Services
         private readonly ISlackWebApi _slack;
         private readonly ICoffeeRepository _coffeeRepository;
         private readonly IBackgroundJobClient _backgroundJobClient;
-        private readonly IUserRepository _userRepository;
         private readonly IInventoryRepository _inventoryRepository;
         private readonly IUserService _userService;
         private readonly IStatsRepository _statsRepository;
+        private readonly ICreditsRepository _creditsRepository;
 
-        public CoffeeService(ISlackWebApi slackWebApi, ICoffeeRepository coffeeRepository, IBackgroundJobClient backgroundJobClient, IUserRepository userRepository, IInventoryRepository inventoryRepository, IUserService userService, IStatsRepository statsRepository)
+        public CoffeeService(ISlackWebApi slackWebApi, ICoffeeRepository coffeeRepository, IBackgroundJobClient backgroundJobClient, IInventoryRepository inventoryRepository, IUserService userService, IStatsRepository statsRepository, ICreditsRepository creditsRepository)
         {
             _slack = slackWebApi;
             _coffeeRepository = coffeeRepository;
             _backgroundJobClient = backgroundJobClient;
-            _userRepository = userRepository;
             _inventoryRepository = inventoryRepository;
             _userService = userService;
             _statsRepository = statsRepository;
+            _creditsRepository = creditsRepository;
         }
 
         public void CountParrot(string userId, string channelId, DateTime currentTime)
@@ -128,7 +128,7 @@ namespace Doug.Services
             var participantsId = participants.Select(user => user.Id).ToList();
 
             _statsRepository.RegenerateUsersHealth(participantsId);
-            _userRepository.AddCreditsToUsers(participantsId, CoffeeBreakAward);
+            _creditsRepository.AddCreditsToUsers(participantsId, CoffeeBreakAward);
             _inventoryRepository.AddItemToUsers(participants, new CoffeeCup(_statsRepository, _inventoryRepository));
 
             _userService.AddBulkExperience(participants, CoffeeExperienceAward, channelId).Wait();

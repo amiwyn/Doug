@@ -33,6 +33,7 @@ namespace Test.Slurs
         private readonly Mock<IAuthorizationService> _adminValidator = new Mock<IAuthorizationService>();
         private readonly Mock<IEventDispatcher> _eventDispatcher = new Mock<IEventDispatcher>();
         private readonly Mock<IUserService> _userService = new Mock<IUserService>();
+        private readonly Mock<ICreditsRepository> _creditsRepository = new Mock<ICreditsRepository>();
 
         [TestInitialize]
         public void Setup()
@@ -49,7 +50,7 @@ namespace Test.Slurs
                 new Reaction() { Name = "-1", Count = 5 }
             }));
 
-            _slursCommands = new SlursCommands(_slurRepository.Object, _userRepository.Object, _slack.Object, _adminValidator.Object, _eventDispatcher.Object, _userService.Object);
+            _slursCommands = new SlursCommands(_slurRepository.Object, _userRepository.Object, _slack.Object, _adminValidator.Object, _eventDispatcher.Object, _userService.Object, _creditsRepository.Object);
         }
 
         [TestMethod]

@@ -22,13 +22,13 @@ namespace Test.Combat
 
         private Steal _steal;
 
-        private readonly Mock<IUserRepository> _userRepository = new Mock<IUserRepository>();
         private readonly Mock<ISlackWebApi> _slack = new Mock<ISlackWebApi>();
         private readonly Mock<IEventDispatcher> _itemEventDispatcher = new Mock<IEventDispatcher>();
         private readonly Mock<IStatsRepository> _statsRepository = new Mock<IStatsRepository>();
         private readonly Mock<IRandomService> _randomService = new Mock<IRandomService>();
         private readonly Mock<IUserService> _userService = new Mock<IUserService>();
         private readonly Mock<IChannelRepository> _channelRepository = new Mock<IChannelRepository>();
+        private readonly Mock<ICreditsRepository> _creditsRepository = new Mock<ICreditsRepository>();
 
         [TestInitialize]
         public void Setup()
@@ -38,8 +38,8 @@ namespace Test.Combat
             _channelRepository.Setup(repo => repo.GetChannelType("coco-channel")).Returns(ChannelType.Common);
             _itemEventDispatcher.Setup(disp => disp.OnStealingAmount(It.IsAny<User>(), It.IsAny<int>())).Returns(1);
 
-            _steal = new Steal(_statsRepository.Object, _slack.Object, _userService.Object, _userRepository.Object,
-                _channelRepository.Object, _itemEventDispatcher.Object, _randomService.Object);
+            _steal = new Steal(_statsRepository.Object, _slack.Object, _userService.Object,
+                _channelRepository.Object, _itemEventDispatcher.Object, _randomService.Object, _creditsRepository.Object);
         }
 
         [TestMethod]
@@ -49,7 +49,7 @@ namespace Test.Combat
 
             _steal.Activate(_user, _target, Channel);
 
-            _userRepository.Verify(repo => repo.RemoveCredits("robert", 1));
+            _creditsRepository.Verify(repo => repo.RemoveCredits("robert", 1));
         }
 
         [TestMethod]
@@ -59,7 +59,7 @@ namespace Test.Combat
 
             _steal.Activate(_user, _target, Channel);
 
-            _userRepository.Verify(repo => repo.AddCredits(_user.Id, 1));
+            _creditsRepository.Verify(repo => repo.AddCredits(_user.Id, 1));
         }
 
         [TestMethod]
@@ -81,7 +81,7 @@ namespace Test.Combat
 
             _steal.Activate(_user, target, Channel);
 
-            _userRepository.Verify(repo => repo.RemoveCredits("robert", 3));
+            _creditsRepository.Verify(repo => repo.RemoveCredits("robert", 3));
         }
 
         [TestMethod]

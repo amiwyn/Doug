@@ -13,17 +13,17 @@ namespace Doug.Services
 
     public class ShopService : IShopService
     {
-        private readonly IUserRepository _userRepository;
         private readonly IInventoryRepository _inventoryRepository;
         private readonly IItemFactory _itemFactory;
         private readonly IGovernmentService _governmentService;
+        private readonly ICreditsRepository _creditsRepository;
 
-        public ShopService(IUserRepository userRepository, IInventoryRepository inventoryRepository, IItemFactory itemFactory, IGovernmentService governmentService)
+        public ShopService(IInventoryRepository inventoryRepository, IItemFactory itemFactory, IGovernmentService governmentService, ICreditsRepository creditsRepository)
         {
-            _userRepository = userRepository;
             _inventoryRepository = inventoryRepository;
             _itemFactory = itemFactory;
             _governmentService = governmentService;
+            _creditsRepository = creditsRepository;
         }
 
 
@@ -38,7 +38,7 @@ namespace Doug.Services
                 return new DougResponse(user.NotEnoughCreditsForAmountResponse(price));
             }
 
-            _userRepository.RemoveCredits(user.Id, price);
+            _creditsRepository.RemoveCredits(user.Id, price);
 
             _inventoryRepository.AddItem(user, item);
 
@@ -63,7 +63,7 @@ namespace Doug.Services
 
             _inventoryRepository.RemoveItem(user, position);
 
-            _userRepository.AddCredits(user.Id, item.Price / 2);
+            _creditsRepository.AddCredits(user.Id, item.Price / 2);
 
             return new DougResponse(string.Format(DougMessages.SoldItem, item.Name, item.Price / 2));
         }

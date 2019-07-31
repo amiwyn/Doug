@@ -29,8 +29,10 @@ namespace Doug.Items
         private readonly IEventDispatcher _eventDispatcher;
         private readonly IEffectRepository _effectRepository;
         private readonly IRandomService _randomService;
+        private readonly IChannelRepository _channelRepository;
+        private readonly ICreditsRepository _creditsRepository;
 
-        public ItemFactory(ISlackWebApi slack, IStatsRepository statsRepository, IInventoryRepository inventoryRepository, IUserService userService, IEventDispatcher eventDispatcher, IEffectRepository effectRepository, IRandomService randomService)
+        public ItemFactory(ISlackWebApi slack, IStatsRepository statsRepository, IInventoryRepository inventoryRepository, IUserService userService, IEventDispatcher eventDispatcher, IEffectRepository effectRepository, IRandomService randomService, IChannelRepository channelRepository, ICreditsRepository creditsRepository)
         {
             _slack = slack;
             _statsRepository = statsRepository;
@@ -39,6 +41,8 @@ namespace Doug.Items
             _eventDispatcher = eventDispatcher;
             _effectRepository = effectRepository;
             _randomService = randomService;
+            _channelRepository = channelRepository;
+            _creditsRepository = creditsRepository;
         }
 
         public Item CreateItem(string itemId)
@@ -94,6 +98,7 @@ namespace Doug.Items
 
                 // Skill books
                 case HealBook.ItemId: return new HealBook(_statsRepository, _slack, _userService);
+                case StealBook.ItemId: return new StealBook(_statsRepository, _slack, _userService, _channelRepository, _eventDispatcher, _randomService, _creditsRepository);
 
                 // Misc
                 case BachelorsDegree.ItemId: return new BachelorsDegree();
