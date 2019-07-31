@@ -26,13 +26,14 @@ namespace Test
         private readonly Mock<IInventoryRepository> _inventoryRepository = new Mock<IInventoryRepository>();
         private readonly Mock<IUserService> _userService = new Mock<IUserService>();
         private readonly Mock<IStatsRepository> _statsRepository = new Mock<IStatsRepository>();
+        private readonly Mock<ICreditsRepository> _creditsRepository = new Mock<ICreditsRepository>();
 
         [TestInitialize]
         public void Setup()
         {
             _coffeeRepository.Setup(repo => repo.GetCoffeeBreak()).Returns(new CoffeeBreak());
             _userRepository.Setup(repo => repo.GetUser(It.IsAny<string>())).Returns(new User());
-            _coffeeService = new CoffeeService(_slack.Object, _coffeeRepository.Object, _backgroundJobClient.Object, _userRepository.Object, _inventoryRepository.Object, _userService.Object, _statsRepository.Object);
+            _coffeeService = new CoffeeService(_slack.Object, _coffeeRepository.Object, _backgroundJobClient.Object, _inventoryRepository.Object, _userService.Object, _statsRepository.Object, _creditsRepository.Object);
         }
 
         [TestMethod]
@@ -118,7 +119,7 @@ namespace Test
 
             _coffeeService.EndCoffee(Channel);
 
-            _userRepository.Verify(repo => repo.AddCreditsToUsers(It.IsAny<List<string>>(), 10));
+            _creditsRepository.Verify(repo => repo.AddCreditsToUsers(It.IsAny<List<string>>(), 10));
         }
 
         [TestMethod]

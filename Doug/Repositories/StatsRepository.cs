@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Doug.Models;
 
@@ -14,6 +15,8 @@ namespace Doug.Repositories
         void AttributeStatPoint(string userId, string stat);
         void FreeStatPoint(string userId, string stat);
         void KillUser(string userId);
+        void SetAttackCooldown(string userId, TimeSpan cooldown);
+        void SetSkillCooldown(string userId, TimeSpan cooldown);
     }
 
     public class StatsRepository : IStatsRepository
@@ -116,6 +119,24 @@ namespace Doug.Repositories
             var user = _db.Users.Single(usr => usr.Id == userId);
 
             user.Dies();
+
+            _db.SaveChanges();
+        }
+
+        public void SetAttackCooldown(string userId, TimeSpan cooldown)
+        {
+            var user = _db.Users.Single(usr => usr.Id == userId);
+
+            user.AttackCooldown = DateTime.UtcNow + cooldown;
+
+            _db.SaveChanges();
+        }
+
+        public void SetSkillCooldown(string userId, TimeSpan cooldown)
+        {
+            var user = _db.Users.Single(usr => usr.Id == userId);
+
+            user.SkillCooldown = DateTime.UtcNow + cooldown;
 
             _db.SaveChanges();
         }

@@ -24,13 +24,15 @@ namespace Doug.Commands
         private static readonly DougResponse NoResponse = new DougResponse();
         private readonly IUserService _userService;
         private readonly IShopMenuService _shopMenuService;
+        private readonly ICreditsRepository _creditsRepository;
 
-        public CreditsCommands(IUserRepository userRepository, ISlackWebApi messageSender, IUserService userService, IShopMenuService shopMenuService)
+        public CreditsCommands(IUserRepository userRepository, ISlackWebApi messageSender, IUserService userService, IShopMenuService shopMenuService, ICreditsRepository creditsRepository)
         {
             _userRepository = userRepository;
             _slack = messageSender;
             _userService = userService;
             _shopMenuService = shopMenuService;
+            _creditsRepository = creditsRepository;
         }
 
         public DougResponse Give(Command command)
@@ -55,8 +57,8 @@ namespace Doug.Commands
                 return new DougResponse(user.NotEnoughCreditsForAmountResponse(amount));
             }
 
-            _userRepository.RemoveCredits(user.Id, amount);
-            _userRepository.AddCredits(target.Id, amount);
+            _creditsRepository.RemoveCredits(user.Id, amount);
+            _creditsRepository.AddCredits(target.Id, amount);
 
             var message = string.Format(DougMessages.UserGaveCredits, _userService.Mention(user), amount, _userService.Mention(target));
             _slack.BroadcastMessage(message, command.ChannelId);

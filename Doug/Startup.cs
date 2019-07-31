@@ -124,6 +124,7 @@ namespace Doug
             services.AddScoped<IGovernmentRepository, GovernmentRepository>();
             services.AddScoped<IShopRepository, ShopRepository>();
             services.AddScoped<IMonsterRepository, MonsterRepository>();
+            services.AddScoped<ICreditsRepository, CreditsRepository>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

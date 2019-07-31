@@ -37,14 +37,14 @@ namespace Test.Casino
         private readonly Mock<IStatsRepository> _statsRepository = new Mock<IStatsRepository>();
         private readonly Mock<IRandomService> _randomService = new Mock<IRandomService>();
         private readonly Mock<IUserService> _userService = new Mock<IUserService>();
-
+        private readonly Mock<ICreditsRepository> _creditsRepository = new Mock<ICreditsRepository>();
 
         [TestInitialize]
         public void Setup()
         {
             _userRepository.Setup(repo => repo.GetUser(User)).Returns(_user);
 
-            _casinoCommands = new CasinoCommands(_userRepository.Object, _slack.Object, _channelRepository.Object, _backgroundClient.Object, _itemEventDispatcher.Object, _statsRepository.Object, _randomService.Object, _userService.Object);
+            _casinoCommands = new CasinoCommands(_userRepository.Object, _slack.Object, _channelRepository.Object, _backgroundClient.Object, _itemEventDispatcher.Object, _statsRepository.Object, _randomService.Object, _userService.Object, _creditsRepository.Object);
         }
 
         [TestMethod]
@@ -54,7 +54,7 @@ namespace Test.Casino
 
             _casinoCommands.Gamble(_command);
 
-            _userRepository.Verify(repo => repo.AddCredits(User, 10));
+            _creditsRepository.Verify(repo => repo.AddCredits(User, 10));
         }
 
         [TestMethod]
@@ -64,7 +64,7 @@ namespace Test.Casino
 
             _casinoCommands.Gamble(_command);
 
-            _userRepository.Verify(repo => repo.RemoveCredits(User, 10));
+            _creditsRepository.Verify(repo => repo.RemoveCredits(User, 10));
         }
 
         [TestMethod]

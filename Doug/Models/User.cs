@@ -10,7 +10,6 @@ namespace Doug.Models
     public class User : ICombatable
     {
         private const int BaseAttackCooldown = 30;
-        private const int BaseStealCooldown = 30;
         private const int BaseAttackSpeed = 100;
 
         private int _health;
@@ -23,7 +22,7 @@ namespace Doug.Models
         public Loadout Loadout { get; set; }
         public long Experience { get; set; }
         public DateTime AttackCooldown { get; set; }
-        public DateTime StealCooldown { get; set; }
+        public DateTime SkillCooldown { get; set; }
 
         public int Luck { get; set; }
         public int Agility { get; set; }
@@ -112,10 +111,9 @@ namespace Doug.Models
         public bool HasEnoughEnergyForCost(int cost) => Energy - cost >= 0;
         public bool IsDead() => Health <= 0;
         public bool IsAttackOnCooldown() => DateTime.UtcNow <= AttackCooldown;
-        public bool IsStealOnCooldown() => DateTime.UtcNow <= StealCooldown;
+        public bool IsStealOnCooldown() => DateTime.UtcNow <= SkillCooldown;
         public int CalculateAttackCooldownRemaining() => (int)(AttackCooldown - DateTime.UtcNow).TotalSeconds;
-        public int CalculateStealCooldownRemaining() => (int)(StealCooldown - DateTime.UtcNow).TotalSeconds;
-        public TimeSpan GetStealCooldown() => TimeSpan.FromSeconds(BaseStealCooldown);
+        public int CalculateStealCooldownRemaining() => (int)(SkillCooldown - DateTime.UtcNow).TotalSeconds;
         public TimeSpan GetAttackCooldown() => TimeSpan.FromSeconds(BaseAttackCooldown * 100.0 / TotalAttackSpeed());
         public double GetExperienceAdvancement() => (Experience - PrevLevelExp()) / (NextLevelExp() - PrevLevelExp());
         private double NextLevelExp() => Math.Pow((Level + 1) * 20 - 20, 2);
