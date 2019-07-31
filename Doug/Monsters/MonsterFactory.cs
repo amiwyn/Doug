@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Doug.Monsters.Brigands;
 using Doug.Monsters.Seagulls;
+using Doug.Monsters.Hobos;
 
 namespace Doug.Monsters
 {
@@ -21,7 +22,8 @@ namespace Doug.Monsters
             _monsters = new Dictionary<string, Func<Monster>> 
             {
                 { Seagull.MonsterId, () => new Seagull() },
-                { Biker.MonsterId, () => new Biker() }
+                { Biker.MonsterId, () => new Biker() },
+                { Hobo.MonsterId, () => new Biker() }
             };
         }
 
