@@ -67,6 +67,7 @@ namespace Doug.Monsters
             if (new Random().NextDouble() < missChance)
             {
                 attack.Status = AttackStatus.Missed;
+                attack.Damage = 0;
                 return attack;
             }
 
