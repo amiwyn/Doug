@@ -13,18 +13,19 @@ namespace Doug.Skills
 
         public Heal(IStatsRepository statsRepository, ISlackWebApi slack, IUserService userService) : base(statsRepository)
         {
+            EnergyCost = 8;
+            Cooldown = 30;
+
             _slack = slack;
             _userService = userService;
-            EnergyCost = 8;
         }
 
         public override DougResponse Activate(User user, ICombatable target, string channel)
         {
-            if (!user.HasEnoughEnergyForCost(EnergyCost))
+            if (!CanActivateSkill(user, out var response))
             {
-                return new DougResponse(DougMessages.NotEnoughEnergy);
+                return response;
             }
-            StatsRepository.UpdateEnergy(user.Id, EnergyCost);
 
             var userToBeHealed = user;
             if (target != null && target is User targetUser)
