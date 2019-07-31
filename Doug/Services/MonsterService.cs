@@ -80,10 +80,11 @@ namespace Doug.Services
         public async Task HandleMonsterDeathByUser(User user, SpawnedMonster spawnedMonster, string channel)
         {
             var monster = spawnedMonster.Monster;
-            var userIds = await _slack.GetUsersInChannel(channel);
+            var userIds = spawnedMonster.Attackers.Select(attacker => attacker.UserId).ToList();
             var users = _userRepository.GetUsers(userIds);
+            var lootWinner = _userRepository.GetUser(spawnedMonster.FindHighestDamageDealer());
 
-            await AddMonsterLootToUser(user, monster, channel);
+            await AddMonsterLootToUser(lootWinner, monster, channel);
 
             _monsterRepository.RemoveMonster(spawnedMonster.Id);
 

@@ -11,6 +11,7 @@ namespace Doug.Items
         public int AgilityRequirement { get; set; }
         public int StrengthRequirement { get; set; }
         public int IntelligenceRequirement { get; set; }
+        public int ConstitutionRequirement { get; set; }
 
         public ItemStats Stats { get; set; }
         public EquipmentSlot Slot { get; set; }
@@ -28,7 +29,22 @@ namespace Doug.Items
 
         public virtual IEnumerable<string> GetDisplayAttributeList()
         {
-            return Stats.ToStringList().Prepend(string.Format(DougMessages.ItemLevel, LevelRequirement));
+            var attributes = new List<string>
+            {
+                string.Format(DougMessages.ItemLevel, LevelRequirement),
+                DisplayRequirement(DougMessages.Luck, LuckRequirement),
+                DisplayRequirement(DougMessages.Agi, AgilityRequirement),
+                DisplayRequirement(DougMessages.Str, StrengthRequirement),
+                DisplayRequirement(DougMessages.Int, IntelligenceRequirement),
+                DisplayRequirement(DougMessages.Con, ConstitutionRequirement),
+            };
+            var requirements = attributes.Where(attr => !string.IsNullOrEmpty(attr)).ToList();
+            return requirements.Concat(Stats.ToStringList());
+        }
+
+        private string DisplayRequirement(string text, int requirement)
+        {
+            return requirement == 0 ? string.Empty : $"*{requirement} {text}*";
         }
 
         public bool IsHandSlot()

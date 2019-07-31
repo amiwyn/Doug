@@ -189,7 +189,8 @@ namespace Doug.Models
                    TotalStrength() >= item.StrengthRequirement &&
                    TotalAgility() >= item.AgilityRequirement &&
                    TotalIntelligence() >= item.IntelligenceRequirement &&
-                   TotalLuck() >= item.LuckRequirement;
+                   TotalLuck() >= item.LuckRequirement &&
+                   TotalConstitution() >= item.ConstitutionRequirement;
         }
 
         public Attack AttackTarget(ICombatable target, IEventDispatcher eventDispatcher)
@@ -236,13 +237,12 @@ namespace Doug.Models
             reducedDamage = reducedDamage <= 0 ? 1 : reducedDamage;
 
             attack.Damage = reducedDamage;
-
             if (attack.Status == AttackStatus.Critical)
             {
                 attack.Damage *= 2;
             }
 
-            Health -= reducedDamage;
+            Health -= attack.Damage;
 
             return attack;
         }

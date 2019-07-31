@@ -11,6 +11,7 @@
             Rarity = Rarity.Common;
             Icon = ":iron_ingot:";
             Price = 430;
+            MaxStack = 99;
         }
     }
 }

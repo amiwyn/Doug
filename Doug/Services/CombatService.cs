@@ -178,7 +178,7 @@ namespace Doug.Services
             var message = attack.Status.ToMessage(_userService.Mention(user), $"*{monster.Name}*", attack.Damage);
             await _slack.BroadcastMessage(message, channel);
 
-            _monsterRepository.UpdateHealth(spawnedMonster.Id, monster.Health);
+            _monsterRepository.RegisterUserDamage(spawnedMonster.Id, user.Id, attack.Damage);
 
             if (monster.IsDead())
             {

@@ -110,6 +110,11 @@
         public const string MonsterDied = "*{0}* Died!";
         public const string UserObtained = "{0} obtained {1}";
         public const string YouObtained = "You obtained {0}";
+        public const string Agi = "Agi";
+        public const string Str = "Str";
+        public const string Con = "Con";
+        public const string Luck = "Luck";
+        public const string Int = "Int";
 
         public const string DougError = "Beep boop, it's not working : {0}";
         public const string NotAnAdmin = "You are not an admin.";
