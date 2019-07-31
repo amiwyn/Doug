@@ -13,7 +13,7 @@ namespace Doug.Models
         public string Channel { get; set; }
         public int Health { get; set; }
         public DateTime AttackCooldown { get; set; }
-        public List<MonsterAttacker> Attackers { get; set; }
+        public List<MonsterAttacker> MonsterAttackers { get; set; }
 
         [NotMapped]
         public Monster Monster { get; set; }
@@ -31,8 +31,8 @@ namespace Doug.Models
 
         public string FindHighestDamageDealer()
         {
-            var highestDamage = Attackers.Max(attacker => attacker.DamageDealt);
-            return Attackers.Single(attacker => attacker.DamageDealt == highestDamage).UserId;
+            var highestDamage = MonsterAttackers.Max(attacker => attacker.DamageDealt);
+            return MonsterAttackers.Single(attacker => attacker.DamageDealt == highestDamage).UserId;
         }
     }
 }
