@@ -4,6 +4,7 @@ using System.Linq;
 using Doug.Monsters.Brigands;
 using Doug.Monsters.Seagulls;
 
+
 namespace Doug.Monsters
 {
     public interface IMonsterFactory
@@ -21,7 +22,8 @@ namespace Doug.Monsters
             _monsters = new Dictionary<string, Func<Monster>> 
             {
                 { Seagull.MonsterId, () => new Seagull() },
-                { Biker.MonsterId, () => new Biker() }
+                { Biker.MonsterId, () => new Biker() },
+                { Hobo.MonsterId, () => new Hobo() }
             };
         }
 
