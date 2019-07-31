@@ -5,11 +5,11 @@ using Doug.Items.Equipment.Necklaces;
 using Doug.Items.Equipment.Sets.Cloth;
 using Doug.Items.Equipment.Sets.Leather;
 using Doug.Items.Equipment.Sets.Noob;
-using Doug.Items.Equipment.Sets.StartingWeapons;
 using Doug.Items.Equipment.Sets.Thick;
 using Doug.Items.Lootboxes;
 using Doug.Items.Misc;
 using Doug.Items.Misc.Drops;
+using Doug.Items.SkillBooks;
 using Doug.Repositories;
 using Doug.Services;
 using Doug.Slack;
@@ -91,6 +91,9 @@ namespace Doug.Items
 
                 // Necklaces
                 case EmeraldAmulet.ItemId: return new EmeraldAmulet();
+
+                // Skill books
+                case HealBook.ItemId: return new HealBook(_statsRepository, _slack, _userService);
 
                 // Misc
                 case BachelorsDegree.ItemId: return new BachelorsDegree();

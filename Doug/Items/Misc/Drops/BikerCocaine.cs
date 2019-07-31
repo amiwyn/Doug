@@ -11,6 +11,7 @@
             Rarity = Rarity.Common;
             Icon = ":powder:";
             Price = 100;
+            MaxStack = 99;
         }
     }
 }

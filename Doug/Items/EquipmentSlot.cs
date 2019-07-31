@@ -8,6 +8,9 @@
         Gloves,
         LeftHand,
         RightHand,
-        Neck
+        Neck,
+        LeftRing,
+        RightRing,
+        Skill,
     }
 }

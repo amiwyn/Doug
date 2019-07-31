@@ -80,10 +80,11 @@ namespace Doug.Services
         public async Task HandleMonsterDeathByUser(User user, SpawnedMonster spawnedMonster, string channel)
         {
             var monster = spawnedMonster.Monster;
-            var userIds = await _slack.GetUsersInChannel(channel);
+            var userIds = spawnedMonster.MonsterAttackers.Select(attacker => attacker.UserId).ToList();
             var users = _userRepository.GetUsers(userIds);
+            var lootWinner = _userRepository.GetUser(spawnedMonster.FindHighestDamageDealer());
 
-            await AddMonsterLootToUser(user, monster, channel);
+            await AddMonsterLootToUser(lootWinner, monster, channel);
 
             _monsterRepository.RemoveMonster(spawnedMonster.Id);
 
@@ -96,11 +97,11 @@ namespace Doug.Services
         {
             var droppedItems = _randomService.RandomTableDrop(monster.DropTable, user.ExtraDropChance()).Select(drop => _itemFactory.CreateItem(drop.Id)).ToList();
 
-            if (!droppedItems.Any())
+            if (droppedItems.Any())
             {
                 _inventoryRepository.AddItems(user, droppedItems);
                 var itemsMessage = string.Join(", ", droppedItems.Select(item => $"*{item.Name}*"));
-                await _slack.SendEphemeralMessage(string.Format(DougMessages.UserObtained, _userService.Mention(user), itemsMessage), user.Id, channel);
+                await _slack.BroadcastMessage(string.Format(DougMessages.UserObtained, _userService.Mention(user), itemsMessage), channel);
             }
         }
     }

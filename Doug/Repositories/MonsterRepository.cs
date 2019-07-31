@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Doug.Models;
 using Doug.Monsters;
+using Microsoft.EntityFrameworkCore;
 
 namespace Doug.Repositories
 {
@@ -12,8 +13,8 @@ namespace Doug.Repositories
         SpawnedMonster GetMonster(int monsterId);
         void SpawnMonster(Monster monster, string channel);
         void RemoveMonster(int id);
-        void UpdateHealth(int id, int health);
         void SetAttackCooldown(int id, TimeSpan cooldown);
+        void RegisterUserDamage(int id, string userId, int damage);
     }
 
     public class MonsterRepository : IMonsterRepository
@@ -29,14 +30,20 @@ namespace Doug.Repositories
 
         public IEnumerable<SpawnedMonster> GetMonsters(string channel)
         {
-            var monsters = _db.SpawnedMonsters.Where(mst => mst.Channel == channel).ToList();
+            var monsters = _db.SpawnedMonsters
+                .Where(monsta => monsta.Channel == channel)
+                .Include(monsta => monsta.MonsterAttackers)
+                .ToList();
             monsters.ForEach(monster => monster.LoadMonster(_monsterFactory));
             return monsters;
         }
 
         public SpawnedMonster GetMonster(int monsterId)
         {
-            var monster = _db.SpawnedMonsters.Single(monsta => monsta.Id == monsterId);
+            var monster = _db.SpawnedMonsters
+                .Include(monsta => monsta.MonsterAttackers)
+                .Single(monsta => monsta.Id == monsterId);
+
             monster.LoadMonster(_monsterFactory);
             return monster;
         }
@@ -54,17 +61,32 @@ namespace Doug.Repositories
             _db.SaveChanges();
         }
 
-        public void UpdateHealth(int id, int health)
-        {
-            var monster = _db.SpawnedMonsters.Single(monsta => monsta.Id == id);
-            monster.Health = health;
-            _db.SaveChanges();
-        }
-
         public void SetAttackCooldown(int id, TimeSpan cooldown)
         {
             var monster = _db.SpawnedMonsters.Single(monsta => monsta.Id == id);
             monster.AttackCooldown = DateTime.UtcNow + cooldown;
+            _db.SaveChanges();
+        }
+
+        public void RegisterUserDamage(int id, string userId, int damage)
+        {
+            var monster = _db.SpawnedMonsters
+                .Include(monsta => monsta.MonsterAttackers)
+                .Single(monsta => monsta.Id == id);
+
+            var attacker = monster.MonsterAttackers.SingleOrDefault(user => user.UserId == userId);
+
+            if (attacker == null)
+            {
+                monster.MonsterAttackers.Add(new MonsterAttacker(id, userId, damage));
+            }
+            else
+            {
+                attacker.DamageDealt += damage;
+            }
+
+            monster.Health -= damage;
+
             _db.SaveChanges();
         }
     }

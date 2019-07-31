@@ -11,6 +11,7 @@
             Rarity = Rarity.Common;
             Icon = ":beak:";
             Price = 134;
+            MaxStack = 99;
         }
     }
 }

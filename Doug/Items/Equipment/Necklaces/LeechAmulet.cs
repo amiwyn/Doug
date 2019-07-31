@@ -14,7 +14,7 @@ namespace Doug.Items.Equipment.Necklaces
             _statsRepository = statsRepository;
             Id = ItemId;
             Name = "Leech Amulet";
-            Description = "Im positively sure this is an actual leech worm. Heals 10% of damage taken.";
+            Description = "Im positively sure this is an actual leech worm. Heals 5% of damage dealt.";
             Rarity = Rarity.Rare;
             Icon = ":leech_amulet:";
             Slot = EquipmentSlot.Neck;
@@ -24,13 +24,13 @@ namespace Doug.Items.Equipment.Necklaces
             Stats.Health = 120;
         }
 
-        public override int OnGettingAttacked(ICombatable attacker, User target, int damage)
+        public override int OnAttacking(User attacker, ICombatable target, int damage)
         {
-            target.Health += (int)(damage * 0.1);
+            attacker.Health += (int)(damage * 0.05);
 
-            _statsRepository.UpdateHealth(target.Id, target.Health);
+            _statsRepository.UpdateHealth(attacker.Id, attacker.Health);
 
-            return base.OnGettingAttacked(attacker, target, damage);
+            return base.OnAttacking(attacker, target, damage);
         }
     }
 }

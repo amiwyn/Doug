@@ -74,7 +74,12 @@ namespace Doug.Monsters
             reducedDamage = reducedDamage <= 0 ? 1 : reducedDamage;
 
             attack.Damage = reducedDamage;
-            Health -= reducedDamage;
+            if (attack.Status == AttackStatus.Critical)
+            {
+                attack.Damage *= 2;
+            }
+
+            Health -= attack.Damage;
 
             return attack;
         }

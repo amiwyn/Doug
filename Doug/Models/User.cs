@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Doug.Items;
 using System.Linq;
 using Doug.Effects;
-using Doug.Items.Lootboxes;
 using Doug.Models.Combat;
 
 namespace Doug.Models
@@ -35,7 +34,7 @@ namespace Doug.Models
         public int Level => (int)Math.Floor(Math.Sqrt(Experience) * 0.05 + 1);
         public int TotalStatsPoints => (int)Math.Floor(Level + 5 * Math.Floor(Level * 0.1)) + 4;
         public int FreeStatsPoints => TotalStatsPoints + 25 - (Luck + Agility + Strength + Constitution + Intelligence);
-        public int Attack => (int)Math.Floor(Strength * 3.0);
+        public int Attack => (int)Math.Floor(Strength * 2.5);
 
         public int Health
         {
@@ -112,6 +111,7 @@ namespace Doug.Models
         public bool HasEnoughCreditsForAmount(int amount) => Credits - amount >= 0;
         public string NotEnoughCreditsForAmountResponse(int amount) => string.Format(DougMessages.NotEnoughCredits, amount, Credits);
         public bool HasEmptyInventory() => !InventoryItems.Any();
+        public bool HasEnoughEnergyForCost(int cost) => Energy - cost >= 0;
         public bool IsDead() => Health <= 0;
         public bool IsAttackOnCooldown() => DateTime.UtcNow <= AttackCooldown;
         public bool IsStealOnCooldown() => DateTime.UtcNow <= StealCooldown;
@@ -127,7 +127,6 @@ namespace Doug.Models
         {
             Health = TotalHealth();
             Energy = TotalEnergy();
-            InventoryItems.Add(new InventoryItem(Id, MysteryBox.ItemId));
         }
 
         public void LoadItems(IItemFactory itemFactory)
@@ -193,7 +192,8 @@ namespace Doug.Models
                    TotalStrength() >= item.StrengthRequirement &&
                    TotalAgility() >= item.AgilityRequirement &&
                    TotalIntelligence() >= item.IntelligenceRequirement &&
-                   TotalLuck() >= item.LuckRequirement;
+                   TotalLuck() >= item.LuckRequirement &&
+                   TotalConstitution() >= item.ConstitutionRequirement;
         }
 
         public Attack AttackTarget(ICombatable target, IEventDispatcher eventDispatcher)
@@ -240,7 +240,12 @@ namespace Doug.Models
             reducedDamage = reducedDamage <= 0 ? 1 : reducedDamage;
 
             attack.Damage = reducedDamage;
-            Health -= reducedDamage;
+            if (attack.Status == AttackStatus.Critical)
+            {
+                attack.Damage *= 2;
+            }
+
+            Health -= attack.Damage;
 
             return attack;
         }

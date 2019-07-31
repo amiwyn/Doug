@@ -16,7 +16,7 @@ namespace Doug.Monsters.Seagulls
             Description = "A fierce animal with a razor sharp beak.";
             Image = "https://upload.wikimedia.org/wikipedia/commons/f/fb/Seagull_in_flight_by_Jiyang_Chen.jpg";
             Level = 10;
-            ExperienceValue = 550;
+            ExperienceValue = 250;
 
             MaxHealth = Health = 480;
             MinAttack = 78;

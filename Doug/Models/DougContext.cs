@@ -55,6 +55,14 @@ namespace Doug.Models
                 .WithMany(s => s.ShopItems)
                 .HasForeignKey(s => s.ShopId);
 
+            modelBuilder.Entity<MonsterAttacker>()
+                .HasKey(m => new { m.UserId, m.SpawnedMonsterId });
+
+            modelBuilder.Entity<MonsterAttacker>()
+                .HasOne(m => m.Monster)
+                .WithMany(m => m.MonsterAttackers)
+                .HasForeignKey(m => m.SpawnedMonsterId);
+
             base.OnModelCreating(modelBuilder);
         }
     }

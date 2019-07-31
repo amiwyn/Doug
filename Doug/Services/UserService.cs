@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Doug.Effects.Buffs;
 using Doug.Items;
+using Doug.Items.Lootboxes;
 using Doug.Models;
 using Doug.Repositories;
 using Doug.Slack;
@@ -26,13 +27,15 @@ namespace Doug.Services
         private readonly IStatsRepository _statsRepository;
         private readonly IEventDispatcher _eventDispatcher;
         private readonly IEffectRepository _effectRepository;
+        private readonly IInventoryRepository _inventoryRepository;
 
-        public UserService(ISlackWebApi slack, IStatsRepository statsRepository, IEventDispatcher eventDispatcher, IEffectRepository effectRepository)
+        public UserService(ISlackWebApi slack, IStatsRepository statsRepository, IEventDispatcher eventDispatcher, IEffectRepository effectRepository, IInventoryRepository inventoryRepository)
         {
             _slack = slack;
             _statsRepository = statsRepository;
             _eventDispatcher = eventDispatcher;
             _effectRepository = effectRepository;
+            _inventoryRepository = inventoryRepository;
         }
 
         public string Mention(User user)
@@ -84,12 +87,18 @@ namespace Doug.Services
 
             var levelUpUsers = users.Where(user => levels.GetValueOrDefault(user.Id) < user.Level).ToList();
 
-            _statsRepository.LevelUpUsers(levelUpUsers.Select(user => user.Id).ToList());
+            LevelUpUsers(levelUpUsers);
 
             var levelUpMessageTasks = levelUpUsers.Select(user => _slack.BroadcastMessage(string.Format(DougMessages.LevelUp, Mention(user), user.Level), channel));
 
             await Task.WhenAll(expGainMessageTasks);
             await Task.WhenAll(levelUpMessageTasks);
+        }
+
+        private void LevelUpUsers(List<User> users)
+        {
+            _statsRepository.LevelUpUsers(users.Select(user => user.Id).ToList());
+            _inventoryRepository.AddItemToUsers(users, new MysteryBox(null, null, null, null, null)); //rip
         }
 
         public Task<bool> IsUserActive(string userId)
