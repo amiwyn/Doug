@@ -43,5 +43,12 @@ namespace Doug.Controllers
             var result = await _combatCommands.ListMonsters(slackCommand.ToCommand());
             return Ok(result.Message);
         }
+
+        [HttpPost("skill")]
+        public ActionResult Skill([FromForm]SlackCommandDto slackCommand)
+        {
+            var result = _combatCommands.Skill(slackCommand.ToCommand());
+            return Ok(result.Message);
+        }
     }
 }

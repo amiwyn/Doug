@@ -109,6 +109,7 @@ namespace Doug.Models
         public bool HasEnoughCreditsForAmount(int amount) => Credits - amount >= 0;
         public string NotEnoughCreditsForAmountResponse(int amount) => string.Format(DougMessages.NotEnoughCredits, amount, Credits);
         public bool HasEmptyInventory() => !InventoryItems.Any();
+        public bool HasEnoughEnergyForCost(int cost) => Energy - cost >= 0;
         public bool IsDead() => Health <= 0;
         public bool IsAttackOnCooldown() => DateTime.UtcNow <= AttackCooldown;
         public bool IsStealOnCooldown() => DateTime.UtcNow <= StealCooldown;

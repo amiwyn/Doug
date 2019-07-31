@@ -15,6 +15,7 @@ namespace Doug.Models
         public string LeftHand { get; set; }
         public string RightHand { get; set; }
         public string Neck { get; set; }
+        public string Skill { get; set; }
 
         public Dictionary<EquipmentSlot, EquipmentItem> Equipment { get; }
 
@@ -32,6 +33,7 @@ namespace Doug.Models
             AddEquipment(LeftHand, itemFactory);
             AddEquipment(RightHand, itemFactory);
             AddEquipment(Neck, itemFactory);
+            AddEquipment(Skill, itemFactory);
         }
 
         private void AddEquipment(string itemId, IItemFactory itemFactory)
@@ -125,11 +127,17 @@ namespace Doug.Models
             LeftHand = GetEquipmentAt(EquipmentSlot.LeftHand)?.Id;
             RightHand = GetEquipmentAt(EquipmentSlot.RightHand)?.Id;
             Neck = GetEquipmentAt(EquipmentSlot.Neck)?.Id;
+            Skill = GetEquipmentAt(EquipmentSlot.Skill)?.Id;
         }
 
         public EquipmentItem GetEquipmentAt(EquipmentSlot slot)
         {
             return Equipment.GetValueOrDefault(slot);
+        }
+
+        public SkillBook GetSkill()
+        {
+            return GetEquipmentAt(EquipmentSlot.Skill) as SkillBook;
         }
 
         public IEnumerable<string> GetDisplayEquipmentList()

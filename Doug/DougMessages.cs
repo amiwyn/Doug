@@ -115,6 +115,7 @@
         public const string Con = "Con";
         public const string Luck = "Luck";
         public const string Int = "Int";
+        public const string UserHealed = "{0} healed {1} for *{2}* health";
 
         public const string DougError = "Beep boop, it's not working : {0}";
         public const string NotAnAdmin = "You are not an admin.";
@@ -142,6 +143,7 @@
         public const string UserMustBeActive = "The user you are targetting must be active.";
         public const string YouMustBeActive = "You must be active for this.";
         public const string RevolutionCooldown = "You must wait {0} minutes until the next revolution";
+        public const string SkillCannotBeActivated = "This skill cannot be activated.";
     }
 }
 
