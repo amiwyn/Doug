@@ -3,7 +3,7 @@ using Doug.Items.Consumables;
 using Doug.Items.Misc.Drops;
 using Doug.Models;
 
-namespace Doug.Monsters.Hobos
+namespace Doug.Monsters.Brigands
 {
     public class Hobo : Monster
     {
@@ -16,7 +16,7 @@ namespace Doug.Monsters.Hobos
             Description = "Little vapoting punk. Watch out, he can spit on you !!";
             Image = "https://imgur.com/a/ovnZdsK";
             Level = 10;
-            ExperienceValue = 250;
+            ExperienceValue = 100;
 
             MaxHealth = Health = 269;
             MinAttack = 69;
