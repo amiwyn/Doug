@@ -105,6 +105,8 @@ namespace Doug.Models
         public void RegenerateHealth() => Health += (int)(TotalHealth() * 0.2);
         public double BaseOpponentStealSuccessRate() => 0.75;
         public int BaseStealAmount() => (int)Math.Floor(3 * (Math.Sqrt(TotalAgility()) - Math.Sqrt(5)) + 1);
+        public double BaseDetectionChance() => (Math.Sqrt(Math.Max((TotalIntelligence() - 5), 1)) * 0.08);
+        public double BaseDetectionAvoidance() => Math.Sqrt((TotalAgility() + TotalLuck()) / 2) * 0.15;
         public bool HasEnoughCreditsForAmount(int amount) => Credits - amount >= 0;
         public string NotEnoughCreditsForAmountResponse(int amount) => string.Format(DougMessages.NotEnoughCredits, amount, Credits);
         public bool HasEmptyInventory() => !InventoryItems.Any();

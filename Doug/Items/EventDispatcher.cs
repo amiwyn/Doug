@@ -104,7 +104,7 @@ namespace Doug.Items
 
         public string OnMention(User user, string mention)
         {
-            return PropagateItemEvents(user, mention, (amount, item) => item.OnMention(mention));
+            return PropagateItemEvents(user, mention, (amount, item) => item.OnMention(amount));
         }
     }
 }

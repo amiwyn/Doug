@@ -84,6 +84,7 @@ namespace Doug.Items
                 case CloakOfSpikes.ItemId: return new CloakOfSpikes();
                 case StraightEdge.ItemId: return new StraightEdge();
                 case Crown.ItemId: return new Crown();
+                case IncognitoShades.ItemId: return new IncognitoShades();
 
                 // Starting Weapons
                 case LightSword.ItemId: return new LightSword();
