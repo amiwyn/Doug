@@ -15,7 +15,7 @@ namespace Doug.Monsters.Brigands
             Name = "Sorel-Tracy Gang Member";
             Description = "Ma te crisser un coup de pied dans gorge.";
             Image = "https://i.imgur.com/mVUCtB7.jpg";
-            Level = 10;
+            Level = 11;
             ExperienceValue = 500;
 
             MaxHealth = Health = 350;
