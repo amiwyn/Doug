@@ -2,6 +2,7 @@ using Doug.Items.Consumables;
 using Doug.Items.Misc.Drops;
 using Doug.Models;
 using System.Collections.Generic;
+using Doug.Items;
 
 namespace Doug.Monsters.Brigands
 {
@@ -28,9 +29,9 @@ namespace Doug.Monsters.Brigands
 
             DropTable = new Dictionary<LootItem, double>
             {
-                { new LootItem(Apple.ItemId, 1), 0.05 },
-                { new LootItem(CoffeeCup.ItemId, 3), 0.05 },
-                { new LootItem(IronIngot.ItemId, 1), 0.1 }
+                { new LootItem(new Apple(), 1), 0.05 },
+                { new LootItem(new CoffeeCup(), 1), 0.5 },
+                { new LootItem(new IronIngot(), 1), 0.1 }
             };
         }
     }

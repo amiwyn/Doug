@@ -41,31 +41,31 @@ namespace Doug.Items.Lootboxes
 
             _dropTable = new Dictionary<LootItem, double>
             {
-                { new LootItem(Apple.ItemId, 5), 0.1 },
-                { new LootItem(CoffeeCup.ItemId, 5), 0.1 },
-                { new LootItem(Bread.ItemId, 5), 0.1 },
-                { new LootItem(McdoFries.ItemId, 2), 0.05 },
-                { new LootItem(KickTicket.ItemId, 3), 0.01 },
-                { new LootItem(InviteTicket.ItemId, 3), 0.1 },
-                { new LootItem(HolyWater.ItemId, 1), 0.05 },
-                { new LootItem(SuicidePill.ItemId, 1), 0.05 },
-                { new LootItem(Cigarette.ItemId, 1), 0.05 },
-                { new LootItem(PicklePickle.ItemId, 1), 0.05 },
-                { new LootItem(BachelorsDegree.ItemId, 1), 0.05 },
-                { new LootItem(IronIngot.ItemId, 1), 0.05 },
+                { new LootItem(_itemFactory.CreateItem(Apple.ItemId), 5), 0.1 },
+                { new LootItem(_itemFactory.CreateItem(CoffeeCup.ItemId), 5), 0.1 },
+                { new LootItem(_itemFactory.CreateItem(Bread.ItemId), 5), 0.1 },
+                { new LootItem(_itemFactory.CreateItem(McdoFries.ItemId), 2), 0.05 },
+                { new LootItem(_itemFactory.CreateItem(KickTicket.ItemId), 3), 0.01 },
+                { new LootItem(_itemFactory.CreateItem(InviteTicket.ItemId), 3), 0.1 },
+                { new LootItem(_itemFactory.CreateItem(HolyWater.ItemId), 1), 0.05 },
+                { new LootItem(_itemFactory.CreateItem(SuicidePill.ItemId), 1), 0.05 },
+                { new LootItem(_itemFactory.CreateItem(Cigarette.ItemId), 1), 0.05 },
+                { new LootItem(_itemFactory.CreateItem(PicklePickle.ItemId), 1), 0.05 },
+                { new LootItem(_itemFactory.CreateItem(BachelorsDegree.ItemId), 1), 0.05 },
+                { new LootItem(_itemFactory.CreateItem(IronIngot.ItemId), 1), 0.05 },
 
-                { new LootItem(StraightEdge.ItemId, 1), 0.01 },
-                { new LootItem(CloakOfSpikes.ItemId, 1), 0.01 },
-                { new LootItem(AwakeningOrb.ItemId, 1), 0.01 },
-                { new LootItem(BurglarBoots.ItemId, 1), 0.01 },
-                { new LootItem(GreedyGloves.ItemId, 1), 0.005 },
-                { new LootItem(LuckyCoin.ItemId, 1), 0.005 },
+                { new LootItem(_itemFactory.CreateItem(StraightEdge.ItemId), 1), 0.01 },
+                { new LootItem(_itemFactory.CreateItem(CloakOfSpikes.ItemId), 1), 0.01 },
+                { new LootItem(_itemFactory.CreateItem(AwakeningOrb.ItemId), 1), 0.01 },
+                { new LootItem(_itemFactory.CreateItem(BurglarBoots.ItemId), 1), 0.01 },
+                { new LootItem(_itemFactory.CreateItem(GreedyGloves.ItemId), 1), 0.005 },
+                { new LootItem(_itemFactory.CreateItem(LuckyCoin.ItemId), 1), 0.005 },
 
-                { new LootItem(AgilityReset.ItemId, 1), 0.02 },
-                { new LootItem(StrengthReset.ItemId, 1), 0.02 },
-                { new LootItem(LuckReset.ItemId, 1), 0.02 },
-                { new LootItem(ConstitutionReset.ItemId, 1), 0.02 },
-                { new LootItem(IntelligenceReset.ItemId, 1), 0.02 }
+                { new LootItem(_itemFactory.CreateItem(AgilityReset.ItemId), 1), 0.02 },
+                { new LootItem(_itemFactory.CreateItem(StrengthReset.ItemId), 1), 0.02 },
+                { new LootItem(_itemFactory.CreateItem(LuckReset.ItemId), 1), 0.02 },
+                { new LootItem(_itemFactory.CreateItem(ConstitutionReset.ItemId), 1), 0.02 },
+                { new LootItem(_itemFactory.CreateItem(IntelligenceReset.ItemId), 1), 0.02 }
             };
         }
 
@@ -75,7 +75,7 @@ namespace Doug.Items.Lootboxes
 
             var loot = _randomService.RandomFromWeightedTable(_dropTable);
 
-            var item = _itemFactory.CreateItem(loot.Id);
+            var item = loot.Item;
 
             _inventoryRepository.AddItems(user, Enumerable.Repeat(item, loot.Quantity));
 

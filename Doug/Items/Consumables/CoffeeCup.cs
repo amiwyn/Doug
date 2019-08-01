@@ -10,6 +10,8 @@ namespace Doug.Items.Consumables
         private readonly IStatsRepository _statsRepository;
         private const int RecoverAmount = 25;
 
+        public CoffeeCup() { }
+
         public CoffeeCup(IStatsRepository statsRepository, IInventoryRepository inventoryRepository) : base(inventoryRepository)
         {
             _statsRepository = statsRepository;

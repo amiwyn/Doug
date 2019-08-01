@@ -7,6 +7,7 @@ namespace Doug.Skills
 {
     public abstract class Skill
     {
+        public string Name { get; set; }
         public int EnergyCost { get; set; }
         public int Cooldown { get; set; }
 

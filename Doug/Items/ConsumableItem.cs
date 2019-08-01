@@ -13,6 +13,8 @@ namespace Doug.Items
             MaxStack = 99;
         }
 
+        protected ConsumableItem() { }
+
         public override string Use(int itemPos, User user, string channel)
         {
             _inventoryRepository.RemoveItem(user, itemPos);

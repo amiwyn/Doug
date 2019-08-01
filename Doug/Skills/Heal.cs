@@ -13,6 +13,7 @@ namespace Doug.Skills
 
         public Heal(IStatsRepository statsRepository, ISlackWebApi slack, IUserService userService) : base(statsRepository)
         {
+            Name = "Heal";
             EnergyCost = 8;
             Cooldown = 30;
 
