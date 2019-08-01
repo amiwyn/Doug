@@ -13,7 +13,7 @@
       "commandName": "IISExpress",
       "launchUrl": "api/values",
       "environmentVariables": {
-        "SLACK_SIGNING_SECRET": "461574fa29b8e4021178d436f352a1ef",
+        
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
