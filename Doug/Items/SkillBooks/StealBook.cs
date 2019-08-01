@@ -14,7 +14,7 @@ namespace Doug.Items.SkillBooks
             IRandomService randomService, ICreditsRepository creditsRepository)
         {
             Id = ItemId;
-            Name = "Heal";
+            Name = "Steal";
             Description = "Steal rupees from the target. Cost 5 energy to cast.";
             Rarity = Rarity.Common;
             Icon = ":skillbook:";

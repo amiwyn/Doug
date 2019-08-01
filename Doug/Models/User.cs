@@ -113,7 +113,7 @@ namespace Doug.Models
         public bool HasEnoughEnergyForCost(int cost) => Energy - cost >= 0;
         public bool IsDead() => Health <= 0;
         public bool IsAttackOnCooldown() => DateTime.UtcNow <= AttackCooldown;
-        public bool IsStealOnCooldown() => DateTime.UtcNow <= SkillCooldown;
+        public bool IsSkillOnCooldown() => DateTime.UtcNow <= SkillCooldown;
         public int CalculateAttackCooldownRemaining() => (int)(AttackCooldown - DateTime.UtcNow).TotalSeconds;
         public int CalculateStealCooldownRemaining() => (int)(SkillCooldown - DateTime.UtcNow).TotalSeconds;
         public TimeSpan GetAttackCooldown() => TimeSpan.FromSeconds(BaseAttackCooldown * 100.0 / TotalAttackSpeed());
