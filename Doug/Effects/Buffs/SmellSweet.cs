@@ -7,10 +7,11 @@ namespace Doug.Effects.Buffs
         {
             Id = EffectId;
             Name = "Smell Sweet";
-            Description = "You gain +10 strength.";
+            Description = "You gain +40 health";
             Rank = Rank.Common;
             Icon = ":smoking:";
-            Strength = 10;
+
+            Health = 40;
         }
     }
 }

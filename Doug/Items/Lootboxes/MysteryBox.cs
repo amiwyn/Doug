@@ -62,11 +62,11 @@ namespace Doug.Items.Lootboxes
                 { new LootItem(GreedyGloves.ItemId, 1), 0.005 },
                 { new LootItem(LuckyCoin.ItemId, 1), 0.005 },
 
-                { new LootItem(AgilityReset.ItemId, 1), 0.02 },
-                { new LootItem(StrengthReset.ItemId, 1), 0.02 },
-                { new LootItem(LuckReset.ItemId, 1), 0.02 },
-                { new LootItem(ConstitutionReset.ItemId, 1), 0.02 },
-                { new LootItem(IntelligenceReset.ItemId, 1), 0.02 }
+                { new LootItem(AgilityReset.ItemId, 1), 0.01 },
+                { new LootItem(StrengthReset.ItemId, 1), 0.01 },
+                { new LootItem(LuckReset.ItemId, 1), 0.01 },
+                { new LootItem(ConstitutionReset.ItemId, 1), 0.01 },
+                { new LootItem(IntelligenceReset.ItemId, 1), 0.01 }
             };
         }
 
