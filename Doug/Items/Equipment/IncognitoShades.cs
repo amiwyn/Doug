@@ -8,14 +8,8 @@ namespace Doug.Items.Equipment
     {
         public const string ItemId = "incognito_shades";
 
-        private readonly ISlackWebApi _slack;
-        private readonly IUserService _userService;
-
-        public IncognitoShades(ISlackWebApi slack, IUserService userService)
+        public IncognitoShades()
         {
-            _slack = slack;
-            _userService = userService;
-
             Id = ItemId;
             Name = "Incognito Shades";
             Description = "Really sick shades, you feel like wearing them even at night. +4 Luck, and you'll look too cool for Doug to recognize you.";

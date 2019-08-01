@@ -146,6 +146,7 @@
         public const string YouMustBeActive = "You must be active for this.";
         public const string RevolutionCooldown = "You must wait {0} minutes until the next revolution";
         public const string SkillCannotBeActivated = "This skill cannot be activated.";
+        public const string SkillNeedsTarget = "You must specify a target.";
     }
 }
 
