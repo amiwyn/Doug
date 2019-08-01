@@ -30,7 +30,8 @@ namespace Doug.Monsters.Brigands
             {
                 { new LootItem(Apple.ItemId, 1), 0.05 },
                 { new LootItem(CoffeeCup.ItemId, 3), 0.05 },
-                { new LootItem(IronIngot.ItemId, 1), 0.1 }
+                { new LootItem(IronIngot.ItemId, 1), 0.1 },
+                { new LootItem(VapeMachine.ItemId, 1), 0.05 }
             };
         }
     }

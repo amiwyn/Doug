@@ -50,6 +50,7 @@ namespace Doug.Items.Lootboxes
                 { new LootItem(HolyWater.ItemId, 1), 0.05 },
                 { new LootItem(SuicidePill.ItemId, 1), 0.05 },
                 { new LootItem(Cigarette.ItemId, 1), 0.05 },
+                { new LootItem(VapeMachine.ItemId, 1), 0.05 },
                 { new LootItem(PicklePickle.ItemId, 1), 0.05 },
                 { new LootItem(BachelorsDegree.ItemId, 1), 0.05 },
                 { new LootItem(IronIngot.ItemId, 1), 0.05 },
