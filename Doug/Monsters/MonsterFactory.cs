@@ -25,7 +25,8 @@ namespace Doug.Monsters
                 { Seagull.MonsterId, () => new Seagull() },
                 { Biker.MonsterId, () => new Biker() },
                 { Hobo.MonsterId, () => new Hobo() },
-                { Gangster.MonsterId, () => new Gangster() }
+                { Gangster.MonsterId, () => new Gangster() },
+                { Codeboxx.MonsterId, () => new Codeboxx() }
             };
         }
 
