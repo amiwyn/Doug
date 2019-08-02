@@ -1,17 +1,12 @@
 ﻿using System;
-using System.Linq;
 using System.Net.Http;
-using System.Threading.Tasks;
 using Doug;
 using Doug.Models;
-using Doug.Monsters;
-using Doug.Repositories;
 using Doug.Services;
-using Doug.Slack;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace MonsterSpawnWebJob
+namespace GameUpdateWebjob
 {
     class Program
     {

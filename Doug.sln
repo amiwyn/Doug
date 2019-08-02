@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test", "Test\Test.csproj", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ResetWebJob", "ResetWebJob\ResetWebJob.csproj", "{3B02046C-DEC8-448E-A4ED-3555E0781A3F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonsterSpawnWebJob", "MonsterSpawnWebJob\MonsterSpawnWebJob.csproj", "{694E2B2B-1E91-4EC5-83D1-0E42A746E55E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameUpdateWebjob", "GameUpdateWebjob\GameUpdateWebjob.csproj", "{694E2B2B-1E91-4EC5-83D1-0E42A746E55E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
