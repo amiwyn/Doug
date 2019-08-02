@@ -11,16 +11,16 @@ namespace Doug.Items.SkillBooks
 
         public HealBook(IStatsRepository statsRepository, ISlackWebApi slack, IUserService userService)
         {
+            Skill = new Heal(statsRepository, slack, userService);
+
             Id = ItemId;
             Name = "Heal";
-            Description = "Heal the target. Health gained depends on the caster's level. Cost 32 mana to cast.";
+            Description = $"Heal the target. Health gained depends on the caster's level. Cost {Skill.EnergyCost} mana to cast.";
             Rarity = Rarity.Common;
-            Icon = ":spellbook:";
+            Icon = ":int_skillbook:";
             Price = 1200;
             LevelRequirement = 10;
             IntelligenceRequirement = 15;
-
-            Skill = new Heal(statsRepository, slack, userService);
         }
     }
 }
