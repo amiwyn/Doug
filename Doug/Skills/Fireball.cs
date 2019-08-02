@@ -19,7 +19,7 @@ namespace Doug.Skills
         {
             Name = "Fireball";
             EnergyCost = 10;
-            Cooldown = 30;
+            Cooldown = 40;
 
             _slack = slack;
             _userService = userService;
