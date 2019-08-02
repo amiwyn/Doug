@@ -101,7 +101,9 @@
         public const string ItemIntelligence = "`Intelligence {0:+#;-#}`";
         public const string ItemConstitution = "`Constitution {0:+#;-#}`";
         public const string ItemLuck = "`Luck {0:+#;-#}`";
-        public const string AttackSpeed = "`Speed: {0:0.##}`";
+        public const string AttackSpeed = "`Speed: {0:+#;-#}`";
+        public const string HealthRegen = "`HP regen: {0:+#;-#}`";
+        public const string EnergyRegen = "`Mp regen: {0:+#;-#}`";
         public const string ItemDualWield = "*Two Handed*";
         public const string ItemLeftHand = "*Left Handed*";
         public const string ItemRightHand = "*Right Handed*";
@@ -109,6 +111,7 @@
         public const string UserIsInvincible = "{0} is invincible!";
         public const string MonsterSpawned = "*{0}* has spawned!";
         public const string AttackAction = "Attack";
+        public const string SkillAction = "Skill";
         public const string MonsterDied = "*{0}* Died!";
         public const string UserObtained = "{0} obtained {1}";
         public const string YouObtained = "You obtained {0}";
@@ -118,6 +121,7 @@
         public const string Luck = "Luck";
         public const string Int = "Int";
         public const string UserHealed = "{0} healed {1} for *{2}* health";
+        public const string UserActivatedSkill = "{0} cast *{1}*";
 
         public const string DougError = "Beep boop, it's not working : {0}";
         public const string NotAnAdmin = "You are not an admin.";

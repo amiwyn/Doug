@@ -14,6 +14,7 @@ namespace Doug.Repositories
         List<User> GetUsers();
         List<User> GetUsers(List<string> users);
         User GetUser(string userId);
+        void RegenerateUsers();
     }
 
     public class UserRepository : IUserRepository
@@ -72,6 +73,15 @@ namespace Doug.Repositories
 
 
             return user;
+        }
+
+        public void RegenerateUsers()
+        {
+            var users = GetUsers();
+
+            users.ForEach(user => user.RegenerateHealthAndEnergy());
+
+            _db.SaveChanges();
         }
 
         public List<User> GetUsers()

@@ -15,7 +15,7 @@ namespace Doug.Items.SkillBooks
         {
             Id = ItemId;
             Name = "Steal";
-            Description = "Steal rupees from the target. Cost 5 energy to cast.";
+            Description = "Steal rupees from the target. Cost 5 mana to cast.";
             Rarity = Rarity.Common;
             Icon = ":skillbook:";
             Price = 1200;

@@ -3,6 +3,7 @@ using Doug.Menus.Blocks;
 using Doug.Menus.Blocks.Accessories;
 using Doug.Menus.Blocks.Text;
 using Doug.Models;
+using Doug.Monsters;
 
 namespace Doug.Menus
 {
@@ -19,7 +20,11 @@ namespace Doug.Menus
             Blocks = new List<Block>
             {
                 monsterDescription,
-                new ActionList(new List<Accessory>{ new Button(DougMessages.AttackAction, spawnedMonster.Id.ToString(), Actions.Attack.ToString()) })
+                new ActionList(new List<Accessory>
+                {
+                    new Button(DougMessages.AttackAction, spawnedMonster.Id.ToString(), Actions.Attack.ToString()),
+                    new Button(DougMessages.SkillAction, spawnedMonster.Id.ToString(), Actions.Skill.ToString())
+                })
             };
         }
     }

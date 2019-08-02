@@ -10,15 +10,25 @@ namespace Doug.Items.Consumables
         private readonly IStatsRepository _statsRepository;
         private const int RecoverAmount = 25;
 
-        public CoffeeCup(IStatsRepository statsRepository, IInventoryRepository inventoryRepository) : base(inventoryRepository)
+        public CoffeeCup()
         {
-            _statsRepository = statsRepository;
+            SetProperties();
+        }
+
+        private void SetProperties()
+        {
             Id = ItemId;
             Name = "Coffee";
             Description = "A good cuppa. Restores 25 energy.";
             Rarity = Rarity.Common;
             Icon = ":coffee_bowl:";
             Price = 50;
+        }
+
+        public CoffeeCup(IStatsRepository statsRepository, IInventoryRepository inventoryRepository) : base(inventoryRepository)
+        {
+            _statsRepository = statsRepository;
+            SetProperties();
         }
 
         public override string Use(int itemPos, User user, string channel)

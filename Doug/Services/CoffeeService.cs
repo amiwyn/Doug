@@ -127,7 +127,6 @@ namespace Doug.Services
             var participants = _coffeeRepository.GetReadyParticipants().ToList();
             var participantsId = participants.Select(user => user.Id).ToList();
 
-            _statsRepository.RegenerateUsersHealth(participantsId);
             _creditsRepository.AddCreditsToUsers(participantsId, CoffeeBreakAward);
             _inventoryRepository.AddItemToUsers(participants, new CoffeeCup(_statsRepository, _inventoryRepository));
 

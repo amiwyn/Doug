@@ -64,6 +64,9 @@ namespace Doug.Controllers
                 case Actions.Attack:
                     await _monsterMenuservice.Attack(interaction);
                     break;
+                case Actions.Skill:
+                    await _monsterMenuservice.Skill(interaction);
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }

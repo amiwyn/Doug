@@ -17,9 +17,10 @@ namespace Doug.Items.Equipment.Sets.Cloth
             Price = 215;
             LevelRequirement = 10;
             IsDualWield = true;
-            DamageType = DamageType.Magical;
 
             Stats.Intelligence = 4;
+            Stats.MinAttack = 42;
+            Stats.MaxAttack = 58;
         }
     }
 }
