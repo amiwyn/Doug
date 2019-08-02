@@ -198,11 +198,6 @@ namespace Doug.Models
         {
             Attack attack = new PhysicalAttack(this, MinAttack(), MaxAttack(), TotalHitrate(), TotalLuck());
 
-            if (Loadout.GetDamageType() == DamageType.Magical)
-            {
-                attack = new MagicAttack(this, TotalIntelligence());
-            }
-
             attack.Damage = eventDispatcher.OnAttacking(this, target, attack.Damage);
 
             return target.ReceiveAttack(attack, eventDispatcher);
