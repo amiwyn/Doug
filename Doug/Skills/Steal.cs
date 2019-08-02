@@ -61,20 +61,24 @@ namespace Doug.Skills
                     return new DougResponse(DougMessages.UserIsNotInPvp);
                 }
 
-                StealFromUser(user, targetUser, channel).Wait();
+                response = StealFromUser(user, targetUser, channel).Result;
             }
 
             return response;
         }
 
-        private async Task StealFromUser(User user, User target, string channel)
+        private async Task<DougResponse> StealFromUser(User user, User target, string channel)
         {
             _statsRepository.SetSkillCooldown(user.Id, TimeSpan.FromSeconds(Cooldown));
+
+            var message = "";
+            var sneakResponse = new DougResponse();
 
             var userChance = _eventDispatcher.OnStealingChance(user, user.BaseStealSuccessRate());
             var targetChance = _eventDispatcher.OnGettingStolenChance(target, target.BaseOpponentStealSuccessRate());
 
             var rollSuccessful = _randomService.RollAgainstOpponent(userChance, targetChance);
+            var detected = !_randomService.RollAgainstOpponent(user.BaseDetectionAvoidance(), target.BaseDetectionChance());
 
             var amount = _eventDispatcher.OnStealingAmount(user, user.BaseStealAmount());
 
@@ -82,20 +86,27 @@ namespace Doug.Skills
             {
                 amount = target.Credits;
             }
-
+            
             if (rollSuccessful)
             {
                 _creditsRepository.RemoveCredits(target.Id, amount);
                 _creditsRepository.AddCredits(user.Id, amount);
 
-                var message = string.Format(DougMessages.StealCredits, _userService.Mention(user), amount, _userService.Mention(target));
-                await _slack.BroadcastMessage(message, channel);
+                message = string.Format(DougMessages.StealCreditsCaught, _userService.Mention(user), amount, _userService.Mention(target));
+                sneakResponse = new DougResponse(string.Format(DougMessages.StealCredits, amount, _userService.Mention(target)));
             }
             else
             {
-                var message = string.Format(DougMessages.StealFail, _userService.Mention(user), _userService.Mention(target));
+                message = string.Format(DougMessages.StealFailCaught, _userService.Mention(user), _userService.Mention(target));
+                sneakResponse = new DougResponse(string.Format(DougMessages.StealFail, _userService.Mention(target)));
+            }
+
+            if (detected)
+            {
                 await _slack.BroadcastMessage(message, channel);
             }
+
+            return sneakResponse;
         }
     }
 }

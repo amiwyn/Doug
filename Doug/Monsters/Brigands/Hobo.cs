@@ -15,7 +15,7 @@ namespace Doug.Monsters.Brigands
             Id = MonsterId;
             Name = "Hobo";
             Description = "Little vapoting punk. Watch out, he can spit on you !!";
-            Image = "https://imgur.com/a/ovnZdsK";
+            Image = "https://i.imgur.com/PK51VpL.jpg";
             Level = 8;
             ExperienceValue = 100;
 

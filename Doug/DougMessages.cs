@@ -47,8 +47,10 @@
         public const string GambleChallengeTip = "You were challenged to a coin flip, type in `/gamblechallenge accept` to accept or `/gamblechallenge decline` to decline";
         public const string UserFlamedYou = "{0} flamed you.";
         public const string YouIdiot = "You idiot.";
-        public const string StealCredits = "{0} stole {1} " + CreditEmoji + " from {2}!";
-        public const string StealFail = "{0} attempted to steal from {1} but failed!";
+        public const string StealCredits = "You stole {0} " + CreditEmoji + " from {1}.";
+        public const string StealCreditsCaught = "{0} stole {1} " + CreditEmoji + " from {2}!";
+        public const string StealFail = "You attempted to steal from {0}, but failed.";
+        public const string StealFailCaught = "{0} attempted to steal from {1} but failed!";
         public const string RecoverItem = "You used *{0}* and recovered {1} {2}.";
         public const string UserGaveItem = "{0} gave *{1}* to {2}.";
         public const string ConsumedItem = "You consumed the item.";
@@ -145,6 +147,7 @@
         public const string YouMustBeActive = "You must be active for this.";
         public const string RevolutionCooldown = "You must wait {0} minutes until the next revolution";
         public const string SkillCannotBeActivated = "This skill cannot be activated.";
+        public const string SkillNeedsTarget = "You must specify a target.";
     }
 }
 
