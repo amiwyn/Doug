@@ -95,7 +95,6 @@ namespace Doug.Services
         public async Task<DougResponse> AttackMonster(User user, SpawnedMonster spawnedMonster, string channel)
         {
             var energy = user.Energy - AttackEnergyCost;
-            var monster = spawnedMonster.Monster;
 
             if (user.IsAttackOnCooldown())
             {

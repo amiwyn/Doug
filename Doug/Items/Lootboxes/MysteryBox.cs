@@ -24,6 +24,21 @@ namespace Doug.Items.Lootboxes
         private readonly IUserService _userService;
         private readonly IItemFactory _itemFactory;
 
+        public MysteryBox()
+        {
+            SetProperties();
+        }
+
+        private void SetProperties()
+        {
+            Id = ItemId;
+            Name = "Mystery Box";
+            Description = "A mysterious box. Who knows what you might get if you open it.";
+            Rarity = Rarity.Rare;
+            Icon = ":mystery_box:";
+            Price = 100;
+        }
+
         public MysteryBox(IInventoryRepository inventoryRepository, IRandomService randomService, ISlackWebApi slack, IUserService userService, IItemFactory itemFactory) : base(inventoryRepository)
         {
             _inventoryRepository = inventoryRepository;
@@ -32,12 +47,7 @@ namespace Doug.Items.Lootboxes
             _userService = userService;
             _itemFactory = itemFactory;
 
-            Id = ItemId;
-            Name = "Mystery Box";
-            Description = "A mysterious box. Who knows what you might get if you open it.";
-            Rarity = Rarity.Rare;
-            Icon = ":mystery_box:";
-            Price = 100;
+            SetProperties();
 
             _dropTable = new Dictionary<LootItem, double>
             {
