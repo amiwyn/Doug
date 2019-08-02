@@ -17,5 +17,10 @@ namespace Doug.Models.Combat
         }
 
         private static int RollAttack(int minDamage, int maxDamage) => new Random().Next(minDamage, maxDamage);
+
+        public PhysicalAttack(ICombatable attacker, int damage, int attackersHitrate) : base(damage, attacker)
+        {
+            AttackersHitrate = attackersHitrate;
+        }
     }
 }
