@@ -2,6 +2,7 @@
 using System.Net.Http;
 using Doug;
 using Doug.Models;
+using Doug.Repositories;
 using Doug.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,8 +23,10 @@ namespace GameUpdateWebjob
             var serviceProvider = services.BuildServiceProvider();
 
             var monsterService = serviceProvider.GetService<IMonsterService>();
+            var userRepository = serviceProvider.GetService<IUserRepository>();
 
             monsterService.RollMonsterSpawn();
+            userRepository.RegenerateUsers();
         }
     }
 }
