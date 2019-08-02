@@ -98,7 +98,7 @@ namespace Doug.Services
         private void LevelUpUsers(List<User> users)
         {
             _statsRepository.LevelUpUsers(users.Select(user => user.Id).ToList());
-            _inventoryRepository.AddItemToUsers(users, new MysteryBox(null, null, null, null, null)); //rip
+            _inventoryRepository.AddItemToUsers(users, new MysteryBox());
         }
 
         public Task<bool> IsUserActive(string userId)

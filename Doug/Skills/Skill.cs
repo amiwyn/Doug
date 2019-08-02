@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Doug.Models;
 using Doug.Models.Combat;
 using Doug.Repositories;
@@ -18,9 +19,9 @@ namespace Doug.Skills
             StatsRepository = statsRepository;
         }
 
-        public virtual DougResponse Activate(User user, ICombatable target, string channel)
+        public virtual async Task<DougResponse> Activate(User user, ICombatable target, string channel)
         {
-            return new DougResponse(DougMessages.SkillCannotBeActivated);
+            return await Task.FromResult(new DougResponse(DougMessages.SkillCannotBeActivated));
         }
 
         protected bool CanActivateSkill(User user, out DougResponse response)

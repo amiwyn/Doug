@@ -14,7 +14,7 @@ namespace Doug.Repositories
         void SpawnMonster(Monster monster, string channel);
         void RemoveMonster(int id);
         void SetAttackCooldown(int id, TimeSpan cooldown);
-        void RegisterUserDamage(int id, string userId, int damage);
+        void RegisterUserDamage(int id, string userId, int damage, int monsterHealth);
     }
 
     public class MonsterRepository : IMonsterRepository
@@ -70,7 +70,7 @@ namespace Doug.Repositories
             _db.SaveChanges();
         }
 
-        public void RegisterUserDamage(int id, string userId, int damage)
+        public void RegisterUserDamage(int id, string userId, int damage, int monsterHealth)
         {
             var monster = _db.SpawnedMonsters
                 .Include(monsta => monsta.MonsterAttackers)
@@ -87,7 +87,8 @@ namespace Doug.Repositories
                 attacker.DamageDealt += damage;
             }
 
-            monster.Health -= damage;
+            monster.Health = monsterHealth;
+            monster.Monster.Health = monsterHealth;
 
             _db.SaveChanges();
         }

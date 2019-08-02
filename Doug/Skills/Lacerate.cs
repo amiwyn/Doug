@@ -8,17 +8,17 @@ using Doug.Slack;
 
 namespace Doug.Skills
 {
-    public class Fireball : Skill
+    public class Lacerate : Skill
     {
         private readonly ISlackWebApi _slack;
         private readonly IUserService _userService;
         private readonly ICombatService _combatService;
         private readonly IEventDispatcher _eventDispatcher;
 
-        public Fireball(IStatsRepository statsRepository, ISlackWebApi slack, IUserService userService, ICombatService combatService, IEventDispatcher eventDispatcher) : base(statsRepository)
+        public Lacerate(IStatsRepository statsRepository, ISlackWebApi slack, IUserService userService, ICombatService combatService, IEventDispatcher eventDispatcher) : base(statsRepository)
         {
-            Name = "Fireball";
-            EnergyCost = 10;
+            Name = "Lacerate";
+            EnergyCost = 20;
             Cooldown = 40;
 
             _slack = slack;
@@ -37,7 +37,8 @@ namespace Doug.Skills
             var message = string.Format(DougMessages.UserActivatedSkill, _userService.Mention(user), Name);
             await _slack.BroadcastMessage(message, channel);
 
-            var attack = new MagicAttack(user, user.TotalIntelligence());
+            var damage = 5 * user.TotalAgility() + 150;
+            var attack = new PhysicalAttack(user, damage, int.MaxValue);
             target.ReceiveAttack(attack, _eventDispatcher);
             await _combatService.DealDamage(user, attack, target, channel);
 

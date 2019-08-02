@@ -13,7 +13,7 @@ namespace Doug.Items.SkillBooks
         {
             Id = ItemId;
             Name = "Heal";
-            Description = "Heal the target by a flat *30* Health. Cost 8 mana to cast.";
+            Description = "Heal the target. Health gained depends on the caster's level. Cost 32 mana to cast.";
             Rarity = Rarity.Common;
             Icon = ":spellbook:";
             Price = 1200;

@@ -1,4 +1,5 @@
-﻿using Doug.Models;
+﻿using System.Threading.Tasks;
+using Doug.Models;
 using Doug.Models.Combat;
 using Doug.Skills;
 
@@ -14,9 +15,9 @@ namespace Doug.Items
             Slot = EquipmentSlot.Skill;
         }
 
-        public DougResponse Activate(User user, ICombatable target, string channel)
+        public async Task<DougResponse> Activate(User user, ICombatable target, string channel)
         {
-            return Skill.Activate(user, target, channel);
+            return await Skill.Activate(user, target, channel);
         }
     }
 }

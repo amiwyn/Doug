@@ -121,7 +121,7 @@
         public const string Luck = "Luck";
         public const string Int = "Int";
         public const string UserHealed = "{0} healed {1} for *{2}* health";
-        public const string UserActivatedSkill = "{0} cast {1}";
+        public const string UserActivatedSkill = "{0} cast *{1}*";
 
         public const string DougError = "Beep boop, it's not working : {0}";
         public const string NotAnAdmin = "You are not an admin.";

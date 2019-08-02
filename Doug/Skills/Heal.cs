@@ -1,4 +1,5 @@
-﻿using Doug.Models;
+﻿using System.Threading.Tasks;
+using Doug.Models;
 using Doug.Models.Combat;
 using Doug.Repositories;
 using Doug.Services;
@@ -14,14 +15,14 @@ namespace Doug.Skills
         public Heal(IStatsRepository statsRepository, ISlackWebApi slack, IUserService userService) : base(statsRepository)
         {
             Name = "Heal";
-            EnergyCost = 12;
+            EnergyCost = 32;
             Cooldown = 20;
 
             _slack = slack;
             _userService = userService;
         }
 
-        public override DougResponse Activate(User user, ICombatable target, string channel)
+        public override async Task<DougResponse> Activate(User user, ICombatable target, string channel)
         {
             if (!CanActivateSkill(user, out var response))
             {
@@ -40,7 +41,7 @@ namespace Doug.Skills
             StatsRepository.UpdateHealth(userToBeHealed.Id, userToBeHealed.Health);
 
             var message = string.Format(DougMessages.UserHealed, _userService.Mention(user), _userService.Mention(userToBeHealed), healAmount);
-            _slack.BroadcastMessage(message, channel);
+            await _slack.BroadcastMessage(message, channel);
 
             return new DougResponse();
         }

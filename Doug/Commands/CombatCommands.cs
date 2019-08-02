@@ -11,7 +11,7 @@ namespace Doug.Commands
         Task<DougResponse> Attack(Command command);
         Task<DougResponse> Revolution(Command command);
         Task<DougResponse> ListMonsters(Command command);
-        DougResponse Skill(Command command);
+        Task<DougResponse> Skill(Command command);
     }
 
     public class CombatCommands : ICombatCommands
@@ -49,7 +49,7 @@ namespace Doug.Commands
             return new DougResponse();
         }
 
-        public DougResponse Skill(Command command)
+        public async Task<DougResponse> Skill(Command command)
         {
             var user = _userRepository.GetUser(command.UserId);
 
@@ -59,7 +59,7 @@ namespace Doug.Commands
                 target = _userRepository.GetUser(command.GetTargetUserId());
             }
 
-            return _combatService.ActivateSkill(user, target, command.ChannelId);
+            return await _combatService.ActivateSkill(user, target, command.ChannelId);
         }
     }
 }

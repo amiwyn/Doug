@@ -14,7 +14,7 @@ namespace Doug.Items.SkillBooks
         {
             Id = ItemId;
             Name = "Fireball";
-            Description = "A blazing ball of fire. Cost 10 energy to cast.";
+            Description = "A blazing ball of fire. Cost 10 mana to cast.";
             Rarity = Rarity.Common;
             Icon = ":skillbook:";
             Price = 1200;
