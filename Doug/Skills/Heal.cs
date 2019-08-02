@@ -14,8 +14,8 @@ namespace Doug.Skills
         public Heal(IStatsRepository statsRepository, ISlackWebApi slack, IUserService userService) : base(statsRepository)
         {
             Name = "Heal";
-            EnergyCost = 8;
-            Cooldown = 30;
+            EnergyCost = 12;
+            Cooldown = 20;
 
             _slack = slack;
             _userService = userService;
@@ -34,7 +34,7 @@ namespace Doug.Skills
                 userToBeHealed = targetUser;
             }
 
-            var healAmount = 30; // TODO : add scaling
+            var healAmount = user.Level * 5 + 50;
 
             userToBeHealed.Health += healAmount; 
             StatsRepository.UpdateHealth(userToBeHealed.Id, userToBeHealed.Health);
