@@ -13,16 +13,16 @@ namespace Doug.Items.SkillBooks
             IChannelRepository channelRepository, IEventDispatcher eventDispatcher,
             IRandomService randomService, ICreditsRepository creditsRepository)
         {
+            Skill = new Steal(statsRepository, slack, userService, channelRepository, eventDispatcher, randomService, creditsRepository);
+
             Id = ItemId;
             Name = "Steal";
-            Description = "Steal rupees from the target. Cost 5 mana to cast.";
+            Description = $"Steal rupees from the target. Cost {Skill.EnergyCost} mana to cast.";
             Rarity = Rarity.Common;
             Icon = ":skillbook:";
             Price = 1200;
             LevelRequirement = 10;
             AgilityRequirement = 15;
-
-            Skill = new Steal(statsRepository, slack, userService, channelRepository, eventDispatcher, randomService, creditsRepository);
         }
     }
 }

@@ -12,16 +12,16 @@ namespace Doug.Items.SkillBooks
         public FireballBook(IStatsRepository statsRepository, ISlackWebApi slack, IUserService userService,
             ICombatService combatService, IEventDispatcher eventDispatcher)
         {
+            Skill = new Fireball(statsRepository, slack, userService, combatService, eventDispatcher);
+
             Id = ItemId;
             Name = "Fireball";
-            Description = "A blazing ball of fire. Cost 10 mana to cast.";
+            Description = $"A blazing ball of fire. Cost {Skill.EnergyCost} mana to cast.";
             Rarity = Rarity.Common;
             Icon = ":skillbook:";
             Price = 1200;
             LevelRequirement = 10;
             IntelligenceRequirement = 15;
-
-            Skill = new Fireball(statsRepository, slack, userService, combatService, eventDispatcher);
         }
     }
 }
