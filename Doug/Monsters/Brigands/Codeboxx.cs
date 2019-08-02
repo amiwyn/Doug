@@ -28,8 +28,8 @@ namespace Doug.Monsters.Brigands
 
             DropTable = new Dictionary<LootItem, double>
             {
-                { new LootItem(CoffeeCup.ItemId, 1), 0.05 },
-                { new LootItem(IronIngot.ItemId, 1), 0.15 },
+                { new LootItem(new CoffeeCup(), 1), 0.05 },
+                { new LootItem(new IronIngot(), 1), 0.15 },
             };
         }
     }
