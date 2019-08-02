@@ -17,7 +17,7 @@ namespace Doug.Items.SkillBooks
             Name = "Heal";
             Description = $"Heal the target. Health gained depends on the caster's level. Cost {Skill.EnergyCost} mana to cast.";
             Rarity = Rarity.Common;
-            Icon = ":spellbook:";
+            Icon = ":int_skillbook:";
             Price = 1200;
             LevelRequirement = 10;
             IntelligenceRequirement = 15;

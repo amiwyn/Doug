@@ -17,7 +17,7 @@ namespace Doug.Items.SkillBooks
             Name = "Lacerate";
             Description = $"A swift and crippling attack. Cost {Skill.EnergyCost} mana to cast. Deal damage based on agility";
             Rarity = Rarity.Common;
-            Icon = ":skillbook:";
+            Icon = ":agi_skillbook:";
             Price = 1200;
             LevelRequirement = 10;
             AgilityRequirement = 15;
