@@ -45,7 +45,7 @@ namespace Doug.Services.MenuServices
             var user = _userRepository.GetUser(interaction.UserId);
             var monster = _monsterRepository.GetMonster(int.Parse(interaction.Value));
 
-            var response = _combatService.ActivateSkill(user, monster, interaction.ChannelId);
+            var response = await _combatService.ActivateSkill(user, monster, interaction.ChannelId);
 
             await _slack.SendEphemeralMessage(response.Message, user.Id, interaction.ChannelId);
             await _slack.UpdateInteractionMessage(new MonsterMenu(monster).Blocks, interaction.ResponseUrl);

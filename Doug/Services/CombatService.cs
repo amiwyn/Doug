@@ -13,7 +13,7 @@ namespace Doug.Services
     {
         Task<DougResponse> Attack(User user, User target, string channel);
         Task<DougResponse> AttackMonster(User user, SpawnedMonster spawnedMonster, string channel);
-        DougResponse ActivateSkill(User user, ICombatable target, string channel);
+        Task<DougResponse> ActivateSkill(User user, ICombatable target, string channel);
         Task DealDamage(User user, Attack attack, ICombatable target, string channel);
     }
 
@@ -116,10 +116,10 @@ namespace Doug.Services
             return new DougResponse();
         }
 
-        public DougResponse ActivateSkill(User user, ICombatable target, string channel)
+        public async Task<DougResponse> ActivateSkill(User user, ICombatable target, string channel)
         {
             var skillbook = user.Loadout.GetSkill();
-            return skillbook.Activate(user, target, channel);
+            return await skillbook.Activate(user, target, channel);
         }
 
         public async Task DealDamage(User user, Attack attack, ICombatable target, string channel)
@@ -140,7 +140,7 @@ namespace Doug.Services
             var message = attack.Status.ToMessage(_userService.Mention(user), $"*{monster.Name}*", attack.Damage);
             await _slack.BroadcastMessage(message, channel);
 
-            _monsterRepository.RegisterUserDamage(spawnedMonster.Id, user.Id, attack.Damage);
+            _monsterRepository.RegisterUserDamage(spawnedMonster.Id, user.Id, attack.Damage, spawnedMonster.Health);
 
             if (monster.IsDead())
             {

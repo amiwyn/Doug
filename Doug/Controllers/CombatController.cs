@@ -38,9 +38,9 @@ namespace Doug.Controllers
         }
 
         [HttpPost("skill")]
-        public ActionResult Skill([FromForm]SlackCommandDto slackCommand)
+        public async Task<ActionResult> Skill([FromForm]SlackCommandDto slackCommand)
         {
-            var result = _combatCommands.Skill(slackCommand.ToCommand());
+            var result = await _combatCommands.Skill(slackCommand.ToCommand());
             return Ok(result.Message);
         }
     }

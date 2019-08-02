@@ -1,4 +1,5 @@
-﻿using Doug.Items;
+﻿using System.Threading.Tasks;
+using Doug.Items;
 using Doug.Models;
 using Doug.Models.Combat;
 using Doug.Repositories;
@@ -26,7 +27,7 @@ namespace Doug.Skills
             _eventDispatcher = eventDispatcher;
         }
 
-        public override DougResponse Activate(User user, ICombatable target, string channel)
+        public override async Task<DougResponse> Activate(User user, ICombatable target, string channel)
         {
             if (!CanActivateSkill(user, out var response))
             {
@@ -34,11 +35,11 @@ namespace Doug.Skills
             }
 
             var message = string.Format(DougMessages.UserActivatedSkill, _userService.Mention(user), Name);
-            _slack.BroadcastMessage(message, channel).Wait();
+            await _slack.BroadcastMessage(message, channel);
 
             var attack = new MagicAttack(user, user.TotalIntelligence());
             target.ReceiveAttack(attack, _eventDispatcher);
-            _combatService.DealDamage(user, attack, target, channel).Wait();
+            await _combatService.DealDamage(user, attack, target, channel);
 
             return new DougResponse();
         }

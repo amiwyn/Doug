@@ -35,7 +35,7 @@ namespace Doug.Skills
             _creditsRepository = creditsRepository;
         }
 
-        public override DougResponse Activate(User user, ICombatable target, string channel)
+        public override async Task<DougResponse> Activate(User user, ICombatable target, string channel)
         {
             if (!CanActivateSkill(user, out var response))
             {
@@ -55,13 +55,13 @@ namespace Doug.Skills
                     return new DougResponse(DougMessages.NotInRightChannel);
                 }
 
-                var usersInChannel = _slack.GetUsersInChannel(channel).Result;
+                var usersInChannel = await _slack.GetUsersInChannel(channel);
                 if (usersInChannel.All(usr => usr != targetUser.Id))
                 {
                     return new DougResponse(DougMessages.UserIsNotInPvp);
                 }
 
-                response = StealFromUser(user, targetUser, channel).Result;
+                response = await StealFromUser(user, targetUser, channel);
             }
 
             return response;
