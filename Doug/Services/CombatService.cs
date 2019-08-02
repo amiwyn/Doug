@@ -14,6 +14,7 @@ namespace Doug.Services
         Task<DougResponse> Attack(User user, User target, string channel);
         Task<DougResponse> AttackMonster(User user, SpawnedMonster spawnedMonster, string channel);
         DougResponse ActivateSkill(User user, ICombatable target, string channel);
+        Task DealDamage(User user, Attack attack, ICombatable target, string channel);
     }
 
     public class CombatService : ICombatService
@@ -69,15 +70,15 @@ namespace Doug.Services
             _statsRepository.UpdateEnergy(user.Id, energy);
             _statsRepository.SetAttackCooldown(user.Id, user.GetAttackCooldown());
 
-            await DealDamage(user, target, channel);
+            var attack = user.AttackTarget(target, _eventDispatcher);
+
+            await DealDamageToUser(user, attack, target, channel);
 
             return new DougResponse();
         }
 
-        private async Task DealDamage(User user, User target, string channel)
+        private async Task DealDamageToUser(User user, Attack attack, User target, string channel)
         {
-            var attack = user.AttackTarget(target, _eventDispatcher);
-
             var message = attack.Status.ToMessage(_userService.Mention(user), _userService.Mention(target), attack.Damage);
 
             await _slack.BroadcastMessage(message, channel);
@@ -90,7 +91,6 @@ namespace Doug.Services
 
             _statsRepository.UpdateHealth(target.Id, target.Health);
         }
-
 
         public async Task<DougResponse> AttackMonster(User user, SpawnedMonster spawnedMonster, string channel)
         {
@@ -110,8 +110,34 @@ namespace Doug.Services
             _statsRepository.UpdateEnergy(user.Id, energy);
             _statsRepository.SetAttackCooldown(user.Id, user.GetAttackCooldown());
 
-            var attack = user.AttackTarget(monster, _eventDispatcher);
+            var attack = user.AttackTarget(spawnedMonster, _eventDispatcher);
 
+            await DealDamageToMonster(user, attack, spawnedMonster, channel);
+
+            return new DougResponse();
+        }
+
+        public DougResponse ActivateSkill(User user, ICombatable target, string channel)
+        {
+            var skillbook = user.Loadout.GetSkill();
+            return skillbook.Activate(user, target, channel);
+        }
+
+        public async Task DealDamage(User user, Attack attack, ICombatable target, string channel)
+        {
+            if (target is User targetUser)
+            {
+                await DealDamageToUser(user, attack, targetUser, channel);
+            }
+            else if (target is SpawnedMonster targetMonster)
+            {
+                await DealDamageToMonster(user, attack, targetMonster, channel);
+            }
+        }
+
+        private async Task DealDamageToMonster(User user, Attack attack, SpawnedMonster spawnedMonster, string channel)
+        {
+            var monster = spawnedMonster.Monster;
             var message = attack.Status.ToMessage(_userService.Mention(user), $"*{monster.Name}*", attack.Damage);
             await _slack.BroadcastMessage(message, channel);
 
@@ -123,25 +149,18 @@ namespace Doug.Services
             }
             else if (!spawnedMonster.IsAttackOnCooldown())
             {
-                await MonsterAttackUser(monster, user, spawnedMonster.Id, channel);
+                await MonsterAttackUser(spawnedMonster, user, channel);
             }
-
-            return new DougResponse();
         }
 
-        public DougResponse ActivateSkill(User user, ICombatable target, string channel)
+        private async Task MonsterAttackUser(SpawnedMonster spawnedMonster, User user, string channel)
         {
-            var skillbook = user.Loadout.GetSkill();
-            return skillbook.Activate(user, target, channel);
-        }
-
-        private async Task MonsterAttackUser(Monster monster, User user, int spawnedMonsterId, string channel)
-        {
-            var retaliationAttack = monster.AttackTarget(user, _eventDispatcher);
+            var monster = spawnedMonster.Monster;
+            var retaliationAttack = spawnedMonster.AttackTarget(user, _eventDispatcher);
 
             var retaliationMessage = retaliationAttack.Status.ToMessage($"*{monster.Name}*", _userService.Mention(user), retaliationAttack.Damage);
             await _slack.BroadcastMessage(retaliationMessage, channel);
-            _monsterRepository.SetAttackCooldown(spawnedMonsterId, monster.GetAttackCooldown());
+            _monsterRepository.SetAttackCooldown(spawnedMonster.Id, monster.GetAttackCooldown());
 
             if (user.IsDead())
             {

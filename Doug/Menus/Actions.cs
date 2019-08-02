@@ -11,7 +11,8 @@
         Equipment,
         Give,
         Target,
-        Attack
+        Attack,
+        Skill,
     }
 
     public enum InventoryActions

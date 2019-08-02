@@ -10,6 +10,7 @@ namespace Doug.Services.MenuServices
     public interface IMonsterMenuService
     {
         Task Attack(Interaction interaction);
+        Task Skill(Interaction interaction);
         Task ShowMonsters(string channel);
     }
 
@@ -34,6 +35,17 @@ namespace Doug.Services.MenuServices
             var monster = _monsterRepository.GetMonster(int.Parse(interaction.Value));
 
             var response = await _combatService.AttackMonster(user, monster, interaction.ChannelId);
+
+            await _slack.SendEphemeralMessage(response.Message, user.Id, interaction.ChannelId);
+            await _slack.UpdateInteractionMessage(new MonsterMenu(monster).Blocks, interaction.ResponseUrl);
+        }
+
+        public async Task Skill(Interaction interaction)
+        {
+            var user = _userRepository.GetUser(interaction.UserId);
+            var monster = _monsterRepository.GetMonster(int.Parse(interaction.Value));
+
+            var response = _combatService.ActivateSkill(user, monster, interaction.ChannelId);
 
             await _slack.SendEphemeralMessage(response.Message, user.Id, interaction.ChannelId);
             await _slack.UpdateInteractionMessage(new MonsterMenu(monster).Blocks, interaction.ResponseUrl);

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Doug.Monsters;
+using Microsoft.EntityFrameworkCore;
 
 namespace Doug.Models
 {
@@ -62,6 +63,9 @@ namespace Doug.Models
                 .HasOne(m => m.Monster)
                 .WithMany(m => m.MonsterAttackers)
                 .HasForeignKey(m => m.SpawnedMonsterId);
+
+            modelBuilder.Entity<MonsterAttacker>()
+                .HasOne(m => m.User).WithOne();
 
             base.OnModelCreating(modelBuilder);
         }

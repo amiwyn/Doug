@@ -26,6 +26,7 @@ namespace Doug.Menus
             Blocks.AddRange(ItemSection(loadout.GetEquipmentAt(EquipmentSlot.LeftHand), "Left Hand"));
             Blocks.AddRange(ItemSection(loadout.GetEquipmentAt(EquipmentSlot.RightHand), "Right Hand"));
             Blocks.AddRange(ItemSection(loadout.GetEquipmentAt(EquipmentSlot.Neck), "Neck"));
+            Blocks.AddRange(ItemSection(loadout.GetEquipmentAt(EquipmentSlot.Skill), "Skill"));
         }
 
         private Block EquipmentHeader()

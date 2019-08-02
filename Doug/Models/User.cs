@@ -11,6 +11,8 @@ namespace Doug.Models
     {
         private const int BaseAttackCooldown = 30;
         private const int BaseAttackSpeed = 100;
+        private const int BaseHealthRegen = 1;
+        private const int BaseEnergyRegen = 1;
 
         private int _health;
         private int _energy;
@@ -33,7 +35,7 @@ namespace Doug.Models
         public int Level => (int)Math.Floor(Math.Sqrt(Experience) * 0.05 + 1);
         public int TotalStatsPoints => (int)Math.Floor(Level + 5 * Math.Floor(Level * 0.1)) + 4;
         public int FreeStatsPoints => TotalStatsPoints + 25 - (Luck + Agility + Strength + Constitution + Intelligence);
-        public int Attack => (int)Math.Floor(Strength * 2.5);
+        public int Attack => (int)Math.Floor(TotalStrength() * 2.5);
 
         public int Health
         {
@@ -101,8 +103,6 @@ namespace Doug.Models
         public int MaxAttack() => Loadout.MaxAttack + Attack + Effects.Sum(userEffect => userEffect.Effect.Attack);
         public int MinAttack() => Loadout.MinAttack + Attack + Effects.Sum(userEffect => userEffect.Effect.Attack);
         public int TotalAttackSpeed() => BaseAttackSpeed + Loadout.AttackSpeed + TotalAgility() / 2;
-
-        public void RegenerateHealth() => Health += (int)(TotalHealth() * 0.2);
         public double BaseOpponentStealSuccessRate() => 0.75;
         public int BaseStealAmount() => (int)Math.Floor(3 * (Math.Sqrt(TotalAgility()) - Math.Sqrt(5)) + 1);
         public double BaseDetectionChance() => (Math.Sqrt(Math.Max((TotalIntelligence() - 5), 1)) * 0.08);
@@ -198,11 +198,6 @@ namespace Doug.Models
         {
             Attack attack = new PhysicalAttack(this, MinAttack(), MaxAttack(), TotalHitrate(), TotalLuck());
 
-            if (Loadout.GetDamageType() == DamageType.Magical)
-            {
-                attack = new MagicAttack(this, TotalIntelligence());
-            }
-
             attack.Damage = eventDispatcher.OnAttacking(this, target, attack.Damage);
 
             return target.ReceiveAttack(attack, eventDispatcher);
@@ -253,6 +248,12 @@ namespace Doug.Models
         private void ApplyMagicalDamage(int damage)
         {
             Health -= damage;
+        }
+
+        public void RegenerateHealthAndEnergy()
+        {
+            Health += (int) (TotalHealth() * (BaseHealthRegen + Loadout.HealthRegen) * 0.01);
+            Energy += (int) (TotalEnergy() * (BaseEnergyRegen + Loadout.EnergyRegen) * 0.01);
         }
     }
 }

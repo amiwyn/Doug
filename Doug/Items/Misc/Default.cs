@@ -1,6 +1,6 @@
 ﻿namespace Doug.Items.Misc
 {
-    public class Default : Item
+    public class Default : Weapon
     {
         public Default()
         {

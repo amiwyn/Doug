@@ -59,6 +59,8 @@ namespace Doug.Models
         public int Hitrate => Equipment.Sum(equip => equip.Value.Stats.Hitrate);
         public int AttackSpeed => Equipment.Sum(equip => equip.Value.Stats.AttackSpeed);
         public int Resistance => Equipment.Sum(equip => equip.Value.Stats.Resistance);
+        public int HealthRegen => Equipment.Sum(equip => equip.Value.Stats.HealthRegen);
+        public int EnergyRegen => Equipment.Sum(equip => equip.Value.Stats.EnergyRegen);
 
         public List<EquipmentItem> Equip(EquipmentItem item)
         {

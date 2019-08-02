@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Doug.Items;
 using Doug.Monsters.Brigands;
 using Doug.Monsters.Seagulls;
 

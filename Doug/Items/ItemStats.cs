@@ -20,6 +20,8 @@ namespace Doug.Items
         public int Strength { get; set; }
         public int Constitution { get; set; }
         public int Intelligence { get; set; }
+        public int HealthRegen { get; set; }
+        public int EnergyRegen { get; set; }
 
         public IEnumerable<string> ToStringList()
         {
@@ -29,6 +31,8 @@ namespace Doug.Items
                 DisplayAttribute(DougMessages.ItemDefense, Defense),
                 DisplayAttribute(DougMessages.ItemResistance, Resistance),
                 Math.Abs(AttackSpeed) <= 1 ? string.Empty : string.Format(DougMessages.AttackSpeed, AttackSpeed),
+                DisplayAttribute(DougMessages.HealthRegen, HealthRegen),
+                DisplayAttribute(DougMessages.EnergyRegen, EnergyRegen),
                 DisplayAttribute(DougMessages.ItemHitrate, Hitrate),
                 DisplayAttribute(DougMessages.ItemDodge, Dodge),
                 DisplayAttribute(DougMessages.ItemHealth, Health),
