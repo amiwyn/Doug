@@ -48,10 +48,10 @@ namespace Doug.Services
             }
 
             var channel = PvpChannel;
-            if (random.Next(2) == 0)
-            {
-                channel = PickRandomChannel(random, _channelRepository).Id;
-            }
+            //if (random.Next(2) == 0)
+            //{
+            //    channel = PickRandomChannel(random, _channelRepository).Id;
+            //}
 
             var monster = _monsterFactory.CreateRandomMonster(random);
             var monstersInChannel = _monsterRepository.GetMonsters(channel);
