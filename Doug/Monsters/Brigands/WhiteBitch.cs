@@ -14,7 +14,7 @@ namespace Doug.Monsters.Brigands
         {
             Id = MonsterId;
             Name = "St-Roch white bitch";
-            Description = "Tellement de followers insta que j'invalide tes attaques :signe_de_main_v: ";
+            Description = "Tellement de followers insta que j'invalide tes attaques :nail_care: ";
             Image = "https://pbs.twimg.com/media/DKBNrJEVAAAwLy4.jpg";
             Level = 18;
             ExperienceValue = 1250;
