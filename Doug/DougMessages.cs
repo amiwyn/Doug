@@ -95,7 +95,7 @@
         public const string ItemHitrate = "`Hitrate {0:+#;-#}`";
         public const string ItemDodge = "`Dodge {0:+#;-#}`";
         public const string ItemHealth = "`Health {0:+#;-#}`";
-        public const string ItemEnergy = "`Energy {0:+#;-#}`";
+        public const string ItemEnergy = "`Mana {0:+#;-#}`";
         public const string ItemStrength = "`Strength {0:+#;-#}`";
         public const string ItemAgility = "`Agility {0:+#;-#}`";
         public const string ItemIntelligence = "`Intelligence {0:+#;-#}`";
@@ -132,7 +132,7 @@
         public const string AlreadyChallenged = "This user is already challenged.";
         public const string NotChallenged = "You are not challenged.";
         public const string SlurAlreadyExists = "That slur already exists.";
-        public const string NotEnoughEnergy = "You don't have enough energy.";
+        public const string NotEnoughEnergy = "You don't have enough mana.";
         public const string NoItemInSlot = "There is no item in slot {0}.";
         public const string ItemCantBeUsed = "This item cannot be used";
         public const string InvalidUserArgument = "You must pass a valid user in arguments";

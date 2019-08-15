@@ -76,9 +76,8 @@ namespace Doug.Services
         {
             var monster = spawnedMonster.Monster;
             var users = spawnedMonster.MonsterAttackers.Select(attacker => attacker.User).ToList();
-            var lootWinner = spawnedMonster.FindHighestDamageDealer();
 
-            await AddMonsterLootToUser(lootWinner, monster, channel);
+            await AddMonsterLootToUser(user, monster, channel);
 
             _monsterRepository.RemoveMonster(spawnedMonster.Id);
 
