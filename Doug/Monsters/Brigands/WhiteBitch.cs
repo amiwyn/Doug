@@ -8,7 +8,7 @@ namespace Doug.Monsters.Brigands
 {
     public class WhiteBitch : Monster
     {
-        public const string MonsterId = "WhiteBitch";
+        public const string MonsterId = "white_bitch";
 
         public WhiteBitch()
         {
