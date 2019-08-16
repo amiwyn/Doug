@@ -19,7 +19,8 @@
             Stats.Defense = 10;
             Stats.Resistance = 7;
             Stats.Energy = 40;
-            Stats.Intelligence = 4;
+            Stats.Intelligence = 3;
+            Stats.EnergyRegen = 2;
         }
     }
 }

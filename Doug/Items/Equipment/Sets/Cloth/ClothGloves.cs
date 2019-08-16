@@ -17,7 +17,7 @@
             IntelligenceRequirement = 15;
 
             Stats.Defense = 4;
-            Stats.Intelligence = 2;
+            Stats.EnergyRegen = 2;
             Stats.Energy = 20;
         }
     }
