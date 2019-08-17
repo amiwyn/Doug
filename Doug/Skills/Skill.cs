@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Doug.Items.WeaponType;
 using Doug.Models;
 using Doug.Models.Combat;
 using Doug.Repositories;
@@ -11,12 +12,14 @@ namespace Doug.Skills
         public string Name { get; set; }
         public int EnergyCost { get; set; }
         public int Cooldown { get; set; }
+        public Type RequiredWeapon { get; set; }
 
         protected readonly IStatsRepository StatsRepository;
 
         protected Skill(IStatsRepository statsRepository)
         {
             StatsRepository = statsRepository;
+            RequiredWeapon = typeof(Weapon);
         }
 
         public virtual async Task<DougResponse> Activate(User user, ICombatable target, string channel)
@@ -26,6 +29,12 @@ namespace Doug.Skills
 
         protected bool CanActivateSkill(User user, out DougResponse response)
         {
+            if (!user.HasWeaponType(RequiredWeapon))
+            {
+                response = new DougResponse(string.Format(DougMessages.WrongWeaponForSkill, RequiredWeapon.Name));
+                return false;
+            }
+
             if (user.IsSkillOnCooldown())
             {
                 response = new DougResponse(string.Format(DougMessages.CommandOnCooldown, user.CalculateStealCooldownRemaining()));

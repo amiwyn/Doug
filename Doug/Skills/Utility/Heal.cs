@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Doug.Items.WeaponType;
 using Doug.Models;
 using Doug.Models.Combat;
 using Doug.Repositories;
@@ -17,6 +18,7 @@ namespace Doug.Skills.Utility
             Name = "Heal";
             EnergyCost = 32;
             Cooldown = 20;
+            RequiredWeapon = typeof(Staff);
 
             _slack = slack;
             _userService = userService;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Doug.Items;
 using System.Linq;
 using Doug.Effects;
+using Doug.Items.WeaponType;
 using Doug.Models.Combat;
 
 namespace Doug.Models
@@ -106,7 +107,8 @@ namespace Doug.Models
         public double BaseOpponentStealSuccessRate() => 0.75;
         public int BaseStealAmount() => (int)Math.Floor(3 * (Math.Sqrt(TotalAgility()) - Math.Sqrt(5)) + 1);
         public double BaseDetectionChance() => (Math.Sqrt(Math.Max((TotalIntelligence() - 5), 1)) * 0.08);
-        public double BaseDetectionAvoidance() => Math.Sqrt((TotalAgility() + TotalLuck()) / 2) * 0.15;
+        public double BaseDetectionAvoidance() => Math.Sqrt((TotalAgility() + TotalLuck()) / 2.0) * 0.15;
+        public bool HasWeaponType(Type type) => Loadout.HasWeaponType(type);
         public bool HasEnoughCreditsForAmount(int amount) => Credits - amount >= 0;
         public string NotEnoughCreditsForAmountResponse(int amount) => string.Format(DougMessages.NotEnoughCredits, amount, Credits);
         public bool HasEmptyInventory() => !InventoryItems.Any();

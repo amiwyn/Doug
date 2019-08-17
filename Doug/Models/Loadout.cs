@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Doug.Items;
-using Doug.Models.Combat;
+using Doug.Items.WeaponType;
 
 namespace Doug.Models
 {
@@ -152,13 +153,10 @@ namespace Doug.Models
             return Equipment.Count == 0;
         }
 
-        public DamageType GetDamageType()
+        public bool HasWeaponType(Type type)
         {
-            if (GetEquipmentAt(EquipmentSlot.RightHand) is Weapon weapon)
-            {
-                return weapon.DamageType;
-            }
-            return DamageType.Physical;
+            return GetEquipmentAt(EquipmentSlot.RightHand).GetType().IsSubclassOf(type) ||
+                   GetEquipmentAt(EquipmentSlot.LeftHand).GetType().IsSubclassOf(type);
         }
     }
 }

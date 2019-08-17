@@ -1,6 +1,8 @@
-﻿namespace Doug.Items.Equipment.Sets.Leather
+﻿using Doug.Items.WeaponType;
+
+namespace Doug.Items.Equipment.Sets.Leather
 {
-    public class SmallClaw : Weapon
+    public class SmallClaw : Claws
     {
         public const string ItemId = "small_claw";
 
@@ -14,7 +16,6 @@
             Slot = EquipmentSlot.RightHand;
             Price = 233;
             LevelRequirement = 10;
-            IsDualWield = true;
 
             Stats.MinAttack = 42;
             Stats.MaxAttack = 58;

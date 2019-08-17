@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Doug.Items;
+using Doug.Items.WeaponType;
 using Doug.Models;
 using Doug.Models.Combat;
 using Doug.Repositories;
@@ -20,6 +21,7 @@ namespace Doug.Skills.Combat
             Name = "Mighty Strike";
             EnergyCost = 20;
             Cooldown = 60;
+            RequiredWeapon = typeof(Sword);
 
             _slack = slack;
             _userService = userService;

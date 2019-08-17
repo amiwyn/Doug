@@ -1,8 +1,8 @@
-﻿using Doug.Models.Combat;
+﻿using Doug.Items.WeaponType;
 
 namespace Doug.Items.Equipment.Sets.Cloth
 {
-    public class WoodenStaff : Weapon
+    public class WoodenStaff : Staff
     {
         public const string ItemId = "wood_staff";
 
@@ -16,7 +16,6 @@ namespace Doug.Items.Equipment.Sets.Cloth
             Slot = EquipmentSlot.RightHand;
             Price = 215;
             LevelRequirement = 10;
-            IsDualWield = true;
 
             Stats.Intelligence = 4;
             Stats.MinAttack = 42;

@@ -1,6 +1,8 @@
-﻿namespace Doug.Items.Equipment.Sets.Leather
+﻿using Doug.Items.WeaponType;
+
+namespace Doug.Items.Equipment.Sets.Leather
 {
-    public class ShortBow : Weapon
+    public class ShortBow : Bow
     {
         public const string ItemId = "short_bow";
 
@@ -14,7 +16,6 @@
             Slot = EquipmentSlot.RightHand;
             Price = 233;
             LevelRequirement = 10;
-            IsDualWield = true;
 
             Stats.MinAttack = 40;
             Stats.MaxAttack = 60;

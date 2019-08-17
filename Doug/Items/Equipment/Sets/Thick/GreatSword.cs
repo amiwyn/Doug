@@ -1,6 +1,8 @@
-﻿namespace Doug.Items.Equipment.Sets.Thick
+﻿using Doug.Items.WeaponType;
+
+namespace Doug.Items.Equipment.Sets.Thick
 {
-    public class LargeSword : Weapon
+    public class LargeSword : GreatSword
     {
         public const string ItemId = "large_sword";
 
@@ -14,12 +16,10 @@
             Slot = EquipmentSlot.RightHand;
             Price = 315;
             LevelRequirement = 10;
-            IsDualWield = true;
 
             Stats.MinAttack = 38;
             Stats.MaxAttack = 70;
             Stats.Strength = 2;
-            Stats.AttackSpeed = -20;
         }
     }
 }

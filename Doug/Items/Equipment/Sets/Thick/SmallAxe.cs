@@ -1,6 +1,8 @@
-﻿namespace Doug.Items.Equipment.Sets.Thick
+﻿using Doug.Items.WeaponType;
+
+namespace Doug.Items.Equipment.Sets.Thick
 {
-    public class SmallAxe : Weapon
+    public class SmallAxe : Axe
     {
         public const string ItemId = "small_axe";
 

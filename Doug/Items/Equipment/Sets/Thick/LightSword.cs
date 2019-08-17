@@ -1,6 +1,8 @@
-﻿namespace Doug.Items.Equipment.Sets.Thick
+﻿using Doug.Items.WeaponType;
+
+namespace Doug.Items.Equipment.Sets.Thick
 {
-    public class LightSword : Weapon
+    public class LightSword : Sword
     {
         public const string ItemId = "light_sword";
 

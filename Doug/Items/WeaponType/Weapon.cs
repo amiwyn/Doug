@@ -1,16 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Doug.Models.Combat;
 
-namespace Doug.Items
+namespace Doug.Items.WeaponType
 {
     public abstract class Weapon : EquipmentItem
     {
         public bool IsDualWield { get; set; }
-        public DamageType DamageType { get; set; }
 
         protected Weapon()
         {
+            Slot = EquipmentSlot.RightHand;
             Stats.AttackSpeed = 0;
         }
 

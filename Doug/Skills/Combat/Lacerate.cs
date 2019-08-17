@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Doug.Items;
+using Doug.Items.WeaponType;
 using Doug.Models;
 using Doug.Models.Combat;
 using Doug.Repositories;
@@ -21,6 +22,7 @@ namespace Doug.Skills.Combat
             Name = "Lacerate";
             EnergyCost = 20;
             Cooldown = 40;
+            RequiredWeapon = typeof(Claws);
 
             _slack = slack;
             _userService = userService;

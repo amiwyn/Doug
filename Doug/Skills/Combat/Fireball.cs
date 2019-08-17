@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Doug.Items;
+using Doug.Items.WeaponType;
 using Doug.Models;
 using Doug.Models.Combat;
 using Doug.Repositories;
@@ -21,6 +22,7 @@ namespace Doug.Skills.Combat
             Name = "Fireball";
             EnergyCost = 10;
             Cooldown = 40;
+            RequiredWeapon = typeof(Staff);
 
             _slack = slack;
             _userService = userService;
