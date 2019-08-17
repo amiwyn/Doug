@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Doug.Items;
 using Doug.Items.Consumables;
 using Doug.Items.Misc.Drops;
 using Doug.Models;

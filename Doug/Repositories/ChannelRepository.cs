@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Doug.Models;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace Doug.Repositories
 {
@@ -13,6 +14,7 @@ namespace Doug.Repositories
         GambleChallenge GetGambleChallenge(string target);
         void RemoveGambleChallenge(string target);
         ChannelType GetChannelType(string channelId);
+        IEnumerable<Channel> GetChannelsByType(ChannelType type);
     }
 
     public class ChannelRepository : IChannelRepository
@@ -44,6 +46,11 @@ namespace Doug.Repositories
             var typeString = _db.Channels.SingleOrDefault(channel => channel.Id == channelId)?.Type;
             Enum.TryParse(typeString, out ChannelType channelType);
             return channelType;
+        }
+
+        public IEnumerable<Channel> GetChannelsByType(ChannelType type)
+        {
+            return _db.Channels.Where(channel => channel.Type == type.ToString()).Include(channel => channel.Monsters);
         }
 
         public IEnumerable<Channel> GetChannels()

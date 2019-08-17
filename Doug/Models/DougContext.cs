@@ -31,6 +31,7 @@ namespace Doug.Models
                 .WithMany(u => u.InventoryItems)
                 .HasForeignKey(u => u.UserId);
 
+
             modelBuilder.Entity<Loadout>()
                 .ToTable("Users")
                 .HasBaseType((string)null);
@@ -40,6 +41,7 @@ namespace Doug.Models
                 .HasOne(o => o.Loadout).WithOne()
                 .HasForeignKey<User>(o => o.Id);
 
+
             modelBuilder.Entity<UserEffect>()
                 .HasKey(e => new { e.UserId, e.EffectId });
 
@@ -48,6 +50,7 @@ namespace Doug.Models
                 .WithMany(u => u.Effects)
                 .HasForeignKey(u => u.UserId);
 
+
             modelBuilder.Entity<ShopItem>()
                 .HasKey(s => new { s.ShopId, s.ItemId });
 
@@ -55,6 +58,7 @@ namespace Doug.Models
                 .HasOne(s => s.Shop)
                 .WithMany(s => s.ShopItems)
                 .HasForeignKey(s => s.ShopId);
+
 
             modelBuilder.Entity<MonsterAttacker>()
                 .HasKey(m => new { m.UserId, m.SpawnedMonsterId });
@@ -66,6 +70,15 @@ namespace Doug.Models
 
             modelBuilder.Entity<MonsterAttacker>()
                 .HasOne(m => m.User).WithOne();
+
+
+            modelBuilder.Entity<RegionMonster>()
+                .HasKey(m => new { m.ChannelId, m.MonsterId });
+
+            modelBuilder.Entity<RegionMonster>()
+                .HasOne(m => m.Channel)
+                .WithMany(m => m.Monsters)
+                .HasForeignKey(m => m.ChannelId);
 
             base.OnModelCreating(modelBuilder);
         }

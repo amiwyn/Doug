@@ -1,4 +1,6 @@
-﻿namespace Doug.Models
+﻿using System.Collections.Generic;
+
+namespace Doug.Models
 {
     public enum ChannelType
     {
@@ -7,12 +9,14 @@
         Casino,
         Coffee,
         Marketplace,
-        Common
+        Common,
+        Region
     }
 
     public class Channel
     {
         public string Id { get; set; }
         public string Type { get; set; }
+        public List<RegionMonster> Monsters { get; set; }
     }
 }

@@ -17,7 +17,6 @@ namespace Doug.Services
     public class MonsterService : IMonsterService
     {
         private const double SpawnChance = 0.2;
-        private const string PvpChannel = "CL2TYGE1E";
         private const int MaximumMonsterTypeInChannel = 3;
 
         private readonly IMonsterRepository _monsterRepository;
@@ -47,27 +46,25 @@ namespace Doug.Services
                 return;
             }
 
-            var channel = PvpChannel;
-            //if (random.Next(2) == 0)
-            //{
-            //    channel = PickRandomChannel(random, _channelRepository).Id;
-            //}
+            var channel = PickRandomRegion(random, _channelRepository);
+            var monsterIds = channel.Monsters.Select(mons => mons.MonsterId).ToList().OrderBy(mons => Guid.NewGuid());
+            var monstersInChannel = _monsterRepository.GetMonsters(channel.Id).ToList();
 
-            var monster = _monsterFactory.CreateRandomMonster(random);
-            var monstersInChannel = _monsterRepository.GetMonsters(channel);
-
-            if (monstersInChannel.Count(monsta => monsta.MonsterId == monster.Id) >= MaximumMonsterTypeInChannel)
+            foreach (var monsterId in monsterIds)
             {
-                return;
+                if (monstersInChannel.Count(monsta => monsta.MonsterId == monsterId) < MaximumMonsterTypeInChannel)
+                {
+                    var monster = _monsterFactory.CreateMonster(monsterId);
+                    _monsterRepository.SpawnMonster(monster, channel.Id);
+                    _slack.BroadcastMessage(string.Format(DougMessages.MonsterSpawned, monster.Name), channel.Id).Wait();
+                    return;
+                }
             }
-
-            _monsterRepository.SpawnMonster(monster, channel);
-            _slack.BroadcastMessage(string.Format(DougMessages.MonsterSpawned, monster.Name), channel).Wait();
         }
 
-        private Channel PickRandomChannel(Random random, IChannelRepository channelRepository)
+        private Channel PickRandomRegion(Random random, IChannelRepository channelRepository)
         {
-            var channels = channelRepository.GetChannels().ToList();
+            var channels = channelRepository.GetChannelsByType(ChannelType.Region).ToList();
             var index = random.Next(0, channels.Count);
             return channels.ElementAt(index);
         }
