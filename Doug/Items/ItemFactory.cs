@@ -102,9 +102,9 @@ namespace Doug.Items
                 // Skill books
                 case HealBook.ItemId: return new HealBook(_statsRepository, _slack, _userService);
                 case StealBook.ItemId: return new StealBook(_statsRepository, _slack, _userService, _channelRepository, _eventDispatcher, _randomService, _creditsRepository);
-                case FireballBook.ItemId: return new FireballBook(_statsRepository, _slack, _userService, _combatService, _eventDispatcher);
-                case MightyStrikeBook.ItemId: return new MightyStrikeBook(_statsRepository, _slack, _userService, _combatService, _eventDispatcher);
-                case LacerateBook.ItemId: return new LacerateBook(_statsRepository, _slack, _userService, _combatService, _eventDispatcher);
+                case FireballBook.ItemId: return new FireballBook(_statsRepository, _slack, _channelRepository, _userService, _combatService, _eventDispatcher);
+                case MightyStrikeBook.ItemId: return new MightyStrikeBook(_statsRepository, _slack, _channelRepository, _userService, _combatService, _eventDispatcher);
+                case LacerateBook.ItemId: return new LacerateBook(_statsRepository, _slack, _channelRepository, _userService, _combatService, _eventDispatcher);
 
                 // Misc
                 case BachelorsDegree.ItemId: return new BachelorsDegree();

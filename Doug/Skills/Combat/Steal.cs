@@ -8,19 +8,18 @@ using Doug.Repositories;
 using Doug.Services;
 using Doug.Slack;
 
-namespace Doug.Skills
+namespace Doug.Skills.Combat
 {
-    public class Steal : Skill
+    public class Steal : CombatSkill
     {
         private readonly ISlackWebApi _slack;
         private readonly IUserService _userService;
-        private readonly IChannelRepository _channelRepository;
         private readonly IStatsRepository _statsRepository;
         private readonly IEventDispatcher _eventDispatcher;
         private readonly IRandomService _randomService;
         private readonly ICreditsRepository _creditsRepository;
 
-        public Steal(IStatsRepository statsRepository, ISlackWebApi slack, IUserService userService, IChannelRepository channelRepository, IEventDispatcher eventDispatcher, IRandomService randomService, ICreditsRepository creditsRepository) : base(statsRepository)
+        public Steal(IStatsRepository statsRepository, ISlackWebApi slack, IUserService userService, IChannelRepository channelRepository, IEventDispatcher eventDispatcher, IRandomService randomService, ICreditsRepository creditsRepository) : base(statsRepository, channelRepository, slack)
         {
             Name = "Steal";
             EnergyCost = 1;
@@ -29,7 +28,6 @@ namespace Doug.Skills
             _statsRepository = statsRepository;
             _slack = slack;
             _userService = userService;
-            _channelRepository = channelRepository;
             _eventDispatcher = eventDispatcher;
             _randomService = randomService;
             _creditsRepository = creditsRepository;
@@ -37,7 +35,7 @@ namespace Doug.Skills
 
         public override async Task<DougResponse> Activate(User user, ICombatable target, string channel)
         {
-            if (!CanActivateSkill(user, out var response))
+            if (!CanActivateSkill(user, target, channel, out var response))
             {
                 return response;
             }
@@ -49,18 +47,6 @@ namespace Doug.Skills
 
             if (target is User targetUser)
             {
-                var channelType = _channelRepository.GetChannelType(channel);
-                if (channelType != ChannelType.Common && channelType != ChannelType.Pvp)
-                {
-                    return new DougResponse(DougMessages.NotInRightChannel);
-                }
-
-                var usersInChannel = await _slack.GetUsersInChannel(channel);
-                if (usersInChannel.All(usr => usr != targetUser.Id))
-                {
-                    return new DougResponse(DougMessages.UserIsNotInPvp);
-                }
-
                 response = await StealFromUser(user, targetUser, channel);
             }
 
@@ -70,9 +56,6 @@ namespace Doug.Skills
         private async Task<DougResponse> StealFromUser(User user, User target, string channel)
         {
             _statsRepository.SetSkillCooldown(user.Id, TimeSpan.FromSeconds(Cooldown));
-
-            var message = "";
-            var sneakResponse = new DougResponse();
 
             var userChance = _eventDispatcher.OnStealingChance(user, user.BaseStealSuccessRate());
             var targetChance = _eventDispatcher.OnGettingStolenChance(target, target.BaseOpponentStealSuccessRate());
@@ -86,7 +69,10 @@ namespace Doug.Skills
             {
                 amount = target.Credits;
             }
-            
+
+            string message;
+            DougResponse sneakResponse;
+
             if (rollSuccessful)
             {
                 _creditsRepository.RemoveCredits(target.Id, amount);

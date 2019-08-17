@@ -1,6 +1,6 @@
 ﻿using Doug.Repositories;
 using Doug.Services;
-using Doug.Skills;
+using Doug.Skills.Combat;
 using Doug.Slack;
 
 namespace Doug.Items.SkillBooks

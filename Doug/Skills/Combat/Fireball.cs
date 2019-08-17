@@ -6,20 +6,21 @@ using Doug.Repositories;
 using Doug.Services;
 using Doug.Slack;
 
-namespace Doug.Skills
+namespace Doug.Skills.Combat
 {
-    public class MightyStrike : Skill
+    public class Fireball : CombatSkill
     {
         private readonly ISlackWebApi _slack;
         private readonly IUserService _userService;
         private readonly ICombatService _combatService;
         private readonly IEventDispatcher _eventDispatcher;
 
-        public MightyStrike(IStatsRepository statsRepository, ISlackWebApi slack, IUserService userService, ICombatService combatService, IEventDispatcher eventDispatcher) : base(statsRepository)
+        public Fireball(IStatsRepository statsRepository, ISlackWebApi slack, IUserService userService,
+            ICombatService combatService, IEventDispatcher eventDispatcher, IChannelRepository channelRepository) : base(statsRepository, channelRepository, slack)
         {
-            Name = "Mighty Strike";
-            EnergyCost = 20;
-            Cooldown = 60;
+            Name = "Fireball";
+            EnergyCost = 10;
+            Cooldown = 40;
 
             _slack = slack;
             _userService = userService;
@@ -37,8 +38,9 @@ namespace Doug.Skills
             var message = string.Format(DougMessages.UserActivatedSkill, _userService.Mention(user), Name);
             await _slack.BroadcastMessage(message, channel);
 
-            var damage = 5 * user.TotalStrength() + user.Level * 5;
-            var attack = new PhysicalAttack(user, damage, int.MaxValue);
+            var damage = (int)(user.TotalIntelligence() * 2.5);
+
+            var attack = new MagicAttack(user, damage);
             target.ReceiveAttack(attack, _eventDispatcher);
             await _combatService.DealDamage(user, attack, target, channel);
 

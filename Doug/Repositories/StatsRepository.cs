@@ -16,6 +16,7 @@ namespace Doug.Repositories
         void KillUser(string userId);
         void SetAttackCooldown(string userId, TimeSpan cooldown);
         void SetSkillCooldown(string userId, TimeSpan cooldown);
+        void FireSkill(string userId, TimeSpan cooldown, int newEnergy);
     }
 
     public class StatsRepository : IStatsRepository
@@ -126,6 +127,16 @@ namespace Doug.Repositories
         {
             var user = _db.Users.Single(usr => usr.Id == userId);
 
+            user.SkillCooldown = DateTime.UtcNow + cooldown;
+
+            _db.SaveChanges();
+        }
+
+        public void FireSkill(string userId, TimeSpan cooldown, int newEnergy)
+        {
+            var user = _db.Users.Single(usr => usr.Id == userId);
+
+            user.Energy = newEnergy;
             user.SkillCooldown = DateTime.UtcNow + cooldown;
 
             _db.SaveChanges();

@@ -5,7 +5,7 @@ using Doug.Repositories;
 using Doug.Services;
 using Doug.Slack;
 
-namespace Doug.Skills
+namespace Doug.Skills.Utility
 {
     public class Heal : Skill
     {
@@ -35,7 +35,7 @@ namespace Doug.Skills
                 userToBeHealed = targetUser;
             }
 
-            var healAmount = user.Level * 5 + 50;
+            var healAmount = user.Level * 5 + 2 * user.TotalIntelligence();
 
             userToBeHealed.Health += healAmount; 
             StatsRepository.UpdateHealth(userToBeHealed.Id, userToBeHealed.Health);

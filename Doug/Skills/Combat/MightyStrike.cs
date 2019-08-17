@@ -6,20 +6,20 @@ using Doug.Repositories;
 using Doug.Services;
 using Doug.Slack;
 
-namespace Doug.Skills
+namespace Doug.Skills.Combat
 {
-    public class Fireball : Skill
+    public class MightyStrike : CombatSkill
     {
         private readonly ISlackWebApi _slack;
         private readonly IUserService _userService;
         private readonly ICombatService _combatService;
         private readonly IEventDispatcher _eventDispatcher;
 
-        public Fireball(IStatsRepository statsRepository, ISlackWebApi slack, IUserService userService, ICombatService combatService, IEventDispatcher eventDispatcher) : base(statsRepository)
+        public MightyStrike(IStatsRepository statsRepository, ISlackWebApi slack, IUserService userService, ICombatService combatService, IEventDispatcher eventDispatcher, IChannelRepository channelRepository) : base(statsRepository, channelRepository, slack)
         {
-            Name = "Fireball";
-            EnergyCost = 10;
-            Cooldown = 40;
+            Name = "Mighty Strike";
+            EnergyCost = 20;
+            Cooldown = 60;
 
             _slack = slack;
             _userService = userService;
@@ -29,7 +29,7 @@ namespace Doug.Skills
 
         public override async Task<DougResponse> Activate(User user, ICombatable target, string channel)
         {
-            if (!CanActivateSkill(user, out var response))
+            if (!CanActivateSkill(user, target, channel, out var response))
             {
                 return response;
             }
@@ -37,9 +37,8 @@ namespace Doug.Skills
             var message = string.Format(DougMessages.UserActivatedSkill, _userService.Mention(user), Name);
             await _slack.BroadcastMessage(message, channel);
 
-            var damage = (int)(user.TotalIntelligence() * 2.5);
-
-            var attack = new MagicAttack(user, damage);
+            var damage = 5 * user.TotalStrength() + user.Level * 5;
+            var attack = new PhysicalAttack(user, damage, int.MaxValue);
             target.ReceiveAttack(attack, _eventDispatcher);
             await _combatService.DealDamage(user, attack, target, channel);
 
