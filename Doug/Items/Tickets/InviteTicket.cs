@@ -2,7 +2,7 @@
 using Doug.Repositories;
 using Doug.Slack;
 
-namespace Doug.Items.Consumables
+namespace Doug.Items.Tickets
 {
     public class InviteTicket : ConsumableItem
     {

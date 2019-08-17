@@ -5,6 +5,7 @@ using Doug.Items.Consumables.Resets;
 using Doug.Items.Equipment;
 using Doug.Items.Misc;
 using Doug.Items.Misc.Drops;
+using Doug.Items.Tickets;
 using Doug.Models;
 using Doug.Repositories;
 using Doug.Services;

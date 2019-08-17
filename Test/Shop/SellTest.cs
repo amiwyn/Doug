@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Doug.Items;
-using Doug.Items.Consumables;
 using Doug.Items.Equipment;
+using Doug.Items.Tickets;
 using Doug.Models;
 using Doug.Repositories;
 using Doug.Services;

@@ -10,6 +10,7 @@ using Doug.Items.Lootboxes;
 using Doug.Items.Misc;
 using Doug.Items.Misc.Drops;
 using Doug.Items.SkillBooks;
+using Doug.Items.Tickets;
 using Doug.Repositories;
 using Doug.Services;
 using Doug.Slack;
@@ -61,6 +62,8 @@ namespace Doug.Items
                 case SuicidePill.ItemId: return new SuicidePill(_inventoryRepository, _userService);
                 case KickTicket.ItemId: return new KickTicket(_inventoryRepository, _slack, _userService, _eventDispatcher);
                 case InviteTicket.ItemId: return new InviteTicket(_inventoryRepository, _slack);
+                case StRochTicket.ItemId: return new StRochTicket(_inventoryRepository, _slack);
+                case VanierTicket.ItemId: return new VanierTicket(_inventoryRepository, _slack);
 
                 // Effect Consumables
                 case BigMac.ItemId: return new BigMac(_inventoryRepository, _effectRepository);

@@ -3,7 +3,7 @@ using Doug.Repositories;
 using Doug.Services;
 using Doug.Slack;
 
-namespace Doug.Items.Consumables
+namespace Doug.Items.Tickets
 {
     public class KickTicket : ConsumableItem
     {
