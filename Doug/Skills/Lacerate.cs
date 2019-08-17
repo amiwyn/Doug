@@ -37,7 +37,7 @@ namespace Doug.Skills
             var message = string.Format(DougMessages.UserActivatedSkill, _userService.Mention(user), Name);
             await _slack.BroadcastMessage(message, channel);
 
-            var damage = 5 * user.TotalAgility() + 150;
+            var damage = 5 * user.TotalAgility() + user.Level * 8;
             var attack = new PhysicalAttack(user, damage, int.MaxValue);
             target.ReceiveAttack(attack, _eventDispatcher);
             await _combatService.DealDamage(user, attack, target, channel);
