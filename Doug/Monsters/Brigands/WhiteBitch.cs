@@ -22,9 +22,9 @@ namespace Doug.Monsters.Brigands
             MaxHealth = Health = 450;
             MinAttack = 102;
             MaxAttack = 160;
-            Hitrate = 48;
+            Hitrate = 16;
             Dodge = 100;
-            Defense = 10;
+            Defense = 42;
             Resistance = 10;
 
             DropTable = new Dictionary<LootItem, double>

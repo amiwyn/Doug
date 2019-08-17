@@ -22,7 +22,7 @@ namespace Doug.Monsters.Seagulls
             MaxHealth = Health = 480;
             MinAttack = 78;
             MaxAttack = 96;
-            Hitrate = 18;
+            Hitrate = 6;
             Dodge = 18;
             Defense = 20;
             Resistance = 10;

@@ -21,7 +21,7 @@ namespace Doug.Monsters.Brigands
             MaxHealth = Health = 350;
             MinAttack = 50;
             MaxAttack = 100;
-            Hitrate = 38;
+            Hitrate = 6;
             Dodge = 28;
             Defense = 22;
             Resistance = 10;
