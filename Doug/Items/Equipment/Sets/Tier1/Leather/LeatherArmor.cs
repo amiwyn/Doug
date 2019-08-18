@@ -10,7 +10,7 @@
             Name = "Leather Armor";
             Description = "An armor made of leather.";
             Rarity = Rarity.Common;
-            Icon = ":leather_Armor:";
+            Icon = ":leather_armor:";
             Slot = EquipmentSlot.Body;
             Price = 387;
             LevelRequirement = 10;

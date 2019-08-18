@@ -10,7 +10,7 @@
             Name = "Plate Armor";
             Description = "An armor made of thicc material.";
             Rarity = Rarity.Common;
-            Icon = ":thick_Armor:";
+            Icon = ":thick_armor:";
             Slot = EquipmentSlot.Body;
             Price = 387;
             LevelRequirement = 10;
