@@ -1,6 +1,6 @@
 ﻿using Doug.Items.WeaponType;
 
-namespace Doug.Items.Equipment.Sets.Thick
+namespace Doug.Items.Equipment.Sets.Tier1.Plate
 {
     public class LargeSword : GreatSword
     {
@@ -16,6 +16,7 @@ namespace Doug.Items.Equipment.Sets.Thick
             Slot = EquipmentSlot.RightHand;
             Price = 315;
             LevelRequirement = 10;
+            StrengthRequirement = 15;
 
             Stats.MinAttack = 38;
             Stats.MaxAttack = 70;

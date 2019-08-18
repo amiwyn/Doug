@@ -5,6 +5,7 @@
         protected Axe()
         {
             IsDualWield = false;
+            Slot = EquipmentSlot.RightHand;
         }
     }
 }

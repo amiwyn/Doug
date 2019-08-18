@@ -21,7 +21,7 @@ namespace Doug.Skills.Combat
         {
             Name = "Fireball";
             EnergyCost = 10;
-            Cooldown = 40;
+            Cooldown = 25;
             RequiredWeapon = typeof(Staff);
 
             _slack = slack;

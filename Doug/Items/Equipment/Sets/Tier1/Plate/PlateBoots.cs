@@ -1,13 +1,13 @@
-﻿namespace Doug.Items.Equipment.Sets.Thick
+﻿namespace Doug.Items.Equipment.Sets.Tier1.Plate
 {
-    public class ThickBoots : EquipmentItem
+    public class PlateBoots : EquipmentItem
     {
         public const string ItemId = "thick_boots";
 
-        public ThickBoots()
+        public PlateBoots()
         {
             Id = ItemId;
-            Name = "Thick Boots";
+            Name = "Plate Boots";
             Description = "These boots are thicc.";
             Rarity = Rarity.Common;
             Icon = ":boots_1:";

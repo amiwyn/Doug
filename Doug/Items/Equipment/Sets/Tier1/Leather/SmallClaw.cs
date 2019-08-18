@@ -1,6 +1,6 @@
 ﻿using Doug.Items.WeaponType;
 
-namespace Doug.Items.Equipment.Sets.Leather
+namespace Doug.Items.Equipment.Sets.Tier1.Leather
 {
     public class SmallClaw : Claws
     {
@@ -16,6 +16,7 @@ namespace Doug.Items.Equipment.Sets.Leather
             Slot = EquipmentSlot.RightHand;
             Price = 233;
             LevelRequirement = 10;
+            AgilityRequirement = 15;
 
             Stats.MinAttack = 42;
             Stats.MaxAttack = 58;

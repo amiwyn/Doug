@@ -1,13 +1,13 @@
-﻿namespace Doug.Items.Equipment.Sets.Thick
+﻿namespace Doug.Items.Equipment.Sets.Tier1.Plate
 {
-    public class ThickArmor : EquipmentItem
+    public class PlateArmor : EquipmentItem
     {
         public const string ItemId = "thick_armor";
 
-        public ThickArmor()
+        public PlateArmor()
         {
             Id = ItemId;
-            Name = "Thick Armor";
+            Name = "Plate Armor";
             Description = "An armor made of thicc material.";
             Rarity = Rarity.Common;
             Icon = ":thick_Armor:";

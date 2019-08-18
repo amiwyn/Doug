@@ -1,4 +1,4 @@
-﻿namespace Doug.Items.Equipment.Sets.Leather
+﻿namespace Doug.Items.Equipment.Sets.Tier1.Leather
 {
     public class LeatherArmor : EquipmentItem
     {

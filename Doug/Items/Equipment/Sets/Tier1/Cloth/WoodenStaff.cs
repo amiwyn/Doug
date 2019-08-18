@@ -1,6 +1,6 @@
 ﻿using Doug.Items.WeaponType;
 
-namespace Doug.Items.Equipment.Sets.Cloth
+namespace Doug.Items.Equipment.Sets.Tier1.Cloth
 {
     public class WoodenStaff : Staff
     {
@@ -16,6 +16,7 @@ namespace Doug.Items.Equipment.Sets.Cloth
             Slot = EquipmentSlot.RightHand;
             Price = 215;
             LevelRequirement = 10;
+            IntelligenceRequirement = 15;
 
             Stats.Intelligence = 4;
             Stats.MinAttack = 42;

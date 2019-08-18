@@ -1,23 +1,23 @@
-﻿namespace Doug.Items.Equipment.Sets.Thick
+﻿namespace Doug.Items.Equipment.Sets.Tier1.Plate
 {
-    public class ThickGloves : EquipmentItem
+    public class PlateGloves : EquipmentItem
     {
         public const string ItemId = "thick_gloves";
 
-        public ThickGloves()
+        public PlateGloves()
         {
             Id = ItemId;
-            Name = "Thick Gloves";
+            Name = "Plate Gloves";
             Description = "Some thicc gloves.";
             Rarity = Rarity.Common;
             Icon = ":gloves_1:";
             Slot = EquipmentSlot.Gloves;
             Price = 250;
-            LevelRequirement = 10;
-            StrengthRequirement = 15;
+            LevelRequirement = 15;
+            StrengthRequirement = 20;
 
             Stats.Defense = 8;
-            Stats.Hitrate = 10;
+            Stats.Hitrate = 14;
         }
     }
 }

@@ -2,10 +2,10 @@
 using Doug.Items.Consumables.Resets;
 using Doug.Items.Equipment;
 using Doug.Items.Equipment.Necklaces;
-using Doug.Items.Equipment.Sets.Cloth;
-using Doug.Items.Equipment.Sets.Leather;
+using Doug.Items.Equipment.Sets.Tier1.Cloth;
+using Doug.Items.Equipment.Sets.Tier1.Leather;
 using Doug.Items.Equipment.Sets.Noob;
-using Doug.Items.Equipment.Sets.Thick;
+using Doug.Items.Equipment.Sets.Tier1.Plate;
 using Doug.Items.Lootboxes;
 using Doug.Items.Misc;
 using Doug.Items.Misc.Drops;
@@ -91,14 +91,6 @@ namespace Doug.Items
                 case Crown.ItemId: return new Crown();
                 case IncognitoShades.ItemId: return new IncognitoShades();
 
-                // Starting Weapons
-                case LightSword.ItemId: return new LightSword();
-                case SmallAxe.ItemId: return new SmallAxe();
-                case LargeSword.ItemId: return new LargeSword();
-                case ShortBow.ItemId: return new ShortBow();
-                case SmallClaw.ItemId: return new SmallClaw();
-                case WoodenStaff.ItemId: return new WoodenStaff();
-
                 // Necklaces
                 case EmeraldAmulet.ItemId: return new EmeraldAmulet();
 
@@ -131,21 +123,29 @@ namespace Doug.Items
                 case ShortSword.ItemId: return new ShortSword();
                 case WoodenShield.ItemId: return new WoodenShield();
 
-                // Cloth Set
+                // Cloth Set 10-15
                 case ClothArmor.ItemId: return new ClothArmor();
                 case ClothBoots.ItemId: return new ClothBoots();
                 case ClothGloves.ItemId: return new ClothGloves();
                 case FurHat.ItemId: return new FurHat();
+                case WoodenStaff.ItemId: return new WoodenStaff();
 
-                // Leather Set
+                // Leather Set 10-15
                 case LeatherArmor.ItemId: return new LeatherArmor();
                 case LeatherBoots.ItemId: return new LeatherBoots();
                 case LeatherGloves.ItemId: return new LeatherGloves();
+                case ShortBow.ItemId: return new ShortBow();
+                case SmallClaw.ItemId: return new SmallClaw();
 
-                // Thick Set
-                case ThickArmor.ItemId: return new ThickArmor();
-                case ThickBoots.ItemId: return new ThickBoots();
-                case ThickGloves.ItemId: return new ThickGloves();
+                // Plate Set 10-15
+                case PlateArmor.ItemId: return new PlateArmor();
+                case PlateBoots.ItemId: return new PlateBoots();
+                case PlateGloves.ItemId: return new PlateGloves();
+                case LightSword.ItemId: return new LightSword();
+                case SmallAxe.ItemId: return new SmallAxe();
+                case LargeSword.ItemId: return new LargeSword();
+
+
 
                 default: return new Default();
             }
