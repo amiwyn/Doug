@@ -39,11 +39,11 @@ namespace Doug.Monsters
 
         public Attack AttackTarget(ICombatable target, IEventDispatcher eventDispatcher)
         {
-            Attack attack = new PhysicalAttack(this, Monster.MinAttack, Monster.MaxAttack, Monster.Hitrate, Monster.Luck);
+            Attack attack = new PhysicalAttack(this, Monster.MinAttack, Monster.MaxAttack, Monster.Hitrate, Monster.GetCriticalHitChance());
 
             if (Monster.DamageType == DamageType.Magical)
             {
-                attack = new MagicAttack(this, Monster.Intelligence);
+                attack = new MagicAttack(this, Monster.MaxAttack);
             }
 
             return target.ReceiveAttack(attack, eventDispatcher);

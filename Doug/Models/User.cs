@@ -171,6 +171,11 @@ namespace Doug.Models
             return Math.Log(TotalLuck() / 5.0) / (Math.Log(1.2) * 100);
         }
 
+        public double CriticalHitChance()
+        {
+            return Math.Sqrt(TotalLuck()) * 0.04;
+        }
+
         public void Dies()
         {
             Health = 1;
@@ -197,7 +202,7 @@ namespace Doug.Models
 
         public Attack AttackTarget(ICombatable target, IEventDispatcher eventDispatcher)
         {
-            Attack attack = new PhysicalAttack(this, MinAttack(), MaxAttack(), TotalHitrate(), TotalLuck());
+            Attack attack = new PhysicalAttack(this, MinAttack(), MaxAttack(), TotalHitrate(), CriticalHitChance());
 
             attack.Damage = eventDispatcher.OnAttacking(this, target, attack.Damage);
 
