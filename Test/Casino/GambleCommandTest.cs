@@ -44,7 +44,7 @@ namespace Test.Casino
         {
             _userRepository.Setup(repo => repo.GetUser(User)).Returns(_user);
 
-            _casinoCommands = new CasinoCommands(_userRepository.Object, _slack.Object, _channelRepository.Object, _backgroundClient.Object, _itemEventDispatcher.Object, _statsRepository.Object, _randomService.Object, _userService.Object, _creditsRepository.Object);
+            _casinoCommands = new CasinoCommands(_userRepository.Object, _slack.Object, _channelRepository.Object, _backgroundClient.Object, _itemEventDispatcher.Object, _randomService.Object, _userService.Object, _creditsRepository.Object);
         }
 
         [TestMethod]
