@@ -1,6 +1,8 @@
-﻿namespace Doug.Items.Equipment
+﻿using Doug.Items.WeaponType;
+
+namespace Doug.Items.Equipment
 {
-    public class StraightEdge : EquipmentItem
+    public class StraightEdge : Sword
     {
         public const string ItemId = "straight_edge";
 
@@ -11,7 +13,6 @@
             Description = "No thanks, I'm straight edge.";
             Rarity = Rarity.Common;
             Icon = ":straight_edge:";
-            Slot = EquipmentSlot.RightHand;
             Price = 820;
             LevelRequirement = 1;
 
