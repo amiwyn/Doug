@@ -101,24 +101,6 @@ namespace Test.Casino
         }
 
         [TestMethod]
-        public void WhenGambling_UserLoseTenPercentOfAmountInEnergy()
-        {
-            _casinoCommands.Gamble(_command);
-
-            _statsRepository.Verify(repo => repo.UpdateEnergy(User, 19));
-        }
-
-        [TestMethod]
-        public void GivenUserHasNotEnoughEnergy_WhenGambling_UserReceiveNotEnoughEnergyMessage()
-        {
-            _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User { Id = "testuser", Credits = 68, Energy = 0 });
-
-            var result = _casinoCommands.Gamble(_command);
-
-            Assert.AreEqual(DougMessages.NotEnoughEnergy, result.Message);
-        }
-
-        [TestMethod]
         public void GivenUserIsRich_WhenGambling_UserCanGamble()
         {
             _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User() { Id = "testuser", Credits = 8912, Energy = 33});
