@@ -1,8 +1,9 @@
-﻿using Doug.Models;
+﻿using Doug.Items.WeaponType;
+using Doug.Models;
 
 namespace Doug.Items.Equipment
 {
-    public class PimentSword : EquipmentItem
+    public class PimentSword : Sword
     {
         public const string ItemId = "piment_sword";
 
@@ -12,8 +13,7 @@ namespace Doug.Items.Equipment
             Name = "Fucking Sword of Piment";
             Description = "Well.. this sword is really spicy. Still useless, you're kinda dumb of owning it.";
             Rarity = Rarity.Uncommon;
-            Icon = ":piment_sword:";
-            Slot = EquipmentSlot.RightHand;
+            Icon = ":piment_sword:";         
             Price = 224;
             LevelRequirement = 5;
             Stats.MinAttack = 18;
