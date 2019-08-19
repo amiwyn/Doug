@@ -2,7 +2,6 @@
 using Doug.Items.Consumables.Resets;
 using Doug.Items.Equipment;
 using Doug.Items.Equipment.Necklaces;
-using Doug.Items.Equipment.Sets;
 using Doug.Items.Equipment.Sets.Tier1.Cloth;
 using Doug.Items.Equipment.Sets.Tier1.Leather;
 using Doug.Items.Equipment.Sets.Noob;
