@@ -99,14 +99,15 @@ namespace Doug.Models
         public int TotalIntelligence() => Loadout.Intelligence + Intelligence + Effects.Sum(userEffect => userEffect.Effect.Intelligence);
         public int TotalDefense() => Loadout.Defense + (int)Math.Floor(2.0 * TotalConstitution()) + Effects.Sum(userEffect => userEffect.Effect.Intelligence);
         public int TotalDodge() => Loadout.Dodge + TotalAgility() + Effects.Sum(userEffect => userEffect.Effect.Dodge);
-        public int TotalHitrate() => Loadout.Hitrate + 5 + Effects.Sum(userEffect => userEffect.Effect.Hitrate);
+        public int TotalHitrate() => Loadout.Hitrate + TotalAgility() + Effects.Sum(userEffect => userEffect.Effect.Hitrate);
         public int MaxAttack() => Loadout.MaxAttack + Attack + Effects.Sum(userEffect => userEffect.Effect.Attack);
         public int MinAttack() => Loadout.MinAttack + Attack + Effects.Sum(userEffect => userEffect.Effect.Attack);
         public int TotalAttackSpeed() => BaseAttackSpeed + Loadout.AttackSpeed + TotalAgility() / 2;
         public double BaseOpponentStealSuccessRate() => 0.75;
         public int BaseStealAmount() => (int)Math.Floor(3 * (Math.Sqrt(TotalAgility()) - Math.Sqrt(5)) + 1);
         public double BaseDetectionChance() => (Math.Sqrt(Math.Max((TotalIntelligence() - 5), 1)) * 0.08);
-        public double BaseDetectionAvoidance() => Math.Sqrt((TotalAgility() + TotalLuck()) / 2) * 0.15;
+        public double BaseDetectionAvoidance() => Math.Sqrt((TotalAgility() + TotalLuck()) / 2.0) * 0.15;
+        public bool HasWeaponType(Type type) => Loadout.HasWeaponType(type);
         public bool HasEnoughCreditsForAmount(int amount) => Credits - amount >= 0;
         public string NotEnoughCreditsForAmountResponse(int amount) => string.Format(DougMessages.NotEnoughCredits, amount, Credits);
         public bool HasEmptyInventory() => !InventoryItems.Any();
@@ -252,8 +253,8 @@ namespace Doug.Models
 
         public void RegenerateHealthAndEnergy()
         {
-            Health += (int) (TotalHealth() * (BaseHealthRegen + Loadout.HealthRegen) * 0.01);
-            Energy += (int) (TotalEnergy() * (BaseEnergyRegen + Loadout.EnergyRegen) * 0.01);
+            Health += (int)Math.Ceiling(TotalHealth() * (BaseHealthRegen + Loadout.HealthRegen) * 0.01);
+            Energy += (int)Math.Ceiling(TotalEnergy() * (BaseEnergyRegen + Loadout.EnergyRegen) * 0.01);
         }
     }
 }

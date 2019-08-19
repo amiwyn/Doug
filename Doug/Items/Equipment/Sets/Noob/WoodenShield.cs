@@ -1,6 +1,8 @@
-﻿namespace Doug.Items.Equipment.Sets.Noob
+﻿using Doug.Items.WeaponType;
+
+namespace Doug.Items.Equipment.Sets.Noob
 {
-    public class WoodenShield : EquipmentItem
+    public class WoodenShield : Shield
     {
         public const string ItemId = "wooden_shield";
 
@@ -11,7 +13,6 @@
             Description = "A shield made of wood.";
             Rarity = Rarity.Common;
             Icon = ":noob_shield:";
-            Slot = EquipmentSlot.LeftHand;
             Price = 105;
             LevelRequirement = 5;
 

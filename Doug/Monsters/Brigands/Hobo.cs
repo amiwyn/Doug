@@ -2,7 +2,6 @@ using Doug.Items.Consumables;
 using Doug.Items.Misc.Drops;
 using Doug.Models;
 using System.Collections.Generic;
-using Doug.Items;
 
 namespace Doug.Monsters.Brigands
 {
@@ -22,7 +21,7 @@ namespace Doug.Monsters.Brigands
             MaxHealth = Health = 269;
             MinAttack = 69;
             MaxAttack = 69;
-            Hitrate = 18;
+            Hitrate = 7;
             Dodge = 18;
             Defense = 17;
             Resistance = 9;

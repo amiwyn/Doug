@@ -1,6 +1,8 @@
-﻿namespace Doug.Items.Equipment.Sets.Noob
+﻿using Doug.Items.WeaponType;
+
+namespace Doug.Items.Equipment.Sets.Noob
 {
-    public class ShortSword : Weapon
+    public class ShortSword : Sword
     {
         public const string ItemId = "short_sword";
 

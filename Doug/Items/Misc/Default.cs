@@ -1,4 +1,6 @@
-﻿namespace Doug.Items.Misc
+﻿using Doug.Items.WeaponType;
+
+namespace Doug.Items.Misc
 {
     public class Default : Weapon
     {

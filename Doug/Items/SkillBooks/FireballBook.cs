@@ -1,6 +1,6 @@
 ﻿using Doug.Repositories;
 using Doug.Services;
-using Doug.Skills;
+using Doug.Skills.Combat;
 using Doug.Slack;
 
 namespace Doug.Items.SkillBooks
@@ -9,10 +9,10 @@ namespace Doug.Items.SkillBooks
     {
         public const string ItemId = "fireball";
 
-        public FireballBook(IStatsRepository statsRepository, ISlackWebApi slack, IUserService userService,
+        public FireballBook(IStatsRepository statsRepository, ISlackWebApi slack, IChannelRepository channelRepository, IUserService userService,
             ICombatService combatService, IEventDispatcher eventDispatcher)
         {
-            Skill = new Fireball(statsRepository, slack, userService, combatService, eventDispatcher);
+            Skill = new Fireball(statsRepository, slack, userService, combatService, eventDispatcher, channelRepository);
 
             Id = ItemId;
             Name = "Fireball";

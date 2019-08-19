@@ -36,7 +36,7 @@ namespace Doug.Commands
 
         private static readonly DougResponse NoResponse = new DougResponse();
         private readonly IUserService _userService;
-        public ICreditsRepository _creditsRepository;
+        private readonly ICreditsRepository _creditsRepository;
 
         public SlursCommands(ISlurRepository slursRepository, IUserRepository userRepository, ISlackWebApi messageSender, IAuthorizationService adminValidator, IEventDispatcher eventDispatcher, IUserService userService, ICreditsRepository creditsRepository)
         {

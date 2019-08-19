@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using Doug.Commands;
 using Doug.Items;
-using Doug.Items.Consumables;
 using Doug.Items.Misc;
+using Doug.Items.Tickets;
 using Doug.Models;
 using Doug.Repositories;
 using Doug.Services;

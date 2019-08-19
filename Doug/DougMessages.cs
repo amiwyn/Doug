@@ -146,11 +146,9 @@
         public const string LevelRequirementNotMet = "You do not meet the level requirements to equip this item.";
         public const string CommandOnCooldown = "This action is on cooldown, try again in {0} seconds.";
         public const string UnknownShop = "Unknown shop. Verify the shop id.";
-        public const string UserMustBeActive = "The user you are targetting must be active.";
-        public const string YouMustBeActive = "You must be active for this.";
         public const string RevolutionCooldown = "You must wait {0} minutes until the next revolution";
         public const string SkillCannotBeActivated = "This skill cannot be activated.";
-        public const string SkillNeedsTarget = "You must specify a target.";
+        public const string WrongWeaponForSkill = "You must have a *{0}* equipped to use this skill.";
     }
 }
 

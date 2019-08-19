@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Doug.Items;
 using Doug.Models;
 using Doug.Models.Combat;
 
@@ -15,6 +14,7 @@ namespace Doug.Monsters
         public string Image { get; set; }
         public DamageType DamageType { get; set; }
         public Dictionary<LootItem, double> DropTable { get; set; }
+        public string Region { get; set; }
 
         public string Name { get; set; }
         public string Description { get; set; }
