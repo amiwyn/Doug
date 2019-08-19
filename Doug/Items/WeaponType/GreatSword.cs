@@ -6,6 +6,7 @@
         {
             IsDualWield = true;
             Stats.AttackSpeed = -20;
+            Slot = EquipmentSlot.RightHand;
         }
     }
 }

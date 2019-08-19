@@ -13,7 +13,6 @@ namespace Doug.Items.Equipment.Sets.Tier1.Leather
             Description = "Watch out for bears.";
             Rarity = Rarity.Common;
             Icon = ":claw1:";
-            Slot = EquipmentSlot.RightHand;
             Price = 233;
             LevelRequirement = 10;
             AgilityRequirement = 15;

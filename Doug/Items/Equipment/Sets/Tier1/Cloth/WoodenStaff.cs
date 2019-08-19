@@ -13,7 +13,6 @@ namespace Doug.Items.Equipment.Sets.Tier1.Cloth
             Description = "A magical staff, still it looks like a piece of wood.";
             Rarity = Rarity.Common;
             Icon = ":staff1:";
-            Slot = EquipmentSlot.RightHand;
             Price = 215;
             LevelRequirement = 10;
             IntelligenceRequirement = 15;

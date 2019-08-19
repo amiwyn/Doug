@@ -5,6 +5,7 @@
         protected Staff()
         {
             IsDualWield = true;
+            Slot = EquipmentSlot.RightHand;
         }
     }
 }

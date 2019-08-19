@@ -5,6 +5,7 @@
         protected Sword()
         {
             IsDualWield = false;
+            Slot = EquipmentSlot.RightHand;
         }
     }
 }

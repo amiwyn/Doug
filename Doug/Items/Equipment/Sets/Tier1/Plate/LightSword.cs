@@ -13,7 +13,6 @@ namespace Doug.Items.Equipment.Sets.Tier1.Plate
             Description = "A sword made of lightweight material.";
             Rarity = Rarity.Common;
             Icon = ":sword1:";
-            Slot = EquipmentSlot.RightHand;
             Price = 190;
             LevelRequirement = 10;
             StrengthRequirement = 15;

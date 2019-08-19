@@ -13,7 +13,6 @@ namespace Doug.Items.Equipment.Sets.Tier1.Plate
             Description = "Now that's a big sword!";
             Rarity = Rarity.Common;
             Icon = ":heavy_sword1:";
-            Slot = EquipmentSlot.RightHand;
             Price = 315;
             LevelRequirement = 10;
             StrengthRequirement = 15;
