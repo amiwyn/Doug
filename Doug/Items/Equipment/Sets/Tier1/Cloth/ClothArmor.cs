@@ -21,23 +21,6 @@
             Stats.Energy = 40;
             Stats.Intelligence = 3;
             Stats.EnergyRegen = 2;
-
-            Stats.Health = 1;
-            Stats.Energy = 1;
-            Stats.MaxAttack = 1;
-            Stats.MinAttack = 1;
-            Stats.AttackSpeed = 1;
-            Stats.Hitrate = 1;
-            Stats.Dodge = 1;
-            Stats.Defense = 1;
-            Stats.Resistance = 1;
-            Stats.HealthRegen = 1;
-            Stats.EnergyRegen = 1;
-            Stats.Luck = 1;
-            Stats.Agility = 1;
-            Stats.Strength = 1;
-            Stats.Constitution = 1;
-            Stats.Intelligence = 1;
         }
     }
 }
