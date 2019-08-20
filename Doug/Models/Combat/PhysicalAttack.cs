@@ -6,11 +6,11 @@ namespace Doug.Models.Combat
     {
         public int AttackersHitrate { get; set; }
 
-        public PhysicalAttack(ICombatable attacker, int minDamage, int maxDamage, int attackersHitrate, int attackersLuck) : base(RollAttack(minDamage, maxDamage), attacker)
+        public PhysicalAttack(ICombatable attacker, int minDamage, int maxDamage, int attackersHitrate, double criticalHitChance) : base(RollAttack(minDamage, maxDamage), attacker)
         {
             AttackersHitrate = attackersHitrate;
 
-            if (new Random().NextDouble() < Math.Sqrt(attackersLuck) * 0.04)
+            if (new Random().NextDouble() < criticalHitChance)
             {
                 Status = AttackStatus.Critical;
             }

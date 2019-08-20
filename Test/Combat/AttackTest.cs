@@ -49,16 +49,6 @@ namespace Test.Combat
         }
 
         [TestMethod]
-        public async Task GivenUserHasNoEnergy_WhenAttacking_NotEnoughEnergyMessage()
-        {
-            var user = new User { Energy = 0 };
-
-            var result = await _combatService.Attack(user, _target, Channel);
-
-            Assert.AreEqual(DougMessages.NotEnoughEnergy, result.Message);
-        }
-
-        [TestMethod]
         public async Task GivenUserIsInWrongChannel_WhenAttacking_WrongChannelMessage()
         {
             _channelRepository.Setup(repo => repo.GetChannelType("coco-channel")).Returns(ChannelType.Common);

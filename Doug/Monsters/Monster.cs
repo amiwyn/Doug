@@ -26,12 +26,8 @@ namespace Doug.Monsters
         public int Dodge { get; set; }
         public int Resistance { get; set; }
         public int Defense { get; set; }
-
-        public int Luck { get; set; }
-        public int Agility { get; set; }
-        public int Strength { get; set; }
-        public int Constitution { get; set; }
-        public int Intelligence { get; set; }
+        public int AttackCooldown { get; set; }
+        public int CriticalHitChance { get; set; }
 
         protected Monster()
         {
@@ -45,7 +41,12 @@ namespace Doug.Monsters
 
         public TimeSpan GetAttackCooldown()
         {
-            return TimeSpan.FromSeconds(3000.0 / (100 + Agility / 2));
+            return TimeSpan.FromSeconds(AttackCooldown);
+        }
+
+        public double GetCriticalHitChance()
+        {
+            return CriticalHitChance / 100.0;
         }
     }
 }

@@ -155,8 +155,11 @@ namespace Doug.Models
 
         public bool HasWeaponType(Type type)
         {
-            return GetEquipmentAt(EquipmentSlot.RightHand).GetType().IsSubclassOf(type) ||
-                   GetEquipmentAt(EquipmentSlot.LeftHand).GetType().IsSubclassOf(type);
+            var rightHand = GetEquipmentAt(EquipmentSlot.RightHand);
+            var leftHand = GetEquipmentAt(EquipmentSlot.LeftHand);
+
+            return rightHand != null && rightHand.GetType().IsSubclassOf(type) ||
+                   leftHand != null && leftHand.GetType().IsSubclassOf(type);
         }
     }
 }

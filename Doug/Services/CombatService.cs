@@ -19,7 +19,6 @@ namespace Doug.Services
 
     public class CombatService : ICombatService
     {
-        private const int AttackEnergyCost = 1;
         private const int KillExperienceGain = 100;
 
         private readonly IEventDispatcher _eventDispatcher;
@@ -43,16 +42,9 @@ namespace Doug.Services
 
         public async Task<DougResponse> Attack(User user, User target, string channel)
         {
-            var energy = user.Energy - AttackEnergyCost;
-
             if (user.IsAttackOnCooldown())
             {
                 return new DougResponse(string.Format(DougMessages.CommandOnCooldown, user.CalculateAttackCooldownRemaining()));
-            }
-
-            if (energy < 0)
-            {
-                return new DougResponse(DougMessages.NotEnoughEnergy);
             }
 
             var channelType = _channelRepository.GetChannelType(channel);
@@ -67,7 +59,6 @@ namespace Doug.Services
                 return new DougResponse(DougMessages.UserIsNotInPvp);
             }
 
-            _statsRepository.UpdateEnergy(user.Id, energy);
             _statsRepository.SetAttackCooldown(user.Id, user.GetAttackCooldown());
 
             var attack = user.AttackTarget(target, _eventDispatcher);
@@ -94,19 +85,11 @@ namespace Doug.Services
 
         public async Task<DougResponse> AttackMonster(User user, SpawnedMonster spawnedMonster, string channel)
         {
-            var energy = user.Energy - AttackEnergyCost;
-
             if (user.IsAttackOnCooldown())
             {
                 return new DougResponse(string.Format(DougMessages.CommandOnCooldown, user.CalculateAttackCooldownRemaining()));
             }
 
-            if (energy < 0)
-            {
-                return new DougResponse(DougMessages.NotEnoughEnergy);
-            }
-
-            _statsRepository.UpdateEnergy(user.Id, energy);
             _statsRepository.SetAttackCooldown(user.Id, user.GetAttackCooldown());
 
             var attack = user.AttackTarget(spawnedMonster, _eventDispatcher);

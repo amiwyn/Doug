@@ -22,7 +22,7 @@ namespace Doug.Skills
             if (target is User targetUser)
             {
                 var channelType = _channelRepository.GetChannelType(channel);
-                if (channelType != ChannelType.Common && channelType != ChannelType.Pvp)
+                if (channelType != ChannelType.Pvp)
                 {
                     response = new DougResponse(DougMessages.NotInRightChannel);
                     return false;

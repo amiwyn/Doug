@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Doug;
 using Doug.Items;
+using Doug.Items.Equipment;
 using Doug.Models;
 using Doug.Repositories;
 using Doug.Services;
@@ -17,7 +18,7 @@ namespace Test.Combat
     {
         private const string Channel = "coco-channel";
 
-        private readonly User _user = new User { Id = "bebebobo", Energy = 10 };
+        private readonly User _user = new User { Id = "bebebobo", Energy = 10 , Loadout = new Loadout { Equipment = { { EquipmentSlot.RightHand, new StraightEdge() } } } };
         private readonly User _target = new User { Id = "robert", Credits = 10 };
 
         private Steal _steal;
@@ -35,7 +36,7 @@ namespace Test.Combat
         {
             _slack.Setup(slack => slack.GetUsersInChannel("coco-channel")).Returns(Task.FromResult(new List<string> { "robert" }));
             _userService.Setup(service => service.IsUserActive(It.IsAny<string>())).Returns(Task.FromResult(true));
-            _channelRepository.Setup(repo => repo.GetChannelType("coco-channel")).Returns(ChannelType.Common);
+            _channelRepository.Setup(repo => repo.GetChannelType("coco-channel")).Returns(ChannelType.Pvp);
             _itemEventDispatcher.Setup(disp => disp.OnStealingAmount(It.IsAny<User>(), It.IsAny<int>())).Returns(1);
 
             _steal = new Steal(_statsRepository.Object, _slack.Object, _userService.Object,
@@ -65,7 +66,7 @@ namespace Test.Combat
         [TestMethod]
         public async Task GivenUserHasNoEnergy_WhenStealing_NotEnoughEnergyMessage()
         {
-            var user = new User { Energy = 0 };
+            var user = new User { Energy = 0, Loadout = new Loadout { Equipment = { { EquipmentSlot.RightHand, new StraightEdge() } } } };
 
             var result = await _steal.Activate(user, _target, Channel);
 

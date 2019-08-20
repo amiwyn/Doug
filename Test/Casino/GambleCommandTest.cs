@@ -44,7 +44,7 @@ namespace Test.Casino
         {
             _userRepository.Setup(repo => repo.GetUser(User)).Returns(_user);
 
-            _casinoCommands = new CasinoCommands(_userRepository.Object, _slack.Object, _channelRepository.Object, _backgroundClient.Object, _itemEventDispatcher.Object, _statsRepository.Object, _randomService.Object, _userService.Object, _creditsRepository.Object);
+            _casinoCommands = new CasinoCommands(_userRepository.Object, _slack.Object, _channelRepository.Object, _backgroundClient.Object, _itemEventDispatcher.Object, _randomService.Object, _userService.Object, _creditsRepository.Object);
         }
 
         [TestMethod]
@@ -98,24 +98,6 @@ namespace Test.Casino
             var result = _casinoCommands.Gamble(command);
 
             Assert.AreEqual("Invalid amount", result.Message);
-        }
-
-        [TestMethod]
-        public void WhenGambling_UserLoseTenPercentOfAmountInEnergy()
-        {
-            _casinoCommands.Gamble(_command);
-
-            _statsRepository.Verify(repo => repo.UpdateEnergy(User, 19));
-        }
-
-        [TestMethod]
-        public void GivenUserHasNotEnoughEnergy_WhenGambling_UserReceiveNotEnoughEnergyMessage()
-        {
-            _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User { Id = "testuser", Credits = 68, Energy = 0 });
-
-            var result = _casinoCommands.Gamble(_command);
-
-            Assert.AreEqual(DougMessages.NotEnoughEnergy, result.Message);
         }
 
         [TestMethod]
