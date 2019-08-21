@@ -20,7 +20,7 @@ namespace Doug.Skills.Combat
             ICombatService combatService, IEventDispatcher eventDispatcher, IChannelRepository channelRepository) : base(statsRepository, channelRepository, slack)
         {
             Name = "Fireball";
-            EnergyCost = 10;
+            EnergyCost = 30;
             Cooldown = 25;
             RequiredWeapon = typeof(Staff);
 
@@ -40,7 +40,7 @@ namespace Doug.Skills.Combat
             var message = string.Format(DougMessages.UserActivatedSkill, _userService.Mention(user), Name);
             await _slack.BroadcastMessage(message, channel);
 
-            var damage = (int)(user.TotalIntelligence() * 2.5);
+            var damage = (int)(2.5 * user.TotalIntelligence() + user.Level);
 
             var attack = new MagicAttack(user, damage);
             target.ReceiveAttack(attack, _eventDispatcher);

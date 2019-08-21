@@ -16,8 +16,8 @@ namespace Doug.Skills.Utility
         public Heal(IStatsRepository statsRepository, ISlackWebApi slack, IUserService userService) : base(statsRepository)
         {
             Name = "Heal";
-            EnergyCost = 32;
-            Cooldown = 20;
+            EnergyCost = 52;
+            Cooldown = 50;
             RequiredWeapon = typeof(Staff);
 
             _slack = slack;

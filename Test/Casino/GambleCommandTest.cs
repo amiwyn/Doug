@@ -34,7 +34,6 @@ namespace Test.Casino
         private readonly Mock<IChannelRepository> _channelRepository = new Mock<IChannelRepository>();
         private readonly Mock<IBackgroundJobClient> _backgroundClient = new Mock<IBackgroundJobClient>();
         private readonly Mock<IEventDispatcher> _itemEventDispatcher = new Mock<IEventDispatcher>();
-        private readonly Mock<IStatsRepository> _statsRepository = new Mock<IStatsRepository>();
         private readonly Mock<IRandomService> _randomService = new Mock<IRandomService>();
         private readonly Mock<IUserService> _userService = new Mock<IUserService>();
         private readonly Mock<ICreditsRepository> _creditsRepository = new Mock<ICreditsRepository>();
