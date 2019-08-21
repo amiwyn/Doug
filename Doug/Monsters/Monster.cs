@@ -32,6 +32,7 @@ namespace Doug.Monsters
         protected Monster()
         {
             Health = MaxHealth;
+            AttackCooldown = 30;
         }
 
         public bool IsDead()
