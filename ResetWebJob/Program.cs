@@ -29,7 +29,7 @@ namespace ResetWebJob
             var government = db.Government.Single();
 
             var ruler = db.Users.Single(usr => usr.Id == government.Ruler);
-            ruler.Credits += 200;
+            ruler.Credits += 2000;
         }
 
         private static void ResetRecentSlurs(DougContext db)

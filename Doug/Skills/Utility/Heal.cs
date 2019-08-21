@@ -26,7 +26,7 @@ namespace Doug.Skills.Utility
 
         public override async Task<DougResponse> Activate(User user, ICombatable target, string channel)
         {
-            if (!CanActivateSkill(user, out var response))
+            if (!CanActivateSkill(user, target, channel, out var response))
             {
                 return response;
             }

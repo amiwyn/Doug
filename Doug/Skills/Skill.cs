@@ -27,7 +27,7 @@ namespace Doug.Skills
             return await Task.FromResult(new DougResponse(DougMessages.SkillCannotBeActivated));
         }
 
-        protected bool CanActivateSkill(User user, out DougResponse response)
+        protected virtual bool CanActivateSkill(User user, ICombatable target, string channel, out DougResponse response)
         {
             if (!user.HasWeaponType(RequiredWeapon))
             {

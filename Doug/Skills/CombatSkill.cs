@@ -17,7 +17,7 @@ namespace Doug.Skills
             _slack = slack;
         }
 
-        protected bool CanActivateSkill(User user, ICombatable target, string channel, out DougResponse response)
+        protected override bool CanActivateSkill(User user, ICombatable target, string channel, out DougResponse response)
         {
             if (target is User targetUser)
             {
@@ -36,7 +36,7 @@ namespace Doug.Skills
                 }
             }
 
-            return CanActivateSkill(user, out response);
+            return base.CanActivateSkill(user, target, channel, out response);
         }
     }
 }
