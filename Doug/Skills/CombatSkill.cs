@@ -36,7 +36,7 @@ namespace Doug.Skills
                 }
             }
 
-            return CanActivateSkill(user, target, channel, out response);
+            return base.CanActivateSkill(user, target, channel, out response);
         }
     }
 }
