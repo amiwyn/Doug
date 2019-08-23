@@ -16,6 +16,7 @@ namespace Doug.Commands
 
     public class CasinoCommands : ICasinoCommands
     {
+        private const int GambleEnergyCost = 5;
         private const string AcceptChallengeWord = "accept";
         private const string DeclineChallengeWord = "decline";
         private readonly IUserRepository _userRepository;
@@ -27,16 +28,18 @@ namespace Doug.Commands
 
 
         private static readonly DougResponse NoResponse = new DougResponse();
+        private readonly IStatsRepository _statsRepository;
         private readonly IUserService _userService;
         private readonly ICreditsRepository _creditsRepository;
 
-        public CasinoCommands(IUserRepository userRepository, ISlackWebApi messageSender, IChannelRepository channelRepository, IBackgroundJobClient backgroundJobClient, IEventDispatcher eventDispatcher, IRandomService randomService, IUserService userService, ICreditsRepository creditsRepository)
+        public CasinoCommands(IUserRepository userRepository, ISlackWebApi messageSender, IChannelRepository channelRepository, IBackgroundJobClient backgroundJobClient, IEventDispatcher eventDispatcher, IStatsRepository statsRepository, IRandomService randomService, IUserService userService, ICreditsRepository creditsRepository)
         {
             _userRepository = userRepository;
             _slack = messageSender;
             _channelRepository = channelRepository;
             _backgroundJobClient = backgroundJobClient;
             _eventDispatcher = eventDispatcher;
+            _statsRepository = statsRepository;
             _randomService = randomService;
             _userService = userService;
             _creditsRepository = creditsRepository;
@@ -56,6 +59,15 @@ namespace Doug.Commands
             {
                 return new DougResponse(user.NotEnoughCreditsForAmountResponse(amount));
             }
+
+            var energy = user.Energy - GambleEnergyCost;
+
+            if (energy < 0)
+            {
+                return new DougResponse(DougMessages.NotEnoughEnergy);
+            }
+
+            _statsRepository.UpdateEnergy(command.UserId, energy);
 
             string baseMessage;
             if (UserCoinFlipWin(user))
