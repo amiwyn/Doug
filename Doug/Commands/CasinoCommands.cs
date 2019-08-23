@@ -16,6 +16,7 @@ namespace Doug.Commands
 
     public class CasinoCommands : ICasinoCommands
     {
+        private const int GambleEnergyCost = 5;
         private const string AcceptChallengeWord = "accept";
         private const string DeclineChallengeWord = "decline";
         private readonly IUserRepository _userRepository;
@@ -59,8 +60,7 @@ namespace Doug.Commands
                 return new DougResponse(user.NotEnoughCreditsForAmountResponse(amount));
             }
 
-            var cost = (int)Math.Ceiling(amount / 10.0);
-            var energy = user.Energy - cost;
+            var energy = user.Energy - GambleEnergyCost;
 
             if (energy < 0)
             {
