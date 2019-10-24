@@ -170,7 +170,7 @@ namespace Doug.Items
                 case MagePlume.ItemId: return new MagePlume();
 
                 // Leather Set 20
-                case HunterArmor.ItemId: return new MageArmor();
+                case HunterArmor.ItemId: return new HunterArmor();
                 case HunterBoots.ItemId: return new HunterBoots();
                 case HunterGloves.ItemId: return new HunterGloves();
                 case HunterBeret.ItemId: return new HunterBeret();
