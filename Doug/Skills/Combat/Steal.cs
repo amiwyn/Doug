@@ -18,7 +18,7 @@ namespace Doug.Skills.Combat
         private readonly IRandomService _randomService;
         private readonly ICreditsRepository _creditsRepository;
 
-        public Steal(IStatsRepository statsRepository, ISlackWebApi slack, IUserService userService, IChannelRepository channelRepository, IEventDispatcher eventDispatcher, IRandomService randomService, ICreditsRepository creditsRepository) : base(statsRepository, channelRepository, slack)
+        public Steal(IStatsRepository statsRepository, ISlackWebApi slack, IUserService userService, IChannelRepository channelRepository, IEventDispatcher eventDispatcher, IRandomService randomService, ICreditsRepository creditsRepository) : base(statsRepository, channelRepository, slack, eventDispatcher)
         {
             Name = "Steal";
             EnergyCost = 1;

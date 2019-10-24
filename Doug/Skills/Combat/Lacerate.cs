@@ -17,7 +17,7 @@ namespace Doug.Skills.Combat
         private readonly IEventDispatcher _eventDispatcher;
 
         public Lacerate(IStatsRepository statsRepository, ISlackWebApi slack, IUserService userService,
-            ICombatService combatService, IEventDispatcher eventDispatcher, IChannelRepository channelRepository) : base(statsRepository, channelRepository, slack)
+            ICombatService combatService, IEventDispatcher eventDispatcher, IChannelRepository channelRepository) : base(statsRepository, channelRepository, slack, eventDispatcher)
         {
             Name = "Lacerate";
             EnergyCost = 20;
