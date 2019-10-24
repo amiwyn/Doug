@@ -34,10 +34,11 @@ namespace Doug.Repositories
         {
             if (!_db.Users.Any(user => user.Id == userId)) {
 
-                var user = new User()
+                var user = new User
                 {
                     Id = userId,
-                    Credits = 10
+                    Credits = 10,
+                    Loadout = new Loadout { Id = userId }
                 };
 
                 _db.Users.Add(user);

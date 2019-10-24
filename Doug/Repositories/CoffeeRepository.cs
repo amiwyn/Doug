@@ -1,4 +1,5 @@
-﻿using Doug.Models;
+﻿using System;
+using Doug.Models;
 using System.Collections.Generic;
 using System.Linq;
 using Doug.Items;
@@ -20,7 +21,6 @@ namespace Doug.Repositories
         void StartCoffeeBreak();
         string GetRemindJob();
         void SetRemindJob(string jobId);
-        void SwapBreakCompletionFlags();
     }
 
     public class CoffeeRepository : ICoffeeRepository
@@ -116,7 +116,9 @@ namespace Doug.Repositories
         public void StartCoffeeBreak()
         {
             var channel = _db.CoffeeBreak.Single();
+            var coffee = _db.CoffeeBreak.Single();
             channel.IsCoffeeBreak = true;
+            coffee.LastCoffee = DateTime.UtcNow;
 
             _db.SaveChanges();
         }
@@ -129,16 +131,6 @@ namespace Doug.Repositories
         public void SetRemindJob(string jobId)
         {
             _db.CoffeeBreak.Single().CoffeeRemindJobId = jobId;
-            _db.SaveChanges();
-        }
-
-        public void SwapBreakCompletionFlags()
-        {
-            var coffee = _db.CoffeeBreak.Single();
-
-            coffee.MorningBreakCompleted ^= true;
-            coffee.AfternoonBreakCompleted ^= true;
-
             _db.SaveChanges();
         }
 
