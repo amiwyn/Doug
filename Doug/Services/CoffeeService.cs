@@ -46,18 +46,16 @@ namespace Doug.Services
         {
             var coffeeBreak = _coffeeRepository.GetCoffeeBreak();
 
-            var morningBreakIsPossible = IsInTimespan(currentTime, TimeSpan.FromHours(MorningBreak), Tolerance) &&
-                                          !coffeeBreak.MorningBreakCompleted;
-
-            var afternoonBreakIsPossible = IsInTimespan(currentTime, TimeSpan.FromHours(AfternoonBreak), Tolerance) &&
-                                          !coffeeBreak.AfternoonBreakCompleted;
+            var morningBreakIsPossible = IsInTimespan(currentTime, TimeSpan.FromHours(MorningBreak), Tolerance);
+            var afternoonBreakIsPossible = IsInTimespan(currentTime, TimeSpan.FromHours(AfternoonBreak), Tolerance);
+            var isTooCloseFromLastBreak = currentTime < coffeeBreak.LastCoffee + TimeSpan.FromHours(1);
 
             if (!morningBreakIsPossible && !afternoonBreakIsPossible)
             {
                 return;
             }
 
-            if (coffeeBreak.IsCoffeeBreak)
+            if (isTooCloseFromLastBreak || coffeeBreak.IsCoffeeBreak)
             {
                 return;
             }
@@ -115,11 +113,17 @@ namespace Doug.Services
         {
             _coffeeRepository.StartCoffeeBreak();
 
+            var remindJob = _coffeeRepository.GetRemindJob();
+            if (!string.IsNullOrEmpty(remindJob))
+            {
+                _backgroundJobClient.Delete(remindJob);
+            }
+
             _slack.BroadcastMessage(DougMessages.CoffeeStart, channelId);
 
             _backgroundJobClient.Schedule(() => EndCoffee(channelId), TimeSpan.FromMinutes(CoffeeBreakDurationMinutes));
 
-            _coffeeRepository.SwapBreakCompletionFlags();
+
         }
 
         public void EndCoffee(string channelId)

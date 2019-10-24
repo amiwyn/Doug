@@ -152,6 +152,7 @@ namespace Doug
             if (context.Request.Headers.ContainsKey("X-Slack-Retry-Num"))
             {
                 await context.Response.WriteAsync("OK");
+                return;
             }
             await next();
         }
