@@ -16,7 +16,7 @@ namespace Doug.Skills.Combat
         private readonly ICombatService _combatService;
         private readonly IEventDispatcher _eventDispatcher;
 
-        public MightyStrike(IStatsRepository statsRepository, ISlackWebApi slack, IUserService userService, ICombatService combatService, IEventDispatcher eventDispatcher, IChannelRepository channelRepository) : base(statsRepository, channelRepository, slack)
+        public MightyStrike(IStatsRepository statsRepository, ISlackWebApi slack, IUserService userService, ICombatService combatService, IEventDispatcher eventDispatcher, IChannelRepository channelRepository) : base(statsRepository, channelRepository, slack, eventDispatcher)
         {
             Name = "Mighty Strike";
             EnergyCost = 20;

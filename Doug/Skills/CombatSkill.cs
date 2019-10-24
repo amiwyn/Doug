@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Doug.Items;
 using Doug.Models;
 using Doug.Models.Combat;
 using Doug.Repositories;
@@ -10,17 +11,21 @@ namespace Doug.Skills
     {
         private readonly IChannelRepository _channelRepository;
         private readonly ISlackWebApi _slack;
+        private readonly IEventDispatcher _eventDispatcher;
 
-        protected CombatSkill(IStatsRepository statsRepository, IChannelRepository channelRepository, ISlackWebApi slack) : base(statsRepository)
+        protected CombatSkill(IStatsRepository statsRepository, IChannelRepository channelRepository, ISlackWebApi slack, IEventDispatcher eventDispatcher) : base(statsRepository)
         {
             _channelRepository = channelRepository;
             _slack = slack;
+            _eventDispatcher = eventDispatcher;
         }
 
         protected override bool CanActivateSkill(User user, ICombatable target, string channel, out DougResponse response)
         {
             if (target is User targetUser)
             {
+                _eventDispatcher.OnAttacking(user, target, 0);
+
                 var channelType = _channelRepository.GetChannelType(channel);
                 if (channelType != ChannelType.Pvp)
                 {
