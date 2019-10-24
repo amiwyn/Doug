@@ -68,6 +68,9 @@ namespace Doug.Items
                 case StRochTicket.ItemId: return new StRochTicket(_inventoryRepository, _slack);
                 case VanierTicket.ItemId: return new VanierTicket(_inventoryRepository, _slack);
 
+                // Combat Consumables
+                case AntiRogueSpray.ItemId: return new AntiRogueSpray(_inventoryRepository, _eventDispatcher, _slack, _userService, _combatService);
+
                 // Effect Consumables
                 case BigMac.ItemId: return new BigMac(_inventoryRepository, _effectRepository);
                 case Cigarette.ItemId: return new Cigarette(_inventoryRepository, _effectRepository);
