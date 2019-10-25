@@ -41,17 +41,12 @@ namespace Doug.Repositories
 
         private void AddItemToUser(User user, Item item)
         {
-            var currentStacks = user.InventoryItems.Where(inv => inv.ItemId == item.Id).ToList();
+            var currentItem = user.InventoryItems.FirstOrDefault(inv => inv.ItemId == item.Id);
 
-            if (currentStacks.Any())
+            if (currentItem != null)
             {
-                var freeStacks = currentStacks.Where(inv => inv.Quantity < inv.Item.MaxStack).ToList();
-
-                if (freeStacks.Any())
-                {
-                    freeStacks.First().Quantity++;
-                    return;
-                }
+                currentItem.Quantity++;
+                return;
             }
 
             var slot = FindNextFreeSlot(user.InventoryItems);

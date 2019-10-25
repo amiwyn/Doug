@@ -19,11 +19,13 @@ namespace Doug.Commands
         private readonly ISlackWebApi _slack;
 
         private static readonly DougResponse NoResponse = new DougResponse();
+        private readonly IPartyRepository _partyRepository;
 
-        public StatsCommands(IUserRepository userRepository, ISlackWebApi messageSender)
+        public StatsCommands(IUserRepository userRepository, ISlackWebApi messageSender, IPartyRepository partyRepository)
         {
             _userRepository = userRepository;
             _slack = messageSender;
+            _partyRepository = partyRepository;
         }
         public DougResponse Balance(Command command)
         {
@@ -36,10 +38,11 @@ namespace Doug.Commands
         {
             var userId = command.IsUserArgument() ? command.GetTargetUserId() : command.UserId;
             var user = _userRepository.GetUser(userId);
+            var party = _partyRepository.GetPartyByUser(userId);
 
             if (command.IsUserArgument())
             {
-                await _slack.SendEphemeralBlocks(new ShortProfileMenu(user).Blocks, command.UserId, command.ChannelId);
+                await _slack.SendEphemeralBlocks(new ShortProfileMenu(user, party).Blocks, command.UserId, command.ChannelId);
                 return NoResponse;
             }
 

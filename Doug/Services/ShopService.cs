@@ -65,7 +65,7 @@ namespace Doug.Services
 
             _creditsRepository.AddCredits(user.Id, item.Price / 2);
 
-            return new DougResponse(string.Format(DougMessages.SoldItem, item.Name, item.Price / 2));
+            return new DougResponse(string.Format(DougMessages.SoldItem, item.GetDisplayName(), item.Price / 2));
         }
     }
 }

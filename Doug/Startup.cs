@@ -104,6 +104,8 @@ namespace Doug
             services.AddScoped<ICombatService, CombatService>();
             services.AddScoped<IMonsterService, MonsterService>();
             services.AddScoped<IMonsterMenuService, MonsterMenuService>();
+            services.AddScoped<IPartyMenuService, PartyMenuService>();
+            services.AddScoped<IPartyService, PartyService>();
 
             services.AddScoped<ICoffeeCommands, CoffeeCommands>();
             services.AddScoped<ISlursCommands, SlursCommands>();
@@ -125,6 +127,7 @@ namespace Doug
             services.AddScoped<IShopRepository, ShopRepository>();
             services.AddScoped<IMonsterRepository, MonsterRepository>();
             services.AddScoped<ICreditsRepository, CreditsRepository>();
+            services.AddScoped<IPartyRepository, PartyRepository>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

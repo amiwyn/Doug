@@ -91,7 +91,7 @@ namespace Doug.Services
             if (droppedItems.Any())
             {
                 _inventoryRepository.AddItems(user, droppedItems);
-                var itemsMessage = string.Join(", ", droppedItems.Select(item => $"*{item.Name}*"));
+                var itemsMessage = string.Join(", ", droppedItems.Select(item => $"{item.GetDisplayName()}"));
                 await _slack.BroadcastMessage(string.Format(DougMessages.UserObtained, _userService.Mention(user), itemsMessage), channel);
             }
         }

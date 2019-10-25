@@ -35,5 +35,10 @@ namespace Doug.Items
         {
             return false;
         }
+
+        public string GetDisplayName()
+        {
+            return $"{Icon}*{Name}*";
+        }
     }
 }

@@ -26,7 +26,7 @@
         public const string ExperienceStats = "{0:0.##}%";
         public const string HealthStats = ":hp: Health : {0}";
         public const string EnergyStats = ":mp: Mana : {0}";
-        public const string StrengthStats = ":information_desk_person: Strength : {0}";
+        public const string StrengthStats = ":muscle: Strength : {0}";
         public const string AgilityStats = ":runner: Agility : {0}";
         public const string LuckStats = ":four_leaf_clover: Luck : {0}";
         public const string ConstitutionStats = ":heart: Constitution : {0}";
@@ -51,12 +51,12 @@
         public const string StealCreditsCaught = "{0} stole {1} " + CreditEmoji + " from {2}!";
         public const string StealFail = "You attempted to steal from {0}, but failed.";
         public const string StealFailCaught = "{0} attempted to steal from {1} but failed!";
-        public const string RecoverItem = "You used *{0}* and recovered {1} {2}.";
-        public const string UserGaveItem = "{0} gave *{1}* to {2}.";
+        public const string RecoverItem = "You used {0} and recovered {1} {2}.";
+        public const string UserGaveItem = "{0} gave {1} to {2}.";
         public const string ConsumedItem = "You consumed the item.";
         public const string LevelUp = ":confetti_ball: {0} is now level *{1}*!";
         public const string GainedExp = "You gained {0} experience points.";
-        public const string EquippedItem = "You equipped *{0}*.";
+        public const string EquippedItem = "You equipped {0}.";
         public const string BuyFor = "Buy for {0} " + CreditEmoji;
         public const string UserDied = "Oh dear, {0} died!";
         public const string Use = "Use";
@@ -64,7 +64,7 @@
         public const string UnEquip = "Unequip";
         public const string Sell = "Sell for {0} " + CreditEmoji;
         public const string Quantity = "*Quantity:* {0} ";
-        public const string SoldItem = "You sold *{0}* for {1} " + CreditEmoji;
+        public const string SoldItem = "You sold {0} for {1} " + CreditEmoji;
         public const string Inventory = "Inventory";
         public const string Equipment = "Equipment";
         public const string GeneralStore = "General Store";
@@ -73,13 +73,13 @@
         public const string RogueShop = "Rogue Emporium";
         public const string PeasantShop = "Peasant Supplies";
         public const string Info = "Info";
-        public const string UnequippedItem = "You unequipped *{0}*.";
+        public const string UnequippedItem = "You unequipped {0}.";
         public const string Target = "Target ...";
         public const string Give = "Give ...";
         public const string SelectTarget = "Select a target";
         public const string SelectTargetText = "Please select a user to target with this action.";
         public const string UserAttackedTarget = "{0} dealt {2} damage to {1}!";
-        public const string UsedItemOnTarget = "{0} used a *{1}* on {2}";
+        public const string UsedItemOnTarget = "{0} used a {1} on {2}";
         public const string AddedEffect = "You obtained the *{0}* effect for {1} minutes";
         public const string Surrendered = "{0} has surrendered :fr:";
         public const string Missed = "{0} missed their attack on {1}!";
@@ -87,7 +87,7 @@
         public const string RevolutionVote = "{0} wants to lead the revolution :fire: who's with em?";
         public const string RevolutionSucceeded = "<!here> - Off with {0}'s head! {1} is the new emperor!";
         public const string Cleansed = "You are cleansed of all your effects.";
-        public const string LootboxAnnouncement = "{0} opened *{1}* and received {2}";
+        public const string LootboxAnnouncement = "{0} opened {1} and received {2}";
         public const string ItemLevel = "*Level {0}*";
         public const string ItemAttack = "`Attack {0}-{1}`";
         public const string ItemDefense = "`Defense {0:+#;-#}`";
@@ -122,6 +122,11 @@
         public const string Int = "Int";
         public const string UserHealed = "{0} healed {1} for *{2}* health";
         public const string UserActivatedSkill = "{0} cast *{1}*";
+        public const string Accept = "Accept";
+        public const string Reject = "Reject";
+        public const string InviteSent = "Invite Sent";
+        public const string LeftParty = "You have left the party";
+
 
         public const string DougError = "Beep boop, it's not working : {0}";
         public const string NotAnAdmin = "You are not an admin.";
@@ -149,6 +154,10 @@
         public const string RevolutionCooldown = "You must wait {0} minutes until the next revolution";
         public const string SkillCannotBeActivated = "This skill cannot be activated.";
         public const string WrongWeaponForSkill = "You must have a *{0}* equipped to use this skill.";
+        public const string PartyFullInvite = "You cannot invite this user, your party is full";
+        public const string PartyFull = "The party is full";
+        public const string UserHasParty = "You already have a party";
+        public const string NoParty = "You have no party to leave";
     }
 }
 

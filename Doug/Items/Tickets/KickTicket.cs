@@ -43,7 +43,7 @@ namespace Doug.Items.Tickets
 
             _slack.KickUser(target.Id, channel).Wait();
 
-            _slack.BroadcastMessage(string.Format(DougMessages.UsedItemOnTarget, _userService.Mention(user), Name, _userService.Mention(target)), channel);
+            _slack.BroadcastMessage(string.Format(DougMessages.UsedItemOnTarget, _userService.Mention(user), GetDisplayName(), _userService.Mention(target)), channel);
 
             return string.Empty;
         }
