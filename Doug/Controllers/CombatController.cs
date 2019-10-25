@@ -43,5 +43,19 @@ namespace Doug.Controllers
             var result = await _combatCommands.Skill(slackCommand.ToCommand());
             return Ok(result.Message);
         }
+
+        [HttpPost("party")]
+        public async Task<ActionResult> PartyInvite([FromForm]SlackCommandDto slackCommand)
+        {
+            var result = await _combatCommands.PartyInvite(slackCommand.ToCommand());
+            return Ok(result.Message);
+        }
+
+        [HttpPost("leaveparty")]
+        public ActionResult LeaveParty([FromForm]SlackCommandDto slackCommand)
+        {
+            var result = _combatCommands.LeaveParty(slackCommand.ToCommand());
+            return Ok(result.Message);
+        }
     }
 }

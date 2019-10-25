@@ -13,6 +13,8 @@
         Target,
         Attack,
         Skill,
+        AcceptPartyInvite,
+        RejectPartyInvite
     }
 
     public enum InventoryActions

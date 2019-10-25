@@ -122,6 +122,11 @@
         public const string Int = "Int";
         public const string UserHealed = "{0} healed {1} for *{2}* health";
         public const string UserActivatedSkill = "{0} cast *{1}*";
+        public const string Accept = "Accept";
+        public const string Reject = "Reject";
+        public const string InviteSent = "Invite Sent";
+        public const string LeftParty = "You have left the party";
+
 
         public const string DougError = "Beep boop, it's not working : {0}";
         public const string NotAnAdmin = "You are not an admin.";
@@ -149,6 +154,10 @@
         public const string RevolutionCooldown = "You must wait {0} minutes until the next revolution";
         public const string SkillCannotBeActivated = "This skill cannot be activated.";
         public const string WrongWeaponForSkill = "You must have a *{0}* equipped to use this skill.";
+        public const string PartyFullInvite = "You cannot invite this user, your party is full";
+        public const string PartyFull = "The party is full";
+        public const string UserHasParty = "You already have a party";
+        public const string NoParty = "You have no party to leave";
     }
 }
 

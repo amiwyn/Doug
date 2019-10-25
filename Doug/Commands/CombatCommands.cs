@@ -12,6 +12,8 @@ namespace Doug.Commands
         Task<DougResponse> Revolution(Command command);
         Task<DougResponse> ListMonsters(Command command);
         Task<DougResponse> Skill(Command command);
+        Task<DougResponse> PartyInvite(Command command);
+        DougResponse LeaveParty(Command command);
     }
 
     public class CombatCommands : ICombatCommands
@@ -20,13 +22,15 @@ namespace Doug.Commands
         private readonly ICombatService _combatService;
         private readonly IGovernmentService _governmentService;
         private readonly IMonsterMenuService _monsterMenuService;
+        private readonly IPartyService _partyService;
 
-        public CombatCommands(IUserRepository userRepository, ICombatService combatService, IGovernmentService governmentService, IMonsterMenuService monsterMenuService)
+        public CombatCommands(IUserRepository userRepository, ICombatService combatService, IGovernmentService governmentService, IMonsterMenuService monsterMenuService, IPartyService partyService)
         {
             _userRepository = userRepository;
             _combatService = combatService;
             _governmentService = governmentService;
             _monsterMenuService = monsterMenuService;
+            _partyService = partyService;
         }
 
         public async Task<DougResponse> Attack(Command command)
@@ -60,6 +64,21 @@ namespace Doug.Commands
             }
 
             return await _combatService.ActivateSkill(user, target, command.ChannelId);
+        }
+
+        public async Task<DougResponse> PartyInvite(Command command)
+        {
+            var user = _userRepository.GetUser(command.UserId);
+            var target = _userRepository.GetUser(command.GetTargetUserId());
+
+            return await _partyService.SendInvite(target, user, command.ChannelId);
+        }
+
+        public DougResponse LeaveParty(Command command)
+        {
+            var user = _userRepository.GetUser(command.UserId);
+
+            return _partyService.LeaveParty(user);
         }
     }
 }

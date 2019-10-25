@@ -24,6 +24,7 @@ namespace Doug.Slack
         Task BroadcastBlocks(IEnumerable<Block> blocks, string channel);
         Task SendEphemeralBlocks(IEnumerable<Block> blocks, string user, string channel);
         Task UpdateInteractionMessage(IEnumerable<Block> blocks, string url);
+        Task DeleteInteractionMessage(string url);
         Task KickUser(string user, string channel);
         Task InviteUser(string user, string channel);
         Task<List<string>> GetUsersInChannel(string channel);
@@ -190,6 +191,17 @@ namespace Doug.Slack
             };
 
             var content = new StringContent(JsonConvert.SerializeObject(updatedMessage, _jsonSettings), Encoding.UTF8, "application/json");
+            await _client.PostAsync(url, content);
+        }
+
+        public async Task DeleteInteractionMessage(string url)
+        {
+            var message = new
+            {
+                DeleteOriginal = true
+            };
+
+            var content = new StringContent(JsonConvert.SerializeObject(message, _jsonSettings), Encoding.UTF8, "application/json");
             await _client.PostAsync(url, content);
         }
 

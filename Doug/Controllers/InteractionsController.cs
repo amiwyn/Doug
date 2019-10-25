@@ -17,13 +17,15 @@ namespace Doug.Controllers
         private readonly IStatsMenuService _statsMenuService;
         private readonly IInventoryMenuService _inventoryMenuService;
         private readonly IMonsterMenuService _monsterMenuservice;
+        private readonly IPartyMenuService _partyMenuService;
 
-        public InteractionsController(IShopMenuService shopMenuService, IStatsMenuService statsMenuService, IInventoryMenuService inventoryMenuService, IMonsterMenuService monsterMenuservice)
+        public InteractionsController(IShopMenuService shopMenuService, IStatsMenuService statsMenuService, IInventoryMenuService inventoryMenuService, IMonsterMenuService monsterMenuservice, IPartyMenuService partyMenuService)
         {
             _shopMenuService = shopMenuService;
             _statsMenuService = statsMenuService;
             _inventoryMenuService = inventoryMenuService;
             _monsterMenuservice = monsterMenuservice;
+            _partyMenuService = partyMenuService;
         }
 
         [HttpPost]
@@ -66,6 +68,12 @@ namespace Doug.Controllers
                     break;
                 case Actions.Skill:
                     await _monsterMenuservice.Skill(interaction);
+                    break;
+                case Actions.AcceptPartyInvite:
+                    await _partyMenuService.AcceptInvite(interaction);
+                    break;
+                case Actions.RejectPartyInvite:
+                    await _partyMenuService.RefuseInvite(interaction);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
