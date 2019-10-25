@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Doug.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Doug.Repositories
 {
@@ -9,8 +10,8 @@ namespace Doug.Repositories
         Party GetParty(int id);
         Party GetPartyByUser(string user);
         Party CreateParty(User host);
-        void AddUserToParty(int partyId, User user);
-        void RemoveUserFromParty(int partyId, User user);
+        void AddUserToParty(int partyId, string userId);
+        void RemoveUserFromParty(int partyId, string userId);
     }
 
     public class PartyRepository : IPartyRepository
@@ -24,12 +25,16 @@ namespace Doug.Repositories
 
         public Party GetParty(int id)
         {
-            return _db.Parties.Single(party => party.Id == id);
+            return _db.Parties
+                .Include(party => party.Users)
+                .Single(party => party.Id == id);
         }
 
         public Party GetPartyByUser(string user)
         {
-            return _db.Parties.SingleOrDefault(party => party.Users.Any(usr => usr.Id == user));
+            return _db.Parties
+                .Include(party => party.Users)
+                .SingleOrDefault(party => party.Users.Any(usr => usr.Id == user));
         }
 
         public Party CreateParty(User host)
@@ -40,17 +45,18 @@ namespace Doug.Repositories
             return party;
         }
 
-        public void AddUserToParty(int partyId, User user)
+        public void AddUserToParty(int partyId, string userId)
         {
             var party = GetParty(partyId);
-            party.Users.Add(user);
+            var userToAdd = _db.Users.Single(usr => usr.Id == userId);
+            party.Users.Add(userToAdd);
             _db.SaveChanges();
         }
 
-        public void RemoveUserFromParty(int partyId, User user)
+        public void RemoveUserFromParty(int partyId, string userId)
         {
             var party = GetParty(partyId);
-            var userToRemove = party.Users.Single(usr => usr.Id == user.Id);
+            var userToRemove = party.Users.Single(usr => usr.Id == userId);
             party.Users.Remove(userToRemove);
             _db.SaveChanges();
         }

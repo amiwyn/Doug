@@ -41,7 +41,7 @@ namespace Doug.Services
                 return new DougResponse(DougMessages.UserHasParty);
             }
 
-            _partyRepository.AddUserToParty(party.Id, user);
+            _partyRepository.AddUserToParty(party.Id, user.Id);
 
             return new DougResponse();
         }
@@ -55,7 +55,7 @@ namespace Doug.Services
                 return new DougResponse(DougMessages.NoParty);
             }
 
-            _partyRepository.RemoveUserFromParty(party.Id, user);
+            _partyRepository.RemoveUserFromParty(party.Id, user.Id);
 
             return new DougResponse(DougMessages.LeftParty);
         }
