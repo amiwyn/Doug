@@ -20,6 +20,7 @@ namespace Test.Stats
         private readonly Mock<IUserRepository> _userRepository = new Mock<IUserRepository>();
         private readonly Mock<ISlurRepository> _slurRepository = new Mock<ISlurRepository>();
         private readonly Mock<ISlackWebApi> _slack = new Mock<ISlackWebApi>();
+        private readonly Mock<IPartyRepository> _partyRepository = new Mock<IPartyRepository>();
 
         [TestInitialize]
         public void Setup()
@@ -27,7 +28,7 @@ namespace Test.Stats
             _slurRepository.Setup(repo => repo.GetSlursFrom(It.IsAny<string>())).Returns(new List<Slur>());
             _userRepository.Setup(repo => repo.GetUser(It.IsAny<string>())).Returns(new User() { Loadout = new Loadout()});
 
-            _statsCommands = new StatsCommands(_userRepository.Object, _slack.Object);
+            _statsCommands = new StatsCommands(_userRepository.Object, _slack.Object, _partyRepository.Object);
         }
 
         [TestMethod]
