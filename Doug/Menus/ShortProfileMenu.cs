@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using Doug.Menus.Blocks;
 using Doug.Menus.Blocks.Text;
 using Doug.Models;
@@ -10,7 +11,7 @@ namespace Doug.Menus
     {
         public List<Block> Blocks { get; set; }
 
-        public ShortProfileMenu(User user)
+        public ShortProfileMenu(User user, Party party)
         {
             Blocks = new List<Block>
             {
@@ -18,6 +19,12 @@ namespace Doug.Menus
                 CreateSmallUserInfo(user),
                 new Divider()
             };
+
+            if (party != null)
+            {
+                Blocks.Add(CreatePartyFields(party));
+                Blocks.Add(new Divider());
+            }
             
             if (user.Effects.Count > 0)
             {
@@ -54,5 +61,11 @@ namespace Doug.Menus
             return new FieldsSection(fields);
         }
 
+        private Block CreatePartyFields(Party party)
+        {
+            var fields = party.Users.Select(usr => $"<@{usr.Id}>").ToList();
+            fields.Insert(0, "In party with :");
+            return new Context(fields);
+        }
     }
 }
