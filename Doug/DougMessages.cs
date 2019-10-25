@@ -158,6 +158,7 @@
         public const string PartyFull = "The party is full";
         public const string UserHasParty = "You already have a party";
         public const string NoParty = "You have no party to leave";
+        public const string NoSkillEquipped = "You have no skill equipped";
     }
 }
 

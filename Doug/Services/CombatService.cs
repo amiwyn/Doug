@@ -105,7 +105,7 @@ namespace Doug.Services
 
             if (skillbook == null)
             {
-                return new DougResponse(DougMessages.SkillCannotBeActivated);
+                return new DougResponse(DougMessages.NoSkillEquipped);
             }
 
             return await skillbook.Activate(user, target, channel);
