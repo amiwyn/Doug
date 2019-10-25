@@ -102,6 +102,12 @@ namespace Doug.Services
         public async Task<DougResponse> ActivateSkill(User user, ICombatable target, string channel)
         {
             var skillbook = user.Loadout.GetSkill();
+
+            if (skillbook == null)
+            {
+                return new DougResponse(DougMessages.SkillCannotBeActivated);
+            }
+
             return await skillbook.Activate(user, target, channel);
         }
 
