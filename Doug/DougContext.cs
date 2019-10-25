@@ -1,7 +1,8 @@
-﻿using Doug.Monsters;
+﻿using Doug.Models;
+using Doug.Monsters;
 using Microsoft.EntityFrameworkCore;
 
-namespace Doug.Models
+namespace Doug
 {
     public class DougContext : DbContext
     {
@@ -16,6 +17,7 @@ namespace Doug.Models
         public DbSet<Government> Government { get; set; }
         public DbSet<Shop> Shops { get; set; }
         public DbSet<SpawnedMonster> SpawnedMonsters { get; set; }
+        public DbSet<Party> Parties { get; set; }
 
         public DougContext(DbContextOptions<DougContext> options) : base(options)
         {

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using Doug.Models;
+using Doug;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
