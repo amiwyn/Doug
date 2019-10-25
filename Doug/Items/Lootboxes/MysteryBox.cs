@@ -65,12 +65,13 @@ namespace Doug.Items.Lootboxes
                 { new LootItem(_itemFactory.CreateItem(BachelorsDegree.ItemId), 1), 0.05 },
                 { new LootItem(_itemFactory.CreateItem(IronIngot.ItemId), 1), 0.05 },
 
-                { new LootItem(_itemFactory.CreateItem(StraightEdge.ItemId), 1), 0.01 },
+                { new LootItem(_itemFactory.CreateItem(IncognitoShades.ItemId), 1), 0.01 },
                 { new LootItem(_itemFactory.CreateItem(CloakOfSpikes.ItemId), 1), 0.01 },
                 { new LootItem(_itemFactory.CreateItem(AwakeningOrb.ItemId), 1), 0.01 },
-                { new LootItem(_itemFactory.CreateItem(BurglarBoots.ItemId), 1), 0.01 },
+                { new LootItem(_itemFactory.CreateItem(BurglarBoots.ItemId), 1), 0.005 },
                 { new LootItem(_itemFactory.CreateItem(GreedyGloves.ItemId), 1), 0.005 },
                 { new LootItem(_itemFactory.CreateItem(LuckyCoin.ItemId), 1), 0.005 },
+                { new LootItem(_itemFactory.CreateItem(StraightEdge.ItemId), 1), 0.005 },
 
                 { new LootItem(_itemFactory.CreateItem(AgilityReset.ItemId), 1), 0.02 },
                 { new LootItem(_itemFactory.CreateItem(StrengthReset.ItemId), 1), 0.02 },

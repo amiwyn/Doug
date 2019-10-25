@@ -50,7 +50,7 @@ namespace Doug.Items.Lootboxes
             user.InventoryItems.Sort((item1, item2) => item1.InventoryPosition.CompareTo(item2.InventoryPosition));
 
             var itemNames = string.Join(", ", items.Select(item => item.GetDisplayName()));
-            _slack.SendEphemeralMessage(string.Format(DougMessages.YouObtained, $"*{itemNames}*"), user.Id, channel).Wait();
+            _slack.SendEphemeralMessage(string.Format(DougMessages.YouObtained, $"{itemNames}"), user.Id, channel).Wait();
 
             return string.Empty;
         }
