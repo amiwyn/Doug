@@ -34,6 +34,11 @@ namespace Doug.Services.MenuServices
             var user = _userRepository.GetUser(interaction.UserId);
             var monster = _monsterRepository.GetMonster(int.Parse(interaction.Value));
 
+            if (monster == null)
+            {
+                return;
+            }
+
             var response = await _combatService.AttackMonster(user, monster, interaction.ChannelId);
 
             await _slack.SendEphemeralMessage(response.Message, user.Id, interaction.ChannelId);
@@ -44,6 +49,11 @@ namespace Doug.Services.MenuServices
         {
             var user = _userRepository.GetUser(interaction.UserId);
             var monster = _monsterRepository.GetMonster(int.Parse(interaction.Value));
+
+            if (monster == null)
+            {
+                return;
+            }
 
             var response = await _combatService.ActivateSkill(user, monster, interaction.ChannelId);
 
