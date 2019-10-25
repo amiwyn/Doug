@@ -1,5 +1,4 @@
-﻿using Doug.Effects.Buffs;
-using Doug.Models;
+﻿using Doug.Models;
 using Doug.Models.Combat;
 using Doug.Repositories;
 using Doug.Services;
@@ -12,7 +11,7 @@ namespace Doug.Items.Consumables
         public const string ItemId = "anti_rogue_spray";
 
         private readonly IEventDispatcher _eventDispatcher;
-        public readonly ISlackWebApi _slack;
+        private readonly ISlackWebApi _slack;
         private readonly IUserService _userService;
         private readonly ICombatService _combatService;
 
