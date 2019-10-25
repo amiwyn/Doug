@@ -73,7 +73,7 @@ namespace Doug.Commands
 
             _inventoryRepository.AddItem(target, inventoryItem.Item);
 
-            var message = string.Format(DougMessages.UserGaveItem, _userService.Mention(user), inventoryItem.Item.Name, _userService.Mention(target));
+            var message = string.Format(DougMessages.UserGaveItem, _userService.Mention(user), inventoryItem.Item.GetDisplayName(), _userService.Mention(target));
             _slack.BroadcastMessage(message, command.ChannelId);
 
             return new DougResponse();
@@ -124,7 +124,7 @@ namespace Doug.Commands
             _inventoryRepository.AddItems(user, unequippedItems.Select(item => item));
             _inventoryRepository.RemoveItem(user, position);
 
-            return new DougResponse(string.Format(DougMessages.EquippedItem, inventoryItem.Item.Name));
+            return new DougResponse(string.Format(DougMessages.EquippedItem, inventoryItem.Item.GetDisplayName()));
         }
 
         public DougResponse UnEquip(Command command)
@@ -142,7 +142,7 @@ namespace Doug.Commands
 
             _inventoryRepository.AddItem(user, item);
 
-            return new DougResponse(string.Format(DougMessages.UnequippedItem, equipment.Name));
+            return new DougResponse(string.Format(DougMessages.UnequippedItem, equipment.GetDisplayName()));
         }
 
         public async Task<DougResponse> Inventory(Command command)

@@ -93,7 +93,7 @@ namespace Doug.Items.Lootboxes
             user.LoadItems(_itemFactory);
             user.InventoryItems.Sort((item1, item2) => item1.InventoryPosition.CompareTo(item2.InventoryPosition));
 
-            _slack.BroadcastMessage(string.Format(DougMessages.LootboxAnnouncement, _userService.Mention(user), Name, $"{loot.Quantity}x *{item.Name}*"), channel).Wait();
+            _slack.BroadcastMessage(string.Format(DougMessages.LootboxAnnouncement, _userService.Mention(user), GetDisplayName(), $"{loot.Quantity}x {item.GetDisplayName()}"), channel).Wait();
 
             return string.Empty;
         }

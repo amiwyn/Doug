@@ -38,7 +38,7 @@ namespace Doug.Items.Consumables
         {
             base.Use(itemPos, user, channel);
 
-            var message = string.Format(DougMessages.UsedItemOnTarget, _userService.Mention(user), Name, _userService.Mention(target));
+            var message = string.Format(DougMessages.UsedItemOnTarget, _userService.Mention(user), GetDisplayName(), _userService.Mention(target));
             _slack.BroadcastMessage(message, channel);
 
             var damage = target.Level * target.Agility;
