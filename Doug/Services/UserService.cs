@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Doug.Effects.Buffs;
 using Doug.Items;
 using Doug.Items.Lootboxes;
-using Doug.Models;
+using Doug.Models.User;
 using Doug.Monsters;
 using Doug.Repositories;
 using Doug.Slack;

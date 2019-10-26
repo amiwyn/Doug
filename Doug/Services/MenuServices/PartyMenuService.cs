@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Doug.Menus;
-using Doug.Models;
+using Doug.Controllers;
 using Doug.Repositories;
 using Doug.Slack;
 

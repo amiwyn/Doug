@@ -2,7 +2,7 @@
 using System.Linq;
 using Doug.Menus;
 
-namespace Doug.Models
+namespace Doug.Controllers
 {
     public class Interaction
     {

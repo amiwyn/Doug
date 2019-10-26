@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using Doug.Commands;
 using Doug.Effects;
 using Doug.Items;
-using Doug.Models;
 using Doug.Monsters;
 using Doug.Repositories;
 using Doug.Services;

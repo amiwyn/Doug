@@ -1,6 +1,7 @@
 using Doug;
 using Doug.Commands;
 using Doug.Models;
+using Doug.Models.User;
 using Doug.Repositories;
 using Doug.Slack;
 using Microsoft.VisualStudio.TestTools.UnitTesting;

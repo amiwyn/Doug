@@ -4,7 +4,7 @@ using System.Linq;
 using Doug.Items;
 using Doug.Items.WeaponType;
 
-namespace Doug.Models
+namespace Doug.Models.User
 {
     public class Loadout
     {

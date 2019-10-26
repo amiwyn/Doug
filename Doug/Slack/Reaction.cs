@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Doug.Models
+namespace Doug.Slack
 {
     public class Reaction
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Doug.Models
+namespace Doug.Models.Coffee
 {
     public class CoffeeBreak
     {

@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Net.Sockets;
 using Doug.Menus.Blocks;
 using Doug.Menus.Blocks.Text;
 using Doug.Models;
+using Doug.Models.User;
 
 namespace Doug.Menus
 {

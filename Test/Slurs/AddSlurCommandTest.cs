@@ -1,6 +1,7 @@
 using Doug.Commands;
 using Doug.Items;
 using Doug.Models;
+using Doug.Models.Slurs;
 using Doug.Repositories;
 using Doug.Services;
 using Doug.Slack;

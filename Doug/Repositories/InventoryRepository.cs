@@ -2,6 +2,7 @@
 using System.Linq;
 using Doug.Items;
 using Doug.Models;
+using Doug.Models.User;
 
 namespace Doug.Repositories
 {

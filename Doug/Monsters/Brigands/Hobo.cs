@@ -1,7 +1,7 @@
 using Doug.Items.Consumables;
 using Doug.Items.Misc.Drops;
-using Doug.Models;
 using System.Collections.Generic;
+using Doug.Models.Monsters;
 
 namespace Doug.Monsters.Brigands
 {

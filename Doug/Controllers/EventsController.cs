@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using Doug.Models;
 using Doug.Services;
 using Microsoft.AspNetCore.Mvc;
 

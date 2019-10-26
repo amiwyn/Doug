@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using Doug.Items;
 using System.Linq;
 using Doug.Effects;
+using Doug.Items;
 using Doug.Models.Combat;
 using Doug.Monsters;
 
-namespace Doug.Models
+namespace Doug.Models.User
 {
     public class User : ICombatable
     {

@@ -1,6 +1,6 @@
 ﻿using Doug.Items;
 
-namespace Doug.Models
+namespace Doug.Models.Monsters
 {
     public class LootItem
     {

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Doug.Models;
 
 namespace Doug.Slack.Dto
 {

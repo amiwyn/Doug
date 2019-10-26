@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Net.Http;
 using Doug;
-using Doug.Models;
 using Doug.Repositories;
 using Doug.Services;
 using Microsoft.EntityFrameworkCore;

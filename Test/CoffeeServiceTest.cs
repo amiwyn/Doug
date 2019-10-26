@@ -7,7 +7,8 @@ using Moq;
 using System;
 using System.Collections.Generic;
 using Doug.Items.Consumables;
-using Doug.Models;
+using Doug.Models.Coffee;
+using Doug.Models.User;
 
 namespace Test
 {

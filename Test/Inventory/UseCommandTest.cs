@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Doug.Commands;
 using Doug.Items;
 using Doug.Models;
+using Doug.Models.User;
 using Doug.Repositories;
 using Doug.Services;
 using Doug.Slack;

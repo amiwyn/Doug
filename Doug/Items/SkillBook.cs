@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Doug.Models;
 using Doug.Models.Combat;
+using Doug.Models.User;
 using Doug.Skills;
 
 namespace Doug.Items

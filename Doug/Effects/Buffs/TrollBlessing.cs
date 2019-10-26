@@ -1,4 +1,4 @@
-﻿using Doug.Models;
+﻿using Doug.Models.User;
 using Doug.Slack;
 
 namespace Doug.Effects.Buffs

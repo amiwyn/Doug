@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Doug;
 using Doug.Items;
 using Doug.Models;
+using Doug.Models.User;
 using Doug.Repositories;
 using Doug.Services;
 using Doug.Slack;

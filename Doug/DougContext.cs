@@ -1,4 +1,8 @@
 ﻿using Doug.Models;
+using Doug.Models.Coffee;
+using Doug.Models.Monsters;
+using Doug.Models.Slurs;
+using Doug.Models.User;
 using Doug.Monsters;
 using Microsoft.EntityFrameworkCore;
 

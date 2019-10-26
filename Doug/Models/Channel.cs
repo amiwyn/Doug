@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Doug.Models.Monsters;
 
 namespace Doug.Models
 {

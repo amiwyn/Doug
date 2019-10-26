@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using Doug.Menus.Blocks;
-using Doug.Models;
 using Doug.Repositories;
 using Doug.Slack.Dto;
 using Newtonsoft.Json;

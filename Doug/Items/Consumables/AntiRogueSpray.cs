@@ -1,5 +1,5 @@
-﻿using Doug.Models;
-using Doug.Models.Combat;
+﻿using Doug.Models.Combat;
+using Doug.Models.User;
 using Doug.Repositories;
 using Doug.Services;
 using Doug.Slack;

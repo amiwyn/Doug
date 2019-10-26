@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Doug.Models;
+using Doug.Models.User;
 using Doug.Monsters;
 
 namespace Doug.Repositories

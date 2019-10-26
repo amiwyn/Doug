@@ -6,7 +6,7 @@ namespace Doug.Models
     public class InventoryItem
     {
         public string UserId { get; set; }
-        public User User { get; set; }
+        public User.User User { get; set; }
         public string ItemId { get; set; }
         [NotMapped]
         public Item Item { get; set; }

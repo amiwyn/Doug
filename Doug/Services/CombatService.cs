@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Doug.Items;
 using Doug.Models;
 using Doug.Models.Combat;
+using Doug.Models.User;
 using Doug.Monsters;
 using Doug.Repositories;
 using Doug.Slack;

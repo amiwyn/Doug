@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using Doug.Models;
 using Doug.Models.Combat;
+using Doug.Models.Monsters;
 
 namespace Doug.Monsters
 {

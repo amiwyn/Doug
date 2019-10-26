@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Doug.Items;
 using Doug.Models;
+using Doug.Models.User;
 using Doug.Repositories;
 
 namespace Doug.Services

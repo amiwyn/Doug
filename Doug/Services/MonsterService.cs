@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Doug.Models;
+using Doug.Models.Monsters;
+using Doug.Models.User;
 using Doug.Monsters;
 using Doug.Repositories;
 using Doug.Slack;
