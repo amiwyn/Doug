@@ -126,6 +126,8 @@
         public const string Reject = "Reject";
         public const string InviteSent = "Invite Sent";
         public const string LeftParty = "You have left the party";
+        public const string JoinedParty = "You joined the party";
+        public const string JoinedYourParty = "{0} joined your party";
 
 
         public const string DougError = "Beep boop, it's not working : {0}";
