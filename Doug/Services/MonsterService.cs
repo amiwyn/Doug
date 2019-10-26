@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Doug.Models;
@@ -26,8 +27,9 @@ namespace Doug.Services
         private readonly IRandomService _randomService;
         private readonly IMonsterFactory _monsterFactory;
         private readonly IChannelRepository _channelRepository;
+        private readonly IPartyRepository _partyRepository;
 
-        public MonsterService(IMonsterRepository monsterRepository, ISlackWebApi slack, IUserService userService, IInventoryRepository inventoryRepository, IRandomService randomService, IMonsterFactory monsterFactory, IChannelRepository channelRepository)
+        public MonsterService(IMonsterRepository monsterRepository, ISlackWebApi slack, IUserService userService, IInventoryRepository inventoryRepository, IRandomService randomService, IMonsterFactory monsterFactory, IChannelRepository channelRepository, IPartyRepository partyRepository)
         {
             _monsterRepository = monsterRepository;
             _slack = slack;
@@ -36,6 +38,7 @@ namespace Doug.Services
             _randomService = randomService;
             _monsterFactory = monsterFactory;
             _channelRepository = channelRepository;
+            _partyRepository = partyRepository;
         }
 
         public void RollMonsterSpawn()
@@ -72,7 +75,7 @@ namespace Doug.Services
         public async Task HandleMonsterDeathByUser(User user, SpawnedMonster spawnedMonster, string channel)
         {
             var monster = spawnedMonster.Monster;
-            var users = spawnedMonster.MonsterAttackers.Select(attacker => attacker.User).ToList();
+            var party = FindMaxPartyDamageFromUsers(spawnedMonster.MonsterAttackers);
 
             await AddMonsterLootToUser(user, monster, channel);
 
@@ -80,8 +83,21 @@ namespace Doug.Services
 
             await _slack.BroadcastMessage(string.Format(DougMessages.MonsterDied, monster.Name), channel);
 
-            var experiencePerUser = monster.ExperienceValue / users.Count;
-            await _userService.AddBulkExperience(users, experiencePerUser, channel);
+            await _userService.AddExperienceFromMonster(party.Users, monster, channel);
+        }
+
+        private Party FindMaxPartyDamageFromUsers(List<MonsterAttacker> attackers)
+        {
+            var users = attackers.Select(attacker => attacker.User.Id);
+            var parties = _partyRepository.GetUniquePartiesFromUsers(users);
+
+            return parties.Select(party => new { Damage = GetPartyDamage(party, attackers), Party = party })
+                .Aggregate((acc, elem) => acc.Damage > elem.Damage ? acc : elem).Party;
+        }
+
+        private int GetPartyDamage(Party party, List<MonsterAttacker> attackers)
+        {
+            return party.Users.Sum(user => attackers.SingleOrDefault(atk => atk.User.Id == user.Id)?.DamageDealt ?? 0);
         }
 
         private async Task AddMonsterLootToUser(User user, Monster monster, string channel)

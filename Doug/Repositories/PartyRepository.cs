@@ -2,6 +2,7 @@
 using System.Linq;
 using Doug.Models;
 using Microsoft.EntityFrameworkCore;
+using Z.EntityFramework.Plus;
 
 namespace Doug.Repositories
 {
@@ -9,6 +10,7 @@ namespace Doug.Repositories
     {
         Party GetParty(int id);
         Party GetPartyByUser(string user);
+        List<Party> GetUniquePartiesFromUsers(IEnumerable<string> userIds);
         Party CreateParty(User host);
         void AddUserToParty(int partyId, string userId);
         void RemoveUserFromParty(int partyId, string userId);
@@ -35,6 +37,13 @@ namespace Doug.Repositories
             return _db.Parties
                 .Include(party => party.Users)
                 .SingleOrDefault(party => party.Users.Any(usr => usr.Id == user));
+        }
+
+        public List<Party> GetUniquePartiesFromUsers(IEnumerable<string> userIds)
+        {
+            return _db.Parties
+                .Include(party => party.Users)
+                .Where(party => party.Users.Any(user => userIds.Contains(user.Id))).ToList();
         }
 
         public Party CreateParty(User host)
