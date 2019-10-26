@@ -15,16 +15,18 @@ namespace Doug.Controllers
         private readonly IShopMenuService _shopMenuService;
         private readonly IStatsMenuService _statsMenuService;
         private readonly IInventoryMenuService _inventoryMenuService;
-        private readonly IMonsterMenuService _monsterMenuservice;
+        private readonly IMonsterMenuService _monsterMenuService;
         private readonly IPartyMenuService _partyMenuService;
+        private readonly ICraftingMenuService _craftingMenuService;
 
-        public InteractionsController(IShopMenuService shopMenuService, IStatsMenuService statsMenuService, IInventoryMenuService inventoryMenuService, IMonsterMenuService monsterMenuservice, IPartyMenuService partyMenuService)
+        public InteractionsController(IShopMenuService shopMenuService, IStatsMenuService statsMenuService, IInventoryMenuService inventoryMenuService, IMonsterMenuService monsterMenuservice, IPartyMenuService partyMenuService, ICraftingMenuService craftingMenuService)
         {
             _shopMenuService = shopMenuService;
             _statsMenuService = statsMenuService;
             _inventoryMenuService = inventoryMenuService;
-            _monsterMenuservice = monsterMenuservice;
+            _monsterMenuService = monsterMenuservice;
             _partyMenuService = partyMenuService;
+            _craftingMenuService = craftingMenuService;
         }
 
         [HttpPost]
@@ -50,6 +52,9 @@ namespace Doug.Controllers
                 case Actions.EquipmentSwitch:
                     await _inventoryMenuService.ShowEquipment(interaction);
                     break;
+                case Actions.CraftingSwitch:
+                    await _craftingMenuService.ShowCraftingMenu(interaction);
+                    break;
                 case Actions.Equipment:
                     await EquipmentInteractions(interaction);
                     break;
@@ -63,16 +68,19 @@ namespace Doug.Controllers
                     await _shopMenuService.ShopSwitch(interaction);
                     break;
                 case Actions.Attack:
-                    await _monsterMenuservice.Attack(interaction);
+                    await _monsterMenuService.Attack(interaction);
                     break;
                 case Actions.Skill:
-                    await _monsterMenuservice.Skill(interaction);
+                    await _monsterMenuService.Skill(interaction);
                     break;
                 case Actions.AcceptPartyInvite:
                     await _partyMenuService.AcceptInvite(interaction);
                     break;
                 case Actions.RejectPartyInvite:
                     await _partyMenuService.RefuseInvite(interaction);
+                    break;
+                case Actions.Craft:
+                    await _craftingMenuService.Craft(interaction);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

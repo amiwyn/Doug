@@ -7,6 +7,7 @@
         Attribution,
         InventorySwitch,
         EquipmentSwitch,
+        CraftingSwitch,
         ShopSwitch,
         Equipment,
         Give,
@@ -14,7 +15,8 @@
         Attack,
         Skill,
         AcceptPartyInvite,
-        RejectPartyInvite
+        RejectPartyInvite,
+        Craft
     }
 
     public enum InventoryActions
@@ -23,7 +25,8 @@
         Equip,
         Sell,
         Give,
-        Target
+        Target,
+        Craft
     }
 
     public enum EquipmentActions

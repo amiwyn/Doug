@@ -67,6 +67,7 @@
         public const string SoldItem = "You sold {0} for {1} " + CreditEmoji;
         public const string Inventory = "Inventory";
         public const string Equipment = "Equipment";
+        public const string Crafting = "Crafting";
         public const string GeneralStore = "General Store";
         public const string ArmoryShop = "Armory";
         public const string MagicShop = "Diagon Alley";
@@ -128,6 +129,8 @@
         public const string LeftParty = "You have left the party";
         public const string JoinedParty = "You joined the party";
         public const string JoinedYourParty = "{0} joined your party";
+        public const string CraftingSelect = "Select items";
+        public const string CraftingDialog = "Select two or more items to craft them. If the crafting was not successful you don't lose the items.";
 
 
         public const string DougError = "Beep boop, it's not working : {0}";
