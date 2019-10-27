@@ -1,6 +1,7 @@
 using Doug;
 using Doug.Commands;
 using Doug.Models;
+using Doug.Models.User;
 using Doug.Repositories;
 using Doug.Slack;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -26,13 +27,14 @@ namespace Test.Stats
 
         private readonly Mock<IUserRepository> _userRepository = new Mock<IUserRepository>();
         private readonly Mock<ISlackWebApi> _slack = new Mock<ISlackWebApi>();
+        private readonly Mock<IPartyRepository> _partyRepository = new Mock<IPartyRepository>();
 
         [TestInitialize]
         public void Setup()
         {
             _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User() { Id = "bobob", Credits = 79});
 
-            _statsCommands = new StatsCommands(_userRepository.Object, _slack.Object);
+            _statsCommands = new StatsCommands(_userRepository.Object, _slack.Object, _partyRepository.Object);
         }
 
         [TestMethod]

@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 using Doug.Menus;
 using Doug.Models;
+using Doug.Models.User;
 using Doug.Repositories;
-using Doug.Services.MenuServices;
 using Doug.Slack;
 
 namespace Doug.Services
@@ -10,7 +10,7 @@ namespace Doug.Services
     public interface IPartyService
     {
         Task<DougResponse> SendInvite(User target, User host, string channel);
-        DougResponse AcceptInvite(int partyId, User user);
+        DougResponse AcceptInvite(Party party, User user);
         DougResponse LeaveParty(User user);
     }
 
@@ -27,10 +27,8 @@ namespace Doug.Services
             _slack = slack;
         }
 
-        public DougResponse AcceptInvite(int partyId, User user)
+        public DougResponse AcceptInvite(Party party, User user)
         {
-            var party = _partyRepository.GetParty(partyId);
-
             if (party.Users.Count >= 3)
             {
                 return new DougResponse(DougMessages.PartyFull);
@@ -41,9 +39,9 @@ namespace Doug.Services
                 return new DougResponse(DougMessages.UserHasParty);
             }
 
-            _partyRepository.AddUserToParty(party.Id, user);
+            _partyRepository.AddUserToParty(party.Id, user.Id);
 
-            return new DougResponse();
+            return new DougResponse(DougMessages.JoinedParty);
         }
 
         public DougResponse LeaveParty(User user)
@@ -55,7 +53,7 @@ namespace Doug.Services
                 return new DougResponse(DougMessages.NoParty);
             }
 
-            _partyRepository.RemoveUserFromParty(party.Id, user);
+            _partyRepository.RemoveUserFromParty(party.Id, user.Id);
 
             return new DougResponse(DougMessages.LeftParty);
         }

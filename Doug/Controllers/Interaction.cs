@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Doug.Menus;
 
-namespace Doug.Models
+namespace Doug.Controllers
 {
     public class Interaction
     {
@@ -13,6 +14,7 @@ namespace Doug.Models
         public string BlockId { get; set; }
         public string Timestamp { get; set; }
         public string ResponseUrl { get; set; }
+        public List<string> Values { get; set; }
 
         public Actions GetAction()
         {

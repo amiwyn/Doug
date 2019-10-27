@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Doug.Effects;
-using Doug.Models;
+using Doug.Models.User;
 
 namespace Doug.Repositories
 {

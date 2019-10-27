@@ -3,7 +3,7 @@ using Doug.Items;
 using Doug.Menus.Blocks;
 using Doug.Menus.Blocks.Accessories;
 using Doug.Menus.Blocks.Text;
-using Doug.Models;
+using Doug.Models.User;
 
 namespace Doug.Menus
 {
@@ -33,8 +33,9 @@ namespace Doug.Menus
         {
             var inventoryButton = new Button(DougMessages.Inventory, "inventory", Actions.InventorySwitch.ToString());
             var equipmentButton = new PrimaryButton(DougMessages.Equipment, "equipment", Actions.EquipmentSwitch.ToString());
+            var craftingButton = new Button(DougMessages.Crafting, "crafting", Actions.CraftingSwitch.ToString());
 
-            return new ActionList(new List<Accessory> { inventoryButton, equipmentButton });
+            return new ActionList(new List<Accessory> { inventoryButton, equipmentButton, craftingButton });
         }
 
         private List<Block> ItemSection(EquipmentItem equipment, string slot)

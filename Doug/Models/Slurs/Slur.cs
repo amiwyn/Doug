@@ -1,4 +1,4 @@
-﻿namespace Doug.Models
+﻿namespace Doug.Models.Slurs
 {
     public class Slur
     {

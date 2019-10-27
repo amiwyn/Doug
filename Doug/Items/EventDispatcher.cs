@@ -4,6 +4,7 @@ using Doug.Models;
 using System.Linq;
 using Doug.Effects;
 using Doug.Models.Combat;
+using Doug.Models.User;
 
 namespace Doug.Items
 {

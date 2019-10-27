@@ -1,5 +1,5 @@
 using Doug.Items.Consumables;
-using Doug.Models;
+using Doug.Models.User;
 using Doug.Repositories;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;

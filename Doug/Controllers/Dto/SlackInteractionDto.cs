@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Doug.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
@@ -39,6 +38,13 @@ namespace Doug.Controllers.Dto
                 value = slackInteraction.Actions.SingleOrDefault()?.SelectedUser;
             }
 
+            var values = new List<string>();
+
+            if (slackInteraction.Actions.SingleOrDefault()?.Type == "multi_static_select")
+            {
+                values = slackInteraction.Actions.SingleOrDefault()?.SelectedOptions.Select(option => option.Value).ToList();
+            }
+
             return new Interaction
             {
                 Action = slackInteraction.Actions.SingleOrDefault()?.ActionId,
@@ -47,7 +53,8 @@ namespace Doug.Controllers.Dto
                 ChannelId = slackInteraction.Channel.Id,
                 UserId = slackInteraction.User.Id,
                 Timestamp = slackInteraction.Container.MessageTs,
-                ResponseUrl = slackInteraction.ResponseUrl
+                ResponseUrl = slackInteraction.ResponseUrl,
+                Values = values != null && values.Count > 0 ? values : new List<string> { value }
             };
         }
     }
@@ -83,6 +90,7 @@ namespace Doug.Controllers.Dto
         public string ActionId { get; set; }
         public string Value { get; set; }
         public SlackInteractionOption SelectedOption { get; set; }
+        public List<SlackInteractionOption> SelectedOptions { get; set; }
         public string SelectedUser { get; set; }
     }
 

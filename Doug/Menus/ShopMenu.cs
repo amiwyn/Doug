@@ -5,6 +5,7 @@ using Doug.Menus.Blocks;
 using Doug.Menus.Blocks.Accessories;
 using Doug.Menus.Blocks.Text;
 using Doug.Models;
+using Doug.Models.User;
 using Doug.Services;
 using Doug.Services.MenuServices;
 

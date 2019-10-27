@@ -1,5 +1,6 @@
 ﻿using Doug.Models;
 using Doug.Models.Combat;
+using Doug.Models.User;
 
 namespace Doug.Effects
 {

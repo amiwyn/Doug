@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace Doug.Models
+namespace Doug.Controllers
 {
     public class SlackEventData
     {

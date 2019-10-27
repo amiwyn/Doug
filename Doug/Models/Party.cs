@@ -6,8 +6,8 @@ namespace Doug.Models
     {
         public int Id { get; set; }
         public string UserId { get; set; }
-        public User Leader { get; set; }
+        public User.User Leader { get; set; }
 
-        public List<User> Users { get; set; }
+        public List<User.User> Users { get; set; }
     }
 }

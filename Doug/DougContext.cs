@@ -1,4 +1,8 @@
 ﻿using Doug.Models;
+using Doug.Models.Coffee;
+using Doug.Models.Monsters;
+using Doug.Models.Slurs;
+using Doug.Models.User;
 using Doug.Monsters;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,6 +22,7 @@ namespace Doug
         public DbSet<Shop> Shops { get; set; }
         public DbSet<SpawnedMonster> SpawnedMonsters { get; set; }
         public DbSet<Party> Parties { get; set; }
+        public DbSet<Recipe> Recipes { get; set; }  
 
         public DougContext(DbContextOptions<DougContext> options) : base(options)
         {

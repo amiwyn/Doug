@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using Doug.Items;
 using System.Linq;
 using Doug.Effects;
+using Doug.Items;
 using Doug.Models.Combat;
+using Doug.Monsters;
 
-namespace Doug.Models
+namespace Doug.Models.User
 {
     public class User : ICombatable
     {
@@ -84,7 +85,7 @@ namespace Doug.Models
             InventoryItems = new List<InventoryItem>();
             Effects = new List<UserEffect>();
             Loadout = new Loadout();
-            
+
             Luck = 5;
             Agility = 5;
             Strength = 5;
@@ -260,6 +261,19 @@ namespace Doug.Models
         {
             Health += (int)Math.Ceiling(TotalHealth() * (BaseHealthRegen + Loadout.HealthRegen) * 0.01);
             Energy += (int)Math.Ceiling(TotalEnergy() * (BaseEnergyRegen + Loadout.EnergyRegen) * 0.01);
+        }
+
+        public int CalculateExperienceGainedFromMonster(Monster monster, int partyMemberCount)
+        {
+            var levelDifference = Level - monster.Level;
+            var experienceMultiplier = (Math.Max(0, levelDifference * (-0.01) * levelDifference + 1));
+            var monsterExperienceValue = (double)monster.ExperienceValue / partyMemberCount;
+            return (int)Math.Floor(monsterExperienceValue * experienceMultiplier);
+        }
+
+        public void ReceiveExpFromMonster(Monster monster, int partyMemberCount)
+        {
+            Experience += CalculateExperienceGainedFromMonster(monster, partyMemberCount);
         }
     }
 }

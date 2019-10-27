@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using Doug.Items;
-using Doug.Models;
 using Doug.Models.Combat;
+using Doug.Models.Monsters;
+using Doug.Models.User;
 
 namespace Doug.Monsters
 {

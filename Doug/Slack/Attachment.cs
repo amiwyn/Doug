@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using Doug.Models.Slurs;
 
-namespace Doug.Models
+namespace Doug.Slack
 {
     public class Attachment
     {

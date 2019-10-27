@@ -4,6 +4,7 @@ using Doug.Slack;
 using Hangfire;
 using System;
 using Doug.Items;
+using Doug.Models.User;
 using Doug.Services;
 
 namespace Doug.Commands

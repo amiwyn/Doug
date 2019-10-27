@@ -4,6 +4,7 @@ using Doug.Items;
 using Doug.Items.Misc;
 using Doug.Items.Tickets;
 using Doug.Models;
+using Doug.Models.User;
 using Doug.Repositories;
 using Doug.Services;
 using Doug.Slack;

@@ -1,5 +1,6 @@
 using Doug.Items.Equipment;
 using Doug.Models;
+using Doug.Models.User;
 using Doug.Services;
 using Doug.Slack;
 using Microsoft.VisualStudio.TestTools.UnitTesting;

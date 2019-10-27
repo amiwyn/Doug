@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Doug.Menus.Blocks.Text;
 
 namespace Doug.Menus.Blocks.Accessories
 {
@@ -12,18 +11,6 @@ namespace Doug.Menus.Blocks.Accessories
         {
             Options = options;
             ActionId = action;
-        }
-    }
-
-    public class Option
-    {
-        public PlainText Text { get; set; }
-        public string Value { get; set; }
-
-        public Option(string text, string value)
-        {
-            Text = new PlainText(text);
-            Value = value;
         }
     }
 }

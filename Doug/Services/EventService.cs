@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Doug.Models;
 using Doug.Commands;
+using Doug.Controllers;
 using Doug.Repositories;
 
 namespace Doug.Services

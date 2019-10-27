@@ -1,4 +1,4 @@
-﻿using Doug.Models;
+﻿using Doug.Models.User;
 
 namespace Doug.Items
 {

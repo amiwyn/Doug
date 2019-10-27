@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using Doug.Effects;
 
-namespace Doug.Models
+namespace Doug.Models.User
 {
     public class UserEffect
     {

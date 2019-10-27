@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Doug.Items.Equipment.Sets.Noob;
-using Doug.Models;
+using Doug.Models.User;
 using Doug.Repositories;
 using Doug.Slack;
 

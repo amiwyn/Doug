@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Doug.Items.WeaponType;
 using Doug.Models;
 using Doug.Models.Combat;
+using Doug.Models.User;
 using Doug.Repositories;
 
 namespace Doug.Skills

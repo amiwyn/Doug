@@ -1,4 +1,4 @@
-using Doug.Models;
+using Doug.Models.User;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Test.UserTests

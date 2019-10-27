@@ -1,6 +1,6 @@
-﻿using Doug.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using Doug.Models.Slurs;
 
 namespace Doug.Repositories
 {

@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Doug.Models;
+using Doug.Models.User;
+using Doug.Monsters;
 
 namespace Doug.Repositories
 {
@@ -10,6 +11,7 @@ namespace Doug.Repositories
         void UpdateEnergy(string userId, int energy);
         void UpdateHealth(string userId, int health);
         void AddExperienceToUsers(List<string> userIds, long experience);
+        void AddMonsterExperienceToUsers(List<string> userIds, Monster monster);
         void LevelUpUsers(List<string> userIds);
         void AttributeStatPoint(string userId, string stat);
         void FreeStatPoint(string userId, string stat);
@@ -47,6 +49,15 @@ namespace Doug.Repositories
             var users = _db.Users.Where(usr => userIds.Contains(usr.Id)).ToList();
 
             users.ForEach(usr => usr.Experience += experience);
+
+            _db.SaveChanges();
+        }
+
+        public void AddMonsterExperienceToUsers(List<string> userIds, Monster monster)
+        {
+            var users = _db.Users.Where(usr => userIds.Contains(usr.Id)).ToList();
+
+            users.ForEach(usr => usr.ReceiveExpFromMonster(monster, userIds.Count));
 
             _db.SaveChanges();
         }

@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using Doug.Commands;
 using Doug.Effects;
 using Doug.Items;
-using Doug.Models;
 using Doug.Monsters;
 using Doug.Repositories;
 using Doug.Services;
@@ -106,6 +105,8 @@ namespace Doug
             services.AddScoped<IMonsterMenuService, MonsterMenuService>();
             services.AddScoped<IPartyMenuService, PartyMenuService>();
             services.AddScoped<IPartyService, PartyService>();
+            services.AddScoped<ICraftingMenuService, CraftingMenuService>();
+            services.AddScoped<ICraftingService, CraftingService>();
 
             services.AddScoped<ICoffeeCommands, CoffeeCommands>();
             services.AddScoped<ISlursCommands, SlursCommands>();
@@ -128,6 +129,7 @@ namespace Doug
             services.AddScoped<IMonsterRepository, MonsterRepository>();
             services.AddScoped<ICreditsRepository, CreditsRepository>();
             services.AddScoped<IPartyRepository, PartyRepository>();
+            services.AddScoped<IRecipeRepository, RecipeRepository>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

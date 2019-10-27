@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Doug.Models;
+using Doug.Models.Monsters;
 using Doug.Monsters;
 using Microsoft.EntityFrameworkCore;
 
@@ -44,9 +44,9 @@ namespace Doug.Repositories
             var monster = _db.SpawnedMonsters
                 .Include(monsta => monsta.MonsterAttackers)
                 .ThenInclude(attacker => attacker.User)
-                .Single(monsta => monsta.Id == monsterId);
+                .SingleOrDefault(monsta => monsta.Id == monsterId);
 
-            monster.LoadMonster(_monsterFactory);
+            monster?.LoadMonster(_monsterFactory);
             return monster;
         }
 

@@ -3,7 +3,7 @@ using Doug.Commands;
 using Doug.Controllers.Dto;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Doug.Controllers
+namespace Doug.Controllers.Commands
 {
     [Route("cmd/[controller]")]
     [ApiController]

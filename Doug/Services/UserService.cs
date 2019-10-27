@@ -4,7 +4,8 @@ using System.Threading.Tasks;
 using Doug.Effects.Buffs;
 using Doug.Items;
 using Doug.Items.Lootboxes;
-using Doug.Models;
+using Doug.Models.User;
+using Doug.Monsters;
 using Doug.Repositories;
 using Doug.Slack;
 
@@ -16,6 +17,7 @@ namespace Doug.Services
         Task<bool> ApplyTrueDamage(User user, int damage, string channel);
         Task AddExperience(User user, long experience, string channel);
         Task AddBulkExperience(List<User> users, long experience, string channel);
+        Task AddExperienceFromMonster(List<User> users, Monster monster, string channel);
         Task<bool> IsUserActive(string userId);
         Task KillUser(User user, string channel);
         Task<bool> HandleDeath(User user, string channel);
@@ -93,6 +95,24 @@ namespace Doug.Services
 
             await Task.WhenAll(expGainMessageTasks);
             await Task.WhenAll(levelUpMessageTasks);
+        }
+
+        public async Task AddExperienceFromMonster(List<User> users, Monster monster, string channel)
+        {
+            var levels = users.ToDictionary(user => user.Id, user => user.Level);
+
+            var userIds = users.Select(user => user.Id).ToList();
+            _statsRepository.AddMonsterExperienceToUsers(userIds, monster);
+
+            var expGainMessageTasks = users.Select(user => _slack.SendEphemeralMessage(string.Format(DougMessages.GainedExp, user.CalculateExperienceGainedFromMonster(monster, users.Count)), user.Id, channel));
+
+            var levelUpUsers = users.Where(user => levels.GetValueOrDefault(user.Id) < user.Level).ToList();
+
+            LevelUpUsers(levelUpUsers);
+
+            var levelUpMessageTasks = levelUpUsers.Select(user => _slack.BroadcastMessage(string.Format(DougMessages.LevelUp, Mention(user), user.Level), channel));
+
+            await Task.WhenAll(levelUpMessageTasks.Concat(expGainMessageTasks));
         }
 
         private void LevelUpUsers(List<User> users)

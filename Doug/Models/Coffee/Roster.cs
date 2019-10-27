@@ -1,4 +1,4 @@
-﻿namespace Doug.Models
+﻿namespace Doug.Models.Coffee
 {
     public class Roster
     {

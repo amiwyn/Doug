@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using Doug.Monsters;
 
-namespace Doug.Models
+namespace Doug.Models.Monsters
 {
     public class MonsterAttacker
     {
@@ -12,7 +12,7 @@ namespace Doug.Models
         [NotMapped]
         public SpawnedMonster Monster { get; set; }
         [NotMapped]
-        public User User { get; set; }
+        public User.User User { get; set; }
 
         public MonsterAttacker(int spawnedMonsterId, string userId, int damageDealt)
         {
