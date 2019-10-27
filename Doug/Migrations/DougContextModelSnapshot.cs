@@ -31,7 +31,7 @@ namespace Doug.Migrations
                     b.ToTable("Channels");
                 });
 
-            modelBuilder.Entity("Doug.Models.CoffeeBreak", b =>
+            modelBuilder.Entity("Doug.Models.Coffee.CoffeeBreak", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -52,6 +52,20 @@ namespace Doug.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("CoffeeBreak");
+                });
+
+            modelBuilder.Entity("Doug.Models.Coffee.Roster", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("IsReady");
+
+                    b.Property<bool>("IsSkipping");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Roster");
                 });
 
             modelBuilder.Entity("Doug.Models.GambleChallenge", b =>
@@ -107,33 +121,7 @@ namespace Doug.Migrations
                     b.ToTable("InventoryItem");
                 });
 
-            modelBuilder.Entity("Doug.Models.Loadout", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Body");
-
-                    b.Property<string>("Boots");
-
-                    b.Property<string>("Gloves");
-
-                    b.Property<string>("Head");
-
-                    b.Property<string>("LeftHand");
-
-                    b.Property<string>("Neck");
-
-                    b.Property<string>("RightHand");
-
-                    b.Property<string>("Skill");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("Doug.Models.MonsterAttacker", b =>
+            modelBuilder.Entity("Doug.Models.Monsters.MonsterAttacker", b =>
                 {
                     b.Property<string>("UserId");
 
@@ -151,6 +139,17 @@ namespace Doug.Migrations
                     b.ToTable("MonsterAttacker");
                 });
 
+            modelBuilder.Entity("Doug.Models.Monsters.RegionMonster", b =>
+                {
+                    b.Property<string>("ChannelId");
+
+                    b.Property<string>("MonsterId");
+
+                    b.HasKey("ChannelId", "MonsterId");
+
+                    b.ToTable("RegionMonster");
+                });
+
             modelBuilder.Entity("Doug.Models.Party", b =>
                 {
                     b.Property<int>("Id")
@@ -166,44 +165,16 @@ namespace Doug.Migrations
                     b.ToTable("Parties");
                 });
 
-            modelBuilder.Entity("Doug.Models.RecentFlame", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("SlurId");
-
-                    b.Property<string>("TimeStamp");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("RecentSlurs");
-                });
-
-            modelBuilder.Entity("Doug.Models.RegionMonster", b =>
-                {
-                    b.Property<string>("ChannelId");
-
-                    b.Property<string>("MonsterId");
-
-                    b.HasKey("ChannelId", "MonsterId");
-
-                    b.ToTable("RegionMonster");
-                });
-
-            modelBuilder.Entity("Doug.Models.Roster", b =>
+            modelBuilder.Entity("Doug.Models.Recipe", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<bool>("IsReady");
-
-                    b.Property<bool>("IsSkipping");
+                    b.Property<string>("Result");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Roster");
+                    b.ToTable("Recipes");
                 });
 
             modelBuilder.Entity("Doug.Models.Shop", b =>
@@ -233,7 +204,22 @@ namespace Doug.Migrations
                     b.ToTable("ShopItem");
                 });
 
-            modelBuilder.Entity("Doug.Models.Slur", b =>
+            modelBuilder.Entity("Doug.Models.Slurs.RecentFlame", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("SlurId");
+
+                    b.Property<string>("TimeStamp");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RecentSlurs");
+                });
+
+            modelBuilder.Entity("Doug.Models.Slurs.Slur", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -250,7 +236,33 @@ namespace Doug.Migrations
                     b.ToTable("Slurs");
                 });
 
-            modelBuilder.Entity("Doug.Models.User", b =>
+            modelBuilder.Entity("Doug.Models.User.Loadout", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Body");
+
+                    b.Property<string>("Boots");
+
+                    b.Property<string>("Gloves");
+
+                    b.Property<string>("Head");
+
+                    b.Property<string>("LeftHand");
+
+                    b.Property<string>("Neck");
+
+                    b.Property<string>("RightHand");
+
+                    b.Property<string>("Skill");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("Doug.Models.User.User", b =>
                 {
                     b.Property<string>("Id");
 
@@ -285,7 +297,7 @@ namespace Doug.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Doug.Models.UserEffect", b =>
+            modelBuilder.Entity("Doug.Models.User.UserEffect", b =>
                 {
                     b.Property<string>("UserId");
 
@@ -319,38 +331,38 @@ namespace Doug.Migrations
 
             modelBuilder.Entity("Doug.Models.InventoryItem", b =>
                 {
-                    b.HasOne("Doug.Models.User", "User")
+                    b.HasOne("Doug.Models.User.User", "User")
                         .WithMany("InventoryItems")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Doug.Models.MonsterAttacker", b =>
+            modelBuilder.Entity("Doug.Models.Monsters.MonsterAttacker", b =>
                 {
                     b.HasOne("Doug.Monsters.SpawnedMonster", "Monster")
                         .WithMany("MonsterAttackers")
                         .HasForeignKey("SpawnedMonsterId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("Doug.Models.User", "User")
+                    b.HasOne("Doug.Models.User.User", "User")
                         .WithOne()
-                        .HasForeignKey("Doug.Models.MonsterAttacker", "UserId")
+                        .HasForeignKey("Doug.Models.Monsters.MonsterAttacker", "UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Doug.Models.Party", b =>
-                {
-                    b.HasOne("Doug.Models.User", "Leader")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-                });
-
-            modelBuilder.Entity("Doug.Models.RegionMonster", b =>
+            modelBuilder.Entity("Doug.Models.Monsters.RegionMonster", b =>
                 {
                     b.HasOne("Doug.Models.Channel", "Channel")
                         .WithMany("Monsters")
                         .HasForeignKey("ChannelId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Doug.Models.Party", b =>
+                {
+                    b.HasOne("Doug.Models.User.User", "Leader")
+                        .WithMany()
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Doug.Models.ShopItem", b =>
@@ -361,11 +373,11 @@ namespace Doug.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Doug.Models.User", b =>
+            modelBuilder.Entity("Doug.Models.User.User", b =>
                 {
-                    b.HasOne("Doug.Models.Loadout", "Loadout")
+                    b.HasOne("Doug.Models.User.Loadout", "Loadout")
                         .WithOne()
-                        .HasForeignKey("Doug.Models.User", "Id")
+                        .HasForeignKey("Doug.Models.User.User", "Id")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Doug.Models.Party")
@@ -373,9 +385,9 @@ namespace Doug.Migrations
                         .HasForeignKey("PartyId");
                 });
 
-            modelBuilder.Entity("Doug.Models.UserEffect", b =>
+            modelBuilder.Entity("Doug.Models.User.UserEffect", b =>
                 {
-                    b.HasOne("Doug.Models.User", "User")
+                    b.HasOne("Doug.Models.User.User", "User")
                         .WithMany("Effects")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);

@@ -22,6 +22,7 @@ namespace Doug
         public DbSet<Shop> Shops { get; set; }
         public DbSet<SpawnedMonster> SpawnedMonsters { get; set; }
         public DbSet<Party> Parties { get; set; }
+        public DbSet<Recipe> Recipes { get; set; }  
 
         public DougContext(DbContextOptions<DougContext> options) : base(options)
         {

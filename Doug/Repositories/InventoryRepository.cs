@@ -11,6 +11,7 @@ namespace Doug.Repositories
         void AddItem(User user, Item item);
         void AddItems(User user, IEnumerable<Item> items);
         void RemoveItem(User user, int inventoryPosition);
+        void RemoveItems(User user, IEnumerable<int> inventoryPositions);
         void AddItemToUsers(List<User> users, Item item);
     }
 
@@ -73,6 +74,13 @@ namespace Doug.Repositories
         {
             var item = user.InventoryItems.Single(itm => itm.InventoryPosition == inventoryPosition);
 
+            RemoveSingleItem(user, item);
+
+            _db.SaveChanges();
+        }
+
+        private void RemoveSingleItem(User user, InventoryItem item)
+        {
             if (item.Quantity <= 1)
             {
                 user.InventoryItems.Remove(item);
@@ -81,6 +89,12 @@ namespace Doug.Repositories
             {
                 item.Quantity--;
             }
+        }
+
+        public void RemoveItems(User user, IEnumerable<int> inventoryPositions)
+        {
+            var items = user.InventoryItems.Where(item => inventoryPositions.Contains(item.InventoryPosition)).ToList();
+            items.ForEach(item => RemoveSingleItem(user, item));
 
             _db.SaveChanges();
         }

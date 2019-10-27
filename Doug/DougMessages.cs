@@ -131,6 +131,7 @@
         public const string JoinedYourParty = "{0} joined your party";
         public const string CraftingSelect = "Select items";
         public const string CraftingDialog = "Select two or more items to craft them. If the crafting was not successful you don't lose the items.";
+        public const string SuccessCrafting = "You successfully crafted {0}!";
 
 
         public const string DougError = "Beep boop, it's not working : {0}";
@@ -164,6 +165,7 @@
         public const string UserHasParty = "You already have a party";
         public const string NoParty = "You have no party to leave";
         public const string NoSkillEquipped = "You have no skill equipped";
+        public const string FailedCrafting = "The crafting has failed; there's no such recipe.";
     }
 }
 
