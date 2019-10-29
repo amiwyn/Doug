@@ -44,6 +44,7 @@ namespace Doug.Services.MenuServices
             var response = _craftingService.Craft(items, user);
 
             await _slack.SendEphemeralMessage(response.Message, user.Id, interaction.ChannelId);
+            await _slack.UpdateInteractionMessage(new CraftingMenu(user.InventoryItems).Blocks, interaction.ResponseUrl);
         }
     }
 }
