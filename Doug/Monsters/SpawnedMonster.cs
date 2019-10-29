@@ -32,12 +32,6 @@ namespace Doug.Monsters
             return DateTime.UtcNow <= AttackCooldown;
         }
 
-        public User FindHighestDamageDealer()
-        {
-            var highestDamage = MonsterAttackers.Max(attacker => attacker.DamageDealt);
-            return MonsterAttackers.Single(attacker => attacker.DamageDealt == highestDamage).User;
-        }
-
         public Attack AttackTarget(ICombatable target, IEventDispatcher eventDispatcher)
         {
             Attack attack = new PhysicalAttack(this, Monster.MinAttack, Monster.MaxAttack, Monster.Hitrate, Monster.GetCriticalHitChance());

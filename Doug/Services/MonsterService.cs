@@ -77,7 +77,7 @@ namespace Doug.Services
         public async Task HandleMonsterDeathByUser(User user, SpawnedMonster spawnedMonster, string channel)
         {
             var monster = spawnedMonster.Monster;
-            var party = FindMaxPartyDamageFromUsers(spawnedMonster.MonsterAttackers);
+            var users = FindExperienceWinners(spawnedMonster.MonsterAttackers);
 
             await AddMonsterLootToUser(user, monster, channel);
 
@@ -85,16 +85,29 @@ namespace Doug.Services
 
             await _slack.BroadcastMessage(string.Format(DougMessages.MonsterDied, monster.Name), channel);
 
-            await _userService.AddExperienceFromMonster(party.Users, monster, channel);
+            await _userService.AddExperienceFromMonster(users, monster, channel);
         }
 
-        private Party FindMaxPartyDamageFromUsers(List<MonsterAttacker> attackers)
+        private List<User> FindExperienceWinners(List<MonsterAttacker> attackers)
         {
             var users = attackers.Select(attacker => attacker.User.Id);
             var parties = _partyRepository.GetUniquePartiesFromUsers(users);
 
-            return parties.Select(party => new { Damage = GetPartyDamage(party, attackers), Party = party })
-                .Aggregate((acc, elem) => acc.Damage > elem.Damage ? acc : elem).Party;
+            var usersWithoutParty = attackers.Where(attacker => !parties.Any(party => party.Users.Select(user => user.Id).Contains(attacker.UserId))).ToList();
+            var mostSoloDps = usersWithoutParty.Aggregate(new MonsterAttacker(), (acc, elem) => acc.DamageDealt > elem.DamageDealt ? acc : elem);
+
+            if (parties.Any())
+            {
+                var winningParty = parties.Select(party => new { Damage = GetPartyDamage(party, attackers), Party = party })
+                    .Aggregate((acc, elem) => acc.Damage > elem.Damage ? acc : elem);
+
+                if (winningParty.Damage >= mostSoloDps.DamageDealt)
+                {
+                    return winningParty.Party.Users;
+                }
+            }
+
+            return new List<User> { mostSoloDps.User };
         }
 
         private int GetPartyDamage(Party party, List<MonsterAttacker> attackers)

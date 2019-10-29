@@ -20,5 +20,10 @@ namespace Doug.Models.Monsters
             UserId = userId;
             DamageDealt = damageDealt;
         }
+
+        public MonsterAttacker()
+        {
+            DamageDealt = 0;
+        }
     }
 }
