@@ -3,6 +3,7 @@ using System.Linq;
 using Doug.Menus.Blocks;
 using Doug.Menus.Blocks.Accessories;
 using Doug.Menus.Blocks.Text;
+using Doug.Models;
 using Doug.Models.User;
 
 namespace Doug.Menus
@@ -11,7 +12,7 @@ namespace Doug.Menus
     {
         public List<Block> Blocks { get; set; }
 
-        public StatsMenu(User user)
+        public StatsMenu(User user, Party party)
         {
             Blocks = new List<Block>
             {
@@ -19,6 +20,12 @@ namespace Doug.Menus
                 CreateUserOtherInfo(user),
                 new Divider(),
             };
+
+            if (party != null)
+            {
+                Blocks.Add(CreatePartyFields(party));
+                Blocks.Add(new Divider());
+            }
 
             if (user.Effects.Count > 0)
             {
@@ -100,6 +107,11 @@ namespace Doug.Menus
 
             return new FieldsSection(statsFields);
         }
-
+        private Block CreatePartyFields(Party party)
+        {
+            var fields = party.Users.Select(usr => $"<@{usr.Id}>").ToList();
+            fields.Insert(0, "In party with :");
+            return new Context(fields);
+        }
     }
 }

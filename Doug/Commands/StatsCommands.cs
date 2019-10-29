@@ -46,7 +46,7 @@ namespace Doug.Commands
                 return NoResponse;
             }
 
-            await _slack.SendEphemeralBlocks(new StatsMenu(user).Blocks, command.UserId, command.ChannelId);
+            await _slack.SendEphemeralBlocks(new StatsMenu(user, party).Blocks, command.UserId, command.ChannelId);
             return NoResponse;
         }
 

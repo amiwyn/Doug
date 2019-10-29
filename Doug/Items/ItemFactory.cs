@@ -59,6 +59,7 @@ namespace Doug.Items
                 case CoffeeCup.ItemId: return new CoffeeCup(_statsRepository, _inventoryRepository);
                 case Apple.ItemId: return new Apple(_statsRepository, _inventoryRepository);
                 case Bread.ItemId: return new Bread(_statsRepository, _inventoryRepository);
+                case AppleSandwich.ItemId: return new AppleSandwich(_statsRepository, _inventoryRepository);
                 case McdoFries.ItemId: return new McdoFries(_statsRepository, _inventoryRepository, _userService);
 
                 // Utility Consumables
