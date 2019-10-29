@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Doug.Controllers;
 using Doug.Menus;
+using Doug.Monsters;
 using Doug.Repositories;
 using Doug.Slack;
 
@@ -42,7 +43,7 @@ namespace Doug.Services.MenuServices
             var response = await _combatService.AttackMonster(user, monster, interaction.ChannelId);
 
             await _slack.SendEphemeralMessage(response.Message, user.Id, interaction.ChannelId);
-            await _slack.UpdateInteractionMessage(new MonsterMenu(monster).Blocks, interaction.ResponseUrl);
+            await UpdateMonsterAttackBlocks(monster, interaction.ResponseUrl);
         }
 
         public async Task Skill(Interaction interaction)
@@ -58,7 +59,19 @@ namespace Doug.Services.MenuServices
             var response = await _combatService.ActivateSkill(user, monster, interaction.ChannelId);
 
             await _slack.SendEphemeralMessage(response.Message, user.Id, interaction.ChannelId);
-            await _slack.UpdateInteractionMessage(new MonsterMenu(monster).Blocks, interaction.ResponseUrl);
+            await UpdateMonsterAttackBlocks(monster, interaction.ResponseUrl);
+        }
+
+        private async Task UpdateMonsterAttackBlocks(SpawnedMonster spawnedMonster, string url)
+        {
+            if (spawnedMonster.Monster.IsDead())
+            {
+                await _slack.DeleteInteractionMessage(url);
+            }
+            else
+            {
+                await _slack.UpdateInteractionMessage(new MonsterMenu(spawnedMonster).Blocks, url);
+            }
         }
 
         public async Task ShowMonsters(string channel)
