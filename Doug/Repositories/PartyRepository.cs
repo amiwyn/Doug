@@ -29,6 +29,7 @@ namespace Doug.Repositories
         {
             return _db.Parties
                 .Include(party => party.Users)
+                .ThenInclude(usr => usr.InventoryItems)
                 .Single(party => party.Id == id);
         }
 
@@ -36,6 +37,7 @@ namespace Doug.Repositories
         {
             return _db.Parties
                 .Include(party => party.Users)
+                .ThenInclude(usr => usr.InventoryItems)
                 .SingleOrDefault(party => party.Users.Any(usr => usr.Id == user));
         }
 
@@ -43,6 +45,7 @@ namespace Doug.Repositories
         {
             return _db.Parties
                 .Include(party => party.Users)
+                .ThenInclude(user => user.InventoryItems)
                 .Where(party => party.Users.Any(user => userIds.Contains(user.Id))).ToList();
         }
 
