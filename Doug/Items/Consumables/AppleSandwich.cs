@@ -14,7 +14,7 @@ namespace Doug.Items.Consumables
         {
             _statsRepository = statsRepository;
             Id = ItemId;
-            Name = "Apple sandwich";
+            Name = "Apple chausson";
             Description = "Incredible, you made this. I didn't know you could cook.";
             Rarity = Rarity.Common;
             Icon = ":square_sandwich:";
