@@ -45,7 +45,7 @@ namespace Doug.Items.Consumables
             var attack = new MagicAttack(user, damage);
             target.ReceiveAttack(attack, _eventDispatcher);
 
-            _combatService.DealDamage(user, attack, target, channel);
+            _combatService.DealDamage(user, attack, target, channel).Wait();
 
             return string.Empty;
         }
