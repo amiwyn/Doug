@@ -17,8 +17,8 @@ namespace Doug.Services
     {
         private const int CoffeeRemindDelaySeconds = 25;
         private const int CoffeeBreakDurationMinutes = 15;
-        private const int MorningBreak = 9 + 4;
-        private const int AfternoonBreak = 14 + 4;
+        private const int MorningBreak = 9;
+        private const int AfternoonBreak = 14;
         private const int Tolerance = 15;
         private const int CoffeeBreakAward = 10;
         private const int CoffeeExperienceAward = 300;
@@ -46,8 +46,12 @@ namespace Doug.Services
         {
             var coffeeBreak = _coffeeRepository.GetCoffeeBreak();
 
-            var morningBreakIsPossible = IsInTimespan(currentTime, TimeSpan.FromHours(MorningBreak), Tolerance);
-            var afternoonBreakIsPossible = IsInTimespan(currentTime, TimeSpan.FromHours(AfternoonBreak), Tolerance);
+            var timezoneOffset = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time").BaseUtcOffset;
+            var morningBreak = TimeSpan.FromHours(MorningBreak) - timezoneOffset;
+            var afternoonBreak = TimeSpan.FromHours(AfternoonBreak) - timezoneOffset;
+
+            var morningBreakIsPossible = IsInTimespan(currentTime, morningBreak, Tolerance);
+            var afternoonBreakIsPossible = IsInTimespan(currentTime, afternoonBreak, Tolerance);
             var isTooCloseFromLastBreak = currentTime < coffeeBreak.LastCoffee + TimeSpan.FromHours(1);
 
             if (!morningBreakIsPossible && !afternoonBreakIsPossible)
