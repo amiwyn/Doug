@@ -29,9 +29,16 @@ namespace Test
         private readonly Mock<IStatsRepository> _statsRepository = new Mock<IStatsRepository>();
         private readonly Mock<ICreditsRepository> _creditsRepository = new Mock<ICreditsRepository>();
 
+        private DateTime _rightTime = new DateTime(1, 1, 1, 14, 0, 0);
+        private readonly DateTime _wrongTime = new DateTime(1, 1, 1, 1, 0, 0);
+
         [TestInitialize]
         public void Setup()
         {
+            var timezoneOffset = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time").BaseUtcOffset;
+
+            _rightTime -= timezoneOffset;
+
             _coffeeRepository.Setup(repo => repo.GetCoffeeBreak()).Returns(new CoffeeBreak());
             _userRepository.Setup(repo => repo.GetUser(It.IsAny<string>())).Returns(new User());
             _coffeeService = new CoffeeService(_slack.Object, _coffeeRepository.Object, _backgroundJobClient.Object, _inventoryRepository.Object, _userService.Object, _statsRepository.Object, _creditsRepository.Object);
@@ -41,9 +48,8 @@ namespace Test
         public void GivenRightTime_WhenCountingParrotOfUser_UserIsReady()
         {
             _coffeeRepository.Setup(repo => repo.GetMissingParticipants()).Returns(new List<User>());
-            var time = new DateTime(1, 1, 1, 18, 0, 0);
 
-            _coffeeService.CountParrot(User, Channel, time);
+            _coffeeService.CountParrot(User, Channel, _rightTime);
 
             _coffeeRepository.Verify(repo => repo.ConfirmUserReady(User));
         }
@@ -52,9 +58,8 @@ namespace Test
         public void GivenWrongTime_WhenCountingParrotOfUser_UserIsNotReady()
         {
             _coffeeRepository.Setup(repo => repo.GetMissingParticipants()).Returns(new List<User>());
-            var time = new DateTime(1, 1, 1, 19, 0, 0);
 
-            _coffeeService.CountParrot(User, Channel, time);
+            _coffeeService.CountParrot(User, Channel, _wrongTime);
 
             _coffeeRepository.Verify(repo => repo.ConfirmUserReady(User), Times.Never);
         }
@@ -63,9 +68,9 @@ namespace Test
         public void GivenRightTime_AndEveryoneIsReady_WhenCountingParrotOfUser_BroadcastStart()
         {
             _coffeeRepository.Setup(repo => repo.GetMissingParticipants()).Returns(new List<User>());
-            var time = new DateTime(1, 1, 1, 18, 0, 0);
 
-            _coffeeService.CountParrot(User, Channel, time);
+
+            _coffeeService.CountParrot(User, Channel, _rightTime);
 
             _slack.Verify(slack => slack.BroadcastMessage("Alright, let's do this. <!here> GO!", Channel));
         }
@@ -74,9 +79,8 @@ namespace Test
         public void GivenRightTime_ButNotEveryoneIsReady_WhenCountingParrotOfUser_DontBroadcastStart()
         {
             _coffeeRepository.Setup(repo => repo.GetMissingParticipants()).Returns(new List<User>() { new User() });
-            var time = new DateTime(1, 1, 1, 18, 0, 0);
 
-            _coffeeService.CountParrot(User, Channel, time);
+            _coffeeService.CountParrot(User, Channel, _rightTime);
 
             _slack.Verify(slack => slack.BroadcastMessage(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
         }
