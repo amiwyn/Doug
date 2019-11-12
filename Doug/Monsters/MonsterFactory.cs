@@ -17,7 +17,7 @@ namespace Doug.Monsters
             _monsters = new Dictionary<string, Func<Monster>> 
             {
                 { AnimeTiddies.MonsterId, () => new AnimeTiddies() },
-                { AnotherWeeb.MonsterId, () => new AnotherWeeb() },
+                { Kim.MonsterId, () => new Kim() },
                 { APepe.MonsterId, () => new APepe() },
                 { Beaubrun.MonsterId, () => new Beaubrun() },
                 { Beauceron.MonsterId, () => new Beauceron() },
