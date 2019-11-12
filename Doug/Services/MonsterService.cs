@@ -19,7 +19,6 @@ namespace Doug.Services
 
     public class MonsterService : IMonsterService
     {
-        private const double SpawnChance = 0.2;
         private const int MaximumMonsterTypeInChannel = 3;
 
         private readonly IMonsterRepository _monsterRepository;
@@ -45,13 +44,7 @@ namespace Doug.Services
 
         public void RollMonsterSpawn()
         {
-            var random = new Random();
-            if (random.NextDouble() >= SpawnChance)
-            {
-                return;
-            }
-
-            var channel = PickRandomRegion(random, _channelRepository);
+            var channel = PickRandomRegion(_channelRepository);
             var monsterIds = channel.Monsters.Select(mons => mons.MonsterId).ToList().OrderBy(mons => Guid.NewGuid());
             var monstersInChannel = _monsterRepository.GetMonsters(channel.Id).ToList();
 
@@ -67,10 +60,10 @@ namespace Doug.Services
             }
         }
 
-        private Channel PickRandomRegion(Random random, IChannelRepository channelRepository)
+        private Channel PickRandomRegion(IChannelRepository channelRepository)
         {
             var channels = channelRepository.GetChannelsByType(ChannelType.Region).ToList();
-            var index = random.Next(0, channels.Count);
+            var index = new Random().Next(0, channels.Count);
             return channels.ElementAt(index);
         }
 

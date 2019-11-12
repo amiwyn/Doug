@@ -116,9 +116,12 @@ namespace Doug.Items
                 // Monster Drops
                 case GullFeather.ItemId: return new GullFeather();
                 case SharpBeak.ItemId: return new SharpBeak();
-                case IronIngot.ItemId: return new IronIngot();
                 case BikerCocaine.ItemId: return new BikerCocaine();
 
+                case IronIngot.ItemId: return new IronIngot();
+                case SilverIngot.ItemId: return new SilverIngot();
+                case GoldIngot.ItemId: return new GoldIngot();
+                case MithrilIngot.ItemId: return new MithrilIngot();
 
                 // Noob Set
                 case FarmersArmor.ItemId: return new FarmersArmor();
