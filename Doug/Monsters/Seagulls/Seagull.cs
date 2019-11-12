@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using Doug.Items.Consumables;
-using Doug.Items.Misc.Drops;
-using Doug.Models.Monsters;
+﻿using Doug.Monsters.Droptables;
 
 namespace Doug.Monsters.Seagulls
 {
@@ -26,13 +23,7 @@ namespace Doug.Monsters.Seagulls
             Defense = 20;
             Resistance = 10;
 
-            DropTable = new Dictionary<LootItem, double>
-            {
-                { new LootItem(new Apple(), 1), 0.05 },
-                { new LootItem(new GullFeather(), 1), 0.4 },
-                { new LootItem(new SharpBeak(), 1), 0.3 },
-                { new LootItem(new IronIngot(), 1), 0.1 }
-            };
+            DropTable = StRochTable.Drops;
         }
     }
 }

@@ -1,4 +1,3 @@
-Name,Level,Slot,Agi Req.,Int Req.,Str Req.,Price,Health,Mana,Max Atk.,Min Atk.,Atk. Spd,Hitrate,Dodge,Defense,Resistance,Health Regen,Mana Regen,Luk,Agi,Str,Con,Int,,Description,Icon,Id
 Peasant armor,1,Body,,,,65,,,,,,,,6,3,,,,,,,,,An armor made of leather. Protects against physical damage.,:noob_armor:,peasant_shirt
 Peasant boots,1,Boots,,,,30,,,,,,,4,3,,,,,,,,,,These boots are made for walking.,:noob_boots1:,peasant_boots
 Farmers armor,5,Body,,,,155,,,,,,,,10,5,,,,,,,,,An armor made of leather. Protects against physical damage.,:noob_armor:,farmers_armor

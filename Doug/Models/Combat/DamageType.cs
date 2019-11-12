@@ -2,7 +2,7 @@
 {
     public enum DamageType
     {
-        Physical,
-        Magical
+        Physical = 1,
+        Magical = 2
     }
 }
