@@ -66,8 +66,14 @@ namespace Doug.Items
                 case SuicidePill.ItemId: return new SuicidePill(_inventoryRepository, _userService);
                 case KickTicket.ItemId: return new KickTicket(_inventoryRepository, _slack, _userService, _eventDispatcher);
                 case InviteTicket.ItemId: return new InviteTicket(_inventoryRepository, _slack);
+
                 case StRochTicket.ItemId: return new StRochTicket(_inventoryRepository, _slack);
                 case VanierTicket.ItemId: return new VanierTicket(_inventoryRepository, _slack);
+                case BeauceTicket.ItemId: return new BeauceTicket(_inventoryRepository, _slack);
+                case ChibougamauTicket.ItemId: return new ChibougamauTicket(_inventoryRepository, _slack);
+                case JapanTicket.ItemId: return new JapanTicket(_inventoryRepository, _slack);
+                case ParliamentTicket.ItemId: return new ParliamentTicket(_inventoryRepository, _slack);
+                case UniversityTicket.ItemId: return new UniversityTicket(_inventoryRepository, _slack);
 
                 // Combat Consumables
                 case AntiRogueSpray.ItemId: return new AntiRogueSpray(_inventoryRepository, _eventDispatcher, _slack, _userService, _combatService);
