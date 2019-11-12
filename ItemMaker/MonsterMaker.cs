@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Doug.Models.Combat;
@@ -46,9 +47,10 @@ namespace ItemMaker
 
         static string CreateItemClass(string line)
         {
+            var textInfo = new CultureInfo("en-US", false).TextInfo;
             var values = line.Split(",");
-            var className = values[0].Replace(" ", "");
-            var damageType = (DamageType) int.Parse(values[4]);
+            var className = textInfo.ToTitleCase(values[0]).Replace(" ", "");
+            var damageType = "Models.Combat.DamageType." + (DamageType) int.Parse(values[4]);
             return string.Format(ItemTemplate, className, values[2], values[0], values[14], values[15], values[1], values[3], values[5], values[6], values[7], values[9], values[10], values[12], values[11], values[8], damageType);
         }
 

@@ -1,6 +1,6 @@
-﻿using Doug.Monsters.Droptables;
+using Doug.Monsters.Droptables;
 
-namespace Doug.Monsters.Seagulls
+namespace Doug.Monsters
 {
     public class Seagull : Monster
     {
@@ -12,17 +12,17 @@ namespace Doug.Monsters.Seagulls
             Name = "Seagull";
             Description = "A fierce animal with a razor sharp beak.";
             Image = "https://upload.wikimedia.org/wikipedia/commons/f/fb/Seagull_in_flight_by_Jiyang_Chen.jpg";
-            Level = 10;
-            ExperienceValue = 250;
-
-            MaxHealth = Health = 480;
-            MinAttack = 78;
-            MaxAttack = 96;
-            Hitrate = 6;
-            Dodge = 18;
-            Defense = 20;
-            Resistance = 10;
-
+            Level = 2;
+            ExperienceValue = 216;
+            MaxHealth = Health = 204;
+            MinAttack = 51;
+            MaxAttack = 92;
+            Hitrate = 10;
+            Dodge = 9;
+            Defense = 11;
+            Resistance = 16;
+            AttackCooldown = 30;
+            DamageType = Models.Combat.DamageType.Physical;
             DropTable = StRochTable.Drops;
         }
     }

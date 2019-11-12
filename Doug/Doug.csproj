@@ -21,6 +21,7 @@
     <Folder Include="Items\Equipment\Sets\Tier2\Hunter\" />
     <Folder Include="Items\Equipment\Sets\Tier2\Mage\" />
     <Folder Include="Items\Equipment\Sets\Tier2\Fighter\" />
+    <Folder Include="Monsters\Generated\" />
   </ItemGroup>
 
 </Project>
