@@ -22,8 +22,8 @@ namespace Doug.Monsters
             Defense = 68;
             Resistance = 34;
             AttackCooldown = 20;
-            DamageType = Models.Combat.DamageType.Magical;
-            DropTable = StRochTable.Drops;
+            DamageType = Models.Combat.DamageType.Physical;
+            DropTable = DropTables.Chibougamau;
         }
     }
 }

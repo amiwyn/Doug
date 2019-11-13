@@ -22,8 +22,8 @@ namespace Doug.Monsters
             Defense = 26;
             Resistance = 27;
             AttackCooldown = 30;
-            DamageType = Models.Combat.DamageType.Physical;
-            DropTable = StRochTable.Drops;
+            DamageType = Models.Combat.DamageType.Magical;
+            DropTable = DropTables.Vanier;
         }
     }
 }
