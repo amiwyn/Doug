@@ -33,7 +33,7 @@ namespace ItemMaker
                                             "            Resistance = {13};\r\n" +
                                             "            AttackCooldown = {14};\r\n" +
                                             "            DamageType = {15};\r\n" +
-                                            "            DropTable = StRochTable.Drops;\r\n" +
+                                            "            DropTable = {16};\r\n" +
                                             "        }}\r\n" +
                                             "    }}\r\n" +
                                             "}}\r\n";
@@ -49,9 +49,11 @@ namespace ItemMaker
         {
             var textInfo = new CultureInfo("en-US", false).TextInfo;
             var values = line.Split(",");
-            var className = textInfo.ToTitleCase(values[0]).Replace(" ", "");
+            var specialChars = new Regex("[^\\w ]");
+            var className = specialChars.Replace(textInfo.ToTitleCase(values[0]).Replace(" ", ""), string.Empty);
             var damageType = "Models.Combat.DamageType." + (DamageType) int.Parse(values[4]);
-            return string.Format(ItemTemplate, className, values[2], values[0], values[14], values[15], values[1], values[3], values[5], values[6], values[7], values[9], values[10], values[12], values[11], values[8], damageType);
+            var droptable = "DropTables." + values[14];
+            return string.Format(ItemTemplate, className, values[2], values[0], values[15], values[16], values[1], values[3], values[5], values[6], values[7], values[9], values[10], values[12], values[11], values[8], damageType, droptable);
         }
 
         static string GetFilenameFromClass(string file)

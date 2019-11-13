@@ -23,7 +23,7 @@ namespace Doug.Monsters
             Resistance = 40;
             AttackCooldown = 20;
             DamageType = Models.Combat.DamageType.Physical;
-            DropTable = StRochTable.Drops;
+            DropTable = DropTables.Beauce;
         }
     }
 }

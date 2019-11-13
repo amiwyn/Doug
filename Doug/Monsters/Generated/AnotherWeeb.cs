@@ -2,16 +2,16 @@ using Doug.Monsters.Droptables;
 
 namespace Doug.Monsters
 {
-    public class Kim : Monster
+    public class AnotherWeeb : Monster
     {
-        public const string MonsterId = "kim";
+        public const string MonsterId = "keven";
 
-        public Kim()
+        public AnotherWeeb()
         {
             Id = MonsterId;
-            Name = "Kim";
-            Description = "Kim! The ruler of the best Korea.";
-            Image = "https://upload.wikimedia.org/wikipedia/commons/d/d9/Kim_Jong-un_IKS_2018.jpg";
+            Name = "Another weeb";
+            Description = "This one looks like Keven.";
+            Image = "http://cdn4.sussexdirectories.com/rms/rms_photos/sized/05/40/184005-256670-3_320x400.jpg?pu=1391451079";
             Level = 46;
             ExperienceValue = 568;
             MaxHealth = Health = 2316;
@@ -23,7 +23,7 @@ namespace Doug.Monsters
             Resistance = 36;
             AttackCooldown = 20;
             DamageType = Models.Combat.DamageType.Physical;
-            DropTable = StRochTable.Drops;
+            DropTable = DropTables.Japan;
         }
     }
 }

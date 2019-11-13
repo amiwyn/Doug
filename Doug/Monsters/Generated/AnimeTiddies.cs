@@ -11,7 +11,7 @@ namespace Doug.Monsters
             Id = MonsterId;
             Name = "Anime tiddies";
             Description = "HUMONGOUS";
-            Image = "https://thebiem.com/wp-content/uploads/2019/01/Urara-Oikawa.jpg.webp";
+            Image = "https://i.imgur.com/YiOykhK.jpg";
             Level = 50;
             ExperienceValue = 600;
             MaxHealth = Health = 2700;
@@ -23,7 +23,7 @@ namespace Doug.Monsters
             Resistance = 37;
             AttackCooldown = 20;
             DamageType = Models.Combat.DamageType.Magical;
-            DropTable = StRochTable.Drops;
+            DropTable = DropTables.Japan;
         }
     }
 }
