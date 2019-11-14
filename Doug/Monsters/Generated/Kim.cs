@@ -2,16 +2,16 @@ using Doug.Monsters.Droptables;
 
 namespace Doug.Monsters
 {
-    public class AnotherWeeb : Monster
+    public class Kim : Monster
     {
-        public const string MonsterId = "keven";
+        public const string MonsterId = "kim";
 
-        public AnotherWeeb()
+        public Kim()
         {
             Id = MonsterId;
-            Name = "Another weeb";
-            Description = "This one looks like Keven.";
-            Image = "http://cdn4.sussexdirectories.com/rms/rms_photos/sized/05/40/184005-256670-3_320x400.jpg?pu=1391451079";
+            Name = "Kim";
+            Description = "The leader of the best Korea.";
+            Image = "https://cdn.vox-cdn.com/thumbor/VXcdncaX04O11BGJv8oF-pBYv1Q=/0x0:1500x844/1200x675/filters:focal(630x302:870x542)/cdn.vox-cdn.com/uploads/chorus_image/image/63988749/kim_jon_world_lead.0.jpg";
             Level = 46;
             ExperienceValue = 568;
             MaxHealth = Health = 2316;
