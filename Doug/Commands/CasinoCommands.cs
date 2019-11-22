@@ -3,7 +3,7 @@ using Doug.Repositories;
 using Doug.Slack;
 using Hangfire;
 using System;
-using Doug.Items;
+using Doug.Effects;
 using Doug.Models.User;
 using Doug.Services;
 

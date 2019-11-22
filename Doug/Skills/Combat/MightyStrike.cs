@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Doug.Items;
+using Doug.Effects;
 using Doug.Items.WeaponType;
 using Doug.Models;
 using Doug.Models.Combat;
@@ -12,6 +12,8 @@ namespace Doug.Skills.Combat
 {
     public class MightyStrike : CombatSkill
     {
+        public const string SkillId = "mighty_strike";
+
         private readonly ISlackWebApi _slack;
         private readonly IUserService _userService;
         private readonly ICombatService _combatService;
@@ -19,6 +21,7 @@ namespace Doug.Skills.Combat
 
         public MightyStrike(IStatsRepository statsRepository, ISlackWebApi slack, IUserService userService, ICombatService combatService, IEventDispatcher eventDispatcher, IChannelRepository channelRepository) : base(statsRepository, channelRepository, slack, eventDispatcher)
         {
+            Id = SkillId;
             Name = "Mighty Strike";
             EnergyCost = 20;
             Cooldown = 60;

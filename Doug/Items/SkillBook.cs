@@ -6,19 +6,19 @@ using Doug.Skills;
 
 namespace Doug.Items
 {
-    public abstract class SkillBook : EquipmentItem
+    public class SkillBook : EquipmentItem
     {
-        public Skill Skill { get; set; }
+        public string SkillId { get; set; }
 
-        protected SkillBook()
+        public SkillBook()
         {
             Icon = ":skillbook:";
             Slot = EquipmentSlot.Skill;
         }
 
-        public async Task<DougResponse> Activate(User user, ICombatable target, string channel)
+        public async Task<DougResponse> Activate(ISkillFactory skillFactory, User user, ICombatable target, string channel)
         {
-            return await Skill.Activate(user, target, channel);
+            return await skillFactory.CreateSkill(SkillId).Activate(user, target, channel);
         }
     }
 }

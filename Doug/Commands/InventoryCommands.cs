@@ -26,14 +26,18 @@ namespace Doug.Commands
         private readonly IInventoryRepository _inventoryRepository;
         private readonly IEquipmentRepository _equipmentRepository;
         private readonly IUserService _userService;
+        private readonly IActionFactory _actionFactory;
+        private readonly ITargetActionFactory _targetFactory;
 
-        public InventoryCommands(IUserRepository userRepository, ISlackWebApi slack, IInventoryRepository inventoryRepository, IEquipmentRepository equipmentRepository, IUserService userService)
+        public InventoryCommands(IUserRepository userRepository, ISlackWebApi slack, IInventoryRepository inventoryRepository, IEquipmentRepository equipmentRepository, IUserService userService, IActionFactory actionFactory, ITargetActionFactory targetFactory)
         {
             _userRepository = userRepository;
             _slack = slack;
             _inventoryRepository = inventoryRepository;
             _equipmentRepository = equipmentRepository;
             _userService = userService;
+            _actionFactory = actionFactory;
+            _targetFactory = targetFactory;
         }
 
         public DougResponse Use(Command command)
@@ -47,7 +51,7 @@ namespace Doug.Commands
                 return new DougResponse(string.Format(DougMessages.NoItemInSlot, position));
             }
 
-            var response = inventoryItem.Item.Use(position, user, command.ChannelId);
+            var response = inventoryItem.Item.Use(_actionFactory, position, user, command.ChannelId);
 
             return new DougResponse(response);
         }
@@ -91,7 +95,9 @@ namespace Doug.Commands
                 return new DougResponse(string.Format(DougMessages.NoItemInSlot, position));
             }
 
-            var response = inventoryItem.Item.Target(position, user, target, command.ChannelId);
+            _slack.BroadcastMessage(string.Format(DougMessages.UsedItemOnTarget, _userService.Mention(user), inventoryItem.Item.GetDisplayName(), _userService.Mention(target)), command.ChannelId);
+
+            var response = inventoryItem.Item.Target(_targetFactory, position, user, target, command.ChannelId);
 
             return new DougResponse(response);
         }

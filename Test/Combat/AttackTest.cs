@@ -1,11 +1,12 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Doug;
-using Doug.Items;
+using Doug.Effects;
 using Doug.Models;
 using Doug.Models.User;
 using Doug.Repositories;
 using Doug.Services;
+using Doug.Skills;
 using Doug.Slack;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -27,8 +28,9 @@ namespace Test.Combat
         private readonly Mock<IStatsRepository> _statsRepository = new Mock<IStatsRepository>();
         private readonly Mock<IUserService> _userService = new Mock<IUserService>();
         private readonly Mock<IChannelRepository> _channelRepository = new Mock<IChannelRepository>();
-        private readonly Mock<IMonsterRepository> _monsterRepository = new Mock<IMonsterRepository>();
+        private readonly Mock<ISpawnedMonsterRepository> _monsterRepository = new Mock<ISpawnedMonsterRepository>();
         private readonly Mock<IMonsterService> _monsterService = new Mock<IMonsterService>();
+        private readonly Mock<ISkillFactory> _skillFactory = new Mock<ISkillFactory>();
 
         [TestInitialize]
         public void Setup()
@@ -38,7 +40,7 @@ namespace Test.Combat
             _channelRepository.Setup(repo => repo.GetChannelType("coco-channel")).Returns(ChannelType.Pvp);
             _itemEventDispatcher.Setup(disp => disp.OnStealingAmount(It.IsAny<User>(), It.IsAny<int>())).Returns(1);
 
-            _combatService = new CombatService(_itemEventDispatcher.Object, _slack.Object, _statsRepository.Object, _userService.Object, _channelRepository.Object, _monsterRepository.Object, _monsterService.Object);
+            _combatService = new CombatService(_itemEventDispatcher.Object, _slack.Object, _statsRepository.Object, _userService.Object, _channelRepository.Object, _monsterRepository.Object, _monsterService.Object, _skillFactory.Object);
         }
 
         [TestMethod]

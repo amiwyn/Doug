@@ -1,9 +1,10 @@
-﻿using Doug.Models;
+﻿using Doug.Items;
+using Doug.Items.WeaponType;
+using Doug.Models;
 using Doug.Models.Coffee;
 using Doug.Models.Monsters;
 using Doug.Models.Slurs;
 using Doug.Models.User;
-using Doug.Monsters;
 using Microsoft.EntityFrameworkCore;
 
 namespace Doug
@@ -23,6 +24,9 @@ namespace Doug
         public DbSet<SpawnedMonster> SpawnedMonsters { get; set; }
         public DbSet<Party> Parties { get; set; }
         public DbSet<Recipe> Recipes { get; set; }  
+        public DbSet<Item> Items { get; set; }
+        public DbSet<DropTable> Droptables { get; set; }
+        public DbSet<Monster> Monsters { get; set; }  
 
         public DougContext(DbContextOptions<DougContext> options) : base(options)
         {
@@ -30,6 +34,25 @@ namespace Doug
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Consumable>();
+            modelBuilder.Entity<Food>();
+            modelBuilder.Entity<SpecialFood>();
+            modelBuilder.Entity<Ticket>();
+            modelBuilder.Entity<Lootbox>();
+            modelBuilder.Entity<EquipmentItem>();
+            modelBuilder.Entity<Weapon>();
+            modelBuilder.Entity<SkillBook>();
+
+            modelBuilder.Entity<Axe>();
+            modelBuilder.Entity<Bow>();
+            modelBuilder.Entity<Claws>();
+            modelBuilder.Entity<Dagger>();
+            modelBuilder.Entity<GreatSword>();
+            modelBuilder.Entity<Gun>();
+            modelBuilder.Entity<Shield>();
+            modelBuilder.Entity<Staff>();
+            modelBuilder.Entity<Sword>();
+
             modelBuilder.Entity<InventoryItem>()
                 .HasKey(u => new { u.UserId, u.InventoryPosition });
 
@@ -37,17 +60,6 @@ namespace Doug
                 .HasOne(u => u.User)
                 .WithMany(u => u.InventoryItems)
                 .HasForeignKey(u => u.UserId);
-
-
-            modelBuilder.Entity<Loadout>()
-                .ToTable("Users")
-                .HasBaseType((string)null);
-
-            modelBuilder.Entity<User>()
-                .ToTable("Users")
-                .HasOne(o => o.Loadout).WithOne()
-                .HasForeignKey<User>(o => o.Id);
-
 
             modelBuilder.Entity<UserEffect>()
                 .HasKey(e => new { e.UserId, e.EffectId });

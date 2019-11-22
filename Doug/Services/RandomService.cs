@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Doug.Models;
 
 namespace Doug.Services
 {
     public interface IRandomService
     {
         bool RollAgainstOpponent(double userChances, double opponentChances);
-        T RandomFromWeightedTable<T>(IEnumerable<KeyValuePair<T, double>> table);
-        IEnumerable<T> RandomTableDrop<T>(IEnumerable<KeyValuePair<T, double>> table, double modifier);
+        LootItem RandomFromWeightedTable(DropTable table);
+        IEnumerable<LootItem> RandomTableDrop(DropTable table, double modifier);
     }
 
     public class RandomService : IRandomService
@@ -26,28 +27,27 @@ namespace Doug.Services
             return rollResult < userChances;
         }
 
-        public T RandomFromWeightedTable<T>(IEnumerable<KeyValuePair<T, double>> table)
+        public LootItem RandomFromWeightedTable(DropTable table)
         {
             var roll = new Random().NextDouble();
             var sum = 0.0;
 
-            var weightedTable = table.ToList();
-            foreach (var (key, weight) in weightedTable)
+            foreach (var item in table.Items)
             {
-                sum += weight;
+                sum += item.Probability;
                 if (sum >= roll)
                 {
-                    return key;
+                    return item;
                 }
             }
 
-            return weightedTable.Last().Key;
+            return table.Items.Last();
         }
 
-        public IEnumerable<T> RandomTableDrop<T>(IEnumerable<KeyValuePair<T, double>> table, double modifier)
+        public IEnumerable<LootItem> RandomTableDrop(DropTable table, double modifier)
         {
             var random = new Random();
-            return table.Where(elem => random.NextDouble() < elem.Value + modifier).Select(elem => elem.Key);
+            return table.Items.Where(elem => random.NextDouble() < elem.Probability + modifier);
         }
     }
 }

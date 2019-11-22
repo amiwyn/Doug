@@ -11,11 +11,14 @@ namespace Doug.Skills.Utility
 {
     public class Heal : Skill
     {
+        public const string SkillId = "heal";
+
         private readonly ISlackWebApi _slack;
         private readonly IUserService _userService;
 
         public Heal(IStatsRepository statsRepository, ISlackWebApi slack, IUserService userService) : base(statsRepository)
         {
+            Id = SkillId;
             Name = "Heal";
             EnergyCost = 52;
             Cooldown = 50;

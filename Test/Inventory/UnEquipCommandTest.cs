@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using Doug.Commands;
 using Doug.Items;
-using Doug.Items.Equipment;
 using Doug.Models;
 using Doug.Models.User;
 using Doug.Repositories;
@@ -33,17 +32,19 @@ namespace Test.Inventory
         private readonly Mock<IInventoryRepository> _inventoryRepository = new Mock<IInventoryRepository>();
         private readonly Mock<IEquipmentRepository> _equipmentRepository = new Mock<IEquipmentRepository>();
         private readonly Mock<IUserService> _userService = new Mock<IUserService>();
+        private readonly Mock<IActionFactory> _actionFactory = new Mock<IActionFactory>();
+        private readonly Mock<ITargetActionFactory> _targetActionFactory = new Mock<ITargetActionFactory>();
 
         [TestInitialize]
         public void Setup()
         {
             var loadout = new Loadout();
-            loadout.Equip(new CloakOfSpikes());
+            loadout.Equip(new EquipmentItem() { Slot = EquipmentSlot.Body});
 
             _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User() { Id = "testuser", Loadout = loadout });
-            _equipmentRepository.Setup(repo => repo.UnequipItem(It.IsAny<User>(), EquipmentSlot.Body)).Returns(new CloakOfSpikes());
+            _equipmentRepository.Setup(repo => repo.UnequipItem(It.IsAny<User>(), EquipmentSlot.Body)).Returns(new EquipmentItem());
 
-            _inventoryCommands = new InventoryCommands(_userRepository.Object, _slack.Object, _inventoryRepository.Object, _equipmentRepository.Object, _userService.Object);
+            _inventoryCommands = new InventoryCommands(_userRepository.Object, _slack.Object, _inventoryRepository.Object, _equipmentRepository.Object, _userService.Object, _actionFactory.Object, _targetActionFactory.Object);
         }
 
         [TestMethod]
@@ -59,7 +60,7 @@ namespace Test.Inventory
         {
             _inventoryCommands.UnEquip(_command);
 
-            _inventoryRepository.Verify(repo => repo.AddItem(It.IsAny<User>(), It.IsAny<CloakOfSpikes>()));
+            _inventoryRepository.Verify(repo => repo.AddItem(It.IsAny<User>(), It.IsAny<EquipmentItem>()));
         }
 
         [TestMethod]

@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using Doug.Controllers;
-using Doug.Items;
 using Doug.Menus;
 using Doug.Models;
 using Doug.Models.User;
@@ -28,16 +27,16 @@ namespace Doug.Services.MenuServices
 
         private readonly IUserRepository _userRepository;
         private readonly ISlackWebApi _slack;
-        private readonly IItemFactory _itemFactory;
+        private readonly IItemRepository _itemRepository;
         private readonly IShopService _shopService;
         private readonly IGovernmentService _governmentService;
         private readonly IShopRepository _shopRepository;
 
-        public ShopMenuService(IUserRepository userRepository, ISlackWebApi slack, IItemFactory itemFactory, IShopService shopService, IGovernmentService governmentService, IShopRepository shopRepository)
+        public ShopMenuService(IUserRepository userRepository, ISlackWebApi slack, IItemRepository itemRepository, IShopService shopService, IGovernmentService governmentService, IShopRepository shopRepository)
         {
             _userRepository = userRepository;
             _slack = slack;
-            _itemFactory = itemFactory;
+            _itemRepository = itemRepository;
             _shopService = shopService;
             _governmentService = governmentService;
             _shopRepository = shopRepository;
@@ -52,7 +51,7 @@ namespace Doug.Services.MenuServices
                 return new DougResponse(DougMessages.UnknownShop);
             }
 
-            await _slack.SendEphemeralBlocks(new ShopMenu(shop, user, _itemFactory, _governmentService).Blocks, user.Id, channel);
+            await _slack.SendEphemeralBlocks(new ShopMenu(shop, user, _itemRepository, _governmentService).Blocks, user.Id, channel);
 
             return new DougResponse();
         }
@@ -67,7 +66,7 @@ namespace Doug.Services.MenuServices
 
             await _slack.SendEphemeralMessage(response.Message, user.Id, interaction.ChannelId);
 
-            await _slack.UpdateInteractionMessage(new ShopMenu(shop, user, _itemFactory, _governmentService).Blocks, interaction.ResponseUrl);
+            await _slack.UpdateInteractionMessage(new ShopMenu(shop, user, _itemRepository, _governmentService).Blocks, interaction.ResponseUrl);
         }
 
         public async Task Sell(Interaction interaction)
@@ -87,7 +86,7 @@ namespace Doug.Services.MenuServices
             var user = _userRepository.GetUser(interaction.UserId);
             var shop = _shopRepository.GetShop(interaction.Value);
 
-            await _slack.UpdateInteractionMessage(new ShopMenu(shop, user, _itemFactory, _governmentService).Blocks, interaction.ResponseUrl);
+            await _slack.UpdateInteractionMessage(new ShopMenu(shop, user, _itemRepository, _governmentService).Blocks, interaction.ResponseUrl);
         }
     }
 }

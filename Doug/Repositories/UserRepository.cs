@@ -20,13 +20,13 @@ namespace Doug.Repositories
     public class UserRepository : IUserRepository
     {
         private readonly DougContext _db;
-        private readonly IItemFactory _itemFactory;
+        private readonly IEquipmentEffectFactory _equipmentEffectFactory;
         private readonly IEffectFactory _effectFactory;
 
-        public UserRepository(DougContext dougContext, IItemFactory itemFactory, IEffectFactory effectFactory)
+        public UserRepository(DougContext dougContext, IEquipmentEffectFactory equipmentEffectFactory, IEffectFactory effectFactory)
         {
             _db = dougContext;
-            _itemFactory = itemFactory;
+            _equipmentEffectFactory = equipmentEffectFactory;
             _effectFactory = effectFactory;
         }
 
@@ -55,7 +55,7 @@ namespace Doug.Repositories
                 .IncludeFilter(usr => usr.Loadout)
                 .ToList();
 
-            loadedUsers.ForEach(usr => usr.LoadItems(_itemFactory));
+            loadedUsers.ForEach(usr => usr.LoadItems(_equipmentEffectFactory));
             loadedUsers.ForEach(usr => usr.LoadEffects(_effectFactory));
 
             return loadedUsers;
@@ -69,7 +69,7 @@ namespace Doug.Repositories
                 .IncludeFilter(usr => usr.Loadout)
                 .Single(usr => usr.Id == userId);
 
-            user.LoadItems(_itemFactory);
+            user.LoadItems(_equipmentEffectFactory);
             user.LoadEffects(_effectFactory);
 
 
@@ -93,7 +93,7 @@ namespace Doug.Repositories
                 .IncludeFilter(usr => usr.Loadout)
                 .ToList();
 
-            users.ForEach(usr => usr.LoadItems(_itemFactory));
+            users.ForEach(usr => usr.LoadItems(_equipmentEffectFactory));
             users.ForEach(usr => usr.LoadEffects(_effectFactory));
 
             return users;

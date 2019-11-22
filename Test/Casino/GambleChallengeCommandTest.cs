@@ -1,6 +1,6 @@
 using Doug;
 using Doug.Commands;
-using Doug.Items;
+using Doug.Effects;
 using Doug.Models;
 using Doug.Models.User;
 using Doug.Repositories;

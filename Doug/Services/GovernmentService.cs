@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Doug.Items;
-using Doug.Items.Equipment;
 using Doug.Models;
 using Doug.Models.User;
 using Doug.Repositories;
@@ -27,8 +26,11 @@ namespace Doug.Services
         private readonly IUserRepository _userRepository;
         private readonly IEquipmentRepository _equipmentRepository;
         private readonly IInventoryRepository _inventoryRepository;
+        private readonly IItemRepository _itemRepository;
 
-        public GovernmentService(IGovernmentRepository governmentRepository, ISlackWebApi slack, IUserService userService, IUserRepository userRepository, IEquipmentRepository equipmentRepository, IInventoryRepository inventoryRepository)
+        private const string CrownId = "crown";
+
+        public GovernmentService(IGovernmentRepository governmentRepository, ISlackWebApi slack, IUserService userService, IUserRepository userRepository, IEquipmentRepository equipmentRepository, IInventoryRepository inventoryRepository, IItemRepository itemRepository)
         {
             _governmentRepository = governmentRepository;
             _slack = slack;
@@ -36,6 +38,7 @@ namespace Doug.Services
             _userRepository = userRepository;
             _equipmentRepository = equipmentRepository;
             _inventoryRepository = inventoryRepository;
+            _itemRepository = itemRepository;
         }
 
         public void CollectSalesTaxes(Item item)
@@ -73,6 +76,7 @@ namespace Doug.Services
             var government = _governmentRepository.GetGovernment();
             var oldRuler = _userRepository.GetUser(government.Ruler);
             var newRuler = _userRepository.GetUser(government.RevolutionLeader);
+            var crown = _itemRepository.GetItem(CrownId);
 
             if (oldRuler.Id == newRuler.Id)
             {
@@ -84,13 +88,13 @@ namespace Doug.Services
                 return;
             }
 
-            if (oldRuler.Loadout.Head == Crown.ItemId)
+            if (oldRuler.Loadout.HeadId == CrownId)
             {
                 _equipmentRepository.UnequipItem(oldRuler, EquipmentSlot.Head);
             }
             else
             {
-                var crownItem = oldRuler.InventoryItems.SingleOrDefault(inventoryItem => inventoryItem.Item.Id == Crown.ItemId);
+                var crownItem = oldRuler.InventoryItems.SingleOrDefault(inventoryItem => inventoryItem.Item.Id == CrownId);
 
                 if (crownItem != null)
                 {
@@ -98,7 +102,7 @@ namespace Doug.Services
                 }
             }
 
-            _inventoryRepository.AddItem(newRuler, new Crown());
+            _inventoryRepository.AddItem(newRuler, crown);
 
             _slack.BroadcastMessage(string.Format(DougMessages.RevolutionSucceeded, _userService.Mention(oldRuler), _userService.Mention(newRuler)), channel);
 

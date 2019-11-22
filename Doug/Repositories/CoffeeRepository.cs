@@ -27,12 +27,12 @@ namespace Doug.Repositories
     public class CoffeeRepository : ICoffeeRepository
     {
         private readonly DougContext _db;
-        private readonly IItemFactory _itemFactory;
+        private readonly IEquipmentEffectFactory _equipmentEffectFactory;
 
-        public CoffeeRepository(DougContext dougContext, IItemFactory itemFactory)
+        public CoffeeRepository(DougContext dougContext, IEquipmentEffectFactory equipmentEffectFactory)
         {
             _db = dougContext;
-            _itemFactory = itemFactory;
+            _equipmentEffectFactory = equipmentEffectFactory;
         }
 
         public CoffeeBreak GetCoffeeBreak()
@@ -68,7 +68,7 @@ namespace Doug.Repositories
                 .Include(usr => usr.Loadout)
                 .ToList();
 
-            users.ForEach(user => user.LoadItems(_itemFactory));
+            users.ForEach(user => user.LoadItems(_equipmentEffectFactory));
             return users;
         }
 
@@ -81,7 +81,7 @@ namespace Doug.Repositories
                 .Include(usr => usr.Loadout)
                 .ToList();
 
-            users.ForEach(user => user.LoadItems(_itemFactory));
+            users.ForEach(user => user.LoadItems(_equipmentEffectFactory));
             return users;
         }
 

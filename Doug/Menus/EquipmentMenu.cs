@@ -19,14 +19,16 @@ namespace Doug.Menus
                 new Divider()
             };
 
-            Blocks.AddRange(ItemSection(loadout.GetEquipmentAt(EquipmentSlot.Head), "Head"));
-            Blocks.AddRange(ItemSection(loadout.GetEquipmentAt(EquipmentSlot.Body), "Body"));
-            Blocks.AddRange(ItemSection(loadout.GetEquipmentAt(EquipmentSlot.Gloves), "Gloves"));
-            Blocks.AddRange(ItemSection(loadout.GetEquipmentAt(EquipmentSlot.Boots), "Boots"));
-            Blocks.AddRange(ItemSection(loadout.GetEquipmentAt(EquipmentSlot.LeftHand), "Left Hand"));
-            Blocks.AddRange(ItemSection(loadout.GetEquipmentAt(EquipmentSlot.RightHand), "Right Hand"));
-            Blocks.AddRange(ItemSection(loadout.GetEquipmentAt(EquipmentSlot.Neck), "Neck"));
-            Blocks.AddRange(ItemSection(loadout.GetEquipmentAt(EquipmentSlot.Skill), "Skill"));
+            Blocks.AddRange(ItemSection(loadout.Head, "Head"));
+            Blocks.AddRange(ItemSection(loadout.Body, "Body"));
+            Blocks.AddRange(ItemSection(loadout.Gloves, "Gloves"));
+            Blocks.AddRange(ItemSection(loadout.Boots, "Boots"));
+            Blocks.AddRange(ItemSection(loadout.LeftHand, "Left Hand"));
+            Blocks.AddRange(ItemSection(loadout.RightHand, "Right Hand"));
+            Blocks.AddRange(ItemSection(loadout.Neck, "Neck"));
+            Blocks.AddRange(ItemSection(loadout.LeftRing, "Left Ring"));
+            Blocks.AddRange(ItemSection(loadout.RightRing, "Right Ring"));
+            Blocks.AddRange(ItemSection(loadout.Skillbook, "Skill"));
         }
 
         private Block EquipmentHeader()

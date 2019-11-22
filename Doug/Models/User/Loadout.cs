@@ -9,59 +9,62 @@ namespace Doug.Models.User
     public class Loadout
     {
         public string Id { get; set; }
-        public string Head { get; set; }
-        public string Body { get; set; }
-        public string Boots { get; set; }
-        public string Gloves { get; set; }
-        public string LeftHand { get; set; }
-        public string RightHand { get; set; }
-        public string Neck { get; set; }
-        public string Skill { get; set; }
 
-        public Dictionary<EquipmentSlot, EquipmentItem> Equipment { get; }
+        public string HeadId { get; set; }
+        public EquipmentItem Head { get; set; }
 
-        public Loadout()
+        public string BodyId { get; set; }
+        public EquipmentItem Body { get; set; }
+
+        public string BootsId { get; set; }
+        public EquipmentItem Boots { get; set; }
+
+        public string GlovesId { get; set; }
+        public EquipmentItem Gloves { get; set; }
+
+        public string LeftHandId { get; set; }
+        public EquipmentItem LeftHand { get; set; }
+
+        public string RightHandId { get; set; }
+        public EquipmentItem RightHand { get; set; }
+
+        public string NeckId { get; set; }
+        public EquipmentItem Neck { get; set; }
+
+        public string LeftRingId { get; set; }
+        public EquipmentItem LeftRing { get; set; }
+
+        public string RightRingId { get; set; }
+        public EquipmentItem RightRing { get; set; }
+
+        public string SkillbookId { get; set; }
+        public SkillBook Skillbook { get; set; }
+
+        public void CreateEffects(IEquipmentEffectFactory equipmentEffectFactory)
         {
-            Equipment = new Dictionary<EquipmentSlot, EquipmentItem>();
+            Head.CreateEffect(equipmentEffectFactory);
+            Body.CreateEffect(equipmentEffectFactory);
+            Boots.CreateEffect(equipmentEffectFactory);
+            Gloves.CreateEffect(equipmentEffectFactory);
+            LeftHand.CreateEffect(equipmentEffectFactory);
+            RightHand.CreateEffect(equipmentEffectFactory);
+            Neck.CreateEffect(equipmentEffectFactory);
+            LeftRing.CreateEffect(equipmentEffectFactory);
+            RightRing.CreateEffect(equipmentEffectFactory);
         }
 
-        public void CreateEquipment(IItemFactory itemFactory)
+        public int Sum(Func<EquipmentItem, int> stat)
         {
-            AddEquipment(Head, itemFactory);
-            AddEquipment(Body, itemFactory);
-            AddEquipment(Boots, itemFactory);
-            AddEquipment(Gloves, itemFactory);
-            AddEquipment(LeftHand, itemFactory);
-            AddEquipment(RightHand, itemFactory);
-            AddEquipment(Neck, itemFactory);
-            AddEquipment(Skill, itemFactory);
+            return stat(Head ?? new EquipmentItem())
+                   + stat(Body ?? new EquipmentItem())
+                   + stat(Boots ?? new EquipmentItem())
+                   + stat(Gloves ?? new EquipmentItem())
+                   + stat(LeftHand ?? new EquipmentItem())
+                   + stat(RightHand ?? new EquipmentItem())
+                   + stat(Neck ?? new EquipmentItem())
+                   + stat(LeftRing ?? new EquipmentItem())
+                   + stat(RightRing ?? new EquipmentItem());
         }
-
-        private void AddEquipment(string itemId, IItemFactory itemFactory)
-        {
-            if (!string.IsNullOrEmpty(itemId))
-            {
-                var item = (EquipmentItem) itemFactory.CreateItem(itemId);
-                Equipment.TryAdd(item.Slot, item);
-            }
-        }
-
-        public int Health => Equipment.Sum(equip => equip.Value.Stats.Health);
-        public int Energy => Equipment.Sum(equip => equip.Value.Stats.Energy);
-        public int Luck => Equipment.Sum(equip => equip.Value.Stats.Luck);
-        public int Agility => Equipment.Sum(equip => equip.Value.Stats.Agility);
-        public int Strength => Equipment.Sum(equip => equip.Value.Stats.Strength);
-        public int Constitution => Equipment.Sum(equip => equip.Value.Stats.Constitution);
-        public int Intelligence => Equipment.Sum(equip => equip.Value.Stats.Intelligence);
-        public int MaxAttack => Equipment.Sum(equip => equip.Value.Stats.MaxAttack);
-        public int MinAttack => Equipment.Sum(equip => equip.Value.Stats.MinAttack);
-        public int Defense => Equipment.Sum(equip => equip.Value.Stats.Defense);
-        public int Dodge => Equipment.Sum(equip => equip.Value.Stats.Dodge);
-        public int Hitrate => Equipment.Sum(equip => equip.Value.Stats.Hitrate);
-        public int AttackSpeed => Equipment.Sum(equip => equip.Value.Stats.AttackSpeed);
-        public int Resistance => Equipment.Sum(equip => equip.Value.Stats.Resistance);
-        public int HealthRegen => Equipment.Sum(equip => equip.Value.Stats.HealthRegen);
-        public int EnergyRegen => Equipment.Sum(equip => equip.Value.Stats.EnergyRegen);
 
         public List<EquipmentItem> Equip(EquipmentItem item)
         {
@@ -78,8 +81,7 @@ namespace Doug.Models.User
                 unequippedItems.AddRange(EquipWeapon(item));
             }
 
-            Equipment.Add(item.Slot, item);
-            SetLoadoutStrings();
+            SetEquipmentAt(item.Slot, item);
             return unequippedItems;
         }
 
@@ -109,57 +111,122 @@ namespace Doug.Models.User
 
         public EquipmentItem UnEquip(EquipmentSlot slot)
         {
-            var equipment = Equipment.GetValueOrDefault(slot);
+            var equipment = GetEquipmentAt(slot);
 
             if (equipment == null)
             {
                 return null;
             }
 
-            Equipment.Remove(slot);
-            SetLoadoutStrings();
+            SetEquipmentAt(slot, null);
             return equipment;
-        }
-
-        private void SetLoadoutStrings()
-        {
-            Head = GetEquipmentAt(EquipmentSlot.Head)?.Id;
-            Body = GetEquipmentAt(EquipmentSlot.Body)?.Id;
-            Boots = GetEquipmentAt(EquipmentSlot.Boots)?.Id;
-            Gloves = GetEquipmentAt(EquipmentSlot.Gloves)?.Id;
-            LeftHand = GetEquipmentAt(EquipmentSlot.LeftHand)?.Id;
-            RightHand = GetEquipmentAt(EquipmentSlot.RightHand)?.Id;
-            Neck = GetEquipmentAt(EquipmentSlot.Neck)?.Id;
-            Skill = GetEquipmentAt(EquipmentSlot.Skill)?.Id;
         }
 
         public EquipmentItem GetEquipmentAt(EquipmentSlot slot)
         {
-            return Equipment.GetValueOrDefault(slot);
+            switch (slot)
+            {
+                case EquipmentSlot.Head: return Head;
+                case EquipmentSlot.Body: return Body;
+                case EquipmentSlot.Boots: return Boots;
+                case EquipmentSlot.Gloves: return Gloves;
+                case EquipmentSlot.LeftHand: return LeftHand;
+                case EquipmentSlot.RightHand: return RightHand;
+                case EquipmentSlot.Neck: return Neck;
+                case EquipmentSlot.LeftRing: return LeftRing;
+                case EquipmentSlot.RightRing: return RightRing;
+                case EquipmentSlot.Skill: return Skillbook;
+                default:
+                    return default;
+            }
         }
 
-        public SkillBook GetSkill()
+        public void SetEquipmentAt(EquipmentSlot slot, EquipmentItem value)
         {
-            return GetEquipmentAt(EquipmentSlot.Skill) as SkillBook;
+            switch (slot)
+            {
+                case EquipmentSlot.Head:
+                    Head = value;
+                    HeadId = value?.Id;
+                    break;
+                case EquipmentSlot.Body:
+                    Body = value;
+                    BodyId = value?.Id;
+                    break;
+                case EquipmentSlot.Boots: 
+                    Boots = value;
+                    BootsId = value?.Id;
+                    break;
+                case EquipmentSlot.Gloves:
+                    Gloves = value;
+                    GlovesId = value?.Id;
+                    break;
+                case EquipmentSlot.LeftHand: 
+                    LeftHand = value;
+                    LeftHandId = value?.Id;
+                    break;
+                case EquipmentSlot.RightHand: 
+                    RightHand = value;
+                    RightHandId = value?.Id;
+                    break;
+                case EquipmentSlot.Neck:
+                    Neck = value;
+                    NeckId = value?.Id;
+                    break;
+                case EquipmentSlot.LeftRing:
+                    LeftRing = value;
+                    LeftRingId = value?.Id;
+                    break;  
+                case EquipmentSlot.RightRing:
+                    RightRing = value;
+                    RightRingId = value?.Id;
+                    break;
+                case EquipmentSlot.Skill:
+                    Skillbook = (SkillBook)value;
+                    SkillbookId = value?.Id;
+                    break;
+            }
         }
 
         public IEnumerable<string> GetDisplayEquipmentList()
         {
-            return Equipment.Select(equipment => $"{equipment.Value.Icon} *{equipment.Value.Name}*");
+            return GetEquipmentList().Select(item => item.GetDisplayName());
         }
 
         public bool IsEmpty()
         {
-            return Equipment.Count == 0;
+            return HeadId == null &&
+                   BodyId == null &&
+                   BootsId == null &&
+                   GlovesId == null &&
+                   LeftHandId == null &&
+                   RightHandId == null &&
+                   NeckId == null &&
+                   LeftRingId == null &&
+                   RightRingId == null &&
+                   SkillbookId == null;
         }
 
         public bool HasWeaponType(Type type)
         {
-            var rightHand = GetEquipmentAt(EquipmentSlot.RightHand);
-            var leftHand = GetEquipmentAt(EquipmentSlot.LeftHand);
+            return RightHand != null && RightHand.GetType().IsSubclassOf(type) ||
+                   LeftHand != null && LeftHand.GetType().IsSubclassOf(type);
+        }
 
-            return rightHand != null && rightHand.GetType().IsSubclassOf(type) ||
-                   leftHand != null && leftHand.GetType().IsSubclassOf(type);
+        public List<EquipmentItem> GetEquipmentList()
+        {
+            return new List<EquipmentItem>
+            {
+                Head,
+                Body,
+                Boots,
+                Gloves,
+                LeftHand,
+                RightHand,
+                Neck,
+                LeftRing,
+                RightRing
+            };
         }
     }
 }

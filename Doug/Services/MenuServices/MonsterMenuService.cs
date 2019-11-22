@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Doug.Controllers;
 using Doug.Menus;
-using Doug.Monsters;
+using Doug.Models.Monsters;
 using Doug.Repositories;
 using Doug.Slack;
 
@@ -19,21 +19,21 @@ namespace Doug.Services.MenuServices
     {
         private readonly IUserRepository _userRepository;
         private readonly ICombatService _combatService;
-        private readonly IMonsterRepository _monsterRepository;
+        private readonly ISpawnedMonsterRepository _spawnedMonsterRepository;
         private readonly ISlackWebApi _slack;
 
-        public MonsterMenuService(IUserRepository userRepository, ICombatService combatService, IMonsterRepository monsterRepository, ISlackWebApi slack)
+        public MonsterMenuService(IUserRepository userRepository, ICombatService combatService, ISpawnedMonsterRepository spawnedMonsterRepository, ISlackWebApi slack)
         {
             _userRepository = userRepository;
             _combatService = combatService;
-            _monsterRepository = monsterRepository;
+            _spawnedMonsterRepository = spawnedMonsterRepository;
             _slack = slack;
         }
 
         public async Task Attack(Interaction interaction)
         {
             var user = _userRepository.GetUser(interaction.UserId);
-            var monster = _monsterRepository.GetMonster(int.Parse(interaction.Value));
+            var monster = _spawnedMonsterRepository.GetMonster(int.Parse(interaction.Value));
 
             if (monster == null)
             {
@@ -49,7 +49,7 @@ namespace Doug.Services.MenuServices
         public async Task Skill(Interaction interaction)
         {
             var user = _userRepository.GetUser(interaction.UserId);
-            var monster = _monsterRepository.GetMonster(int.Parse(interaction.Value));
+            var monster = _spawnedMonsterRepository.GetMonster(int.Parse(interaction.Value));
 
             if (monster == null)
             {
@@ -76,7 +76,7 @@ namespace Doug.Services.MenuServices
 
         public async Task ShowMonsters(string channel)
         {
-            var monsters = _monsterRepository.GetMonsters(channel);
+            var monsters = _spawnedMonsterRepository.GetMonsters(channel);
             var blocks = monsters.SelectMany(monster => new MonsterMenu(monster).Blocks);
             await _slack.BroadcastBlocks(blocks, channel);
         }

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Doug.Items;
+using Doug.Effects;
 using Doug.Models;
 using Doug.Models.Combat;
 using Doug.Models.User;
@@ -12,6 +12,8 @@ namespace Doug.Skills.Combat
 {
     public class Steal : CombatSkill
     {
+        public const string SkillId = "steal";
+
         private readonly ISlackWebApi _slack;
         private readonly IUserService _userService;
         private readonly IStatsRepository _statsRepository;
@@ -21,6 +23,7 @@ namespace Doug.Skills.Combat
 
         public Steal(IStatsRepository statsRepository, ISlackWebApi slack, IUserService userService, IChannelRepository channelRepository, IEventDispatcher eventDispatcher, IRandomService randomService, ICreditsRepository creditsRepository) : base(statsRepository, channelRepository, slack, eventDispatcher)
         {
+            Id = SkillId;
             Name = "Steal";
             EnergyCost = 1;
             Cooldown = 30;
