@@ -6,7 +6,6 @@ using Doug.Models;
 using Doug.Models.User;
 using Doug.Repositories;
 using Doug.Services;
-using Doug.Skills;
 using Doug.Slack;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;

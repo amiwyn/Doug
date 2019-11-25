@@ -136,8 +136,7 @@ namespace Doug.Models.User
                 case EquipmentSlot.LeftRing: return LeftRing;
                 case EquipmentSlot.RightRing: return RightRing;
                 case EquipmentSlot.Skill: return Skillbook;
-                default:
-                    return default;
+                default: return null;
             }
         }
 

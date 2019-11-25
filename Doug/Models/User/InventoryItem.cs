@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using Doug.Items;
+﻿using Doug.Items;
 
 namespace Doug.Models.User
 {

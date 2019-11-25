@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace Doug.Models.Monsters
+﻿namespace Doug.Models.Monsters
 {
     public class RegionMonster
     {
