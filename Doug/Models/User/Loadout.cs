@@ -42,15 +42,15 @@ namespace Doug.Models.User
 
         public void CreateEffects(IEquipmentEffectFactory equipmentEffectFactory)
         {
-            Head.CreateEffect(equipmentEffectFactory);
-            Body.CreateEffect(equipmentEffectFactory);
-            Boots.CreateEffect(equipmentEffectFactory);
-            Gloves.CreateEffect(equipmentEffectFactory);
-            LeftHand.CreateEffect(equipmentEffectFactory);
-            RightHand.CreateEffect(equipmentEffectFactory);
-            Neck.CreateEffect(equipmentEffectFactory);
-            LeftRing.CreateEffect(equipmentEffectFactory);
-            RightRing.CreateEffect(equipmentEffectFactory);
+            Head?.CreateEffect(equipmentEffectFactory);
+            Body?.CreateEffect(equipmentEffectFactory);
+            Boots?.CreateEffect(equipmentEffectFactory);
+            Gloves?.CreateEffect(equipmentEffectFactory);
+            LeftHand?.CreateEffect(equipmentEffectFactory);
+            RightHand?.CreateEffect(equipmentEffectFactory);
+            Neck?.CreateEffect(equipmentEffectFactory);
+            LeftRing?.CreateEffect(equipmentEffectFactory);
+            RightRing?.CreateEffect(equipmentEffectFactory);
         }
 
         public int Sum(Func<EquipmentItem, int> stat)

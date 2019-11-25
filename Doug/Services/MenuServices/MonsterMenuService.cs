@@ -21,13 +21,15 @@ namespace Doug.Services.MenuServices
         private readonly ICombatService _combatService;
         private readonly ISpawnedMonsterRepository _spawnedMonsterRepository;
         private readonly ISlackWebApi _slack;
+        private readonly ISkillService _skillService;
 
-        public MonsterMenuService(IUserRepository userRepository, ICombatService combatService, ISpawnedMonsterRepository spawnedMonsterRepository, ISlackWebApi slack)
+        public MonsterMenuService(IUserRepository userRepository, ICombatService combatService, ISpawnedMonsterRepository spawnedMonsterRepository, ISlackWebApi slack, ISkillService skillService)
         {
             _userRepository = userRepository;
             _combatService = combatService;
             _spawnedMonsterRepository = spawnedMonsterRepository;
             _slack = slack;
+            _skillService = skillService;
         }
 
         public async Task Attack(Interaction interaction)
@@ -56,7 +58,7 @@ namespace Doug.Services.MenuServices
                 return;
             }
 
-            var response = await _combatService.ActivateSkill(user, monster, interaction.ChannelId);
+            var response = await _skillService.ActivateSkill(user, monster, interaction.ChannelId);
 
             await _slack.SendEphemeralMessage(response.Message, user.Id, interaction.ChannelId);
             await UpdateMonsterAttackBlocks(monster, interaction.ResponseUrl);

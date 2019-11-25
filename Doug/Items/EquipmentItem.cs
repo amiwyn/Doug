@@ -42,6 +42,7 @@ namespace Doug.Items
         public EquipmentItem()
         {
             MaxStack = 1;
+            Rarity = 0;
         }
 
         public override bool IsEquipable()

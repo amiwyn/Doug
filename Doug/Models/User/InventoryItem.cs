@@ -5,11 +5,10 @@ namespace Doug.Models.User
 {
     public class InventoryItem
     {
+        public string ItemId { get; set; }
+        public Item Item { get; set; }
         public string UserId { get; set; }
         public User User { get; set; }
-        public string ItemId { get; set; }
-        [NotMapped]
-        public Item Item { get; set; }
         public int InventoryPosition { get; set; }
         public int Quantity { get; set; }
 

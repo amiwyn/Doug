@@ -46,6 +46,25 @@ namespace Doug.Migrations
                 oldClrType: typeof(string),
                 oldNullable: true);
 
+            migrationBuilder.AlterColumn<string>(
+                name: "MonsterId",
+                table: "SpawnedMonsters",
+                nullable: true,
+                oldClrType: typeof(string),
+                oldNullable: true);
+
+            migrationBuilder.AlterColumn<string>(
+                name: "ItemId",
+                table: "InventoryItem",
+                nullable: true,
+                oldClrType: typeof(string),
+                oldNullable: true);
+
+            migrationBuilder.AddColumn<string>(
+                name: "Description",
+                table: "Channels",
+                nullable: true);
+
             migrationBuilder.CreateTable(
                 name: "Droptables",
                 columns: table => new
@@ -259,6 +278,16 @@ namespace Doug.Migrations
                 column: "LoadoutId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_SpawnedMonsters_MonsterId",
+                table: "SpawnedMonsters",
+                column: "MonsterId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_InventoryItem_ItemId",
+                table: "InventoryItem",
+                column: "ItemId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Items_DropTableId",
                 table: "Items",
                 column: "DropTableId");
@@ -324,6 +353,22 @@ namespace Doug.Migrations
                 column: "DropTableId");
 
             migrationBuilder.AddForeignKey(
+                name: "FK_InventoryItem_Items_ItemId",
+                table: "InventoryItem",
+                column: "ItemId",
+                principalTable: "Items",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_SpawnedMonsters_Monsters_MonsterId",
+                table: "SpawnedMonsters",
+                column: "MonsterId",
+                principalTable: "Monsters",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
+
+            migrationBuilder.AddForeignKey(
                 name: "FK_Users_Loadout_LoadoutId",
                 table: "Users",
                 column: "LoadoutId",
@@ -334,6 +379,14 @@ namespace Doug.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_InventoryItem_Items_ItemId",
+                table: "InventoryItem");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_SpawnedMonsters_Monsters_MonsterId",
+                table: "SpawnedMonsters");
+
             migrationBuilder.DropForeignKey(
                 name: "FK_Users_Loadout_LoadoutId",
                 table: "Users");
@@ -356,6 +409,18 @@ namespace Doug.Migrations
             migrationBuilder.DropIndex(
                 name: "IX_Users_LoadoutId",
                 table: "Users");
+
+            migrationBuilder.DropIndex(
+                name: "IX_SpawnedMonsters_MonsterId",
+                table: "SpawnedMonsters");
+
+            migrationBuilder.DropIndex(
+                name: "IX_InventoryItem_ItemId",
+                table: "InventoryItem");
+
+            migrationBuilder.DropColumn(
+                name: "Description",
+                table: "Channels");
 
             migrationBuilder.RenameColumn(
                 name: "LoadoutId",
@@ -403,6 +468,20 @@ namespace Doug.Migrations
                 name: "RightHand",
                 table: "Users",
                 nullable: true);
+
+            migrationBuilder.AlterColumn<string>(
+                name: "MonsterId",
+                table: "SpawnedMonsters",
+                nullable: true,
+                oldClrType: typeof(string),
+                oldNullable: true);
+
+            migrationBuilder.AlterColumn<string>(
+                name: "ItemId",
+                table: "InventoryItem",
+                nullable: true,
+                oldClrType: typeof(string),
+                oldNullable: true);
         }
     }
 }

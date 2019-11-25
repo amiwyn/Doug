@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ResetWebJob", "ResetWebJob\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameUpdateWebjob", "GameUpdateWebjob\GameUpdateWebjob.csproj", "{694E2B2B-1E91-4EC5-83D1-0E42A746E55E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ItemMaker", "ItemMaker\ItemMaker.csproj", "{A47F5AAA-3676-4832-9AF1-11DC306C05CA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ItemMigrator", "ItemMaker\ItemMigrator.csproj", "{A47F5AAA-3676-4832-9AF1-11DC306C05CA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

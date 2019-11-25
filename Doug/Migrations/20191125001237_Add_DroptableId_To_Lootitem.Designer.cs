@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Doug.Migrations
 {
     [DbContext(typeof(DougContext))]
-    [Migration("20191122034157_Items_And_Monsters")]
-    partial class Items_And_Monsters
+    [Migration("20191125001237_Add_DroptableId_To_Lootitem")]
+    partial class Add_DroptableId_To_Lootitem
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -60,6 +60,8 @@ namespace Doug.Migrations
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Description");
 
                     b.Property<string>("Type");
 
@@ -155,8 +157,7 @@ namespace Doug.Migrations
 
             modelBuilder.Entity("Doug.Models.LootItem", b =>
                 {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<string>("Id");
 
                     b.Property<string>("DropTableId");
 
@@ -164,7 +165,7 @@ namespace Doug.Migrations
 
                     b.Property<int>("Quantity");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id", "DropTableId");
 
                     b.HasIndex("DropTableId");
 
@@ -263,6 +264,8 @@ namespace Doug.Migrations
                     b.Property<string>("MonsterId");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("MonsterId");
 
                     b.ToTable("SpawnedMonsters");
                 });
@@ -364,6 +367,8 @@ namespace Doug.Migrations
                     b.Property<int>("Quantity");
 
                     b.HasKey("UserId", "InventoryPosition");
+
+                    b.HasIndex("ItemId");
 
                     b.ToTable("InventoryItem");
                 });
@@ -661,7 +666,8 @@ namespace Doug.Migrations
                 {
                     b.HasOne("Doug.Models.DropTable")
                         .WithMany("Items")
-                        .HasForeignKey("DropTableId");
+                        .HasForeignKey("DropTableId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Doug.Models.Monsters.Monster", b =>
@@ -692,6 +698,13 @@ namespace Doug.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("Doug.Models.Monsters.SpawnedMonster", b =>
+                {
+                    b.HasOne("Doug.Models.Monsters.Monster", "Monster")
+                        .WithMany()
+                        .HasForeignKey("MonsterId");
+                });
+
             modelBuilder.Entity("Doug.Models.Party", b =>
                 {
                     b.HasOne("Doug.Models.User.User", "Leader")
@@ -709,6 +722,10 @@ namespace Doug.Migrations
 
             modelBuilder.Entity("Doug.Models.User.InventoryItem", b =>
                 {
+                    b.HasOne("Doug.Items.Item", "Item")
+                        .WithMany()
+                        .HasForeignKey("ItemId");
+
                     b.HasOne("Doug.Models.User.User", "User")
                         .WithMany("InventoryItems")
                         .HasForeignKey("UserId")

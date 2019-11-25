@@ -14,8 +14,6 @@ namespace Doug.Models.Monsters
         public int Health { get; set; }
         public DateTime AttackCooldown { get; set; }
         public List<MonsterAttacker> MonsterAttackers { get; set; }
-
-        [NotMapped]
         public Monster Monster { get; set; }
 
         public void LoadMonster()

@@ -20,7 +20,8 @@ namespace Doug.Repositories
 
         public Monster GetMonster(string monsterId)
         {
-            return _db.Monsters.Include(monster => monster.DropTable).Single(monster => monster.Id == monsterId);
+            return _db.Monsters.Include(monster => monster.DropTable)
+                .ThenInclude(table => table.Items).Single(monster => monster.Id == monsterId);
         }
     }
 }

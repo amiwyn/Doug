@@ -4,14 +4,16 @@ using Doug;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Doug.Migrations
 {
     [DbContext(typeof(DougContext))]
-    partial class DougContextModelSnapshot : ModelSnapshot
+    [Migration("20191123000431_Items_And_Monsters")]
+    partial class Items_And_Monsters
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -155,7 +157,8 @@ namespace Doug.Migrations
 
             modelBuilder.Entity("Doug.Models.LootItem", b =>
                 {
-                    b.Property<string>("Id");
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
 
                     b.Property<string>("DropTableId");
 
@@ -163,7 +166,7 @@ namespace Doug.Migrations
 
                     b.Property<int>("Quantity");
 
-                    b.HasKey("Id", "DropTableId");
+                    b.HasKey("Id");
 
                     b.HasIndex("DropTableId");
 
@@ -664,8 +667,7 @@ namespace Doug.Migrations
                 {
                     b.HasOne("Doug.Models.DropTable")
                         .WithMany("Items")
-                        .HasForeignKey("DropTableId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("DropTableId");
                 });
 
             modelBuilder.Entity("Doug.Models.Monsters.Monster", b =>

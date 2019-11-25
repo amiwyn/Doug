@@ -20,23 +20,6 @@ namespace Doug.Models.User
 
         public string Id { get; set; }
         public int Credits { get; set; }
-        public List<InventoryItem> InventoryItems { get; set; }
-        public List<UserEffect> Effects { get; set; }
-        public Loadout Loadout { get; set; }
-        public long Experience { get; set; }
-        public DateTime AttackCooldown { get; set; }
-        public DateTime SkillCooldown { get; set; }
-
-        public int Luck { get; set; }
-        public int Agility { get; set; }
-        public int Strength { get; set; }
-        public int Constitution { get; set; }
-        public int Intelligence { get; set; }
-
-        public int Level => (int)Math.Floor(Math.Sqrt(Experience) * 0.05 + 1);
-        public int TotalStatsPoints => (int)Math.Floor(Level + 5 * Math.Floor(Level * 0.1)) + 4;
-        public int FreeStatsPoints => TotalStatsPoints + 25 - (Luck + Agility + Strength + Constitution + Intelligence);
-        public int Attack => (int)Math.Floor(TotalStrength() * 2.5);
 
         public int Health
         {
@@ -79,6 +62,25 @@ namespace Doug.Models.User
                 _energy = value;
             }
         }
+
+        public int Strength { get; set; }
+        public int Agility { get; set; }
+        public int Luck { get; set; }
+        public int Constitution { get; set; }
+        public int Intelligence { get; set; }
+
+
+        public long Experience { get; set; }
+        public List<InventoryItem> InventoryItems { get; set; }
+        public List<UserEffect> Effects { get; set; }
+        public Loadout Loadout { get; set; }
+        public DateTime AttackCooldown { get; set; }
+        public DateTime SkillCooldown { get; set; }
+
+        public int Level => (int)Math.Floor(Math.Sqrt(Experience) * 0.05 + 1);
+        public int TotalStatsPoints => (int)Math.Floor(Level + 5 * Math.Floor(Level * 0.1)) + 4;
+        public int FreeStatsPoints => TotalStatsPoints + 25 - (Luck + Agility + Strength + Constitution + Intelligence);
+        public int Attack => (int)Math.Floor(TotalStrength() * 2.5);
 
         public User()
         {

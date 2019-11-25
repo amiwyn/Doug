@@ -30,6 +30,7 @@ namespace Doug.Repositories
             return _db.Parties
                 .Include(party => party.Users)
                 .ThenInclude(usr => usr.InventoryItems)
+                .ThenInclude(item => item.Item)
                 .Single(party => party.Id == id);
         }
 
@@ -38,6 +39,7 @@ namespace Doug.Repositories
             return _db.Parties
                 .Include(party => party.Users)
                 .ThenInclude(usr => usr.InventoryItems)
+                .ThenInclude(item => item.Item)
                 .SingleOrDefault(party => party.Users.Any(usr => usr.Id == user));
         }
 

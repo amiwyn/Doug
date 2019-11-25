@@ -109,6 +109,7 @@ namespace Doug
             services.AddScoped<IPartyService, PartyService>();
             services.AddScoped<ICraftingMenuService, CraftingMenuService>();
             services.AddScoped<ICraftingService, CraftingService>();
+            services.AddScoped<ISkillService, SkillService>();
 
             services.AddScoped<ICoffeeCommands, CoffeeCommands>();
             services.AddScoped<ISlursCommands, SlursCommands>();

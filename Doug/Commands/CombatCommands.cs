@@ -24,14 +24,16 @@ namespace Doug.Commands
         private readonly IGovernmentService _governmentService;
         private readonly IMonsterMenuService _monsterMenuService;
         private readonly IPartyService _partyService;
+        private readonly ISkillService _skillService;
 
-        public CombatCommands(IUserRepository userRepository, ICombatService combatService, IGovernmentService governmentService, IMonsterMenuService monsterMenuService, IPartyService partyService)
+        public CombatCommands(IUserRepository userRepository, ICombatService combatService, IGovernmentService governmentService, IMonsterMenuService monsterMenuService, IPartyService partyService, ISkillService skillService)
         {
             _userRepository = userRepository;
             _combatService = combatService;
             _governmentService = governmentService;
             _monsterMenuService = monsterMenuService;
             _partyService = partyService;
+            _skillService = skillService;
         }
 
         public async Task<DougResponse> Attack(Command command)
@@ -64,7 +66,7 @@ namespace Doug.Commands
                 target = _userRepository.GetUser(command.GetTargetUserId());
             }
 
-            return await _combatService.ActivateSkill(user, target, command.ChannelId);
+            return await _skillService.ActivateSkill(user, target, command.ChannelId);
         }
 
         public async Task<DougResponse> PartyInvite(Command command)

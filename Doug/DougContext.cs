@@ -61,6 +61,9 @@ namespace Doug
                 .WithMany(u => u.InventoryItems)
                 .HasForeignKey(u => u.UserId);
 
+            modelBuilder.Entity<LootItem>()
+                .HasKey(e => new { e.Id, e.DropTableId });
+
             modelBuilder.Entity<UserEffect>()
                 .HasKey(e => new { e.UserId, e.EffectId });
 

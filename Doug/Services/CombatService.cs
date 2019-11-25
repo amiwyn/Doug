@@ -6,7 +6,6 @@ using Doug.Models.Combat;
 using Doug.Models.Monsters;
 using Doug.Models.User;
 using Doug.Repositories;
-using Doug.Skills;
 using Doug.Slack;
 
 namespace Doug.Services
@@ -15,7 +14,6 @@ namespace Doug.Services
     {
         Task<DougResponse> Attack(User user, User target, string channel);
         Task<DougResponse> AttackMonster(User user, SpawnedMonster spawnedMonster, string channel);
-        Task<DougResponse> ActivateSkill(User user, ICombatable target, string channel);
         Task DealDamage(User user, Attack attack, ICombatable target, string channel);
     }
 
@@ -30,9 +28,8 @@ namespace Doug.Services
         private readonly IChannelRepository _channelRepository;
         private readonly ISpawnedMonsterRepository _spawnedMonsterRepository;
         private readonly IMonsterService _monsterService;
-        private readonly ISkillFactory _skillFactory;
 
-        public CombatService(IEventDispatcher eventDispatcher, ISlackWebApi slack, IStatsRepository statsRepository, IUserService userService, IChannelRepository channelRepository, ISpawnedMonsterRepository spawnedMonsterRepository, IMonsterService monsterService, ISkillFactory skillFactory)
+        public CombatService(IEventDispatcher eventDispatcher, ISlackWebApi slack, IStatsRepository statsRepository, IUserService userService, IChannelRepository channelRepository, ISpawnedMonsterRepository spawnedMonsterRepository, IMonsterService monsterService)
         {
             _eventDispatcher = eventDispatcher;
             _slack = slack;
@@ -41,7 +38,6 @@ namespace Doug.Services
             _channelRepository = channelRepository;
             _spawnedMonsterRepository = spawnedMonsterRepository;
             _monsterService = monsterService;
-            _skillFactory = skillFactory;
         }
 
         public async Task<DougResponse> Attack(User user, User target, string channel)
@@ -101,16 +97,6 @@ namespace Doug.Services
             await DealDamageToMonster(user, attack, spawnedMonster, channel);
 
             return new DougResponse();
-        }
-
-        public async Task<DougResponse> ActivateSkill(User user, ICombatable target, string channel)
-        {
-            if (user.Loadout.Skillbook == null)
-            {
-                return new DougResponse(DougMessages.NoSkillEquipped);
-            }
-
-            return await user.Loadout.Skillbook.Activate(_skillFactory, user, target, channel);
         }
 
         public async Task DealDamage(User user, Attack attack, ICombatable target, string channel)

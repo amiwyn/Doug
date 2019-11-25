@@ -11,6 +11,7 @@ namespace Doug.Models.Monsters
         public int ExperienceValue { get; set; }
         public string Image { get; set; }
         public DamageType DamageType { get; set; }
+        public string DropTableId { get; set; }
         public DropTable DropTable { get; set; }
         public string Region { get; set; }
 
