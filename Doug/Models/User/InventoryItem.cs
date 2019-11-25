@@ -1,15 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using Doug.Items;
 
-namespace Doug.Models
+namespace Doug.Models.User
 {
     public class InventoryItem
     {
-        public string UserId { get; set; }
-        public User.User User { get; set; }
         public string ItemId { get; set; }
-        [NotMapped]
         public Item Item { get; set; }
+        public string UserId { get; set; }
+        public User User { get; set; }
         public int InventoryPosition { get; set; }
         public int Quantity { get; set; }
 
@@ -19,9 +18,12 @@ namespace Doug.Models
             ItemId = itemId;
         }
 
-        public void CreateItem(IItemFactory itemFactory)
+        public void CreateItemEffects(IEquipmentEffectFactory equipmentEffectFactory)
         {
-            Item = itemFactory.CreateItem(ItemId);
+            if (Item is EquipmentItem equipmentItem)
+            {
+                equipmentItem.CreateEffect(equipmentEffectFactory);
+            }
         }
     }
 }

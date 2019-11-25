@@ -3,7 +3,6 @@ using Doug.Slack;
 using Hangfire;
 using System;
 using System.Linq;
-using Doug.Items.Consumables;
 
 namespace Doug.Services
 {
@@ -28,18 +27,18 @@ namespace Doug.Services
         private readonly IBackgroundJobClient _backgroundJobClient;
         private readonly IInventoryRepository _inventoryRepository;
         private readonly IUserService _userService;
-        private readonly IStatsRepository _statsRepository;
         private readonly ICreditsRepository _creditsRepository;
+        private readonly IItemRepository _itemRepository;
 
-        public CoffeeService(ISlackWebApi slackWebApi, ICoffeeRepository coffeeRepository, IBackgroundJobClient backgroundJobClient, IInventoryRepository inventoryRepository, IUserService userService, IStatsRepository statsRepository, ICreditsRepository creditsRepository)
+        public CoffeeService(ISlackWebApi slackWebApi, ICoffeeRepository coffeeRepository, IBackgroundJobClient backgroundJobClient, IInventoryRepository inventoryRepository, IUserService userService, ICreditsRepository creditsRepository, IItemRepository itemRepository)
         {
             _slack = slackWebApi;
             _coffeeRepository = coffeeRepository;
             _backgroundJobClient = backgroundJobClient;
             _inventoryRepository = inventoryRepository;
             _userService = userService;
-            _statsRepository = statsRepository;
             _creditsRepository = creditsRepository;
+            _itemRepository = itemRepository;
         }
 
         public void CountParrot(string userId, string channelId, DateTime currentTime)
@@ -134,9 +133,10 @@ namespace Doug.Services
         {
             var participants = _coffeeRepository.GetReadyParticipants().ToList();
             var participantsId = participants.Select(user => user.Id).ToList();
+            var coffeeCup = _itemRepository.GetItem("coffee_bowl");
 
             _creditsRepository.AddCreditsToUsers(participantsId, CoffeeBreakAward);
-            _inventoryRepository.AddItemToUsers(participants, new CoffeeCup(_statsRepository, _inventoryRepository));
+            _inventoryRepository.AddItemToUsers(participants, coffeeCup);
 
             _userService.AddBulkExperience(participants, CoffeeExperienceAward, channelId).Wait();
 

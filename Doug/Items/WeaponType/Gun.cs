@@ -1,11 +1,11 @@
 ﻿namespace Doug.Items.WeaponType
 {
-    public abstract class Gun : Weapon
+    public class Gun : Weapon
     {
-        protected Gun()
+        public Gun()
         {
             IsDualWield = true;
-            Stats.AttackSpeed = -50;
+            AttackSpeed = -50;
             Slot = EquipmentSlot.RightHand;
         }
     }

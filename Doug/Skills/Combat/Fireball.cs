@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Doug.Items;
+using Doug.Effects;
 using Doug.Items.WeaponType;
 using Doug.Models;
 using Doug.Models.Combat;
@@ -12,6 +12,8 @@ namespace Doug.Skills.Combat
 {
     public class Fireball : CombatSkill
     {
+        public const string SkillId = "fireball";
+
         private readonly ISlackWebApi _slack;
         private readonly IUserService _userService;
         private readonly ICombatService _combatService;
@@ -20,6 +22,7 @@ namespace Doug.Skills.Combat
         public Fireball(IStatsRepository statsRepository, ISlackWebApi slack, IUserService userService,
             ICombatService combatService, IEventDispatcher eventDispatcher, IChannelRepository channelRepository) : base(statsRepository, channelRepository, slack, eventDispatcher)
         {
+            Id = SkillId;
             Name = "Fireball";
             EnergyCost = 30;
             Cooldown = 25;

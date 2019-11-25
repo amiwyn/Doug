@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Doug;
+using Doug.Effects;
 using Doug.Items;
-using Doug.Items.Equipment;
 using Doug.Models;
 using Doug.Models.User;
 using Doug.Repositories;
@@ -19,7 +19,7 @@ namespace Test.Combat
     {
         private const string Channel = "coco-channel";
 
-        private readonly User _user = new User { Id = "bebebobo", Energy = 10 , Loadout = new Loadout { Equipment = { { EquipmentSlot.RightHand, new StraightEdge() } } } };
+        private readonly User _user = new User { Id = "bebebobo", Energy = 10 , Loadout = new Loadout { RightHand = new Default() } };
         private readonly User _target = new User { Id = "robert", Credits = 10 };
 
         private Steal _steal;
@@ -67,7 +67,7 @@ namespace Test.Combat
         [TestMethod]
         public async Task GivenUserHasNoEnergy_WhenStealing_NotEnoughEnergyMessage()
         {
-            var user = new User { Energy = 0, Loadout = new Loadout { Equipment = { { EquipmentSlot.RightHand, new StraightEdge() } } } };
+            var user = new User { Energy = 0, Loadout = new Loadout { RightHand = new Default() } };
 
             var result = await _steal.Activate(user, _target, Channel);
 

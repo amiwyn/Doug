@@ -37,5 +37,20 @@ namespace Doug.Effects
                 default: return new UnknownEffect();
             }
         }
+
+        // yolo
+        public static string GetEffectName(string effectId)
+        {
+            switch (effectId)
+            {
+                case TrollBlessing.EffectId: return new TrollBlessing(null).Name;
+                case NicotineHigh.EffectId: return new NicotineHigh().Name;
+                case FrenchCurse.EffectId: return new FrenchCurse(null, null).Name;
+                case PickleBuff.EffectId: return new PickleBuff().Name;
+                case Luck.EffectId: return new Luck().Name;
+                case MortuaryGrace.EffectId: return new MortuaryGrace(null).Name;
+                default: return new UnknownEffect().Name;
+            }
+        }
     }
 }

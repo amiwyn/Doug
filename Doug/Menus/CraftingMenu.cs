@@ -3,7 +3,7 @@ using System.Linq;
 using Doug.Menus.Blocks;
 using Doug.Menus.Blocks.Accessories;
 using Doug.Menus.Blocks.Text;
-using Doug.Models;
+using Doug.Models.User;
 
 namespace Doug.Menus
 {

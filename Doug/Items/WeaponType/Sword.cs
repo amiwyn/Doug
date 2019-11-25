@@ -1,8 +1,8 @@
 ﻿namespace Doug.Items.WeaponType
 {
-    public abstract class Sword : Weapon
+    public class Sword : Weapon
     {
-        protected Sword()
+        public Sword()
         {
             IsDualWield = false;
             Slot = EquipmentSlot.RightHand;

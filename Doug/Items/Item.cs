@@ -2,7 +2,10 @@
 
 namespace Doug.Items
 {
-    public abstract class Item
+    public delegate string Action(int itemPos, User user, string channel);
+    public delegate string TargetAction(int itemPos, User user, User target, string channel);
+
+    public class Item
     {
         public string Id { get; set; }
         public string Name { get; set; }
@@ -13,22 +16,25 @@ namespace Doug.Items
         public int Price { get; set; }
         public bool IsTradable { get; set; }
         public bool IsSellable { get; set; }
+        public string ActionId { get; set; }
+        public string TargetActionId { get; set; }
 
-        protected Item()
+
+        public Item()
         {
-            MaxStack = 1;
+            MaxStack = 99;
             IsTradable = true;
             IsSellable = true;
         }
 
-        public virtual string Use(int itemPos, User user, string channel)
+        public virtual string Use(IActionFactory actionFactory, int itemPos, User user, string channel)
         {
-            return DougMessages.ItemCantBeUsed;
+            return actionFactory.CreateAction(ActionId)(itemPos, user, channel);
         }
 
-        public virtual string Target(int itemPos, User user, User target, string channel)
+        public virtual string Target(ITargetActionFactory targetActionFactory, int itemPos, User user, User target, string channel)
         {
-            return DougMessages.ItemCantBeUsed;
+            return targetActionFactory.CreateTargetAction(TargetActionId)(itemPos, user, target, channel);
         }
 
         public virtual bool IsEquipable()

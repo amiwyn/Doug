@@ -1,11 +1,11 @@
 ﻿namespace Doug.Items.WeaponType
 {
-    public abstract class Claws : Weapon
+    public class Claws : Weapon
     {
-        protected Claws()
+        public Claws()
         {
             IsDualWield = true;
-            Stats.AttackSpeed = 80;
+            AttackSpeed = 80;
             Slot = EquipmentSlot.RightHand;
         }
     }

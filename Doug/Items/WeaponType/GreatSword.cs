@@ -1,11 +1,11 @@
 ﻿namespace Doug.Items.WeaponType
 {
-    public abstract class GreatSword : Weapon
+    public class GreatSword : Weapon
     {
-        protected GreatSword()
+        public GreatSword()
         {
             IsDualWield = true;
-            Stats.AttackSpeed = -20;
+            AttackSpeed = -20;
             Slot = EquipmentSlot.RightHand;
         }
     }

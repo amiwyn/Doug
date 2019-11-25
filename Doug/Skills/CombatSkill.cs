@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using Doug.Items;
+using Doug.Effects;
 using Doug.Models;
 using Doug.Models.Combat;
 using Doug.Models.User;

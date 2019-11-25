@@ -2,7 +2,7 @@
 using Doug.Menus.Blocks;
 using Doug.Menus.Blocks.Accessories;
 using Doug.Menus.Blocks.Text;
-using Doug.Monsters;
+using Doug.Models.Monsters;
 
 namespace Doug.Menus
 {

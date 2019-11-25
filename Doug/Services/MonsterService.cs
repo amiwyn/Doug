@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Doug.Models;
 using Doug.Models.Monsters;
 using Doug.Models.User;
-using Doug.Monsters;
 using Doug.Repositories;
 using Doug.Slack;
 
@@ -21,39 +20,41 @@ namespace Doug.Services
     {
         private const int MaximumMonsterTypeInChannel = 3;
 
-        private readonly IMonsterRepository _monsterRepository;
+        private readonly ISpawnedMonsterRepository _spawnedMonsterRepository;
         private readonly ISlackWebApi _slack;
         private readonly IUserService _userService;
         private readonly IInventoryRepository _inventoryRepository;
         private readonly IRandomService _randomService;
-        private readonly IMonsterFactory _monsterFactory;
+        private readonly IMonsterRepository _monsterRepository;
         private readonly IChannelRepository _channelRepository;
         private readonly IPartyRepository _partyRepository;
+        private readonly IItemRepository _itemRepository;
 
-        public MonsterService(IMonsterRepository monsterRepository, ISlackWebApi slack, IUserService userService, IInventoryRepository inventoryRepository, IRandomService randomService, IMonsterFactory monsterFactory, IChannelRepository channelRepository, IPartyRepository partyRepository)
+        public MonsterService(ISpawnedMonsterRepository spawnedMonsterRepository, ISlackWebApi slack, IUserService userService, IInventoryRepository inventoryRepository, IRandomService randomService, IMonsterRepository monsterRepository, IChannelRepository channelRepository, IPartyRepository partyRepository, IItemRepository itemRepository)
         {
-            _monsterRepository = monsterRepository;
+            _spawnedMonsterRepository = spawnedMonsterRepository;
             _slack = slack;
             _userService = userService;
             _inventoryRepository = inventoryRepository;
             _randomService = randomService;
-            _monsterFactory = monsterFactory;
+            _monsterRepository = monsterRepository;
             _channelRepository = channelRepository;
             _partyRepository = partyRepository;
+            _itemRepository = itemRepository;
         }
 
         public void RollMonsterSpawn()
         {
             var channel = PickRandomRegion(_channelRepository);
             var monsterIds = channel.Monsters.Select(mons => mons.MonsterId).ToList().OrderBy(mons => Guid.NewGuid());
-            var monstersInChannel = _monsterRepository.GetMonsters(channel.Id).ToList();
+            var monstersInChannel = _spawnedMonsterRepository.GetMonsters(channel.Id).ToList();
 
             foreach (var monsterId in monsterIds)
             {
                 if (monstersInChannel.Count(monsta => monsta.MonsterId == monsterId) < MaximumMonsterTypeInChannel)
                 {
-                    var monster = _monsterFactory.CreateMonster(monsterId);
-                    _monsterRepository.SpawnMonster(monster, channel.Id);
+                    var monster = _monsterRepository.GetMonster(monsterId);
+                    _spawnedMonsterRepository.SpawnMonster(monster, channel.Id);
                     _slack.BroadcastMessage(string.Format(DougMessages.MonsterSpawned, monster.Name), channel.Id).Wait();
                     return;
                 }
@@ -74,7 +75,7 @@ namespace Doug.Services
 
             await AddMonsterLootToUser(user, monster, channel);
 
-            _monsterRepository.RemoveMonster(spawnedMonster.Id);
+            _spawnedMonsterRepository.RemoveMonster(spawnedMonster.Id);
 
             await _slack.BroadcastMessage(string.Format(DougMessages.MonsterDied, monster.Name), channel);
 
@@ -110,12 +111,14 @@ namespace Doug.Services
 
         private async Task AddMonsterLootToUser(User user, Monster monster, string channel)
         {
-            var droppedItems = _randomService.RandomTableDrop(monster.DropTable, user.ExtraDropChance()).Select(drop => drop.Item).ToList();
+            var droppedItems = _randomService.RandomTableDrop(monster.DropTable, user.ExtraDropChance()).Select(drop => drop.Id).ToList();
+
+            var items = _itemRepository.GetItems(droppedItems);
 
             if (droppedItems.Any())
             {
-                _inventoryRepository.AddItems(user, droppedItems);
-                var itemsMessage = string.Join(", ", droppedItems.Select(item => $"{item.GetDisplayName()}"));
+                _inventoryRepository.AddItems(user, items);
+                var itemsMessage = string.Join(", ", items.Select(item => $"{item.GetDisplayName()}"));
                 await _slack.BroadcastMessage(string.Format(DougMessages.UserObtained, _userService.Mention(user), itemsMessage), channel);
             }
         }

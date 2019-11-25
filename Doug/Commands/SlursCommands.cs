@@ -1,5 +1,4 @@
-﻿using Doug.Items;
-using Doug.Models;
+﻿using Doug.Models;
 using Doug.Repositories;
 using Doug.Services;
 using Doug.Slack;
@@ -7,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Doug.Effects;
 using Doug.Models.Slurs;
 using Doug.Models.User;
 

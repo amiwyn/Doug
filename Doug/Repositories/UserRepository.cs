@@ -4,6 +4,7 @@ using System.Linq;
 using Doug.Effects;
 using Doug.Items;
 using Doug.Models.User;
+using Microsoft.EntityFrameworkCore;
 using Z.EntityFramework.Plus;
 
 namespace Doug.Repositories
@@ -12,7 +13,6 @@ namespace Doug.Repositories
     {
         void AddUser(string userId);
         List<User> GetUsers();
-        List<User> GetUsers(List<string> users);
         User GetUser(string userId);
         void RegenerateUsers();
     }
@@ -20,19 +20,20 @@ namespace Doug.Repositories
     public class UserRepository : IUserRepository
     {
         private readonly DougContext _db;
-        private readonly IItemFactory _itemFactory;
+        private readonly IEquipmentEffectFactory _equipmentEffectFactory;
         private readonly IEffectFactory _effectFactory;
 
-        public UserRepository(DougContext dougContext, IItemFactory itemFactory, IEffectFactory effectFactory)
+        public UserRepository(DougContext dougContext, IEquipmentEffectFactory equipmentEffectFactory, IEffectFactory effectFactory)
         {
             _db = dougContext;
-            _itemFactory = itemFactory;
+            _equipmentEffectFactory = equipmentEffectFactory;
             _effectFactory = effectFactory;
         }
 
         public void AddUser(string userId)
         {
-            if (!_db.Users.Any(user => user.Id == userId)) {
+            if (!_db.Users.Any(user => user.Id == userId))
+            {
 
                 var user = new User
                 {
@@ -46,32 +47,38 @@ namespace Doug.Repositories
             }
         }
 
-        public List<User> GetUsers(List<string> users)
-        {
-            var loadedUsers = _db.Users
-                .Where(user => users.Any(usr => usr == user.Id))
-                .IncludeFilter(usr => usr.Effects.Where(effect => effect.EndTime >= DateTime.UtcNow))
-                .IncludeFilter(usr => usr.InventoryItems)
-                .IncludeFilter(usr => usr.Loadout)
-                .ToList();
-
-            loadedUsers.ForEach(usr => usr.LoadItems(_itemFactory));
-            loadedUsers.ForEach(usr => usr.LoadEffects(_effectFactory));
-
-            return loadedUsers;
-        }
-
         public User GetUser(string userId)
         {
             var user = _db.Users
-                .IncludeFilter(usr => usr.Effects.Where(effect => effect.EndTime >= DateTime.UtcNow))
-                .IncludeFilter(usr => usr.InventoryItems)
-                .IncludeFilter(usr => usr.Loadout)
+                .Include(usr => usr.Effects)
+                .Include(usr => usr.InventoryItems)
+                    .ThenInclude(itm => itm.Item)
+                .Include(usr => usr.Loadout)
+                    .ThenInclude(itm => itm.Head)
+                .Include(usr => usr.Loadout)
+                    .ThenInclude(itm => itm.Body)
+                .Include(usr => usr.Loadout)
+                    .ThenInclude(itm => itm.Boots)
+                .Include(usr => usr.Loadout)
+                    .ThenInclude(itm => itm.Gloves)
+                .Include(usr => usr.Loadout)
+                    .ThenInclude(itm => itm.LeftHand)
+                .Include(usr => usr.Loadout)
+                    .ThenInclude(itm => itm.RightHand)
+                .Include(usr => usr.Loadout)
+                    .ThenInclude(itm => itm.Neck)
+                .Include(usr => usr.Loadout)
+                    .ThenInclude(itm => itm.LeftRing)
+                .Include(usr => usr.Loadout)
+                    .ThenInclude(itm => itm.RightRing)
+                .Include(usr => usr.Loadout)
+                    .ThenInclude(itm => itm.Skillbook)
                 .Single(usr => usr.Id == userId);
 
-            user.LoadItems(_itemFactory);
-            user.LoadEffects(_effectFactory);
+            user.Effects = user.Effects.Where(effect => effect.EndTime >= DateTime.UtcNow).ToList();
 
+            user.LoadItems(_equipmentEffectFactory);
+            user.LoadEffects(_effectFactory);
 
             return user;
         }
@@ -88,12 +95,34 @@ namespace Doug.Repositories
         public List<User> GetUsers()
         {
             var users = _db.Users
-                .IncludeFilter(usr => usr.Effects.Where(effect => effect.EndTime >= DateTime.UtcNow))
-                .IncludeFilter(usr => usr.InventoryItems)
-                .IncludeFilter(usr => usr.Loadout)
+                .Include(usr => usr.Effects)
+                .Include(usr => usr.InventoryItems)
+                .ThenInclude(itm => itm.Item)
+                .Include(usr => usr.Loadout)
+                .ThenInclude(itm => itm.Head)
+                .Include(usr => usr.Loadout)
+                .ThenInclude(itm => itm.Body)
+                .Include(usr => usr.Loadout)
+                .ThenInclude(itm => itm.Boots)
+                .Include(usr => usr.Loadout)
+                .ThenInclude(itm => itm.Gloves)
+                .Include(usr => usr.Loadout)
+                .ThenInclude(itm => itm.LeftHand)
+                .Include(usr => usr.Loadout)
+                .ThenInclude(itm => itm.RightHand)
+                .Include(usr => usr.Loadout)
+                .ThenInclude(itm => itm.Neck)
+                .Include(usr => usr.Loadout)
+                .ThenInclude(itm => itm.LeftRing)
+                .Include(usr => usr.Loadout)
+                .ThenInclude(itm => itm.RightRing)
+                .Include(usr => usr.Loadout)
+                .ThenInclude(itm => itm.Skillbook)
                 .ToList();
 
-            users.ForEach(usr => usr.LoadItems(_itemFactory));
+            users.ForEach(user => user.Effects = user.Effects.Where(effect => effect.EndTime >= DateTime.UtcNow).ToList());
+
+            users.ForEach(usr => usr.LoadItems(_equipmentEffectFactory));
             users.ForEach(usr => usr.LoadEffects(_effectFactory));
 
             return users;

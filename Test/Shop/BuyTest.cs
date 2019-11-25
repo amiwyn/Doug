@@ -1,6 +1,5 @@
 using Doug;
 using Doug.Items;
-using Doug.Items.Equipment;
 using Doug.Models.User;
 using Doug.Repositories;
 using Doug.Services;
@@ -18,7 +17,7 @@ namespace Test.Shop
 
         private readonly Mock<IUserRepository> _userRepository = new Mock<IUserRepository>();
         private readonly Mock<IInventoryRepository>  _inventoryRepository = new Mock<IInventoryRepository>();
-        private readonly Mock<IItemFactory> _itemFactory = new Mock<IItemFactory>();
+        private readonly Mock<IItemRepository> _itemRepository = new Mock<IItemRepository>();
         private readonly Mock<IGovernmentService> _governmentService = new Mock<IGovernmentService>();
         private readonly Mock<ICreditsRepository> _creditsRepository = new Mock<ICreditsRepository>();
         private User _user;
@@ -27,11 +26,11 @@ namespace Test.Shop
         public void Setup()
         {
             _governmentService.Setup(repo => repo.GetPriceWithTaxes(It.IsAny<Item>())).Returns((Item item) => item.Price);
-            _itemFactory.Setup(factory => factory.CreateItem(It.IsAny<string>())).Returns(new LuckyCoin());
+            _itemRepository.Setup(factory => factory.GetItem(It.IsAny<string>())).Returns(new Item() { Price = 2727 });
             _user = new User() {Id = "testuser", Credits = 431279};
             _userRepository.Setup(repo => repo.GetUser(User)).Returns(_user);
 
-            _shopService = new ShopService(_inventoryRepository.Object, _itemFactory.Object, _governmentService.Object, _creditsRepository.Object);
+            _shopService = new ShopService(_inventoryRepository.Object, _itemRepository.Object, _governmentService.Object, _creditsRepository.Object);
         }
 
         [TestMethod]
@@ -39,7 +38,7 @@ namespace Test.Shop
         {
             _shopService.Buy(_user, "lucky_dice");
 
-            _inventoryRepository.Verify(repo => repo.AddItem(_user, It.IsAny<LuckyCoin>()));
+            _inventoryRepository.Verify(repo => repo.AddItem(_user, It.IsAny<Item>()));
         }
 
         [TestMethod]
@@ -47,7 +46,7 @@ namespace Test.Shop
         {
             _shopService.Buy(_user, "lucky_dice");
 
-            _creditsRepository.Verify(repo => repo.RemoveCredits(User, 2674));
+            _creditsRepository.Verify(repo => repo.RemoveCredits(User, 2727));
         }
 
         [TestMethod]
@@ -57,7 +56,7 @@ namespace Test.Shop
 
             var result = _shopService.Buy(user, "lucky_dice");
 
-            Assert.AreEqual("You need 2674 " + DougMessages.CreditEmoji + " to do this and you have 22 " + DougMessages.CreditEmoji, result.Message);
+            Assert.AreEqual("You need 2727 " + DougMessages.CreditEmoji + " to do this and you have 22 " + DougMessages.CreditEmoji, result.Message);
         }
     }
 }

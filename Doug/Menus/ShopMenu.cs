@@ -6,6 +6,7 @@ using Doug.Menus.Blocks.Accessories;
 using Doug.Menus.Blocks.Text;
 using Doug.Models;
 using Doug.Models.User;
+using Doug.Repositories;
 using Doug.Services;
 using Doug.Services.MenuServices;
 
@@ -16,9 +17,9 @@ namespace Doug.Menus
         private readonly IGovernmentService _governmentService;
         public List<Block> Blocks { get; set; }
 
-        public ShopMenu(Shop shop, User user, IItemFactory itemFactory, IGovernmentService governmentService)
+        public ShopMenu(Shop shop, User user, IItemRepository itemRepository, IGovernmentService governmentService)
         {
-            var items = shop.ShopItems.Select(itm => itemFactory.CreateItem(itm.ItemId));
+            var items = shop.ShopItems.Select(itm => itemRepository.GetItem(itm.ItemId));
 
             _governmentService = governmentService;
             Blocks = new List<Block>

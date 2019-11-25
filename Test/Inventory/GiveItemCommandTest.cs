@@ -1,8 +1,6 @@
 using System.Collections.Generic;
 using Doug.Commands;
 using Doug.Items;
-using Doug.Items.Misc;
-using Doug.Items.Tickets;
 using Doug.Models;
 using Doug.Models.User;
 using Doug.Repositories;
@@ -37,6 +35,8 @@ namespace Test.Inventory
         private readonly Mock<IInventoryRepository> _inventoryRepository = new Mock<IInventoryRepository>();
         private readonly Mock<IEquipmentRepository> _equipmentRepository = new Mock<IEquipmentRepository>();
         private readonly Mock<IUserService> _userService = new Mock<IUserService>();
+        private readonly Mock<IActionFactory> _actionFactory = new Mock<IActionFactory>();
+        private readonly Mock<ITargetActionFactory> _targetActionFactory = new Mock<ITargetActionFactory>();
 
         [TestInitialize]
         public void Setup()
@@ -44,7 +44,7 @@ namespace Test.Inventory
             var items = new List<InventoryItem>()
             {
                 new InventoryItem("testuser", "testitem") {InventoryPosition = 2, Item = new Default()},
-                new InventoryItem("testuser", "testitem") {InventoryPosition = 3, Item = new KickTicket(null, null, null, null)}
+                new InventoryItem("testuser", "testitem") {InventoryPosition = 3, Item = new Item()}
             };
             
             _user = new User() { Id = "testuser", InventoryItems = items };
@@ -53,7 +53,7 @@ namespace Test.Inventory
             _userRepository.Setup(repo => repo.GetUser(User)).Returns(_user);
             _userRepository.Setup(repo => repo.GetUser("ginette")).Returns(_target);
 
-            _inventoryCommands = new InventoryCommands(_userRepository.Object, _slack.Object, _inventoryRepository.Object, _equipmentRepository.Object, _userService.Object);
+            _inventoryCommands = new InventoryCommands(_userRepository.Object, _slack.Object, _inventoryRepository.Object, _equipmentRepository.Object, _userService.Object, _actionFactory.Object, _targetActionFactory.Object);
         }
 
         [TestMethod]

@@ -1,4 +1,4 @@
-﻿using Doug.Items;
+﻿using Doug.Effects;
 
 namespace Doug.Models.Combat
 {

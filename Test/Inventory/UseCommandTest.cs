@@ -33,6 +33,8 @@ namespace Test.Inventory
         private readonly Mock<IUserService> _userService = new Mock<IUserService>();
         private readonly Mock<ISlackWebApi> _slack = new Mock<ISlackWebApi>();
         private readonly Mock<Item> _item = new Mock<Item>();
+        private readonly Mock<IActionFactory> _actionFactory = new Mock<IActionFactory>();
+        private readonly Mock<ITargetActionFactory> _targetActionFactory = new Mock<ITargetActionFactory>();
 
         [TestInitialize]
         public void Setup()
@@ -40,7 +42,7 @@ namespace Test.Inventory
             var items = new List<InventoryItem>() {new InventoryItem("testuser", "testitem") {InventoryPosition = 2, Item = _item.Object } };
             _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User() { Id = "testuser", InventoryItems = items });
 
-            _inventoryCommands = new InventoryCommands(_userRepository.Object, _slack.Object, _inventoryRepository.Object, _equipmentRepository.Object, _userService.Object);
+            _inventoryCommands = new InventoryCommands(_userRepository.Object, _slack.Object, _inventoryRepository.Object, _equipmentRepository.Object, _userService.Object, _actionFactory.Object, _targetActionFactory.Object);
         }
 
         [TestMethod]
@@ -48,7 +50,7 @@ namespace Test.Inventory
         {
             _inventoryCommands.Use(_command);
 
-            _item.Verify(item => item.Use(2, It.IsAny<User>(), Channel));
+            _item.Verify(item => item.Use(_actionFactory.Object, 2, It.IsAny<User>(), Channel));
         }
 
         [TestMethod]

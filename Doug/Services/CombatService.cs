@@ -1,10 +1,10 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using Doug.Items;
+using Doug.Effects;
 using Doug.Models;
 using Doug.Models.Combat;
+using Doug.Models.Monsters;
 using Doug.Models.User;
-using Doug.Monsters;
 using Doug.Repositories;
 using Doug.Slack;
 
@@ -14,7 +14,6 @@ namespace Doug.Services
     {
         Task<DougResponse> Attack(User user, User target, string channel);
         Task<DougResponse> AttackMonster(User user, SpawnedMonster spawnedMonster, string channel);
-        Task<DougResponse> ActivateSkill(User user, ICombatable target, string channel);
         Task DealDamage(User user, Attack attack, ICombatable target, string channel);
     }
 
@@ -27,17 +26,17 @@ namespace Doug.Services
         private readonly IStatsRepository _statsRepository;
         private readonly IUserService _userService;
         private readonly IChannelRepository _channelRepository;
-        private readonly IMonsterRepository _monsterRepository;
+        private readonly ISpawnedMonsterRepository _spawnedMonsterRepository;
         private readonly IMonsterService _monsterService;
 
-        public CombatService(IEventDispatcher eventDispatcher, ISlackWebApi slack, IStatsRepository statsRepository, IUserService userService, IChannelRepository channelRepository, IMonsterRepository monsterRepository, IMonsterService monsterService)
+        public CombatService(IEventDispatcher eventDispatcher, ISlackWebApi slack, IStatsRepository statsRepository, IUserService userService, IChannelRepository channelRepository, ISpawnedMonsterRepository spawnedMonsterRepository, IMonsterService monsterService)
         {
             _eventDispatcher = eventDispatcher;
             _slack = slack;
             _statsRepository = statsRepository;
             _userService = userService;
             _channelRepository = channelRepository;
-            _monsterRepository = monsterRepository;
+            _spawnedMonsterRepository = spawnedMonsterRepository;
             _monsterService = monsterService;
         }
 
@@ -100,18 +99,6 @@ namespace Doug.Services
             return new DougResponse();
         }
 
-        public async Task<DougResponse> ActivateSkill(User user, ICombatable target, string channel)
-        {
-            var skillbook = user.Loadout.GetSkill();
-
-            if (skillbook == null)
-            {
-                return new DougResponse(DougMessages.NoSkillEquipped);
-            }
-
-            return await skillbook.Activate(user, target, channel);
-        }
-
         public async Task DealDamage(User user, Attack attack, ICombatable target, string channel)
         {
             if (target is User targetUser)
@@ -130,7 +117,7 @@ namespace Doug.Services
             var message = attack.Status.ToMessage(_userService.Mention(user), $"*{monster.Name}*", attack.Damage);
             await _slack.BroadcastMessage(message, channel);
 
-            _monsterRepository.RegisterUserDamage(spawnedMonster.Id, user.Id, attack.Damage, spawnedMonster.Health);
+            _spawnedMonsterRepository.RegisterUserDamage(spawnedMonster.Id, user.Id, attack.Damage, spawnedMonster.Health);
 
             if (monster.IsDead())
             {
@@ -149,7 +136,7 @@ namespace Doug.Services
 
             var retaliationMessage = retaliationAttack.Status.ToMessage($"*{monster.Name}*", _userService.Mention(user), retaliationAttack.Damage);
             await _slack.BroadcastMessage(retaliationMessage, channel);
-            _monsterRepository.SetAttackCooldown(spawnedMonster.Id, monster.GetAttackCooldown());
+            _spawnedMonsterRepository.SetAttackCooldown(spawnedMonster.Id, monster.GetAttackCooldown());
 
             if (user.IsDead())
             {
