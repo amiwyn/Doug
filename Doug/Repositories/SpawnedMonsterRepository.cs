@@ -29,6 +29,7 @@ namespace Doug.Repositories
         {
             var monsters = _db.SpawnedMonsters
                 .Where(monsta => monsta.Channel == channel)
+                .Include(monsta => monsta.Monster)
                 .Include(monsta => monsta.MonsterAttackers)
                 .ThenInclude(attacker => attacker.User)
                 .ToList();
@@ -39,6 +40,7 @@ namespace Doug.Repositories
         public SpawnedMonster GetMonster(int monsterId)
         {
             var monster = _db.SpawnedMonsters
+                .Include(monsta => monsta.Monster)
                 .Include(monsta => monsta.MonsterAttackers)
                 .ThenInclude(attacker => attacker.User)
                 .SingleOrDefault(monsta => monsta.Id == monsterId);
@@ -70,6 +72,7 @@ namespace Doug.Repositories
         public void RegisterUserDamage(int id, string userId, int damage, int monsterHealth)
         {
             var monster = _db.SpawnedMonsters
+                .Include(monsta => monsta.Monster)
                 .Include(monsta => monsta.MonsterAttackers)
                 .Single(monsta => monsta.Id == id);
 

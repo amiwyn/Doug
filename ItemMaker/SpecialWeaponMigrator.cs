@@ -21,6 +21,10 @@ namespace ItemMigrator
                 {
                     db.Items.Add(item);
                 }
+                else
+                {
+                    db.Entry(db.Items.Find(item.Id)).CurrentValues.SetValues(item);
+                }
             }
             db.SaveChanges();
         }
@@ -54,8 +58,8 @@ namespace ItemMigrator
             weapon.Price = int.Parse(values[6]);
             weapon.Health = int.Parse(values[7]);
             weapon.Energy = int.Parse(values[8]);
-            weapon.MaxAttack = int.Parse(values[9]);
-            weapon.MinAttack = int.Parse(values[10]);
+            weapon.MinAttack = int.Parse(values[9]);
+            weapon.MaxAttack = int.Parse(values[10]);
             weapon.Hitrate = int.Parse(values[12]);
             weapon.Dodge = int.Parse(values[13]);
             weapon.Defense = int.Parse(values[14]);

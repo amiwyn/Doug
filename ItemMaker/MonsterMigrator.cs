@@ -16,7 +16,7 @@ namespace ItemMigrator
 
             foreach (var item in items)
             {
-                if (!db.Items.Any(itm => itm.Id == item.Id))
+                if (!db.Monsters.Any(itm => itm.Id == item.Id))
                 {
                     db.Monsters.Add(item);
                 }

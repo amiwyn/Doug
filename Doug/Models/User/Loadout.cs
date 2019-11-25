@@ -214,18 +214,26 @@ namespace Doug.Models.User
 
         public List<EquipmentItem> GetEquipmentList()
         {
-            return new List<EquipmentItem>
+            var list = new List<EquipmentItem>();
+            AddIfNotNull(list, Head);
+            AddIfNotNull(list, Body);
+            AddIfNotNull(list, Boots);
+            AddIfNotNull(list, Gloves);
+            AddIfNotNull(list, LeftHand);
+            AddIfNotNull(list, RightHand);
+            AddIfNotNull(list, Neck);
+            AddIfNotNull(list, LeftRing);
+            AddIfNotNull(list, RightRing);
+            return list;
+        }
+
+        private void AddIfNotNull<T>(ICollection<T> list, T item)
+        {
+            if (item == null)
             {
-                Head,
-                Body,
-                Boots,
-                Gloves,
-                LeftHand,
-                RightHand,
-                Neck,
-                LeftRing,
-                RightRing
-            };
+                return;
+            }
+            list.Add(item);
         }
     }
 }
