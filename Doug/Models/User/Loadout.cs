@@ -208,8 +208,8 @@ namespace Doug.Models.User
 
         public bool HasWeaponType(Type type)
         {
-            return RightHand != null && RightHand.GetType().IsSubclassOf(type) ||
-                   LeftHand != null && LeftHand.GetType().IsSubclassOf(type);
+            return RightHand != null && RightHand.GetType() == type ||
+                   LeftHand != null && LeftHand.GetType() == type;
         }
 
         public List<EquipmentItem> GetEquipmentList()

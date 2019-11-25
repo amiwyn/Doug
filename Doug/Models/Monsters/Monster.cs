@@ -18,7 +18,6 @@ namespace Doug.Models.Monsters
         public string Name { get; set; }
         public string Description { get; set; }
 
-        public int MaxHealth { get; set; }
         public int MinAttack { get; set; }
         public int MaxAttack { get; set; }
         public int Hitrate { get; set; }
@@ -30,7 +29,6 @@ namespace Doug.Models.Monsters
 
         public Monster()
         {
-            Health = MaxHealth;
             AttackCooldown = 30;
         }
 
