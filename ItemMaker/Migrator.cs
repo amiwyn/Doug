@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using Doug;
 
 namespace ItemMigrator
 {
     class Migrator
     {
-        static Regex Regex = new Regex("(?:^|,)(\"(?:[^\"]+|\"\")*\"|[^,]*)", RegexOptions.Compiled);
+        static readonly Regex Regex = new Regex("(?:^|,)(\"(?:[^\"]+|\"\")*\"|[^,]*)", RegexOptions.Compiled);
 
         protected List<string> Split(string input)
         {
