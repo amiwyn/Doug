@@ -20,6 +20,10 @@ namespace ItemMigrator
                 {
                     db.Items.Add(item);
                 }
+                else
+                {
+                    db.Entry(db.Items.Find(item.Id)).CurrentValues.SetValues(item);
+                }
             }
             db.SaveChanges();
         }
@@ -30,7 +34,7 @@ namespace ItemMigrator
             Enum.TryParse(values[2], out EquipmentSlot slot);
 
             //Name,Level,Slot,Agi Req.,Int Req.,Str Req.,Price,Health,Mana,Max Atk.,Min Atk.,Atk. Spd,Hitrate,Dodge,Defense,Resistance,Health Regen,Mana Regen,Luk,Agi,Str,Con,Int,Icon,Id,Description
-            return new EquipmentItem()
+            return new EquipmentItem
             {
                 Name = values[0],
                 LevelRequirement = int.Parse(values[1]),
@@ -41,8 +45,8 @@ namespace ItemMigrator
                 Price = int.Parse(values[6]),
                 Health = int.Parse(values[7]),
                 Energy = int.Parse(values[8]),
-                MaxAttack = int.Parse(values[9]),
-                MinAttack = int.Parse(values[10]),
+                MinAttack = int.Parse(values[9]),
+                MaxAttack = int.Parse(values[10]),
                 AttackSpeed = int.Parse(values[11]),
                 Hitrate = int.Parse(values[12]),
                 Dodge = int.Parse(values[13]),
