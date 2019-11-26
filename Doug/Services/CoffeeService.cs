@@ -133,7 +133,7 @@ namespace Doug.Services
         {
             var participants = _coffeeRepository.GetReadyParticipants().ToList();
             var participantsId = participants.Select(user => user.Id).ToList();
-            var coffeeCup = _itemRepository.GetItem("coffee_bowl");
+            var coffeeCup = _itemRepository.GetItem("coffee_cup");
 
             _creditsRepository.AddCreditsToUsers(participantsId, CoffeeBreakAward);
             _inventoryRepository.AddItemToUsers(participants, coffeeCup);
