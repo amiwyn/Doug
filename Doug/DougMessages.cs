@@ -103,9 +103,13 @@
         public const string ItemIntelligence = "`Intelligence {0:+#;-#}`";
         public const string ItemConstitution = "`Constitution {0:+#;-#}`";
         public const string ItemLuck = "`Luck {0:+#;-#}`";
-        public const string AttackSpeed = "`Speed: {0:+#;-#}`";
-        public const string HealthRegen = "`HP regen: {0:+#;-#}`";
-        public const string EnergyRegen = "`Mp regen: {0:+#;-#}`";
+        public const string AttackSpeed = "`Speed {0:+#;-#}`";
+        public const string HealthRegen = "`HP regen {0:+#;-#}`";
+        public const string EnergyRegen = "`Mp regen {0:+#;-#}`";
+        public const string HealthFactor = "`Health {0:+#;-#}%`";
+        public const string EnergyFactor = "`Mana {0:+#;-#}%`";
+        public const string DefenseFactor = "`Defense {0:+#;-#}%`";
+        public const string CriticalFactor = "`Critrate {0:+#;-#}`";
         public const string ItemDualWield = "*Two Handed*";
         public const string ItemLeftHand = "*Left Handed*";
         public const string ItemRightHand = "*Right Handed*";

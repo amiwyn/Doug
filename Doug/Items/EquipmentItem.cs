@@ -38,6 +38,10 @@ namespace Doug.Items
         public int Intelligence { get; set; }
         public int HealthRegen { get; set; }
         public int EnergyRegen { get; set; }
+        public int HealthFactor { get; set; }
+        public int EnergyFactor { get; set; }
+        public int DefenseFactor { get; set; }
+        public int CriticalFactor { get; set; }
 
         public EquipmentItem()
         {
@@ -80,6 +84,10 @@ namespace Doug.Items
                 Math.Abs(AttackSpeed) <= 1 ? string.Empty : string.Format(DougMessages.AttackSpeed, AttackSpeed),
                 DisplayAttribute(DougMessages.HealthRegen, HealthRegen),
                 DisplayAttribute(DougMessages.EnergyRegen, EnergyRegen),
+                DisplayAttribute(DougMessages.HealthFactor, HealthFactor),
+                DisplayAttribute(DougMessages.EnergyFactor, EnergyFactor),
+                DisplayAttribute(DougMessages.DefenseFactor, DefenseFactor),
+                DisplayAttribute(DougMessages.CriticalFactor, CriticalFactor),
                 DisplayAttribute(DougMessages.ItemHitrate, Hitrate),
                 DisplayAttribute(DougMessages.ItemDodge, Dodge),
                 DisplayAttribute(DougMessages.ItemHealth, Health),

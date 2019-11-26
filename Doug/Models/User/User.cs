@@ -100,7 +100,7 @@ namespace Doug.Models.User
         public int TotalStrength() => Loadout.Sum(stat => stat.Strength) + Strength + Effects.Sum(userEffect => userEffect.Effect.Strength);
         public int TotalConstitution() => Loadout.Sum(stat => stat.Constitution) + Constitution + Effects.Sum(userEffect => userEffect.Effect.Constitution);
         public int TotalIntelligence() => Loadout.Sum(stat => stat.Intelligence) + Intelligence + Effects.Sum(userEffect => userEffect.Effect.Intelligence);
-        public int TotalDefense() => Loadout.Sum(stat => stat.Defense) + (int)Math.Floor(2.0 * TotalConstitution()) + Effects.Sum(userEffect => userEffect.Effect.Intelligence);
+        public int TotalDefense() => (int)Math.Ceiling((Loadout.Sum(stat => stat.Defense) + (int)Math.Floor(2.0 * TotalConstitution()) + Effects.Sum(userEffect => userEffect.Effect.Intelligence)) * (1 + Loadout.Sum(stat => stat.DefenseFactor) * 0.01));
         public int TotalDodge() => Loadout.Sum(stat => stat.Dodge) + TotalAgility() + Effects.Sum(userEffect => userEffect.Effect.Dodge);
         public int TotalHitrate() => Loadout.Sum(stat => stat.Hitrate) + TotalAgility() + Effects.Sum(userEffect => userEffect.Effect.Hitrate);
         public int MaxAttack() => Loadout.Sum(stat => stat.MaxAttack) + Attack + Effects.Sum(userEffect => userEffect.Effect.Attack);
@@ -151,7 +151,7 @@ namespace Doug.Models.User
             var healthFromLevel = (int)Math.Floor(15.0 * Level + 85);
             var healthFromConstitution = (int)Math.Floor(15.0 * TotalConstitution() - 75);
             var healthFromEffects = Effects.Sum(userEffect => userEffect.Effect.Health);
-            return healthFromLevel + healthFromConstitution + healthFromEffects + Loadout.Sum(stats => stats.Health);
+            return (int)Math.Ceiling((healthFromLevel + healthFromConstitution + healthFromEffects + Loadout.Sum(stats => stats.Health)) * (1 + Loadout.Sum(stat => stat.HealthFactor) * 0.01));
         }
 
         public int TotalEnergy()
@@ -159,7 +159,7 @@ namespace Doug.Models.User
             var energyFromLevel = (int)Math.Floor(5.0 * Level + 20);
             var energyFromIntelligence = (int)Math.Floor(5.0 * TotalIntelligence() - 25);
             var energyFromEffects = Effects.Sum(userEffect => userEffect.Effect.Energy);
-            return energyFromLevel + energyFromIntelligence + energyFromEffects + Loadout.Sum(stats => stats.Energy);
+            return (int)Math.Ceiling((energyFromLevel + energyFromIntelligence + energyFromEffects + Loadout.Sum(stats => stats.Energy)) * (1 + Loadout.Sum(stat => stat.EnergyFactor) * 0.01));
         }
 
         public double BaseGambleChance()
@@ -181,7 +181,7 @@ namespace Doug.Models.User
 
         public double CriticalHitChance()
         {
-            return Math.Sqrt(TotalLuck()) * 0.04;
+            return Math.Sqrt(TotalLuck()) * 0.04 + Loadout.Sum(stat => stat.CriticalFactor) * 0.01;
         }
 
         public void Dies()
