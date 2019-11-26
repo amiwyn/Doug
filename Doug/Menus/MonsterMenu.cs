@@ -13,7 +13,7 @@ namespace Doug.Menus
         public MonsterMenu(SpawnedMonster spawnedMonster)
         {
             var monster = spawnedMonster.Monster;
-            var monsterText = new MarkdownText($"*{monster.Name}* `lvl {monster.Level}` \n *{monster.Health}*/{monster.MaxHealth} \n {monster.Description}");
+            var monsterText = new MarkdownText($"*{monster.Name}* `lvl {monster.Level}` \n *{spawnedMonster.Health}*/{monster.Health} \n {monster.Description}");
             var monsterDescription = new Section(monsterText, new Image(monster.Image, monster.Name));
 
             Blocks = new List<Block>

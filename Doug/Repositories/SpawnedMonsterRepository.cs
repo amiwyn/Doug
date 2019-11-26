@@ -51,7 +51,7 @@ namespace Doug.Repositories
 
         public void SpawnMonster(Monster monster, string channel)
         {
-            _db.SpawnedMonsters.Add(new SpawnedMonster{ Health = monster.MaxHealth, MonsterId = monster.Id, Channel = channel });
+            _db.SpawnedMonsters.Add(new SpawnedMonster{ Health = monster.Health, MonsterId = monster.Id, Channel = channel });
             _db.SaveChanges();
         }
 
@@ -88,7 +88,6 @@ namespace Doug.Repositories
             }
 
             monster.Health = monsterHealth;
-            monster.Monster.Health = monsterHealth;
 
             _db.SaveChanges();
         }
