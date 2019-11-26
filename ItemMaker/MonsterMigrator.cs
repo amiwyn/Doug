@@ -20,6 +20,10 @@ namespace ItemMigrator
                 {
                     db.Monsters.Add(item);
                 }
+                else
+                {
+                    db.Entry(db.Monsters.Find(item.Id)).CurrentValues.SetValues(item);
+                }
             }
             db.SaveChanges();
         }
