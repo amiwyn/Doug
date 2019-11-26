@@ -30,6 +30,8 @@ namespace Doug.Repositories
             var monsters = _db.SpawnedMonsters
                 .Where(monsta => monsta.Channel == channel)
                 .Include(monsta => monsta.Monster)
+                .ThenInclude(monsta => monsta.DropTable)
+                .ThenInclude(droptable => droptable.Items)
                 .Include(monsta => monsta.MonsterAttackers)
                 .ThenInclude(attacker => attacker.User)
                 .ToList();
@@ -41,6 +43,8 @@ namespace Doug.Repositories
         {
             var monster = _db.SpawnedMonsters
                 .Include(monsta => monsta.Monster)
+                .ThenInclude(monsta => monsta.DropTable)
+                .ThenInclude(droptable => droptable.Items)
                 .Include(monsta => monsta.MonsterAttackers)
                 .ThenInclude(attacker => attacker.User)
                 .SingleOrDefault(monsta => monsta.Id == monsterId);
