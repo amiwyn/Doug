@@ -27,12 +27,12 @@ namespace Doug.Repositories
     public class CoffeeRepository : ICoffeeRepository
     {
         private readonly DougContext _db;
-        private readonly IItemFactory _itemFactory;
+        private readonly IEquipmentEffectFactory _equipmentEffectFactory;
 
-        public CoffeeRepository(DougContext dougContext, IItemFactory itemFactory)
+        public CoffeeRepository(DougContext dougContext, IEquipmentEffectFactory equipmentEffectFactory)
         {
             _db = dougContext;
-            _itemFactory = itemFactory;
+            _equipmentEffectFactory = equipmentEffectFactory;
         }
 
         public CoffeeBreak GetCoffeeBreak()
@@ -64,11 +64,34 @@ namespace Doug.Repositories
             var userIds = _db.Roster.Where(user => !user.IsSkipping && !user.IsReady).Select(user => user.Id).ToList();
 
             var users = _db.Users.Where(usr => userIds.Contains(usr.Id))
+                .Include(usr => usr.Effects)
                 .Include(usr => usr.InventoryItems)
+                .ThenInclude(itm => itm.Item)
                 .Include(usr => usr.Loadout)
+                .ThenInclude(itm => itm.Head)
+                .Include(usr => usr.Loadout)
+                .ThenInclude(itm => itm.Body)
+                .Include(usr => usr.Loadout)
+                .ThenInclude(itm => itm.Boots)
+                .Include(usr => usr.Loadout)
+                .ThenInclude(itm => itm.Gloves)
+                .Include(usr => usr.Loadout)
+                .ThenInclude(itm => itm.LeftHand)
+                .Include(usr => usr.Loadout)
+                .ThenInclude(itm => itm.RightHand)
+                .Include(usr => usr.Loadout)
+                .ThenInclude(itm => itm.Neck)
+                .Include(usr => usr.Loadout)
+                .ThenInclude(itm => itm.LeftRing)
+                .Include(usr => usr.Loadout)
+                .ThenInclude(itm => itm.RightRing)
+                .Include(usr => usr.Loadout)
+                .ThenInclude(itm => itm.Skillbook)
                 .ToList();
 
-            users.ForEach(user => user.LoadItems(_itemFactory));
+            users.ForEach(user => user.Effects = user.Effects.Where(effect => effect.EndTime >= DateTime.UtcNow).ToList());
+
+            users.ForEach(user => user.LoadItems(_equipmentEffectFactory));
             return users;
         }
 
@@ -77,11 +100,34 @@ namespace Doug.Repositories
             var userIds = _db.Roster.Where(user => !user.IsSkipping && user.IsReady).Select(user => user.Id).ToList();
 
             var users = _db.Users.Where(usr => userIds.Contains(usr.Id))
+                .Include(usr => usr.Effects)
                 .Include(usr => usr.InventoryItems)
+                .ThenInclude(itm => itm.Item)
                 .Include(usr => usr.Loadout)
+                .ThenInclude(itm => itm.Head)
+                .Include(usr => usr.Loadout)
+                .ThenInclude(itm => itm.Body)
+                .Include(usr => usr.Loadout)
+                .ThenInclude(itm => itm.Boots)
+                .Include(usr => usr.Loadout)
+                .ThenInclude(itm => itm.Gloves)
+                .Include(usr => usr.Loadout)
+                .ThenInclude(itm => itm.LeftHand)
+                .Include(usr => usr.Loadout)
+                .ThenInclude(itm => itm.RightHand)
+                .Include(usr => usr.Loadout)
+                .ThenInclude(itm => itm.Neck)
+                .Include(usr => usr.Loadout)
+                .ThenInclude(itm => itm.LeftRing)
+                .Include(usr => usr.Loadout)
+                .ThenInclude(itm => itm.RightRing)
+                .Include(usr => usr.Loadout)
+                .ThenInclude(itm => itm.Skillbook)
                 .ToList();
 
-            users.ForEach(user => user.LoadItems(_itemFactory));
+            users.ForEach(user => user.Effects = user.Effects.Where(effect => effect.EndTime >= DateTime.UtcNow).ToList());
+
+            users.ForEach(user => user.LoadItems(_equipmentEffectFactory));
             return users;
         }
 

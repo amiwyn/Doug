@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Doug.Items;
 using Doug.Models;
 using Doug.Models.User;
 using Doug.Repositories;
@@ -15,13 +14,13 @@ namespace Doug.Services
     public class CraftingService : ICraftingService
     {
         private readonly IRecipeRepository _recipeRepository;
-        private readonly IItemFactory _itemFactory;
+        private readonly IItemRepository _itemRepository;
         private readonly IInventoryRepository _inventoryRepository;
 
-        public CraftingService(IRecipeRepository recipeRepository, IItemFactory itemFactory, IInventoryRepository inventoryRepository)
+        public CraftingService(IRecipeRepository recipeRepository, IItemRepository itemRepository, IInventoryRepository inventoryRepository)
         {
             _recipeRepository = recipeRepository;
-            _itemFactory = itemFactory;
+            _itemRepository = itemRepository;
             _inventoryRepository = inventoryRepository;
         }
 
@@ -35,7 +34,7 @@ namespace Doug.Services
                 return new DougResponse(DougMessages.FailedCrafting);
             }
 
-            var result = _itemFactory.CreateItem(recipe.Result);
+            var result = _itemRepository.GetItem(recipe.Result);
 
             _inventoryRepository.RemoveItems(user, items.Select(item => item.InventoryPosition));
 

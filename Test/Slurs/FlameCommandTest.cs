@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Doug.Commands;
-using Doug.Items;
+using Doug.Effects;
 using Doug.Models;
 using Doug.Models.Slurs;
 using Doug.Models.User;

@@ -1,7 +1,5 @@
 using System.Collections.Generic;
 using Doug.Items;
-using Doug.Items.Equipment;
-using Doug.Models;
 using Doug.Models.User;
 using Doug.Repositories;
 using Doug.Services;
@@ -26,18 +24,19 @@ namespace Test.Government
         private readonly Mock<IInventoryRepository> _inventoryRepository = new Mock<IInventoryRepository>();
         private readonly Mock<IUserService> _userService = new Mock<IUserService>();
         private readonly Mock<IGovernmentRepository> _governmentRepository = new Mock<IGovernmentRepository>();
+        private readonly Mock<IItemRepository> _itemRepository = new Mock<IItemRepository>();
 
         [TestInitialize]
         public void Setup()
         {
             _governmentRepository.Setup(repo => repo.GetGovernment()).Returns(new Doug.Models.Government { Ruler = "wgf", RevolutionLeader = "gab"});
-            _oldRuler = new User { Id = "wgf", Loadout = new Loadout() {Head = "crown"}};
+            _oldRuler = new User { Id = "wgf", Loadout = new Loadout {Head = new EquipmentItem()}};
             _newRuler = new User();
 
             _userRepository.Setup(repo => repo.GetUser("wgf")).Returns(_oldRuler);
             _userRepository.Setup(repo => repo.GetUser("gab")).Returns(_newRuler);
 
-            _governmentService = new GovernmentService(_governmentRepository.Object, _slack.Object, _userService.Object, _userRepository.Object, _equipmentRepository.Object, _inventoryRepository.Object);
+            _governmentService = new GovernmentService(_governmentRepository.Object, _slack.Object, _userService.Object, _userRepository.Object, _equipmentRepository.Object, _inventoryRepository.Object, _itemRepository.Object);
         }
 
         [TestMethod]
@@ -59,7 +58,7 @@ namespace Test.Government
         [TestMethod]
         public void GivenRulerHasCrownEquipped_WhenRevolting_RulersCrownIsRemoved()
         {
-            _oldRuler = new User { Id = "wgf", Loadout = new Loadout() { Head = "crown" } };
+            _oldRuler = new User { Id = "wgf", Loadout = new Loadout() { Head = new EquipmentItem() { Id = "crown"}, HeadId = "crown"} };
             _userRepository.Setup(repo => repo.GetUser("wgf")).Returns(_oldRuler);
 
             _governmentService.Revolution(Channel);
@@ -70,7 +69,7 @@ namespace Test.Government
         [TestMethod]
         public void GivenRulerHasCrownNotEquipped_WhenRevolting_RulersCrownIsRemoved()
         {
-            var inventory = new List<InventoryItem> { new InventoryItem("wgf", "crown") { Item = new Crown() } };
+            var inventory = new List<InventoryItem> { new InventoryItem("wgf", "crown") { Item = new EquipmentItem() { Id = "crown" } } };
             _oldRuler = new User { Id = "wgf", Loadout = new Loadout(), InventoryItems = inventory};
             _userRepository.Setup(repo => repo.GetUser("wgf")).Returns(_oldRuler);
 
@@ -84,7 +83,7 @@ namespace Test.Government
         {
             _governmentService.Revolution(Channel);
 
-            _inventoryRepository.Verify(repo => repo.AddItem(_newRuler, It.IsAny<Crown>()));
+            _inventoryRepository.Verify(repo => repo.AddItem(_newRuler, It.IsAny<EquipmentItem>()));
         }
     }
 }

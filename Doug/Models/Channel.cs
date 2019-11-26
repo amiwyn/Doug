@@ -18,6 +18,7 @@ namespace Doug.Models
     {
         public string Id { get; set; }
         public string Type { get; set; }
+        public string Description { get; set; }
         public List<RegionMonster> Monsters { get; set; }
     }
 }

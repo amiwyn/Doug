@@ -1,8 +1,5 @@
 using System.Collections.Generic;
 using Doug.Items;
-using Doug.Items.Equipment;
-using Doug.Items.Tickets;
-using Doug.Models;
 using Doug.Models.User;
 using Doug.Repositories;
 using Doug.Services;
@@ -20,7 +17,7 @@ namespace Test.Shop
 
         private readonly Mock<IUserRepository> _userRepository = new Mock<IUserRepository>();
         private readonly Mock<IInventoryRepository>  _inventoryRepository = new Mock<IInventoryRepository>();
-        private readonly Mock<IItemFactory> _itemFactory = new Mock<IItemFactory>();
+        private readonly Mock<IItemRepository> _itemRepository = new Mock<IItemRepository>();
         private readonly Mock<IGovernmentService> _governmentService = new Mock<IGovernmentService>();
         private readonly Mock<ICreditsRepository> _creditsRepository = new Mock<ICreditsRepository>();
 
@@ -31,14 +28,14 @@ namespace Test.Shop
         {
             var items = new List<InventoryItem>()
             {
-                new InventoryItem("testuser", "testitem") { InventoryPosition = 4, Item = new LuckyCoin() },
-                new InventoryItem("testuser", "testitem") { InventoryPosition = 3, Item = new KickTicket(null, null, null, null) }
+                new InventoryItem("testuser", "testitem") { InventoryPosition = 4, Item = new Consumable() {Price = 1337 * 2} },
+                new InventoryItem("testuser", "testitem") { InventoryPosition = 3, Item = new EquipmentItem() }
             };
 
             _user = new User() { Id = "testuser", InventoryItems = items };
             _userRepository.Setup(repo => repo.GetUser(User)).Returns(_user);
 
-            _shopService = new ShopService(_inventoryRepository.Object, _itemFactory.Object, _governmentService.Object, _creditsRepository.Object);
+            _shopService = new ShopService(_inventoryRepository.Object, _itemRepository.Object, _governmentService.Object, _creditsRepository.Object);
         }
 
         [TestMethod]

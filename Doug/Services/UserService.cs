@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Doug.Effects;
 using Doug.Effects.Buffs;
-using Doug.Items;
-using Doug.Items.Lootboxes;
+using Doug.Models.Monsters;
 using Doug.Models.User;
-using Doug.Monsters;
 using Doug.Repositories;
 using Doug.Slack;
 
@@ -30,14 +29,18 @@ namespace Doug.Services
         private readonly IEventDispatcher _eventDispatcher;
         private readonly IEffectRepository _effectRepository;
         private readonly IInventoryRepository _inventoryRepository;
+        private readonly IItemRepository _itemRepository;
 
-        public UserService(ISlackWebApi slack, IStatsRepository statsRepository, IEventDispatcher eventDispatcher, IEffectRepository effectRepository, IInventoryRepository inventoryRepository)
+        private const string MysteryBoxId = "mystery_box";
+
+        public UserService(ISlackWebApi slack, IStatsRepository statsRepository, IEventDispatcher eventDispatcher, IEffectRepository effectRepository, IInventoryRepository inventoryRepository, IItemRepository itemRepository)
         {
             _slack = slack;
             _statsRepository = statsRepository;
             _eventDispatcher = eventDispatcher;
             _effectRepository = effectRepository;
             _inventoryRepository = inventoryRepository;
+            _itemRepository = itemRepository;
         }
 
         public string Mention(User user)
@@ -117,8 +120,9 @@ namespace Doug.Services
 
         private void LevelUpUsers(List<User> users)
         {
+            var mysteryBox = _itemRepository.GetItem(MysteryBoxId);
             _statsRepository.LevelUpUsers(users.Select(user => user.Id).ToList());
-            _inventoryRepository.AddItemToUsers(users, new MysteryBox());
+            _inventoryRepository.AddItemToUsers(users, mysteryBox);
         }
 
         public Task<bool> IsUserActive(string userId)

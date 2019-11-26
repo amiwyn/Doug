@@ -4,7 +4,7 @@ using System.Linq;
 using Doug.Effects;
 using Doug.Items;
 using Doug.Models.Combat;
-using Doug.Monsters;
+using Doug.Models.Monsters;
 
 namespace Doug.Models.User
 {
@@ -20,23 +20,6 @@ namespace Doug.Models.User
 
         public string Id { get; set; }
         public int Credits { get; set; }
-        public List<InventoryItem> InventoryItems { get; set; }
-        public List<UserEffect> Effects { get; set; }
-        public Loadout Loadout { get; set; }
-        public long Experience { get; set; }
-        public DateTime AttackCooldown { get; set; }
-        public DateTime SkillCooldown { get; set; }
-
-        public int Luck { get; set; }
-        public int Agility { get; set; }
-        public int Strength { get; set; }
-        public int Constitution { get; set; }
-        public int Intelligence { get; set; }
-
-        public int Level => (int)Math.Floor(Math.Sqrt(Experience) * 0.05 + 1);
-        public int TotalStatsPoints => (int)Math.Floor(Level + 5 * Math.Floor(Level * 0.1)) + 4;
-        public int FreeStatsPoints => TotalStatsPoints + 25 - (Luck + Agility + Strength + Constitution + Intelligence);
-        public int Attack => (int)Math.Floor(TotalStrength() * 2.5);
 
         public int Health
         {
@@ -80,6 +63,25 @@ namespace Doug.Models.User
             }
         }
 
+        public int Strength { get; set; }
+        public int Agility { get; set; }
+        public int Luck { get; set; }
+        public int Constitution { get; set; }
+        public int Intelligence { get; set; }
+
+
+        public long Experience { get; set; }
+        public List<InventoryItem> InventoryItems { get; set; }
+        public List<UserEffect> Effects { get; set; }
+        public Loadout Loadout { get; set; }
+        public DateTime AttackCooldown { get; set; }
+        public DateTime SkillCooldown { get; set; }
+
+        public int Level => (int)Math.Floor(Math.Sqrt(Experience) * 0.05 + 1);
+        public int TotalStatsPoints => (int)Math.Floor(Level + 5 * Math.Floor(Level * 0.1)) + 4;
+        public int FreeStatsPoints => TotalStatsPoints + 25 - (Luck + Agility + Strength + Constitution + Intelligence);
+        public int Attack => (int)Math.Floor(TotalStrength() * 2.5);
+
         public User()
         {
             InventoryItems = new List<InventoryItem>();
@@ -93,17 +95,22 @@ namespace Doug.Models.User
             Intelligence = 5;
         }
 
-        public int TotalLuck() => Loadout.Luck + Luck + Effects.Sum(userEffect => userEffect.Effect.Luck);
-        public int TotalAgility() => Loadout.Agility + Agility + Effects.Sum(userEffect => userEffect.Effect.Agility);
-        public int TotalStrength() => Loadout.Strength + Strength + Effects.Sum(userEffect => userEffect.Effect.Strength);
-        public int TotalConstitution() => Loadout.Constitution + Constitution + Effects.Sum(userEffect => userEffect.Effect.Constitution);
-        public int TotalIntelligence() => Loadout.Intelligence + Intelligence + Effects.Sum(userEffect => userEffect.Effect.Intelligence);
-        public int TotalDefense() => Loadout.Defense + (int)Math.Floor(2.0 * TotalConstitution()) + Effects.Sum(userEffect => userEffect.Effect.Intelligence);
-        public int TotalDodge() => Loadout.Dodge + TotalAgility() + Effects.Sum(userEffect => userEffect.Effect.Dodge);
-        public int TotalHitrate() => Loadout.Hitrate + TotalAgility() + Effects.Sum(userEffect => userEffect.Effect.Hitrate);
-        public int MaxAttack() => Loadout.MaxAttack + Attack + Effects.Sum(userEffect => userEffect.Effect.Attack);
-        public int MinAttack() => Loadout.MinAttack + Attack + Effects.Sum(userEffect => userEffect.Effect.Attack);
-        public int TotalAttackSpeed() => BaseAttackSpeed + Loadout.AttackSpeed + TotalAgility() / 2;
+        public int TotalLuck() => Loadout.Sum(stat => stat.Luck) + Luck + Effects.Sum(userEffect => userEffect.Effect.Luck);
+        public int TotalAgility() => Loadout.Sum(stat => stat.Agility) + Agility + Effects.Sum(userEffect => userEffect.Effect.Agility);
+        public int TotalStrength() => Loadout.Sum(stat => stat.Strength) + Strength + Effects.Sum(userEffect => userEffect.Effect.Strength);
+        public int TotalConstitution() => Loadout.Sum(stat => stat.Constitution) + Constitution + Effects.Sum(userEffect => userEffect.Effect.Constitution);
+        public int TotalIntelligence() => Loadout.Sum(stat => stat.Intelligence) + Intelligence + Effects.Sum(userEffect => userEffect.Effect.Intelligence);
+        public int TotalDefense() => (int)Math.Ceiling((Loadout.Sum(stat => stat.Defense) + (int)Math.Floor(2.0 * TotalConstitution()) + Effects.Sum(userEffect => userEffect.Effect.Intelligence)) * (1 + Loadout.Sum(stat => stat.DefenseFactor) * 0.01));
+        public int TotalDodge() => Loadout.Sum(stat => stat.Dodge) + TotalAgility() + Effects.Sum(userEffect => userEffect.Effect.Dodge);
+        public int TotalHitrate() => Loadout.Sum(stat => stat.Hitrate) + TotalAgility() + Effects.Sum(userEffect => userEffect.Effect.Hitrate);
+        public int MaxAttack() => Loadout.Sum(stat => stat.MaxAttack) + Attack + Effects.Sum(userEffect => userEffect.Effect.Attack);
+        public int MinAttack() => Loadout.Sum(stat => stat.MinAttack) + Attack + Effects.Sum(userEffect => userEffect.Effect.Attack);
+        public int TotalResistance() => Loadout.Sum(stats => stats.Resistance);
+        public int TotalAttackSpeed() => BaseAttackSpeed + Loadout.Sum(stat => stat.AttackSpeed) + TotalAgility() / 2;
+        public int TotalHealthRegen() => BaseHealthRegen + Loadout.Sum(stats => stats.HealthRegen);
+        public int TotalEnergyRegen() => BaseEnergyRegen + Loadout.Sum(stats => stats.EnergyRegen);
+
+
         public double BaseOpponentStealSuccessRate() => 0.75;
         public int BaseStealAmount() => (int)Math.Floor(3 * (Math.Sqrt(TotalAgility()) - Math.Sqrt(5)) + 1);
         public double BaseDetectionChance() => (Math.Sqrt(Math.Max((TotalIntelligence() - 5), 1)) * 0.08);
@@ -129,10 +136,10 @@ namespace Doug.Models.User
             Energy = TotalEnergy();
         }
 
-        public void LoadItems(IItemFactory itemFactory)
+        public void LoadItems(IEquipmentEffectFactory equipmentEffectFactory)
         {
-            InventoryItems.ForEach(item => item.CreateItem(itemFactory));
-            Loadout.CreateEquipment(itemFactory);
+            InventoryItems.ForEach(item => item.CreateItemEffects(equipmentEffectFactory));
+            Loadout.CreateEffects(equipmentEffectFactory);
         }
 
         public void LoadEffects(IEffectFactory effectFactory)
@@ -144,7 +151,7 @@ namespace Doug.Models.User
             var healthFromLevel = (int)Math.Floor(15.0 * Level + 85);
             var healthFromConstitution = (int)Math.Floor(15.0 * TotalConstitution() - 75);
             var healthFromEffects = Effects.Sum(userEffect => userEffect.Effect.Health);
-            return healthFromLevel + healthFromConstitution + healthFromEffects + Loadout.Health;
+            return (int)Math.Ceiling((healthFromLevel + healthFromConstitution + healthFromEffects + Loadout.Sum(stats => stats.Health)) * (1 + Loadout.Sum(stat => stat.HealthFactor) * 0.01));
         }
 
         public int TotalEnergy()
@@ -152,7 +159,7 @@ namespace Doug.Models.User
             var energyFromLevel = (int)Math.Floor(5.0 * Level + 20);
             var energyFromIntelligence = (int)Math.Floor(5.0 * TotalIntelligence() - 25);
             var energyFromEffects = Effects.Sum(userEffect => userEffect.Effect.Energy);
-            return energyFromLevel + energyFromIntelligence + energyFromEffects + Loadout.Energy;
+            return (int)Math.Ceiling((energyFromLevel + energyFromIntelligence + energyFromEffects + Loadout.Sum(stats => stats.Energy)) * (1 + Loadout.Sum(stat => stat.EnergyFactor) * 0.01));
         }
 
         public double BaseGambleChance()
@@ -174,7 +181,7 @@ namespace Doug.Models.User
 
         public double CriticalHitChance()
         {
-            return Math.Sqrt(TotalLuck()) * 0.04;
+            return Math.Sqrt(TotalLuck()) * 0.04 + Loadout.Sum(stat => stat.CriticalFactor) * 0.01;
         }
 
         public void Dies()
@@ -238,7 +245,7 @@ namespace Doug.Models.User
                 return attack;
             }
 
-            var reducedDamage = attack.Damage - (int)Math.Ceiling(attack.Damage * Loadout.Resistance * 0.01 + TotalDefense());
+            var reducedDamage = attack.Damage - (int)Math.Ceiling(attack.Damage * TotalResistance() * 0.01 + TotalDefense());
             reducedDamage = reducedDamage <= 0 ? 1 : reducedDamage;
 
             attack.Damage = reducedDamage;
@@ -259,8 +266,8 @@ namespace Doug.Models.User
 
         public void RegenerateHealthAndEnergy()
         {
-            Health += (int)Math.Ceiling(TotalHealth() * (BaseHealthRegen + Loadout.HealthRegen) * 0.01);
-            Energy += (int)Math.Ceiling(TotalEnergy() * (BaseEnergyRegen + Loadout.EnergyRegen) * 0.01);
+            Health += (int)Math.Ceiling(TotalHealth() * TotalHealthRegen() * 0.01);
+            Energy += (int)Math.Ceiling(TotalEnergy() * TotalEnergyRegen() * 0.01);
         }
 
         public int CalculateExperienceGainedFromMonster(Monster monster, int partyMemberCount)
@@ -274,6 +281,15 @@ namespace Doug.Models.User
         public void ReceiveExpFromMonster(Monster monster, int partyMemberCount)
         {
             Experience += CalculateExperienceGainedFromMonster(monster, partyMemberCount);
+        }
+
+        public void ResetStats()
+        {
+            Luck = 5;
+            Agility = 5;
+            Strength = 5;
+            Constitution = 5;
+            Intelligence = 5;
         }
     }
 }

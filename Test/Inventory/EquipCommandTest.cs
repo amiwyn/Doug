@@ -1,8 +1,6 @@
 using System.Collections.Generic;
 using Doug.Commands;
 using Doug.Items;
-using Doug.Items.Consumables;
-using Doug.Items.Equipment;
 using Doug.Models;
 using Doug.Models.User;
 using Doug.Repositories;
@@ -31,23 +29,24 @@ namespace Test.Inventory
 
         private readonly Mock<IUserRepository> _userRepository = new Mock<IUserRepository>();
         private readonly Mock<ISlackWebApi> _slack = new Mock<ISlackWebApi>();
-        private readonly Mock<IStatsRepository> _statsRepository = new Mock<IStatsRepository>();
         private readonly Mock<IInventoryRepository> _inventoryRepository = new Mock<IInventoryRepository>();
         private readonly Mock<IEquipmentRepository> _equipmentRepository = new Mock<IEquipmentRepository>();
         private readonly Mock<IUserService> _userService = new Mock<IUserService>();
+        private readonly Mock<IActionFactory> _actionFactory = new Mock<IActionFactory>();
+        private readonly Mock<ITargetActionFactory> _targetActionFactory = new Mock<ITargetActionFactory>();
 
         private EquipmentItem _item;
 
         [TestInitialize]
         public void Setup()
         {
-            _item = new AwakeningOrb(_slack.Object, _userService.Object);
+            _item = new EquipmentItem();
             var loadout = new Loadout();
             var items = new List<InventoryItem>() { new InventoryItem("testuser", "testitem") { InventoryPosition = 6, Item = _item } };
             _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User { Id = "testuser", Experience = 35000, InventoryItems = items, Loadout = loadout });
             _equipmentRepository.Setup(repo => repo.EquipItem(It.IsAny<User>(), It.IsAny<EquipmentItem>())).Returns(new List<EquipmentItem>());
 
-            _inventoryCommands = new InventoryCommands(_userRepository.Object, _slack.Object, _inventoryRepository.Object, _equipmentRepository.Object, _userService.Object);
+            _inventoryCommands = new InventoryCommands(_userRepository.Object, _slack.Object, _inventoryRepository.Object, _equipmentRepository.Object, _userService.Object, _actionFactory.Object, _targetActionFactory.Object);
         }
 
         [TestMethod]
@@ -79,7 +78,7 @@ namespace Test.Inventory
         [TestMethod]
         public void GivenItemIsNotEquipAble_WhenEquipping_NotEquipAbleMessageSent()
         {
-            var items = new List<InventoryItem>() { new InventoryItem("testuser", "testitem") { InventoryPosition = 6, Item = new Apple(_statsRepository.Object, _inventoryRepository.Object) } };
+            var items = new List<InventoryItem>() { new InventoryItem("testuser", "testitem") { InventoryPosition = 6, Item = new Consumable() } };
             _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User() { Id = "testuser", InventoryItems = items });
 
             var result = _inventoryCommands.Equip(_command);
@@ -90,7 +89,7 @@ namespace Test.Inventory
         [TestMethod]
         public void GivenItemLevelIsTooHigh_WhenEquipping_ItemLevelTooHighMessageSent()
         {
-            var items = new List<InventoryItem>() { new InventoryItem("testuser", "testitem") { InventoryPosition = 6, Item = new CloakOfSpikes() } };
+            var items = new List<InventoryItem>() { new InventoryItem("testuser", "testitem") { InventoryPosition = 6, Item = new EquipmentItem { LevelRequirement = 69 } } };
             _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User() { Id = "testuser", InventoryItems = items });
 
             var result = _inventoryCommands.Equip(_command);

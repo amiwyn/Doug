@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 using Doug.Commands;
 using Doug.Effects;
 using Doug.Items;
-using Doug.Monsters;
 using Doug.Repositories;
 using Doug.Services;
 using Doug.Services.MenuServices;
+using Doug.Skills;
 using Doug.Slack;
 using Hangfire;
 using Hangfire.SQLite;
@@ -86,9 +86,11 @@ namespace Doug
         {
             services.AddScoped<ISlackWebApi, SlackWebApi>();
             services.AddScoped<IEventDispatcher, EventDispatcher>();
-            services.AddScoped<IItemFactory, ItemFactory>();
             services.AddScoped<IEffectFactory, EffectFactory>();
-            services.AddScoped<IMonsterFactory, MonsterFactory>();
+            services.AddScoped<ISkillFactory, SkillFactory>();
+            services.AddScoped<IEquipmentEffectFactory, EquipmentEffectFactory>();
+            services.AddScoped<IActionFactory, ActionFactory>();
+            services.AddScoped<ITargetActionFactory, TargetActionFactory>();
 
             services.AddScoped<IEventService, EventService>();
             services.AddScoped<IAuthorizationService, AuthorizationService>();
@@ -107,6 +109,7 @@ namespace Doug
             services.AddScoped<IPartyService, PartyService>();
             services.AddScoped<ICraftingMenuService, CraftingMenuService>();
             services.AddScoped<ICraftingService, CraftingService>();
+            services.AddScoped<ISkillService, SkillService>();
 
             services.AddScoped<ICoffeeCommands, CoffeeCommands>();
             services.AddScoped<ISlursCommands, SlursCommands>();
@@ -126,10 +129,12 @@ namespace Doug
             services.AddScoped<IEffectRepository, EffectRepository>();
             services.AddScoped<IGovernmentRepository, GovernmentRepository>();
             services.AddScoped<IShopRepository, ShopRepository>();
-            services.AddScoped<IMonsterRepository, MonsterRepository>();
+            services.AddScoped<ISpawnedMonsterRepository, SpawnedMonsterRepository>();
             services.AddScoped<ICreditsRepository, CreditsRepository>();
             services.AddScoped<IPartyRepository, PartyRepository>();
             services.AddScoped<IRecipeRepository, RecipeRepository>();
+            services.AddScoped<IItemRepository, ItemRepository>();
+            services.AddScoped<IMonsterRepository, MonsterRepository>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

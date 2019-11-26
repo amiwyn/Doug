@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Doug;
-using Doug.Items;
+using Doug.Effects;
 using Doug.Models;
 using Doug.Models.User;
 using Doug.Repositories;
@@ -27,7 +27,7 @@ namespace Test.Combat
         private readonly Mock<IStatsRepository> _statsRepository = new Mock<IStatsRepository>();
         private readonly Mock<IUserService> _userService = new Mock<IUserService>();
         private readonly Mock<IChannelRepository> _channelRepository = new Mock<IChannelRepository>();
-        private readonly Mock<IMonsterRepository> _monsterRepository = new Mock<IMonsterRepository>();
+        private readonly Mock<ISpawnedMonsterRepository> _monsterRepository = new Mock<ISpawnedMonsterRepository>();
         private readonly Mock<IMonsterService> _monsterService = new Mock<IMonsterService>();
 
         [TestInitialize]

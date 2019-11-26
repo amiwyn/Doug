@@ -8,8 +8,9 @@ using Doug.Repositories;
 
 namespace Doug.Skills
 {
-    public abstract class Skill
+    public class Skill
     {
+        public string Id { get; set; }
         public string Name { get; set; }
         public int EnergyCost { get; set; }
         public int Cooldown { get; set; }
@@ -17,7 +18,7 @@ namespace Doug.Skills
 
         protected readonly IStatsRepository StatsRepository;
 
-        protected Skill(IStatsRepository statsRepository)
+        public Skill(IStatsRepository statsRepository)
         {
             StatsRepository = statsRepository;
             RequiredWeapon = typeof(Weapon);

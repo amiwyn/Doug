@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using Doug.Items;
 using Doug.Models;
 using Doug.Models.User;
 using Doug.Repositories;
@@ -15,14 +14,14 @@ namespace Doug.Services
     public class ShopService : IShopService
     {
         private readonly IInventoryRepository _inventoryRepository;
-        private readonly IItemFactory _itemFactory;
+        private readonly IItemRepository _itemRepository;
         private readonly IGovernmentService _governmentService;
         private readonly ICreditsRepository _creditsRepository;
 
-        public ShopService(IInventoryRepository inventoryRepository, IItemFactory itemFactory, IGovernmentService governmentService, ICreditsRepository creditsRepository)
+        public ShopService(IInventoryRepository inventoryRepository, IItemRepository itemRepository, IGovernmentService governmentService, ICreditsRepository creditsRepository)
         {
             _inventoryRepository = inventoryRepository;
-            _itemFactory = itemFactory;
+            _itemRepository = itemRepository;
             _governmentService = governmentService;
             _creditsRepository = creditsRepository;
         }
@@ -30,7 +29,7 @@ namespace Doug.Services
 
         public DougResponse Buy(User user, string itemId)
         {
-            var item = _itemFactory.CreateItem(itemId);
+            var item = _itemRepository.GetItem(itemId);
 
             var price = _governmentService.GetPriceWithTaxes(item);
 

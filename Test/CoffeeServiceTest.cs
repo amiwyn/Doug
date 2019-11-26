@@ -6,7 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
 using System.Collections.Generic;
-using Doug.Items.Consumables;
+using Doug.Items;
 using Doug.Models.Coffee;
 using Doug.Models.User;
 
@@ -26,8 +26,8 @@ namespace Test
         private readonly Mock<IUserRepository> _userRepository = new Mock<IUserRepository>();
         private readonly Mock<IInventoryRepository> _inventoryRepository = new Mock<IInventoryRepository>();
         private readonly Mock<IUserService> _userService = new Mock<IUserService>();
-        private readonly Mock<IStatsRepository> _statsRepository = new Mock<IStatsRepository>();
         private readonly Mock<ICreditsRepository> _creditsRepository = new Mock<ICreditsRepository>();
+        private readonly Mock<IItemRepository> _itemRepository = new Mock<IItemRepository>();
 
         private DateTime _rightTime = new DateTime(1, 1, 1, 14, 0, 0);
         private readonly DateTime _wrongTime = new DateTime(1, 1, 1, 1, 0, 0);
@@ -41,7 +41,7 @@ namespace Test
 
             _coffeeRepository.Setup(repo => repo.GetCoffeeBreak()).Returns(new CoffeeBreak());
             _userRepository.Setup(repo => repo.GetUser(It.IsAny<string>())).Returns(new User());
-            _coffeeService = new CoffeeService(_slack.Object, _coffeeRepository.Object, _backgroundJobClient.Object, _inventoryRepository.Object, _userService.Object, _statsRepository.Object, _creditsRepository.Object);
+            _coffeeService = new CoffeeService(_slack.Object, _coffeeRepository.Object, _backgroundJobClient.Object, _inventoryRepository.Object, _userService.Object, _creditsRepository.Object, _itemRepository.Object);
         }
 
         [TestMethod]
@@ -134,7 +134,7 @@ namespace Test
 
             _coffeeService.EndCoffee(Channel);
 
-            _inventoryRepository.Verify(repo => repo.AddItemToUsers(It.IsAny<List<User>>(), It.IsAny<CoffeeCup>()));
+            _inventoryRepository.Verify(repo => repo.AddItemToUsers(It.IsAny<List<User>>(), It.IsAny<Item>()));
         }
 
         [TestMethod]

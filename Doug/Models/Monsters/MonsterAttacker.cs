@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
-using Doug.Monsters;
 
 namespace Doug.Models.Monsters
 {

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Doug.Models.Monsters;
 using Doug.Models.User;
-using Doug.Monsters;
 
 namespace Doug.Repositories
 {
@@ -15,6 +15,7 @@ namespace Doug.Repositories
         void LevelUpUsers(List<string> userIds);
         void AttributeStatPoint(string userId, string stat);
         void FreeStatPoint(string userId, string stat);
+        void ResetStats(string userId);
         void KillUser(string userId);
         void SetAttackCooldown(string userId, TimeSpan cooldown);
         void SetSkillCooldown(string userId, TimeSpan cooldown);
@@ -91,6 +92,13 @@ namespace Doug.Repositories
 
             EditStatPoint(user, stat, -1);
 
+            _db.SaveChanges();
+        }
+
+        public void ResetStats(string userId)
+        {
+            var user = _db.Users.Single(usr => usr.Id == userId);
+            user.ResetStats();
             _db.SaveChanges();
         }
 

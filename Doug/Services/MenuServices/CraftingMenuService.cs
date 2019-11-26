@@ -1,9 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Doug.Controllers;
 using Doug.Menus;
-using Doug.Models;
 using Doug.Repositories;
 using Doug.Slack;
 

@@ -1,8 +1,8 @@
 ﻿namespace Doug.Items.WeaponType
 {
-    public abstract class Staff : Weapon
+    public class Staff : Weapon
     {
-        protected Staff()
+        public Staff()
         {
             IsDualWield = true;
             Slot = EquipmentSlot.RightHand;

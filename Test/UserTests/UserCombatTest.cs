@@ -1,4 +1,4 @@
-using Doug.Items;
+using Doug.Effects;
 using Doug.Models.Combat;
 using Doug.Models.User;
 using Microsoft.VisualStudio.TestTools.UnitTesting;

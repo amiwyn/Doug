@@ -51,7 +51,8 @@
         public const string StealCreditsCaught = "{0} stole {1} " + CreditEmoji + " from {2}!";
         public const string StealFail = "You attempted to steal from {0}, but failed.";
         public const string StealFailCaught = "{0} attempted to steal from {1} but failed!";
-        public const string RecoverItem = "You used {0} and recovered {1} {2}.";
+        public const string RecoverItem = "You consumed {0} and recovered {1}.";
+        public const string RecoverItemNothing = "You consumed {0}.";
         public const string UserGaveItem = "{0} gave {1} to {2}.";
         public const string ConsumedItem = "You consumed the item.";
         public const string LevelUp = ":confetti_ball: {0} is now level *{1}*!";
@@ -102,9 +103,13 @@
         public const string ItemIntelligence = "`Intelligence {0:+#;-#}`";
         public const string ItemConstitution = "`Constitution {0:+#;-#}`";
         public const string ItemLuck = "`Luck {0:+#;-#}`";
-        public const string AttackSpeed = "`Speed: {0:+#;-#}`";
-        public const string HealthRegen = "`HP regen: {0:+#;-#}`";
-        public const string EnergyRegen = "`Mp regen: {0:+#;-#}`";
+        public const string AttackSpeed = "`Speed {0:+#;-#}`";
+        public const string HealthRegen = "`HP regen {0:+#;-#}`";
+        public const string EnergyRegen = "`Mp regen {0:+#;-#}`";
+        public const string HealthFactor = "`Health {0:+#;-#}%`";
+        public const string EnergyFactor = "`Mana {0:+#;-#}%`";
+        public const string DefenseFactor = "`Defense {0:+#;-#}%`";
+        public const string CriticalFactor = "`Critrate {0:+#;-#}`";
         public const string ItemDualWield = "*Two Handed*";
         public const string ItemLeftHand = "*Left Handed*";
         public const string ItemRightHand = "*Right Handed*";
