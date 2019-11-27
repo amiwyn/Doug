@@ -66,6 +66,19 @@ namespace Doug.Models.User
                    + stat(RightRing ?? new EquipmentItem());
         }
 
+        public double SumDoubles(Func<EquipmentItem, double> stat)
+        {
+            return stat(Head ?? new EquipmentItem())
+                  + stat(Body ?? new EquipmentItem())
+                  + stat(Boots ?? new EquipmentItem())
+                  + stat(Gloves ?? new EquipmentItem())
+                  + stat(LeftHand ?? new EquipmentItem())
+                  + stat(RightHand ?? new EquipmentItem())
+                  + stat(Neck ?? new EquipmentItem())
+                  + stat(LeftRing ?? new EquipmentItem())
+                  + stat(RightRing ?? new EquipmentItem());
+        }
+
         public List<EquipmentItem> Equip(EquipmentItem item)
         {
             var unequippedItems = new List<EquipmentItem>();

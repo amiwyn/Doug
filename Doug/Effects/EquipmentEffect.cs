@@ -62,5 +62,10 @@ namespace Doug.Effects
         {
             return damage;
         }
+
+        public virtual int OnCriticalHit(User attacker, ICombatable target, int damage, string channel)
+        {
+            return damage;
+        }
     }
 }

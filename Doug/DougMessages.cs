@@ -109,7 +109,8 @@
         public const string HealthFactor = "`Health {0:+#;-#}%`";
         public const string EnergyFactor = "`Mana {0:+#;-#}%`";
         public const string DefenseFactor = "`Defense {0:+#;-#}%`";
-        public const string CriticalFactor = "`Critrate {0:+#;-#}`";
+        public const string CriticalHitChanceFactor = "`Critrate {0:+#;-#}`";
+        public const string CriticalDamageFactor = "`Crit multi {0:+#;-#}`";
         public const string ItemDualWield = "*Two Handed*";
         public const string ItemLeftHand = "*Left Handed*";
         public const string ItemRightHand = "*Right Handed*";
@@ -127,6 +128,7 @@
         public const string Luck = "Luck";
         public const string Int = "Int";
         public const string UserHealed = "{0} healed {1} for *{2}* health";
+        public const string UserBuffed = "{0} applied *{1}* to {2} for *{3} minutes*.";
         public const string UserActivatedSkill = "{0} cast *{1}*";
         public const string Accept = "Accept";
         public const string Reject = "Reject";
@@ -157,6 +159,7 @@
         public const string NoEquipmentInSlot = "No equipment in slot {0}";
         public const string NotInRightChannel = "You cannot perform this action in this channel.";
         public const string UserIsNotInPvp = "The target user is not in the pvp channel.";
+        public const string UserNotInChannel = "The target user is not here.";
         public const string ItemNotTradable = "This item is not tradable.";
         public const string EmptyInventory = "Oops, yer loot seems empty, buy more at th' shop now.";
         public const string LevelRequirementNotMet = "You do not meet the level requirements to equip this item.";
