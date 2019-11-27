@@ -4,14 +4,16 @@ using Doug;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Doug.Migrations
 {
     [DbContext(typeof(DougContext))]
-    partial class DougContextModelSnapshot : ModelSnapshot
+    [Migration("20191127222534_Add_Stats_To_Item")]
+    partial class Add_Stats_To_Item
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -226,7 +228,7 @@ namespace Doug.Migrations
 
                     b.HasKey("UserId", "SpawnedMonsterId");
 
-                    b.HasAlternateKey("SpawnedMonsterId", "UserId");
+                    b.HasIndex("SpawnedMonsterId");
 
                     b.HasIndex("UserId")
                         .IsUnique();

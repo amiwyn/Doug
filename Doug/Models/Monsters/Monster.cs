@@ -32,11 +32,6 @@ namespace Doug.Models.Monsters
             AttackCooldown = 30;
         }
 
-        public bool IsDead()
-        {
-            return Health <= 0;
-        }
-
         public TimeSpan GetAttackCooldown()
         {
             return TimeSpan.FromSeconds(AttackCooldown);
