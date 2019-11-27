@@ -108,8 +108,8 @@ namespace Doug.Models.User
         public int MinAttack() => Loadout.Sum(stat => stat.MinAttack) + Attack + Effects.Sum(userEffect => userEffect.Effect.Attack);
         public int TotalResistance() => Loadout.Sum(stats => stats.Resistance);
         public int TotalAttackSpeed() => BaseAttackSpeed + Loadout.Sum(stat => stat.AttackSpeed) + TotalAgility() / 2;
-        public int TotalHealthRegen() => BaseHealthRegen + Loadout.Sum(stats => stats.HealthRegen);
-        public int TotalEnergyRegen() => BaseEnergyRegen + Loadout.Sum(stats => stats.EnergyRegen) + Effects.Sum(userEffect => userEffect.Effect.EnergyRegen);
+        public int TotalHealthRegen() => BaseHealthRegen + TotalStrength() + Loadout.Sum(stats => stats.HealthRegen);
+        public int TotalEnergyRegen() => BaseEnergyRegen + (TotalIntelligence() / 2) + Loadout.Sum(stats => stats.EnergyRegen) + Effects.Sum(userEffect => userEffect.Effect.EnergyRegen);
 
 
         public double BaseOpponentStealSuccessRate() => 0.75;
