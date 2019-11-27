@@ -119,7 +119,7 @@ namespace Doug.Services
 
             _spawnedMonsterRepository.RegisterUserDamage(spawnedMonster.Id, user.Id, attack.Damage, spawnedMonster.Health);
 
-            if (monster.IsDead())
+            if (spawnedMonster.IsDead())
             {
                 await _monsterService.HandleMonsterDeathByUser(user, spawnedMonster, channel);
             }

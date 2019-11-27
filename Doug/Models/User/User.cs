@@ -146,6 +146,7 @@ namespace Doug.Models.User
         {
             Effects.ForEach(effect => effect.CreateEffect(effectFactory));
         }
+
         public int TotalHealth()
         {
             var healthFromLevel = (int)Math.Floor(15.0 * Level + 85);

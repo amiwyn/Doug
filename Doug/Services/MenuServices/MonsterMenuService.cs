@@ -66,7 +66,7 @@ namespace Doug.Services.MenuServices
 
         private async Task UpdateMonsterAttackBlocks(SpawnedMonster spawnedMonster, string url)
         {
-            if (spawnedMonster.Monster.IsDead())
+            if (spawnedMonster.IsDead())
             {
                 await _slack.DeleteInteractionMessage(url);
             }
