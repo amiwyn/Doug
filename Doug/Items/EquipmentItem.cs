@@ -30,6 +30,7 @@ namespace Doug.Items
         public int Dodge { get; set; }
         public int Hitrate { get; set; }
         public int AttackSpeed { get; set; }
+        public int CooldownReduction { get; set; }
         public int Pierce { get; set; }
         public int Resistance { get; set; }
         public int Luck { get; set; }
@@ -38,7 +39,9 @@ namespace Doug.Items
         public int Constitution { get; set; }
         public int Intelligence { get; set; }
         public int HealthRegen { get; set; }
+        public int FlatHealthRegen { get; set; }
         public int EnergyRegen { get; set; }
+        public int FlatEnergyRegen { get; set; }
 
         public double LuckFactor { get; set; }
         public double AgilityFactor { get; set; }

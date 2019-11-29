@@ -26,7 +26,10 @@ namespace Doug.Effects
         public int Strength { get; set; }
         public int Constitution { get; set; }
         public int Intelligence { get; set; }
+        public int HealthRegen { get; set; }
+        public int FlatHealthRegen { get; set; }
         public int EnergyRegen { get; set; }
+        public int FlatEnergyRegen { get; set; }
 
         public int LuckFactor { get; set; }
         public int AgilityFactor { get; set; }
@@ -36,6 +39,7 @@ namespace Doug.Effects
         public int DefenseFactor { get; set; }
         public int HitrateFactor { get; set; }
         public int CritChanceFactor { get; set; }
+        public int CritDamageFactor { get; set; }
         public int PierceFactor { get; set; }
 
         public virtual bool IsBuff()

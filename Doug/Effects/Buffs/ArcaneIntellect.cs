@@ -12,7 +12,7 @@
             Rank = Rank.Enchanted;
             Icon = ":blue_book:";
 
-            EnergyRegen = 6;
+            FlatEnergyRegen = 6;
         }
     }
 }

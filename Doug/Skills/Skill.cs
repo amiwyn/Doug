@@ -31,6 +31,7 @@ namespace Doug.Skills
 
         protected virtual bool CanActivateSkill(User user, ICombatable target, string channel, out DougResponse response)
         {
+            var totalCooldown = Cooldown * (1 - user.CooldownReduction())
             if (!user.HasWeaponType(RequiredWeapon))
             {
                 response = new DougResponse(string.Format(DougMessages.WrongWeaponForSkill, RequiredWeapon.Name));

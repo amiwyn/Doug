@@ -108,8 +108,11 @@ namespace Doug.Models.User
         public int MinAttack() => Loadout.Sum(stat => stat.MinAttack) + Attack + Effects.Sum(userEffect => userEffect.Effect.Attack);
         public int TotalResistance() => Loadout.Sum(stats => stats.Resistance);
         public int TotalAttackSpeed() => BaseAttackSpeed + Loadout.Sum(stat => stat.AttackSpeed) + TotalAgility() / 2;
-        public int TotalHealthRegen() => BaseHealthRegen + TotalStrength() + Loadout.Sum(stats => stats.HealthRegen);
-        public int TotalEnergyRegen() => BaseEnergyRegen + (TotalIntelligence() / 2) + Loadout.Sum(stats => stats.EnergyRegen) + Effects.Sum(userEffect => userEffect.Effect.EnergyRegen);
+        public double CooldownReduction() => ( ((21 * TotalIntelligence()) / (TotalIntelligence() + 12)) + Loadout.Sum(stat => stat.CooldownReduction) ) * 0.01;
+        public int TotalHealthRegen() => BaseHealthRegen + Loadout.Sum(stats => stats.HealthRegen);
+        public int TotalFlatHealthRegen() => TotalStrength() + Loadout.Sum(stats => stats.FlatHealthRegen) + Effects.Sum(userEffect => userEffect.Effect.FlatHealthRegen);
+        public int TotalEnergyRegen() => BaseEnergyRegen + Loadout.Sum(stats => stats.EnergyRegen) + Effects.Sum(userEffect => userEffect.Effect.EnergyRegen);
+        public int TotalFlatEnergyRegen() => (TotalIntelligence() / 2) + Loadout.Sum(stats => stats.FlatEnergyRegen) + Effects.Sum(userEffect => userEffect.Effect.FlatEnergyRegen);
 
 
         public double BaseOpponentStealSuccessRate() => 0.75;
@@ -183,12 +186,12 @@ namespace Doug.Models.User
 
         public double CriticalHitChance()
         {
-            return Math.Sqrt(TotalLuck()) * 0.04 + Loadout.Sum(stat => stat.CriticalHitChanceFactor) * 0.01;
+            return (Math.Sqrt(TotalLuck()) * 0.04 + Loadout.Sum(stat => stat.CriticalHitChanceFactor) + Effects.Sum(userEffect => userEffect.Effect.CritChanceFactor)) * 0.01;
         }
 
         public double CriticalDamageFactor()
         {
-            return Math.Min(1, (TotalLuck() * 0.02 + 1.9) + Loadout.Sum(stat => stat.CriticalDamageFactor));
+            return Math.Min(1, (TotalLuck() * 0.02 + 1.9) + Loadout.Sum(stat => stat.CriticalDamageFactor) + Effects.Sum(userEffect => userEffect.Effect.CritDamageFactor));
         }
 
         public void Dies()
@@ -217,7 +220,7 @@ namespace Doug.Models.User
 
         public Attack AttackTarget(ICombatable target, IEventDispatcher eventDispatcher)
         {
-            Attack attack = new PhysicalAttack(this, MinAttack(), MaxAttack(), TotalHitrate(), CriticalHitChance());
+            Attack attack = new PhysicalAttack(this, MinAttack(), MaxAttack(), TotalHitrate(), CriticalHitChance(), CriticalDamageFactor(), Pierce());
 
             attack.Damage = eventDispatcher.OnAttacking(this, target, attack.Damage);
 
@@ -252,13 +255,14 @@ namespace Doug.Models.User
                 return attack;
             }
 
-            var reducedDamage = attack.Damage - (int)Math.Ceiling(attack.Damage * TotalResistance() * 0.01 + TotalDefense());
+            var totalPierce = TotalDefense() * attack.Pierce * 0.011;
+            var reducedDamage = attack.Damage - (int)Math.Ceiling(attack.Damage * TotalResistance() * 0.01 + TotalDefense() - totalPierce);
             reducedDamage = reducedDamage <= 0 ? 1 : reducedDamage;
 
             attack.Damage = reducedDamage;
             if (attack.Status == AttackStatus.Critical)
             {
-                attack.Damage *= 2;
+                attack.Damage = (int)(Math.Ceiling(attack.Damage * attack.CriticalFactor));
             }
 
             Health -= attack.Damage;
@@ -268,13 +272,14 @@ namespace Doug.Models.User
 
         private void ApplyMagicalDamage(int damage)
         {
-            Health -= damage;
+            var reducedDamage = damage - (int)Math.Ceiling(damage * TotalResistance() * 0.01);
+            Health -= reducedDamage;
         }
 
         public void RegenerateHealthAndEnergy()
         {
-            Health += (int)Math.Ceiling(TotalHealth() * TotalHealthRegen() * 0.01);
-            Energy += (int)Math.Ceiling(TotalEnergy() * TotalEnergyRegen() * 0.01);
+            Health += (int)Math.Ceiling(TotalHealth() * TotalHealthRegen() * 0.01) + TotalFlatHealthRegen();
+            Energy += (int)Math.Ceiling(TotalEnergy() * TotalEnergyRegen() * 0.01) + TotalFlatEnergyRegen();
         }
 
         public int CalculateExperienceGainedFromMonster(Monster monster, int partyMemberCount)

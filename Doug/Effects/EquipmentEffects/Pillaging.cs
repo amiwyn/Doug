@@ -6,13 +6,13 @@ using System;
 
 namespace Doug.Effects.EquipmentEffects
 {
-    public class Thievery : EquipmentEffect
+    public class Pillaging : EquipmentEffect
     {
         private readonly ICreditsRepository _creditsRepository;
         private readonly ISlackWebApi _slack;
         public const string EffectId = "thievery";
 
-        public Thievery(ICreditsRepository creditsRepository, ISlackWebApi slack)
+        public Pillaging(ICreditsRepository creditsRepository, ISlackWebApi slack)
         {
             _creditsRepository = creditsRepository;
             _slack = slack;
