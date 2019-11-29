@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Doug.Effects;
 using Doug.Models.Combat;
+using Doug.Skills.Utility;
 
 namespace Doug.Models.Monsters
 {
@@ -23,6 +24,11 @@ namespace Doug.Models.Monsters
         public bool IsAttackOnCooldown()
         {
             return DateTime.UtcNow <= AttackCooldown;
+        }
+
+        public bool IsDead()
+        {
+            return Health <= 0;
         }
 
         public Attack AttackTarget(ICombatable target, IEventDispatcher eventDispatcher)

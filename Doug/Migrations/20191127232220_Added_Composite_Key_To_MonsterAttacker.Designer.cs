@@ -4,14 +4,16 @@ using Doug;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Doug.Migrations
 {
     [DbContext(typeof(DougContext))]
-    partial class DougContextModelSnapshot : ModelSnapshot
+    [Migration("20191127232220_Added_Composite_Key_To_MonsterAttacker")]
+    partial class Added_Composite_Key_To_MonsterAttacker
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

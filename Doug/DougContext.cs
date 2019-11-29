@@ -64,6 +64,9 @@ namespace Doug
             modelBuilder.Entity<LootItem>()
                 .HasKey(e => new { e.Id, e.DropTableId });
 
+            modelBuilder.Entity<MonsterAttacker>()
+                .HasKey(m => new { m.SpawnedMonsterId, m.UserId });
+
             modelBuilder.Entity<UserEffect>()
                 .HasKey(e => new { e.UserId, e.EffectId });
 
