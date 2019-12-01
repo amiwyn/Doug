@@ -16,11 +16,6 @@ namespace Doug.Models.Monsters
         public List<MonsterAttacker> MonsterAttackers { get; set; }
         public Monster Monster { get; set; }
 
-        public void LoadMonster()
-        {
-            Monster.Health = Health;
-        }
-
         public bool IsAttackOnCooldown()
         {
             return DateTime.UtcNow <= AttackCooldown;
