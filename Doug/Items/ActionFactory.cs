@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Doug.Effects;
+using Doug.Items.ItemActions;
 using Doug.Models;
 using Doug.Models.User;
 using Doug.Repositories;
@@ -11,11 +12,10 @@ namespace Doug.Items
     public interface IActionFactory
     {
         Action CreateAction(string actionId);
-        string Consume(User user, int itemPos);
-        string Eat(User user, int health, int energy, string itemName);
-        string EatEffect(User user, string effectId, int duration);
-        string Transport(User user, string channel);
-        string OpenLootBox(User user, DropTable dropTable, string channel, string lootboxName);
+        string Eat(int itemPos, User user, int health, int energy, string itemName);
+        string EatEffect(int itemPos, User user, string effectId, int duration);
+        string Transport(int itemPos, User user, string channel);
+        string OpenLootBox(int itemPos, User user, DropTable dropTable, string channel, string lootboxName);
     }
 
     public class ActionFactory : IActionFactory
@@ -43,41 +43,17 @@ namespace Doug.Items
         {
             switch (actionId)
             {
-                case "cleanse": return Cleanse;
-                case "suicide": return Suicide;
-                case "reset": return Reset;
+                case "cleanse": return new Cleanse(_effectRepository, _inventoryRepository).Activate;
+                case "suicide": return new Suicide(_inventoryRepository, _userService).Activate;
+                case "reset": return new Reset(_inventoryRepository, _statsRepository).Activate;
                 default: return (_, __, ___) => DougMessages.ItemCantBeUsed;
             }
         }
 
-        public string Cleanse(int itemPos, User user, string channel)
-        {
-            _effectRepository.RemoveAllEffects(user);
-
-            return DougMessages.Cleansed;
-        }
-
-        public string Suicide(int itemPos, User user, string channel)
-        {
-            _userService.KillUser(user, channel);
-            return string.Empty;
-        }
-
-        public string Reset(int itemPos, User user, string channel)
-        {
-            _statsRepository.ResetStats(user.Id);
-
-            return string.Empty;
-        }
-
-        public string Consume(User user, int itemPos)
+        public string Eat(int itemPos, User user, int health, int energy, string itemName)
         {
             _inventoryRepository.RemoveItem(user, itemPos);
-            return DougMessages.ConsumedItem;
-        }
 
-        public string Eat(User user, int health, int energy, string itemName)
-        {
             var recoveryText = string.Empty;
 
             if (health != 0)
@@ -100,22 +76,26 @@ namespace Doug.Items
             return string.Format(DougMessages.RecoverItem, itemName, recoveryText);
         }
 
-        public string EatEffect(User user, string effectId, int duration)
+        public string EatEffect(int itemPos, User user, string effectId, int duration)
         {
             _effectRepository.AddEffect(user, effectId, duration);
 
             return string.Format(DougMessages.AddedEffect, EffectFactory.GetEffectName(effectId), duration);
         }
 
-        public string Transport(User user, string channel)
+        public string Transport(int itemPos, User user, string channel)
         {
+            _inventoryRepository.RemoveItem(user, itemPos);
+
             _slack.InviteUser(user.Id, channel);
 
             return string.Empty;
         }
 
-        public string OpenLootBox(User user, DropTable dropTable, string channel, string lootboxName)
+        public string OpenLootBox(int itemPos, User user, DropTable dropTable, string channel, string lootboxName)
         {
+            _inventoryRepository.RemoveItem(user, itemPos);
+
             var loot = _randomService.RandomFromWeightedTable(dropTable);
             var item = _itemRepository.GetItem(loot.Id);
 

@@ -10,7 +10,7 @@ namespace Doug.Items
         public override string Use(IActionFactory actionFactory, int itemPos, User user, string channel)
         {
             base.Use(actionFactory, itemPos, user, channel);
-            return actionFactory.EatEffect(user, EffectId, Duration);
+            return actionFactory.EatEffect(itemPos, user, EffectId, Duration);
         }
     }
 }

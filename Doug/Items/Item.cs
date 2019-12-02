@@ -32,7 +32,7 @@ namespace Doug.Items
             return actionFactory.CreateAction(ActionId)(itemPos, user, channel);
         }
 
-        public virtual string Target(ITargetActionFactory targetActionFactory, int itemPos, User user, User target, string channel)
+        public string Target(ITargetActionFactory targetActionFactory, int itemPos, User user, User target, string channel)
         {
             return targetActionFactory.CreateTargetAction(TargetActionId)(itemPos, user, target, channel);
         }

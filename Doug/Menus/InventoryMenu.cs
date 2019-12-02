@@ -12,8 +12,10 @@ namespace Doug.Menus
     {
         public List<Block> Blocks { get; set; }
 
-        public InventoryMenu(IEnumerable<InventoryItem> items)
+        public InventoryMenu(List<InventoryItem> items)
         {
+            items.Sort((a, b) => a.InventoryPosition.CompareTo(b.InventoryPosition));
+
             Blocks = new List<Block>
             {
                 InventoryHeader(),

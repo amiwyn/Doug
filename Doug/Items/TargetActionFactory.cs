@@ -1,6 +1,6 @@
 ﻿using Doug.Effects;
-using Doug.Models.Combat;
-using Doug.Models.User;
+using Doug.Items.TargetActions;
+using Doug.Repositories;
 using Doug.Services;
 using Doug.Slack;
 
@@ -16,45 +16,24 @@ namespace Doug.Items
         private readonly IEventDispatcher _eventDispatcher;
         private readonly ISlackWebApi _slack;
         private readonly ICombatService _combatService;
+        private readonly IInventoryRepository _inventoryRepository;
 
-        public TargetActionFactory(IEventDispatcher eventDispatcher, ISlackWebApi slack, ICombatService combatService)
+        public TargetActionFactory(IEventDispatcher eventDispatcher, ISlackWebApi slack, ICombatService combatService, IInventoryRepository inventoryRepository)
         {
             _eventDispatcher = eventDispatcher;
             _slack = slack;
             _combatService = combatService;
+            _inventoryRepository = inventoryRepository;
         }
 
         public TargetAction CreateTargetAction(string targetActionId)
         {
             switch (targetActionId)
             {
-                case "kick": return Kick;
-                case "antirogue": return AntiRogue;
+                case "kick": return new Kick(_eventDispatcher, _slack, _inventoryRepository).Activate;
+                case "antirogue": return new AntiRogue(_eventDispatcher, _combatService, _inventoryRepository).Activate;
                 default: return (_, __, ___, ____) => DougMessages.ItemCantBeUsed;
             }
-        }
-
-        private string Kick(int itemPos, User user, User target, string channel)
-        {
-            if (!_eventDispatcher.OnKick(target, user, channel))
-            {
-                return string.Empty;
-            }
-
-            _slack.KickUser(target.Id, channel).Wait();
-
-            return string.Empty;
-        }
-
-        private string AntiRogue(int itemPos, User user, User target, string channel)
-        {
-            var damage = target.Level * target.Agility;
-            var attack = new MagicAttack(user, damage);
-            target.ReceiveAttack(attack, _eventDispatcher);
-
-            _combatService.DealDamage(user, attack, target, channel).Wait();
-
-            return string.Empty;
         }
     }
 }

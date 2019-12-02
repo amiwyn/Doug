@@ -15,7 +15,7 @@ namespace Doug.Items
         public override string Use(IActionFactory actionFactory, int itemPos, User user, string channel)
         {
             base.Use(actionFactory, itemPos, user, channel);
-            return actionFactory.Transport(user, Channel);
+            return actionFactory.Transport(itemPos, user, Channel);
         }
     }
 }
