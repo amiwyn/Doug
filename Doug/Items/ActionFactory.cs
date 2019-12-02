@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Doug.Effects;
+using Doug.Items.ItemActions;
 using Doug.Models;
 using Doug.Models.User;
 using Doug.Repositories;
@@ -43,31 +44,11 @@ namespace Doug.Items
         {
             switch (actionId)
             {
-                case "cleanse": return Cleanse;
-                case "suicide": return Suicide;
-                case "reset": return Reset;
+                case "cleanse": return new Cleanse(_effectRepository, _inventoryRepository).Activate;
+                case "suicide": return new Suicide(_inventoryRepository, _userService).Activate;
+                case "reset": return new Reset(_inventoryRepository, _statsRepository).Activate;
                 default: return (_, __, ___) => DougMessages.ItemCantBeUsed;
             }
-        }
-
-        public string Cleanse(int itemPos, User user, string channel)
-        {
-            _effectRepository.RemoveAllEffects(user);
-
-            return DougMessages.Cleansed;
-        }
-
-        public string Suicide(int itemPos, User user, string channel)
-        {
-            _userService.KillUser(user, channel);
-            return string.Empty;
-        }
-
-        public string Reset(int itemPos, User user, string channel)
-        {
-            _statsRepository.ResetStats(user.Id);
-
-            return string.Empty;
         }
 
         public string Consume(User user, int itemPos)
