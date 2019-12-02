@@ -35,7 +35,7 @@ namespace Doug.Repositories
                 .Include(monsta => monsta.MonsterAttackers)
                 .ThenInclude(attacker => attacker.User)
                 .ToList();
-            monsters.ForEach(monster => monster.LoadMonster());
+
             return monsters;
         }
 
@@ -49,7 +49,6 @@ namespace Doug.Repositories
                 .ThenInclude(attacker => attacker.User)
                 .SingleOrDefault(monsta => monsta.Id == monsterId);
 
-            monster?.LoadMonster();
             return monster;
         }
 
