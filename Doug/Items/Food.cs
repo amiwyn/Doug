@@ -11,7 +11,7 @@ namespace Doug.Items
         {
             base.Use(actionFactory, itemPos, user, channel);
 
-            return actionFactory.Eat(user, HealthAmount, EnergyAmount, GetDisplayName());
+            return actionFactory.Eat(itemPos, user , HealthAmount, EnergyAmount, GetDisplayName());
         }
     }
 }
