@@ -95,24 +95,24 @@ namespace Doug.Models.User
             Intelligence = 5;
         }
 
-        public int TotalLuck() => (int)Math.Floor((Loadout.Sum(stat => stat.Luck) + Luck + Effects.Sum(userEffect => userEffect.Effect.Luck)) * (1 + Loadout.SumDoubles(stat => stat.LuckFactor) + Effects.Sum(userEffect => userEffect.Effect.LuckFactor) * 0.01));
-        public int TotalAgility() => (int)Math.Floor((Loadout.Sum(stat => stat.Agility) + Agility + Effects.Sum(userEffect => userEffect.Effect.Agility)) * (1 + Loadout.SumDoubles(stat => stat.AgilityFactor) + Effects.Sum(userEffect => userEffect.Effect.AgilityFactor) * 0.01));
-        public int TotalStrength() => (int)Math.Floor((Loadout.Sum(stat => stat.Strength) + Strength + Effects.Sum(userEffect => userEffect.Effect.Strength)) * (1 + Loadout.SumDoubles(stat => stat.StrengthFactor) + Effects.Sum(userEffect => userEffect.Effect.StrengthFactor) * 0.01));
-        public int TotalConstitution() => (int)Math.Floor((Loadout.Sum(stat => stat.Constitution) + Constitution + Effects.Sum(userEffect => userEffect.Effect.Constitution)) * (1 + Loadout.SumDoubles(stat => stat.ConstitutionFactor) + Effects.Sum(userEffect => userEffect.Effect.ConstitutionFactor) * 0.01));
-        public int TotalIntelligence() => (int)Math.Floor((Loadout.Sum(stat => stat.Intelligence) + Intelligence + Effects.Sum(userEffect => userEffect.Effect.Intelligence)) * (1 + Loadout.SumDoubles(stat => stat.IntelligenceFactor) + Effects.Sum(userEffect => userEffect.Effect.IntelligenceFactor) * 0.01));
+        public int TotalLuck() => (int)Math.Floor((Loadout.Sum(stat => stat.Luck) + Luck + Effects.Sum(userEffect => userEffect.Effect.Luck)) * (1 + (Loadout.Sum(stat => stat.LuckFactor) * 0.01) + Effects.Sum(userEffect => userEffect.Effect.LuckFactor) * 0.01));
+        public int TotalAgility() => (int)Math.Floor((Loadout.Sum(stat => stat.Agility) + Agility + Effects.Sum(userEffect => userEffect.Effect.Agility)) * (1 + (Loadout.Sum(stat => stat.AgilityFactor) * 0.01) + Effects.Sum(userEffect => userEffect.Effect.AgilityFactor) * 0.01));
+        public int TotalStrength() => (int)Math.Floor((Loadout.Sum(stat => stat.Strength) + Strength + Effects.Sum(userEffect => userEffect.Effect.Strength)) * (1 + (Loadout.Sum(stat => stat.StrengthFactor) * 0.01) + Effects.Sum(userEffect => userEffect.Effect.StrengthFactor) * 0.01));
+        public int TotalConstitution() => (int)Math.Floor((Loadout.Sum(stat => stat.Constitution) + Constitution + Effects.Sum(userEffect => userEffect.Effect.Constitution)) * (1 + (Loadout.Sum(stat => stat.ConstitutionFactor) * 0.01) + Effects.Sum(userEffect => userEffect.Effect.ConstitutionFactor) * 0.01));
+        public int TotalIntelligence() => (int)Math.Floor((Loadout.Sum(stat => stat.Intelligence) + Intelligence + Effects.Sum(userEffect => userEffect.Effect.Intelligence)) * (1 + (Loadout.Sum(stat => stat.IntelligenceFactor) * 0.01) + Effects.Sum(userEffect => userEffect.Effect.IntelligenceFactor) * 0.01));
         public int TotalDefense() => (int)Math.Floor((Loadout.Sum(stat => stat.Defense) + (int)Math.Floor(2.0 * TotalConstitution())) * (1 + Loadout.Sum(stat => stat.DefenseFactor) * 0.01));
         public int TotalDodge() => Loadout.Sum(stat => stat.Dodge) + TotalAgility() + Effects.Sum(userEffect => userEffect.Effect.Dodge);
-        public int TotalHitrate() => (int)Math.Floor((Loadout.Sum(stat => stat.Hitrate) + TotalAgility() + Effects.Sum(userEffect => userEffect.Effect.Hitrate)) * (1 + Loadout.SumDoubles(stat => stat.HitRateFactor) + Effects.Sum(userEffect => userEffect.Effect.HitrateFactor) * 0.01));
-        public int Pierce() => (int)Math.Floor((Loadout.Sum(stat => stat.Pierce) + (TotalAgility() / 2) + Effects.Sum(userEffect => userEffect.Effect.Pierce)) * (1 + Loadout.SumDoubles(stat => stat.PierceFactor) + Effects.Sum(userEffect => userEffect.Effect.PierceFactor) * 0.01));
+        public int TotalHitrate() => (int)Math.Floor((Loadout.Sum(stat => stat.Hitrate) + TotalAgility() + Effects.Sum(userEffect => userEffect.Effect.Hitrate)) * (1 + (Loadout.Sum(stat => stat.HitRateFactor) * 0.01) + Effects.Sum(userEffect => userEffect.Effect.HitrateFactor) * 0.01));
+        public int Pierce() => (int)Math.Floor((Loadout.Sum(stat => stat.Pierce) + (TotalAgility() / 2) + Effects.Sum(userEffect => userEffect.Effect.Pierce)) * (1 + (Loadout.Sum(stat => stat.PierceFactor) * 0.01) + Effects.Sum(userEffect => userEffect.Effect.PierceFactor) * 0.01));
         public int MaxAttack() => Loadout.Sum(stat => stat.MaxAttack) + Attack + Effects.Sum(userEffect => userEffect.Effect.Attack);
         public int MinAttack() => Loadout.Sum(stat => stat.MinAttack) + Attack + Effects.Sum(userEffect => userEffect.Effect.Attack);
         public int TotalResistance() => Loadout.Sum(stats => stats.Resistance);
         public int TotalAttackSpeed() => BaseAttackSpeed + Loadout.Sum(stat => stat.AttackSpeed) + TotalAgility() / 2;
         public double CooldownReduction() => ( ((21 * TotalIntelligence()) / (TotalIntelligence() + 12)) + Loadout.Sum(stat => stat.CooldownReduction) ) * 0.01;
         public int TotalHealthRegen() => BaseHealthRegen + Loadout.Sum(stats => stats.HealthRegen);
-        public int TotalFlatHealthRegen() => TotalStrength() + Loadout.Sum(stats => stats.FlatHealthRegen) + Effects.Sum(userEffect => userEffect.Effect.FlatHealthRegen);
+        public int TotalFlatHealthRegen() => (TotalStrength() / 2) + Loadout.Sum(stats => stats.FlatHealthRegen) + Effects.Sum(userEffect => userEffect.Effect.FlatHealthRegen);
         public int TotalEnergyRegen() => BaseEnergyRegen + Loadout.Sum(stats => stats.EnergyRegen) + Effects.Sum(userEffect => userEffect.Effect.EnergyRegen);
-        public int TotalFlatEnergyRegen() => (TotalIntelligence() / 2) + Loadout.Sum(stats => stats.FlatEnergyRegen) + Effects.Sum(userEffect => userEffect.Effect.FlatEnergyRegen);
+        public int TotalFlatEnergyRegen() => (TotalIntelligence() / 4) + Loadout.Sum(stats => stats.FlatEnergyRegen) + Effects.Sum(userEffect => userEffect.Effect.FlatEnergyRegen);
 
 
         public double BaseOpponentStealSuccessRate() => 0.75;

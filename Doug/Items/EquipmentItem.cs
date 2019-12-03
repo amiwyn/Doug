@@ -43,10 +43,10 @@ namespace Doug.Items
         public int EnergyRegen { get; set; }
         public int FlatEnergyRegen { get; set; }
 
-        public double LuckFactor { get; set; }
-        public double AgilityFactor { get; set; }
-        public double StrengthFactor { get; set; }
-        public double ConstitutionFactor { get; set; }
+        public int LuckFactor { get; set; }
+        public int AgilityFactor { get; set; }
+        public int StrengthFactor { get; set; }
+        public int ConstitutionFactor { get; set; }
         public int IntelligenceFactor { get; set; }
         public int HealthFactor { get; set; }
         public int EnergyFactor { get; set; }
