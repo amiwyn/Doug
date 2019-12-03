@@ -18,11 +18,29 @@ namespace Doug.Effects
         public int Defense { get; set; }
         public int Dodge { get; set; }
         public int Hitrate { get; set; }
+        public int AttackSpeed { get; set; }
+        public int Pierce { get; set; }
+        public int CritChance { get; set; }
         public int Luck { get; set; }
         public int Agility { get; set; }
         public int Strength { get; set; }
         public int Constitution { get; set; }
         public int Intelligence { get; set; }
+        public int HealthRegen { get; set; }
+        public int FlatHealthRegen { get; set; }
+        public int EnergyRegen { get; set; }
+        public int FlatEnergyRegen { get; set; }
+
+        public int LuckFactor { get; set; }
+        public int AgilityFactor { get; set; }
+        public int StrengthFactor { get; set; }
+        public int ConstitutionFactor { get; set; }
+        public int IntelligenceFactor { get; set; }
+        public int DefenseFactor { get; set; }
+        public int HitrateFactor { get; set; }
+        public int CritChanceFactor { get; set; }
+        public int CritDamageFactor { get; set; }
+        public int PierceFactor { get; set; }
 
         public virtual bool IsBuff()
         {
@@ -49,6 +67,11 @@ namespace Doug.Effects
         }
 
         public virtual int OnAttacking(User attacker, ICombatable target, int damage)
+        {
+            return damage;
+        }
+
+        public virtual int OnCriticalHit(User attacker, ICombatable target, int damage, string channel)
         {
             return damage;
         }

@@ -28,7 +28,7 @@ namespace Doug.Models.Monsters
 
         public Attack AttackTarget(ICombatable target, IEventDispatcher eventDispatcher)
         {
-            Attack attack = new PhysicalAttack(this, Monster.MinAttack, Monster.MaxAttack, Monster.Hitrate, Monster.GetCriticalHitChance());
+            Attack attack = new PhysicalAttack(this, Monster.MinAttack, Monster.MaxAttack, Monster.Hitrate, Monster.GetCriticalHitChance(), 2, 0);
 
             if (Monster.DamageType == DamageType.Magical)
             {
@@ -59,13 +59,14 @@ namespace Doug.Models.Monsters
                 return attack;
             }
 
-            var reducedDamage = attack.Damage - (int)Math.Ceiling(attack.Damage * Monster.Resistance * 0.01 + Monster.Defense);
+            var totalPierce = Monster.Defense * attack.Pierce * 0.011;
+            var reducedDamage = attack.Damage - (int)Math.Ceiling(attack.Damage * Monster.Resistance * 0.01 + Monster.Defense - totalPierce);
             reducedDamage = reducedDamage <= 0 ? 1 : reducedDamage;
 
             attack.Damage = reducedDamage;
             if (attack.Status == AttackStatus.Critical)
             {
-                attack.Damage *= 2;
+                attack.Damage = (int)(Math.Ceiling(attack.Damage * attack.CriticalFactor));
             }
 
             Health -= attack.Damage;
@@ -75,7 +76,8 @@ namespace Doug.Models.Monsters
 
         private void ApplyMagicalDamage(int damage)
         {
-            Health -= damage;
+            var reducedDamage = damage - (int)Math.Ceiling(damage * Monster.Resistance * 0.01);
+            Health -= reducedDamage;
         }
     }
 }

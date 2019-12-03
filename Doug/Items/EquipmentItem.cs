@@ -30,6 +30,8 @@ namespace Doug.Items
         public int Dodge { get; set; }
         public int Hitrate { get; set; }
         public int AttackSpeed { get; set; }
+        public int CooldownReduction { get; set; }
+        public int Pierce { get; set; }
         public int Resistance { get; set; }
         public int Luck { get; set; }
         public int Agility { get; set; }
@@ -37,11 +39,23 @@ namespace Doug.Items
         public int Constitution { get; set; }
         public int Intelligence { get; set; }
         public int HealthRegen { get; set; }
+        public int FlatHealthRegen { get; set; }
         public int EnergyRegen { get; set; }
+        public int FlatEnergyRegen { get; set; }
+
+        public int LuckFactor { get; set; }
+        public int AgilityFactor { get; set; }
+        public int StrengthFactor { get; set; }
+        public int ConstitutionFactor { get; set; }
+        public int IntelligenceFactor { get; set; }
         public int HealthFactor { get; set; }
         public int EnergyFactor { get; set; }
         public int DefenseFactor { get; set; }
-        public int CriticalFactor { get; set; }
+        public int HitRateFactor { get; set; }
+        public int PierceFactor { get; set; }
+        public int AttackSpeedFactor { get; set; }
+        public int CriticalHitChanceFactor { get; set; }
+        public int CriticalDamageFactor { get; set; }
 
         public EquipmentItem()
         {
@@ -87,7 +101,8 @@ namespace Doug.Items
                 DisplayAttribute(DougMessages.HealthFactor, HealthFactor),
                 DisplayAttribute(DougMessages.EnergyFactor, EnergyFactor),
                 DisplayAttribute(DougMessages.DefenseFactor, DefenseFactor),
-                DisplayAttribute(DougMessages.CriticalFactor, CriticalFactor),
+                DisplayAttribute(DougMessages.CriticalHitChanceFactor, CriticalHitChanceFactor),
+                DisplayAttribute(DougMessages.CriticalDamageFactor, CriticalDamageFactor),
                 DisplayAttribute(DougMessages.ItemHitrate, Hitrate),
                 DisplayAttribute(DougMessages.ItemDodge, Dodge),
                 DisplayAttribute(DougMessages.ItemHealth, Health),

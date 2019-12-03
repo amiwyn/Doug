@@ -22,8 +22,9 @@ namespace Doug.Skills
         private readonly IChannelRepository _channelRepository;
         private readonly IRandomService _randomService;
         private readonly ICreditsRepository _creditsRepository;
+        private readonly IEffectRepository _effectRepository;
 
-        public SkillFactory(IUserService userService, IStatsRepository statsRepository, ISlackWebApi slack, ICombatService combatService, IEventDispatcher eventDispatcher, IChannelRepository channelRepository, IRandomService randomService, ICreditsRepository creditsRepository)
+        public SkillFactory(IUserService userService, IStatsRepository statsRepository, ISlackWebApi slack, ICombatService combatService, IEventDispatcher eventDispatcher, IChannelRepository channelRepository, IRandomService randomService, ICreditsRepository creditsRepository, IEffectRepository effectRepository)
         {
             _userService = userService;
             _statsRepository = statsRepository;
@@ -33,6 +34,7 @@ namespace Doug.Skills
             _channelRepository = channelRepository;
             _randomService = randomService;
             _creditsRepository = creditsRepository;
+            _effectRepository = effectRepository;
         }
 
         public Skill CreateSkill(string skillId)
@@ -44,6 +46,9 @@ namespace Doug.Skills
                 case MightyStrike.SkillId: return new MightyStrike(_statsRepository, _slack, _userService, _combatService, _eventDispatcher, _channelRepository);
                 case Steal.SkillId: return new Steal(_statsRepository, _slack, _userService, _channelRepository, _eventDispatcher, _randomService, _creditsRepository);
                 case Heal.SkillId: return new Heal(_statsRepository, _slack, _userService);
+                case Berserk.SkillId: return new Berserk(_statsRepository, _effectRepository, _slack, _userService);
+                case Flurry.SkillId: return new Flurry(_statsRepository, _effectRepository, _slack, _userService);
+                case ArcaneIntellect.SkillId: return new ArcaneIntellect(_statsRepository, _effectRepository, _slack, _userService);
                 default: return new Skill(_statsRepository);
             }
         }

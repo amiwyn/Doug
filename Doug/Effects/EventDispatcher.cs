@@ -20,6 +20,7 @@ namespace Doug.Effects
         void OnDeathByUser(User user, User killer);
         bool OnKick(User user, User kicker, string channel);
         int OnAttacking(ICombatable attacker, ICombatable target, int damage);
+        int OnCriticalHit(ICombatable attacker, ICombatable target, int damage, string channel);
         bool OnAttackedInvincibility(ICombatable attacker, User target);
     }
 
@@ -65,6 +66,16 @@ namespace Doug.Effects
             if (target is User userTarget)
             {
                 damage = PropagateEffectEvents(userTarget, damage, (damageSum, effect) => effect.OnGettingAttacked(attacker, userTarget, damageSum));
+            }
+
+            return damage;
+        }
+
+        public int OnCriticalHit(ICombatable attacker, ICombatable target, int damage, string channel)
+        {
+            if (attacker is User userAttacker)
+            {
+                damage = PropagateEffectEvents(userAttacker, damage, (damageSum, effect) => effect.OnCriticalHit(userAttacker, target, damageSum, channel));
             }
 
             return damage;

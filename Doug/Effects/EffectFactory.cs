@@ -33,6 +33,9 @@ namespace Doug.Effects
                 case FrenchCurse.EffectId: return new FrenchCurse(_slack, _userService);
                 case PickleBuff.EffectId: return new PickleBuff();
                 case Luck.EffectId: return new Luck();
+                case ArcaneIntellect.EffectId: return new ArcaneIntellect();
+                case Berserk.EffectId: return new Berserk();
+                case Flurry.EffectId: return new Flurry();
                 case MortuaryGrace.EffectId: return new MortuaryGrace(_effectRepository);
                 default: return new UnknownEffect();
             }
@@ -47,6 +50,9 @@ namespace Doug.Effects
                 case NicotineHigh.EffectId: return new NicotineHigh().Name;
                 case FrenchCurse.EffectId: return new FrenchCurse(null, null).Name;
                 case PickleBuff.EffectId: return new PickleBuff().Name;
+                case ArcaneIntellect.EffectId: return new ArcaneIntellect().Name;
+                case Berserk.EffectId: return new Berserk().Name;
+                case Flurry.EffectId: return new Flurry().Name;
                 case Luck.EffectId: return new Luck().Name;
                 case MortuaryGrace.EffectId: return new MortuaryGrace(null).Name;
                 default: return new UnknownEffect().Name;
