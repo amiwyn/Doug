@@ -1,12 +1,12 @@
 ﻿using System.Threading.Tasks;
 using System.Linq;
-using Doug.Effects;
 using Doug.Models;
 using Doug.Models.Combat;
 using Doug.Models.User;
 using Doug.Repositories;
 using Doug.Slack;
 using Doug.Services;
+using System;
 
 namespace Doug.Skills
 {
@@ -29,6 +29,7 @@ namespace Doug.Skills
 
         protected override bool CanActivateSkill(User user, ICombatable target, string channel, out DougResponse response)
         {
+            var totalCooldown = Cooldown * (1 - user.CooldownReduction());
             if (target is User targetUser)
             {
                 var usersInChannel = _slack.GetUsersInChannel(channel).Result;
@@ -39,7 +40,22 @@ namespace Doug.Skills
                 }
             }
 
-            return base.CanActivateSkill(user, target, channel, out response);
+            if (user.IsSkillOnCooldown())
+            {
+                response = new DougResponse(string.Format(DougMessages.CommandOnCooldown, user.CalculateStealCooldownRemaining()));
+                return false;
+            }
+
+            if (!user.HasEnoughEnergyForCost(EnergyCost))
+            {
+                response = new DougResponse(DougMessages.NotEnoughEnergy);
+                return false;
+            }
+
+            user.Energy -= EnergyCost;
+            StatsRepository.FireSkill(user.Id, TimeSpan.FromSeconds(totalCooldown), user.Energy);
+            response = new DougResponse();
+            return true;
         }
 
         public override async Task<DougResponse> Activate(User user, ICombatable target, string channel)

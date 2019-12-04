@@ -6,7 +6,7 @@ namespace Doug.Skills.Utility
 {
     public class ArcaneIntellect : BuffSkill
     {
-        public const string SkillId = "arcaneIntellect";
+        public const string SkillId = "arcane_intellect";
 
         public ArcaneIntellect(IStatsRepository statsRepository, IEffectRepository effectRepository, ISlackWebApi slack, IUserService userService) : base(statsRepository, effectRepository, slack, userService)
         {
