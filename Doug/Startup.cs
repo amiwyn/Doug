@@ -22,6 +22,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Serialization;
 
@@ -133,7 +134,7 @@ namespace Doug
             services.AddScoped<IMonsterRepository, MonsterRepository>();
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -207,6 +208,8 @@ namespace Doug
                 context.Response.StatusCode = 400;
                 await context.Response.WriteAsync("Request signing failed");
             }
+
+            hmac.Dispose();
         }
 
         private void DougExceptionHandler(IApplicationBuilder builder)
