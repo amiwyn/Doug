@@ -4,9 +4,6 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="System.Data.SqlClient" Version="4.8.0" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Doug\Doug.csproj" />
   </ItemGroup>
   <ItemGroup>
