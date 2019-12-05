@@ -19,8 +19,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Internal;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -43,14 +41,13 @@ namespace Doug
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
-                .AddJsonOptions(x =>
+            services.AddMvc().AddNewtonsoftJson(x =>
+            {
+                x.SerializerSettings.ContractResolver = new DefaultContractResolver
                 {
-                    x.SerializerSettings.ContractResolver = new DefaultContractResolver
-                    {
-                        NamingStrategy = new SnakeCaseNamingStrategy()
-                    };
-                });
+                    NamingStrategy = new SnakeCaseNamingStrategy()
+                };
+            });
 
             services.AddSingleton(new HttpClient(new HttpClientHandler(), false));
 
@@ -79,7 +76,6 @@ namespace Doug
 
                 services.AddDbContext<DougContext>(options => options.UseSqlite("Data Source=doug.db"));
             }
-
         }
 
         public static void RegisterDougServices(IServiceCollection services)
@@ -154,7 +150,10 @@ namespace Doug
 
             app.UseHttpsRedirection();
             app.Use(EventLimiter);
-            app.UseMvc();
+            app.UseRouting();
+            app.UseEndpoints(endpoints => {
+                endpoints.MapControllers();
+            });
         }
 
         private async Task EventLimiter(HttpContext context, Func<Task> next)
@@ -181,7 +180,7 @@ namespace Doug
                 return;
             }
 
-            context.Request.EnableRewind();
+            context.Request.EnableBuffering();
 
             using (var reader = new StreamReader(context.Request.Body, Encoding.UTF8, true, 1024, true))
             {
