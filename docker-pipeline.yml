@@ -23,7 +23,7 @@ stages:
       vmImage: $(vmImageName)
     steps:
     - task: Docker@2
-      displayName: Build a docker image
+      displayName: Build docker image
       inputs:
         command: 'build'
         buildContext: '.'
