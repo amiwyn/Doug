@@ -26,7 +26,7 @@ namespace Doug.Controllers
 
         public bool IsValidCoffeeParrot()
         {
-            return IsValidChannel() && Text.StartsWith(DougMessages.CoffeeParrotEmoji);
+            return IsValidChannel() && Text != null && Text.StartsWith(DougMessages.CoffeeParrotEmoji);
         }
 
         public bool ContainsMcdonaldMention()

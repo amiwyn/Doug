@@ -53,10 +53,10 @@ namespace Doug.Services
             var afternoonBreakIsPossible = IsInTimespan(currentTime, afternoonBreak, Tolerance);
             var isTooCloseFromLastBreak = currentTime < coffeeBreak.LastCoffee + TimeSpan.FromHours(1);
 
-            if (!morningBreakIsPossible && !afternoonBreakIsPossible)
-            {
-                return;
-            }
+            //if (!morningBreakIsPossible && !afternoonBreakIsPossible)
+            //{
+            //    return;
+            //}
 
             if (isTooCloseFromLastBreak || coffeeBreak.IsCoffeeBreak)
             {
