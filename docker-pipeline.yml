@@ -5,9 +5,8 @@ resources:
 - repo: self
 
 variables:
-  dockerRegistryServiceConnection: '15ddcb32-59fd-4287-aa59-e7c740e5e7c1'
+  dockerRegistryServiceConnection: 'Docker Hub'
   imageRepository: 'doug'
-  containerRegistry: 'dougregistry.azurecr.io'
   dockerfilePath: 'Doug/Dockerfile'
   tag: '$(Build.BuildId)'
   
