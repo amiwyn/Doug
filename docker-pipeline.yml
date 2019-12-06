@@ -13,7 +13,7 @@ variables:
   dockerRegistryServiceConnection: '15ddcb32-59fd-4287-aa59-e7c740e5e7c1'
   imageRepository: 'doug'
   containerRegistry: 'dougregistry.azurecr.io'
-  dockerfilePath: '**/Dockerfile'
+  dockerfilePath: 'Doug/Dockerfile'
   tag: '$(Build.BuildId)'
   
   # Agent VM image name
@@ -32,7 +32,7 @@ stages:
       displayName: Build and push an image to container registry
       inputs:
         command: buildAndPush
-        buildContext: Doug
+        buildContext: '.'
         repository: $(imageRepository)
         dockerfile: $(dockerfilePath)
         containerRegistry: $(dockerRegistryServiceConnection)
