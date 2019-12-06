@@ -95,7 +95,10 @@ namespace Doug.Commands
                 return new DougResponse(string.Format(DougMessages.NoItemInSlot, position));
             }
 
-            _slack.BroadcastMessage(string.Format(DougMessages.UsedItemOnTarget, _userService.Mention(user), inventoryItem.Item.GetDisplayName(), _userService.Mention(target)), command.ChannelId);
+            if (inventoryItem.Item.IsTargetable())
+            {
+                _slack.BroadcastMessage(string.Format(DougMessages.UsedItemOnTarget, _userService.Mention(user), inventoryItem.Item.GetDisplayName(), _userService.Mention(target)), command.ChannelId);
+            }
 
             var response = inventoryItem.Item.Target(_targetFactory, position, user, target, command.ChannelId);
 
