@@ -6,7 +6,6 @@ resources:
 
 variables:
   dockerRegistryServiceConnection: 'Docker Hub'
-  imageRepository: 'doug'
   dockerfilePath: 'Doug/Dockerfile'
   tag: '$(Build.BuildId)'
   
@@ -26,7 +25,6 @@ stages:
       inputs:
         command: buildAndPush
         buildContext: '.'
-        repository: $(imageRepository)
         dockerfile: $(dockerfilePath)
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
