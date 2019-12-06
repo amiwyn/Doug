@@ -45,7 +45,11 @@ namespace Doug.Services
         {
             var coffeeBreak = _coffeeRepository.GetCoffeeBreak();
 
-            var timezoneOffset = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time").BaseUtcOffset;
+            var timeZoneInfo = TimeZoneInfo.GetSystemTimeZones().Any(x => x.Id == "Eastern Standard Time") ?
+                TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time") :
+                TimeZoneInfo.FindSystemTimeZoneById("America/New_York");
+
+            var timezoneOffset = timeZoneInfo.BaseUtcOffset;
             var morningBreak = TimeSpan.FromHours(MorningBreak) - timezoneOffset;
             var afternoonBreak = TimeSpan.FromHours(AfternoonBreak) - timezoneOffset;
 
@@ -53,10 +57,10 @@ namespace Doug.Services
             var afternoonBreakIsPossible = IsInTimespan(currentTime, afternoonBreak, Tolerance);
             var isTooCloseFromLastBreak = currentTime < coffeeBreak.LastCoffee + TimeSpan.FromHours(1);
 
-            //if (!morningBreakIsPossible && !afternoonBreakIsPossible)
-            //{
-            //    return;
-            //}
+            if (!morningBreakIsPossible && !afternoonBreakIsPossible)
+            {
+                return;
+            }
 
             if (isTooCloseFromLastBreak || coffeeBreak.IsCoffeeBreak)
             {
