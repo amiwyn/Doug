@@ -9,19 +9,13 @@ resources:
 - repo: self
 
 variables:
-  # Container registry service connection established during pipeline creation
-  dockerRegistryServiceConnection: '15ddcb32-59fd-4287-aa59-e7c740e5e7c1'
-  imageRepository: 'doug'
-  containerRegistry: 'dougregistry.azurecr.io'
   dockerfilePath: 'Doug/Dockerfile'
   tag: '$(Build.BuildId)'
-  
-  # Agent VM image name
   vmImageName: 'ubuntu-latest'
 
 stages:
 - stage: Build
-  displayName: Build and push stage
+  displayName: Build
   jobs:  
   - job: Build
     displayName: Build
@@ -29,12 +23,10 @@ stages:
       vmImage: $(vmImageName)
     steps:
     - task: Docker@2
-      displayName: Build and push an image to container registry
+      displayName: Build a docker image
       inputs:
-        command: buildAndPush
+        command: 'build'
         buildContext: '.'
-        repository: $(imageRepository)
         dockerfile: $(dockerfilePath)
-        containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
           $(tag)
