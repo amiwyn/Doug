@@ -144,11 +144,18 @@ namespace Doug
             {
                 //see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
-                app.Use(RequestSigning);
             }
 
-            app.UseExceptionHandler(DougExceptionHandler);
+            app.UseCors(builder =>
+                builder.AllowAnyOrigin()
+                .AllowAnyMethod());
 
+            app.MapWhen(
+                httpContext => httpContext.Request.Path.StartsWithSegments("/cmd"),
+                subApp => subApp.Use(RequestSigning)
+            );
+
+            app.UseExceptionHandler(DougExceptionHandler);
             app.UseHttpsRedirection();
             app.Use(EventLimiter);
             app.UseRouting();
@@ -169,17 +176,18 @@ namespace Doug
 
         private async Task RequestSigning(HttpContext context, Func<Task> next)
         {
+            if (string.IsNullOrWhiteSpace(context.Request.Headers["x-slack-request-timestamp"]) ||
+                string.IsNullOrWhiteSpace(context.Request.Headers["x-slack-signature"]))
+            {
+                context.Response.StatusCode = 400;
+                await context.Response.WriteAsync("Invalid signature");
+                return;
+            }
+
             string slackSignature = context.Request.Headers["x-slack-signature"];
             var timestamp = long.Parse(context.Request.Headers["x-slack-request-timestamp"]);
             var signingSecret = Environment.GetEnvironmentVariable("SLACK_SIGNING_SECRET");
             string content;
-
-            if (slackSignature == null)
-            {
-                context.Response.StatusCode = 400;
-                await context.Response.WriteAsync("Slack signature missing");
-                return;
-            }
 
             context.Request.EnableBuffering();
 
