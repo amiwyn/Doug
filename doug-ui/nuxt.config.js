@@ -1,7 +1,7 @@
 import colors from 'vuetify/es5/util/colors'
 
 export default {
-  mode: 'spa',
+  mode: 'universal',
   /*
   ** Headers of the page
   */
@@ -43,13 +43,28 @@ export default {
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
+    '@nuxtjs/auth',
   ],
   /*
   ** Axios module configuration
   ** See https://axios.nuxtjs.org/options
   */
   axios: {
-    baseURL: 'https://0716ed02.ngrok.io'
+    baseUrl: 'https://d771c5d7.ngrok.io'
+  },
+  router: {
+    middleware: ['auth']
+  },
+  auth: {
+    strategies: {
+      local: {
+        endpoints: {
+          login: { url: 'https://d771c5d7.ngrok.io/api/authentication', method: 'post', propertyName: 'token' },
+          logout: false,
+          user: { url: 'https://d771c5d7.ngrok.io/ui/user', method: 'get', propertyName: false }
+        }
+      }
+    }
   },
   /*
   ** vuetify module configuration
@@ -79,7 +94,7 @@ export default {
     /*
     ** You can extend webpack config here
     */
-    extend (config, ctx) {
+    extend(config, ctx) {
     }
   }
 }

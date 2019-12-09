@@ -4,14 +4,16 @@ using Doug;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Doug.Migrations
 {
     [DbContext(typeof(DougContext))]
-    partial class DougContextModelSnapshot : ModelSnapshot
+    [Migration("20191208143432_Update_Ef_Core")]
+    partial class Update_Ef_Core
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -554,9 +556,6 @@ namespace Doug.Migrations
 
                     b.Property<int>("Strength")
                         .HasColumnType("int");
-
-                    b.Property<string>("Token")
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

@@ -29,6 +29,7 @@ namespace Doug.Slack
         Task<List<string>> GetUsersInChannel(string channel);
         Task<bool> GetUserPresence(string userId);
         Task<string> Authorize(string code);
+        Task<UserIdentity> Identify(string token);
     }
 
     public class SlackWebApi : ISlackWebApi
@@ -43,6 +44,7 @@ namespace Doug.Slack
         private const string ChannelInfoUrl = "https://slack.com/api/conversations.members";
         private const string PresenceInfoUrl = "https://slack.com/api/users.getPresence";
         private const string AuthorizationUrl = "https://slack.com/api/oauth.access";
+        private const string IdentityUrl = "https://slack.com/api/users.identity";
 
 
         private readonly HttpClient _client;
@@ -264,6 +266,18 @@ namespace Doug.Slack
             var response = await PostToUrl(AuthorizationUrl, keyValues);
 
             return JsonConvert.DeserializeObject<AuthorizationResponse>(response, _jsonSettings).AccessToken;
+        }
+
+        public async Task<UserIdentity> Identify(string token)
+        {
+            var keyValues = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("token", token)
+            };
+
+            var response = await PostToUrl(IdentityUrl, keyValues);
+
+            return JsonConvert.DeserializeObject<IdentityResponse>(response, _jsonSettings).User;
         }
     }
 }

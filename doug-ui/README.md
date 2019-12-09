@@ -1,6 +1,6 @@
 # doug-ui
 
-> My neat Nuxt.js project
+> My fantastic Nuxt.js project
 
 ## Build Setup
 

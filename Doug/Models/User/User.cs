@@ -68,6 +68,7 @@ namespace Doug.Models.User
         public int Luck { get; set; }
         public int Constitution { get; set; }
         public int Intelligence { get; set; }
+        public string Token { get; set; }
 
 
         public long Experience { get; set; }

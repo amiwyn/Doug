@@ -29,7 +29,7 @@ import { mapState, mapGetters } from "vuex";
 export default {
   layout: "empty",
   computed: mapState({
-    authenticated: state => state.login.authenticated
+    authenticated: state => state.user.authenticated
   }),
   head() {
     return {
@@ -38,16 +38,14 @@ export default {
   },
   mounted() {
     if (this.$route.query.code) {
-      this.$store.dispatch("login/signIn", this.$route.query.code);
-      this.$router.push("/");
+      this.$nextTick(() => {
+        this.$nuxt.$loading.start();
+        this.$store.dispatch("authenticate", this.$route.query.code).then(() => {
+          this.$router.push("/");
+          this.$nuxt.$loading.finish();
+        });
+      });
     }
-  },
-  middleware({ store, redirect }) {
-    store.dispatch("login/authenticate").then(() => {
-      if (store.state.login.authenticated) {
-        return redirect("/");
-      }
-    });
   }
 };
 </script>

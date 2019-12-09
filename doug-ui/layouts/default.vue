@@ -30,7 +30,7 @@
       </v-container>
     </v-content>
 
-    <v-footer :fixed="fixed" app>
+    <v-footer fixed app>
       <span>&copy; 2019</span>
     </v-footer>
   </v-app>
@@ -41,8 +41,7 @@ import { mapState } from "vuex";
 
 export default {
   computed: mapState({
-    profileIcon: state => state.login.image,
-    username: state => state.login.username
+    profileIcon: state => state.user ? state.user.icon : undefined
   }),
   data() {
     return {
@@ -50,7 +49,7 @@ export default {
       items: [
         {
           icon: "mdi-apps",
-          title: "Welcome",
+          title: "Dashboard",
           to: "/"
         },
         {
