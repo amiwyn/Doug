@@ -13,7 +13,9 @@ namespace Doug.Repositories
         void AddUser(string userId);
         List<User> GetUsers();
         User GetUser(string userId);
+        User GetUserByToken(string token);
         void RegenerateUsers();
+
     }
 
     public class UserRepository : IUserRepository
@@ -48,33 +50,7 @@ namespace Doug.Repositories
 
         public User GetUser(string userId)
         {
-            var user = _db.Users
-                .Include(usr => usr.Effects)
-                .Include(usr => usr.InventoryItems)
-                    .ThenInclude(itm => itm.Item)
-                        .ThenInclude(itm => ((Lootbox)itm).DropTable)
-                            .ThenInclude(droptable => droptable.Items)
-                .Include(usr => usr.Loadout)
-                    .ThenInclude(itm => itm.Head)
-                .Include(usr => usr.Loadout)
-                    .ThenInclude(itm => itm.Body)
-                .Include(usr => usr.Loadout)
-                    .ThenInclude(itm => itm.Boots)
-                .Include(usr => usr.Loadout)
-                    .ThenInclude(itm => itm.Gloves)
-                .Include(usr => usr.Loadout)
-                    .ThenInclude(itm => itm.LeftHand)
-                .Include(usr => usr.Loadout)
-                    .ThenInclude(itm => itm.RightHand)
-                .Include(usr => usr.Loadout)
-                    .ThenInclude(itm => itm.Neck)
-                .Include(usr => usr.Loadout)
-                    .ThenInclude(itm => itm.LeftRing)
-                .Include(usr => usr.Loadout)
-                    .ThenInclude(itm => itm.RightRing)
-                .Include(usr => usr.Loadout)
-                    .ThenInclude(itm => itm.Skillbook)
-                .Single(usr => usr.Id == userId);
+            var user = Users().Single(usr => usr.Id == userId);
 
             user.Effects = user.Effects.Where(effect => effect.EndTime >= DateTime.UtcNow).ToList();
 
@@ -84,22 +60,13 @@ namespace Doug.Repositories
             return user;
         }
 
-        public void RegenerateUsers()
+        private IQueryable<User> Users()
         {
-            var users = GetUsers();
-
-            users.ForEach(user => user.RegenerateHealthAndEnergy());
-
-            _db.SaveChanges();
-        }
-
-        public List<User> GetUsers()
-        {
-            var users = _db.Users
+            return _db.Users
                 .Include(usr => usr.Effects)
                 .Include(usr => usr.InventoryItems)
                 .ThenInclude(itm => itm.Item)
-                .ThenInclude(itm => ((Lootbox)itm).DropTable)
+                .ThenInclude(itm => ((Lootbox) itm).DropTable)
                 .ThenInclude(droptable => droptable.Items)
                 .Include(usr => usr.Loadout)
                 .ThenInclude(itm => itm.Head)
@@ -120,8 +87,32 @@ namespace Doug.Repositories
                 .Include(usr => usr.Loadout)
                 .ThenInclude(itm => itm.RightRing)
                 .Include(usr => usr.Loadout)
-                .ThenInclude(itm => itm.Skillbook)
-                .ToList();
+                .ThenInclude(itm => itm.Skillbook);
+        }
+
+        public User GetUserByToken(string token)
+        {
+            var user = Users().Single(usr => usr.Token == token);
+            user.Effects = user.Effects.Where(effect => effect.EndTime >= DateTime.UtcNow).ToList();
+
+            user.LoadItems(_equipmentEffectFactory);
+            user.LoadEffects(_effectFactory);
+
+            return user;
+        }
+
+        public void RegenerateUsers()
+        {
+            var users = GetUsers();
+
+            users.ForEach(user => user.RegenerateHealthAndEnergy());
+
+            _db.SaveChanges();
+        }
+
+        public List<User> GetUsers()
+        {
+            var users = Users().ToList();
 
             users.ForEach(user => user.Effects = user.Effects.Where(effect => effect.EndTime >= DateTime.UtcNow).ToList());
 
