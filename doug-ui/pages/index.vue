@@ -1,9 +1,13 @@
 <template>
-  <p>hello</p>
+  <Inventory/>
 </template>
 
 <script>
+import Inventory from '~/components/Inventory.vue'
+
 export default {
-  components: {}
+  components: {
+    Inventory
+  }
 };
 </script>

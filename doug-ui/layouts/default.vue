@@ -21,7 +21,7 @@
       <v-toolbar-title v-text="title" />
       <v-spacer />
       <v-avatar color="teal" size="44">
-        <img :src="profileIcon" />
+        <img :src="icon" />
       </v-avatar>
     </v-app-bar>
     <v-content>
@@ -40,12 +40,10 @@
 import { mapState } from "vuex";
 
 export default {
-  computed: mapState({
-    profileIcon: state => state.user ? state.user.icon : undefined
-  }),
   data() {
     return {
       drawer: false,
+      icon: this.$store.state.auth.user.icon,
       items: [
         {
           icon: "mdi-apps",

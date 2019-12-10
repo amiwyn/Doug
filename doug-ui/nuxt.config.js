@@ -50,7 +50,7 @@ export default {
   ** See https://axios.nuxtjs.org/options
   */
   axios: {
-    baseUrl: 'https://d771c5d7.ngrok.io'
+    baseUrl: 'https://682818d8.ngrok.io'
   },
   router: {
     middleware: ['auth']
@@ -59,9 +59,9 @@ export default {
     strategies: {
       local: {
         endpoints: {
-          login: { url: 'https://d771c5d7.ngrok.io/api/authentication', method: 'post', propertyName: 'token' },
+          login: { url: 'https://682818d8.ngrok.io/api/authentication', method: 'post', propertyName: 'token' },
           logout: false,
-          user: { url: 'https://d771c5d7.ngrok.io/ui/user', method: 'get', propertyName: false }
+          user: { url: 'https://682818d8.ngrok.io/ui/user', method: 'get', propertyName: false }
         }
       }
     }
