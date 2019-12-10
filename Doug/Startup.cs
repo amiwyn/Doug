@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Doug.Commands;
 using Doug.Effects;
 using Doug.Items;
+using Doug.Middlewares;
 using Doug.Repositories;
 using Doug.Services;
 using Doug.Services.MenuServices;
@@ -24,6 +25,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
 namespace Doug
@@ -42,15 +44,20 @@ namespace Doug
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().AddNewtonsoftJson(x =>
+            services.AddMvc().AddNewtonsoftJson(options =>
             {
-                x.SerializerSettings.ContractResolver = new DefaultContractResolver
+                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                options.SerializerSettings.ContractResolver = new DefaultContractResolver
                 {
                     NamingStrategy = new SnakeCaseNamingStrategy()
                 };
             });
 
             services.AddSingleton(new HttpClient(new HttpClientHandler(), false));
+
+            services.AddScoped<EventLimiting>();
+            services.AddScoped<RequestSigning>();
+            services.AddScoped<Authentication>();
 
             RegisterDougServices(services);
 
@@ -144,72 +151,22 @@ namespace Doug
             {
                 //see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
-                app.Use(RequestSigning);
             }
+
+            app.UseCors(builder =>
+                builder.AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
 
             app.UseExceptionHandler(DougExceptionHandler);
-
             app.UseHttpsRedirection();
-            app.Use(EventLimiter);
+            app.UseMiddleware<EventLimiting>();
             app.UseRouting();
-            app.UseEndpoints(endpoints => {
-                endpoints.MapControllers();
-            });
-        }
 
-        private async Task EventLimiter(HttpContext context, Func<Task> next)
-        {
-            if (context.Request.Headers.ContainsKey("X-Slack-Retry-Num"))
-            {
-                await context.Response.WriteAsync("OK");
-                return;
-            }
-            await next();
-        }
+            app.UseWhen(context => context.Request.Path.StartsWithSegments("/cmd"), appBuilder => appBuilder.UseMiddleware<RequestSigning>());
+            app.UseWhen(context => context.Request.Path.StartsWithSegments("/ui"), appBuilder => appBuilder.UseMiddleware<Authentication>());
 
-        private async Task RequestSigning(HttpContext context, Func<Task> next)
-        {
-            string slackSignature = context.Request.Headers["x-slack-signature"];
-            var timestamp = long.Parse(context.Request.Headers["x-slack-request-timestamp"]);
-            var signingSecret = Environment.GetEnvironmentVariable("SLACK_SIGNING_SECRET");
-            string content;
-
-            if (slackSignature == null)
-            {
-                context.Response.StatusCode = 400;
-                await context.Response.WriteAsync("Slack signature missing");
-                return;
-            }
-
-            context.Request.EnableBuffering();
-
-            using (var reader = new StreamReader(context.Request.Body, Encoding.UTF8, true, 1024, true))
-            {
-                content = await reader.ReadToEndAsync();
-            }
-
-            context.Request.Body.Position = 0;
-
-            var sigBase = $"v0:{timestamp}:{content}";
-
-            var encoding = new UTF8Encoding();
-
-            var hmac = new HMACSHA256(encoding.GetBytes(signingSecret));
-            var hashBytes = hmac.ComputeHash(encoding.GetBytes(sigBase));
-
-            var generatedSignature = "v0=" + BitConverter.ToString(hashBytes).Replace("-", "").ToLower();
-
-            if (generatedSignature == slackSignature)
-            {
-                await next();
-            }
-            else
-            {
-                context.Response.StatusCode = 400;
-                await context.Response.WriteAsync("Request signing failed");
-            }
-
-            hmac.Dispose();
+            app.UseEndpoints(endpoints => endpoints.MapControllers());
         }
 
         private void DougExceptionHandler(IApplicationBuilder builder)

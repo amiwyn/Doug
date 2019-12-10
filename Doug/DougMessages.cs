@@ -118,7 +118,7 @@
         public const string UserIsInvincible = "{0} is invincible!";
         public const string MonsterSpawned = "*{0}* has spawned!";
         public const string AttackAction = "Attack";
-        public const string SkillAction = "Skill";
+        public const string SkillAction = "Ability";
         public const string MonsterDied = "*{0}* Died!";
         public const string UserObtained = "{0} obtained {1}";
         public const string YouObtained = "You obtained {0}";

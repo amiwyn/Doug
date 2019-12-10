@@ -37,6 +37,16 @@ namespace Doug.Items
             return targetActionFactory.CreateTargetAction(TargetActionId)(itemPos, user, target, channel);
         }
 
+        public bool IsTargetable()
+        {
+            return string.IsNullOrWhiteSpace(TargetActionId);
+        }
+
+        public bool IsUsable()
+        {
+            return string.IsNullOrWhiteSpace(ActionId);
+        }
+
         public virtual bool IsEquipable()
         {
             return false;

@@ -47,6 +47,8 @@ namespace Doug.Repositories
                 .ThenInclude(droptable => droptable.Items)
                 .Include(monsta => monsta.MonsterAttackers)
                 .ThenInclude(attacker => attacker.User)
+                .ThenInclude(user => user.InventoryItems)
+                .ThenInclude(item => item.Item)
                 .SingleOrDefault(monsta => monsta.Id == monsterId);
 
             return monster;

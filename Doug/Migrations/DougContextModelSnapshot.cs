@@ -3,6 +3,7 @@ using System;
 using Doug;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Doug.Migrations
@@ -14,35 +15,48 @@ namespace Doug.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.6-servicing-10079");
+                .HasAnnotation("ProductVersion", "3.1.0")
+                .HasAnnotation("Relational:MaxIdentifierLength", 128)
+                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("Doug.Items.Item", b =>
                 {
                     b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("ActionId");
+                    b.Property<string>("ActionId")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Description");
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Discriminator")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Icon");
+                    b.Property<string>("Icon")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsSellable");
+                    b.Property<bool>("IsSellable")
+                        .HasColumnType("bit");
 
-                    b.Property<bool>("IsTradable");
+                    b.Property<bool>("IsTradable")
+                        .HasColumnType("bit");
 
-                    b.Property<int>("MaxStack");
+                    b.Property<int>("MaxStack")
+                        .HasColumnType("int");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Price");
+                    b.Property<int>("Price")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Rarity");
+                    b.Property<int>("Rarity")
+                        .HasColumnType("int");
 
-                    b.Property<string>("TargetActionId");
+                    b.Property<string>("TargetActionId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -54,11 +68,13 @@ namespace Doug.Migrations
             modelBuilder.Entity("Doug.Models.Channel", b =>
                 {
                     b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Description");
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Type");
+                    b.Property<string>("Type")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -68,19 +84,27 @@ namespace Doug.Migrations
             modelBuilder.Entity("Doug.Models.Coffee.CoffeeBreak", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("BotToken");
+                    b.Property<string>("BotToken")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("CoffeeRemindJobId");
+                    b.Property<string>("CoffeeRemindJobId")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("FatCounter");
+                    b.Property<int>("FatCounter")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("IsCoffeeBreak");
+                    b.Property<bool>("IsCoffeeBreak")
+                        .HasColumnType("bit");
 
-                    b.Property<DateTime>("LastCoffee");
+                    b.Property<DateTime>("LastCoffee")
+                        .HasColumnType("datetime2");
 
-                    b.Property<string>("UserToken");
+                    b.Property<string>("UserToken")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -90,11 +114,13 @@ namespace Doug.Migrations
             modelBuilder.Entity("Doug.Models.Coffee.Roster", b =>
                 {
                     b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<bool>("IsReady");
+                    b.Property<bool>("IsReady")
+                        .HasColumnType("bit");
 
-                    b.Property<bool>("IsSkipping");
+                    b.Property<bool>("IsSkipping")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
@@ -104,7 +130,7 @@ namespace Doug.Migrations
             modelBuilder.Entity("Doug.Models.DropTable", b =>
                 {
                     b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
@@ -114,13 +140,18 @@ namespace Doug.Migrations
             modelBuilder.Entity("Doug.Models.GambleChallenge", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("Amount");
+                    b.Property<int>("Amount")
+                        .HasColumnType("int");
 
-                    b.Property<string>("RequesterId");
+                    b.Property<string>("RequesterId")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("TargetId");
+                    b.Property<string>("TargetId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -130,17 +161,24 @@ namespace Doug.Migrations
             modelBuilder.Entity("Doug.Models.Government", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("RevolutionCooldown");
+                    b.Property<DateTime>("RevolutionCooldown")
+                        .HasColumnType("datetime2");
 
-                    b.Property<string>("RevolutionLeader");
+                    b.Property<string>("RevolutionLeader")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("RevolutionTimestamp");
+                    b.Property<string>("RevolutionTimestamp")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Ruler");
+                    b.Property<string>("Ruler")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("TaxRate");
+                    b.Property<double>("TaxRate")
+                        .HasColumnType("float");
 
                     b.HasKey("Id");
 
@@ -149,13 +187,17 @@ namespace Doug.Migrations
 
             modelBuilder.Entity("Doug.Models.LootItem", b =>
                 {
-                    b.Property<string>("Id");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("DropTableId");
+                    b.Property<string>("DropTableId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<double>("Probability");
+                    b.Property<double>("Probability")
+                        .HasColumnType("float");
 
-                    b.Property<int>("Quantity");
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
 
                     b.HasKey("Id", "DropTableId");
 
@@ -167,41 +209,58 @@ namespace Doug.Migrations
             modelBuilder.Entity("Doug.Models.Monsters.Monster", b =>
                 {
                     b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("AttackCooldown");
+                    b.Property<int>("AttackCooldown")
+                        .HasColumnType("int");
 
-                    b.Property<int>("CriticalHitChance");
+                    b.Property<int>("CriticalHitChance")
+                        .HasColumnType("int");
 
-                    b.Property<int>("DamageType");
+                    b.Property<int>("DamageType")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Defense");
+                    b.Property<int>("Defense")
+                        .HasColumnType("int");
 
-                    b.Property<string>("Description");
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Dodge");
+                    b.Property<int>("Dodge")
+                        .HasColumnType("int");
 
-                    b.Property<string>("DropTableId");
+                    b.Property<string>("DropTableId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("ExperienceValue");
+                    b.Property<int>("ExperienceValue")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Health");
+                    b.Property<int>("Health")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Hitrate");
+                    b.Property<int>("Hitrate")
+                        .HasColumnType("int");
 
-                    b.Property<string>("Image");
+                    b.Property<string>("Image")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Level");
+                    b.Property<int>("Level")
+                        .HasColumnType("int");
 
-                    b.Property<int>("MaxAttack");
+                    b.Property<int>("MaxAttack")
+                        .HasColumnType("int");
 
-                    b.Property<int>("MinAttack");
+                    b.Property<int>("MinAttack")
+                        .HasColumnType("int");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Region");
+                    b.Property<string>("Region")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Resistance");
+                    b.Property<int>("Resistance")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -212,15 +271,18 @@ namespace Doug.Migrations
 
             modelBuilder.Entity("Doug.Models.Monsters.MonsterAttacker", b =>
                 {
-                    b.Property<string>("UserId");
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("SpawnedMonsterId");
+                    b.Property<int>("SpawnedMonsterId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("DamageDealt");
+                    b.Property<int>("DamageDealt")
+                        .HasColumnType("int");
 
                     b.HasKey("UserId", "SpawnedMonsterId");
 
-                    b.HasAlternateKey("SpawnedMonsterId", "UserId");
+                    b.HasIndex("SpawnedMonsterId");
 
                     b.HasIndex("UserId")
                         .IsUnique();
@@ -230,9 +292,11 @@ namespace Doug.Migrations
 
             modelBuilder.Entity("Doug.Models.Monsters.RegionMonster", b =>
                 {
-                    b.Property<string>("ChannelId");
+                    b.Property<string>("ChannelId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("MonsterId");
+                    b.Property<string>("MonsterId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("ChannelId", "MonsterId");
 
@@ -242,15 +306,21 @@ namespace Doug.Migrations
             modelBuilder.Entity("Doug.Models.Monsters.SpawnedMonster", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("AttackCooldown");
+                    b.Property<DateTime>("AttackCooldown")
+                        .HasColumnType("datetime2");
 
-                    b.Property<string>("Channel");
+                    b.Property<string>("Channel")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Health");
+                    b.Property<int>("Health")
+                        .HasColumnType("int");
 
-                    b.Property<string>("MonsterId");
+                    b.Property<string>("MonsterId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
@@ -262,9 +332,12 @@ namespace Doug.Migrations
             modelBuilder.Entity("Doug.Models.Party", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("UserId");
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
@@ -276,9 +349,10 @@ namespace Doug.Migrations
             modelBuilder.Entity("Doug.Models.Recipe", b =>
                 {
                     b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Result");
+                    b.Property<string>("Result")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -288,13 +362,16 @@ namespace Doug.Migrations
             modelBuilder.Entity("Doug.Models.Shop", b =>
                 {
                     b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Description");
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("PriceMultiplier");
+                    b.Property<double>("PriceMultiplier")
+                        .HasColumnType("float");
 
                     b.HasKey("Id");
 
@@ -303,9 +380,11 @@ namespace Doug.Migrations
 
             modelBuilder.Entity("Doug.Models.ShopItem", b =>
                 {
-                    b.Property<string>("ShopId");
+                    b.Property<string>("ShopId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("ItemId");
+                    b.Property<string>("ItemId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("ShopId", "ItemId");
 
@@ -315,11 +394,15 @@ namespace Doug.Migrations
             modelBuilder.Entity("Doug.Models.Slurs.RecentFlame", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("SlurId");
+                    b.Property<int>("SlurId")
+                        .HasColumnType("int");
 
-                    b.Property<string>("TimeStamp");
+                    b.Property<string>("TimeStamp")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -329,13 +412,18 @@ namespace Doug.Migrations
             modelBuilder.Entity("Doug.Models.Slurs.Slur", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<bool>("Active");
+                    b.Property<bool>("Active")
+                        .HasColumnType("bit");
 
-                    b.Property<string>("CreatedBy");
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Text");
+                    b.Property<string>("Text")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -344,13 +432,17 @@ namespace Doug.Migrations
 
             modelBuilder.Entity("Doug.Models.User.InventoryItem", b =>
                 {
-                    b.Property<string>("UserId");
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("InventoryPosition");
+                    b.Property<int>("InventoryPosition")
+                        .HasColumnType("int");
 
-                    b.Property<string>("ItemId");
+                    b.Property<string>("ItemId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("Quantity");
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
 
                     b.HasKey("UserId", "InventoryPosition");
 
@@ -362,27 +454,37 @@ namespace Doug.Migrations
             modelBuilder.Entity("Doug.Models.User.Loadout", b =>
                 {
                     b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("BodyId");
+                    b.Property<string>("BodyId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("BootsId");
+                    b.Property<string>("BootsId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("GlovesId");
+                    b.Property<string>("GlovesId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("HeadId");
+                    b.Property<string>("HeadId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("LeftHandId");
+                    b.Property<string>("LeftHandId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("LeftRingId");
+                    b.Property<string>("LeftRingId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("NeckId");
+                    b.Property<string>("NeckId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("RightHandId");
+                    b.Property<string>("RightHandId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("RightRingId");
+                    b.Property<string>("RightRingId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("SkillbookId");
+                    b.Property<string>("SkillbookId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
@@ -412,33 +514,49 @@ namespace Doug.Migrations
             modelBuilder.Entity("Doug.Models.User.User", b =>
                 {
                     b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("Agility");
+                    b.Property<int>("Agility")
+                        .HasColumnType("int");
 
-                    b.Property<DateTime>("AttackCooldown");
+                    b.Property<DateTime>("AttackCooldown")
+                        .HasColumnType("datetime2");
 
-                    b.Property<int>("Constitution");
+                    b.Property<int>("Constitution")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Credits");
+                    b.Property<int>("Credits")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Energy");
+                    b.Property<int>("Energy")
+                        .HasColumnType("int");
 
-                    b.Property<long>("Experience");
+                    b.Property<long>("Experience")
+                        .HasColumnType("bigint");
 
-                    b.Property<int>("Health");
+                    b.Property<int>("Health")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Intelligence");
+                    b.Property<int>("Intelligence")
+                        .HasColumnType("int");
 
-                    b.Property<string>("LoadoutId");
+                    b.Property<string>("LoadoutId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("Luck");
+                    b.Property<int>("Luck")
+                        .HasColumnType("int");
 
-                    b.Property<int?>("PartyId");
+                    b.Property<int?>("PartyId")
+                        .HasColumnType("int");
 
-                    b.Property<DateTime>("SkillCooldown");
+                    b.Property<DateTime>("SkillCooldown")
+                        .HasColumnType("datetime2");
 
-                    b.Property<int>("Strength");
+                    b.Property<int>("Strength")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Token")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -451,11 +569,14 @@ namespace Doug.Migrations
 
             modelBuilder.Entity("Doug.Models.User.UserEffect", b =>
                 {
-                    b.Property<string>("UserId");
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("EffectId");
+                    b.Property<string>("EffectId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<DateTime>("EndTime");
+                    b.Property<DateTime>("EndTime")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("UserId", "EffectId");
 
@@ -473,87 +594,128 @@ namespace Doug.Migrations
                 {
                     b.HasBaseType("Doug.Items.Item");
 
-                    b.Property<int>("Agility");
+                    b.Property<int>("Agility")
+                        .HasColumnType("int");
 
-                    b.Property<int>("AgilityFactor");
+                    b.Property<int>("AgilityFactor")
+                        .HasColumnType("int");
 
-                    b.Property<int>("AgilityRequirement");
+                    b.Property<int>("AgilityRequirement")
+                        .HasColumnType("int");
 
-                    b.Property<int>("AttackSpeed");
+                    b.Property<int>("AttackSpeed")
+                        .HasColumnType("int");
 
-                    b.Property<int>("AttackSpeedFactor");
+                    b.Property<int>("AttackSpeedFactor")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Constitution");
+                    b.Property<int>("Constitution")
+                        .HasColumnType("int");
 
-                    b.Property<int>("ConstitutionFactor");
+                    b.Property<int>("ConstitutionFactor")
+                        .HasColumnType("int");
 
-                    b.Property<int>("ConstitutionRequirement");
+                    b.Property<int>("ConstitutionRequirement")
+                        .HasColumnType("int");
 
-                    b.Property<int>("CooldownReduction");
+                    b.Property<int>("CooldownReduction")
+                        .HasColumnType("int");
 
-                    b.Property<int>("CriticalDamageFactor");
+                    b.Property<int>("CriticalDamageFactor")
+                        .HasColumnType("int");
 
-                    b.Property<int>("CriticalHitChanceFactor");
+                    b.Property<int>("CriticalHitChanceFactor")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Defense");
+                    b.Property<int>("Defense")
+                        .HasColumnType("int");
 
-                    b.Property<int>("DefenseFactor");
+                    b.Property<int>("DefenseFactor")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Dodge");
+                    b.Property<int>("Dodge")
+                        .HasColumnType("int");
 
-                    b.Property<string>("EffectId");
+                    b.Property<string>("EffectId")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Energy");
+                    b.Property<int>("Energy")
+                        .HasColumnType("int");
 
-                    b.Property<int>("EnergyFactor");
+                    b.Property<int>("EnergyFactor")
+                        .HasColumnType("int");
 
-                    b.Property<int>("EnergyRegen");
+                    b.Property<int>("EnergyRegen")
+                        .HasColumnType("int");
 
-                    b.Property<int>("FlatEnergyRegen");
+                    b.Property<int>("FlatEnergyRegen")
+                        .HasColumnType("int");
 
-                    b.Property<int>("FlatHealthRegen");
+                    b.Property<int>("FlatHealthRegen")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Health");
+                    b.Property<int>("Health")
+                        .HasColumnType("int");
 
-                    b.Property<int>("HealthFactor");
+                    b.Property<int>("HealthFactor")
+                        .HasColumnType("int");
 
-                    b.Property<int>("HealthRegen");
+                    b.Property<int>("HealthRegen")
+                        .HasColumnType("int");
 
-                    b.Property<int>("HitRateFactor");
+                    b.Property<int>("HitRateFactor")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Hitrate");
+                    b.Property<int>("Hitrate")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Intelligence");
+                    b.Property<int>("Intelligence")
+                        .HasColumnType("int");
 
-                    b.Property<int>("IntelligenceFactor");
+                    b.Property<int>("IntelligenceFactor")
+                        .HasColumnType("int");
 
-                    b.Property<int>("IntelligenceRequirement");
+                    b.Property<int>("IntelligenceRequirement")
+                        .HasColumnType("int");
 
-                    b.Property<int>("LevelRequirement");
+                    b.Property<int>("LevelRequirement")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Luck");
+                    b.Property<int>("Luck")
+                        .HasColumnType("int");
 
-                    b.Property<int>("LuckFactor");
+                    b.Property<int>("LuckFactor")
+                        .HasColumnType("int");
 
-                    b.Property<int>("LuckRequirement");
+                    b.Property<int>("LuckRequirement")
+                        .HasColumnType("int");
 
-                    b.Property<int>("MaxAttack");
+                    b.Property<int>("MaxAttack")
+                        .HasColumnType("int");
 
-                    b.Property<int>("MinAttack");
+                    b.Property<int>("MinAttack")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Pierce");
+                    b.Property<int>("Pierce")
+                        .HasColumnType("int");
 
-                    b.Property<int>("PierceFactor");
+                    b.Property<int>("PierceFactor")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Resistance");
+                    b.Property<int>("Resistance")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Slot");
+                    b.Property<int>("Slot")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Strength");
+                    b.Property<int>("Strength")
+                        .HasColumnType("int");
 
-                    b.Property<int>("StrengthFactor");
+                    b.Property<int>("StrengthFactor")
+                        .HasColumnType("int");
 
-                    b.Property<int>("StrengthRequirement");
+                    b.Property<int>("StrengthRequirement")
+                        .HasColumnType("int");
 
                     b.HasDiscriminator().HasValue("EquipmentItem");
                 });
@@ -562,9 +724,11 @@ namespace Doug.Migrations
                 {
                     b.HasBaseType("Doug.Items.Consumable");
 
-                    b.Property<int>("EnergyAmount");
+                    b.Property<int>("EnergyAmount")
+                        .HasColumnType("int");
 
-                    b.Property<int>("HealthAmount");
+                    b.Property<int>("HealthAmount")
+                        .HasColumnType("int");
 
                     b.HasDiscriminator().HasValue("Food");
                 });
@@ -573,7 +737,8 @@ namespace Doug.Migrations
                 {
                     b.HasBaseType("Doug.Items.Consumable");
 
-                    b.Property<string>("DropTableId");
+                    b.Property<string>("DropTableId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasIndex("DropTableId");
 
@@ -584,7 +749,8 @@ namespace Doug.Migrations
                 {
                     b.HasBaseType("Doug.Items.Consumable");
 
-                    b.Property<string>("Channel");
+                    b.Property<string>("Channel")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasDiscriminator().HasValue("Ticket");
                 });
@@ -593,7 +759,8 @@ namespace Doug.Migrations
                 {
                     b.HasBaseType("Doug.Items.EquipmentItem");
 
-                    b.Property<string>("SkillId");
+                    b.Property<string>("SkillId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasDiscriminator().HasValue("SkillBook");
                 });
@@ -602,7 +769,8 @@ namespace Doug.Migrations
                 {
                     b.HasBaseType("Doug.Items.EquipmentItem");
 
-                    b.Property<bool>("IsDualWield");
+                    b.Property<bool>("IsDualWield")
+                        .HasColumnType("bit");
 
                     b.HasDiscriminator().HasValue("Weapon");
                 });
@@ -611,10 +779,12 @@ namespace Doug.Migrations
                 {
                     b.HasBaseType("Doug.Items.Food");
 
-                    b.Property<int>("Duration");
+                    b.Property<int>("Duration")
+                        .HasColumnType("int");
 
                     b.Property<string>("EffectId")
-                        .HasColumnName("SpecialFood_EffectId");
+                        .HasColumnName("SpecialFood_EffectId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasDiscriminator().HasValue("SpecialFood");
                 });
@@ -684,10 +854,11 @@ namespace Doug.Migrations
 
             modelBuilder.Entity("Doug.Models.LootItem", b =>
                 {
-                    b.HasOne("Doug.Models.DropTable")
+                    b.HasOne("Doug.Models.DropTable", null)
                         .WithMany("Items")
                         .HasForeignKey("DropTableId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Doug.Models.Monsters.Monster", b =>
@@ -702,12 +873,14 @@ namespace Doug.Migrations
                     b.HasOne("Doug.Models.Monsters.SpawnedMonster", "Monster")
                         .WithMany("MonsterAttackers")
                         .HasForeignKey("SpawnedMonsterId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Doug.Models.User.User", "User")
                         .WithOne()
                         .HasForeignKey("Doug.Models.Monsters.MonsterAttacker", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Doug.Models.Monsters.RegionMonster", b =>
@@ -715,7 +888,8 @@ namespace Doug.Migrations
                     b.HasOne("Doug.Models.Channel", "Channel")
                         .WithMany("Monsters")
                         .HasForeignKey("ChannelId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Doug.Models.Monsters.SpawnedMonster", b =>
@@ -737,7 +911,8 @@ namespace Doug.Migrations
                     b.HasOne("Doug.Models.Shop", "Shop")
                         .WithMany("ShopItems")
                         .HasForeignKey("ShopId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Doug.Models.User.InventoryItem", b =>
@@ -749,7 +924,8 @@ namespace Doug.Migrations
                     b.HasOne("Doug.Models.User.User", "User")
                         .WithMany("InventoryItems")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Doug.Models.User.Loadout", b =>
@@ -801,7 +977,7 @@ namespace Doug.Migrations
                         .WithMany()
                         .HasForeignKey("LoadoutId");
 
-                    b.HasOne("Doug.Models.Party")
+                    b.HasOne("Doug.Models.Party", null)
                         .WithMany("Users")
                         .HasForeignKey("PartyId");
                 });
@@ -811,7 +987,8 @@ namespace Doug.Migrations
                     b.HasOne("Doug.Models.User.User", "User")
                         .WithMany("Effects")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Doug.Items.Lootbox", b =>
