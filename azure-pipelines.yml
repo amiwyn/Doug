@@ -38,3 +38,21 @@ steps:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
     ArtifactName: 'drop'
     publishLocation: 'Container'
+
+- task: Npm@1
+  inputs:
+    command: 'install'
+    workingDir: 'doug-ui'
+
+- task: Npm@1
+  inputs:
+    command: 'custom'
+    workingDir: 'doug-ui'
+    customCommand: 'run build'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: 'doug-ui/dist'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
+
