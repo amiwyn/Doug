@@ -40,6 +40,16 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
+- task: Docker@2
+  inputs:
+    command: buildAndPush
+    buildContext: '.'
+    repository: $(imageRepository)
+    dockerfile: $(dockerfilePath)
+    containerRegistry: $(dockerRegistryServiceConnection)
+    tags: |
+        $(tag)
+
 - task: Npm@1
   inputs:
     command: 'install'
