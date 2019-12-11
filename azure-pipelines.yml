@@ -42,7 +42,7 @@ steps:
   inputs:
     command: 'custom'
     workingDir: 'doug-ui'
-    customCommand: 'run build'
+    customCommand: 'run generate'
 
 - task: ArchiveFiles@2
   inputs:
