@@ -28,6 +28,13 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
+- task: VSBuild@1
+  inputs:
+    solution: '$(solution)'
+    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\Functions.zip"'
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+
 - task: VSTest@2
   inputs:
     platform: '$(buildPlatform)'
@@ -44,13 +51,11 @@ steps:
     workingDir: 'doug-ui'
     customCommand: 'run generate'
 
-- task: ArchiveFiles@2
+- task: CopyFiles@2
   inputs:
-    rootFolderOrFile: 'doug-ui/dist'
-    includeRootFolder: true
-    archiveType: 'zip'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/spa.zip'
-    replaceExistingArchive: true
+    SourceFolder: 'doug-ui/dist'
+    Contents: '**'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)/dist'
 
 - task: PublishBuildArtifacts@1
   inputs:
