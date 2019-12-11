@@ -13,6 +13,10 @@ variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
+  dockerRegistryServiceConnection: 'Docker Hub'
+  imageRepository: 'amiwyn/doug'
+  dockerfilePath: 'Doug/Dockerfile'
+  tag: '69'
 
 steps:
 - task: NuGetToolInstaller@1
