@@ -50,7 +50,7 @@ export default {
   ** See https://axios.nuxtjs.org/options
   */
   axios: {
-    baseUrl: 'https://682818d8.ngrok.io'
+    baseUrl: 'https://doug-bot.azurewebsites.net'
   },
   router: {
     middleware: ['auth']
@@ -59,9 +59,9 @@ export default {
     strategies: {
       local: {
         endpoints: {
-          login: { url: 'https://682818d8.ngrok.io/api/authentication', method: 'post', propertyName: 'token' },
+          login: { url: 'https://doug-bot.azurewebsites.net/api/authentication', method: 'post', propertyName: 'token' },
           logout: false,
-          user: { url: 'https://682818d8.ngrok.io/ui/user', method: 'get', propertyName: false }
+          user: { url: 'https://doug-bot.azurewebsites.net/ui/user', method: 'get', propertyName: false }
         }
       }
     }
