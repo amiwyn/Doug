@@ -1,14 +1,17 @@
-﻿using System;
+using System;
 using System.Linq;
 using Doug;
+using Microsoft.Azure.WebJobs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
-namespace ResetWebJob
+namespace Functions
 {
-    class Program
+    public static class Reset
     {
-        static void Main()
+        [FunctionName("Reset")]
+        public static void Run([TimerTrigger("0 0 1 * * *")]TimerInfo myTimer, ILogger log)
         {
             var connectionString = Environment.GetEnvironmentVariable("dougbotdb");
 
