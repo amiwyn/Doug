@@ -7,7 +7,7 @@ trigger:
 - master
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: 'windows-latest'
 
 variables:
   solution: '**/*.sln'
@@ -36,16 +36,6 @@ steps:
   inputs:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
-
-- task: Docker@2
-  inputs:
-    command: buildAndPush
-    buildContext: '.'
-    repository: $(imageRepository)
-    dockerfile: $(dockerfilePath)
-    containerRegistry: $(dockerRegistryServiceConnection)
-    tags: |
-        $(tag)
 
 - task: Npm@1
   inputs:
