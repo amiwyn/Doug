@@ -21,7 +21,7 @@ namespace Doug.Skills
         public Skill(IStatsRepository statsRepository)
         {
             StatsRepository = statsRepository;
-            RequiredWeapon = typeof(Weapon);
+            RequiredWeapon = null;
         }
 
         public virtual async Task<DougResponse> Activate(User user, ICombatable target, string channel)
@@ -32,7 +32,7 @@ namespace Doug.Skills
         protected virtual bool CanActivateSkill(User user, ICombatable target, string channel, out DougResponse response)
         {
             var totalCooldown = Cooldown * (1 - user.CooldownReduction());
-            if (!user.HasWeaponType(RequiredWeapon))
+            if (!user.HasWeaponType(RequiredWeapon) && RequiredWeapon != null)
             {
                 response = new DougResponse(string.Format(DougMessages.WrongWeaponForSkill, RequiredWeapon.Name));
                 return false;
