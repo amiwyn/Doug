@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>
-      <v-dialog width="244">
+      <v-dialog width="284">
         <template v-slot:activator="{ on }">
           <v-hover v-slot:default="{ hover }">
             <div v-on="on">
@@ -9,9 +9,9 @@
                 width="42"
                 height="42"
                 class="grey darken-1 ma-1 d-flex justify-center align-center icon"
-                :elevation="hover ? 12 : 2"
+                :elevation="hover ? 9 : 2"
               >
-                <img class="pa-auto" :src="`/sprites/${icon}.png`" :alt="icon" />
+                <img v-if="item" class="pa-auto" :src="`/sprites/${icon}.png`" :alt="icon" />
               </v-card>
               <div class="number-container">
                 <span class="numbering">{{ quantity }}</span>
@@ -51,27 +51,32 @@
 </style>
 
 <script>
+import Draggable from "vuedraggable";
+
 export default {
+  components: {
+    Draggable
+  },
   props: {
-    itemSlot: {
+    item: {
       type: Object
     }
   },
   data() {
     return {
-      name: this.itemSlot ? this.itemSlot.item.name : undefined,
-      description: this.itemSlot ? this.itemSlot.item.description : undefined,
+      name: this.item ? this.item.name : undefined,
+      description: this.item ? this.item.description : undefined
     };
   },
   computed: {
     quantity: function() {
-      return this.itemSlot && this.itemSlot.quantity > 1
-        ? this.itemSlot.quantity
+      return this.item && this.item.quantity > 1
+        ? this.item.quantity
         : undefined;
     },
     icon: function() {
-      if (this.itemSlot) {
-        let iconName = this.itemSlot.item.icon;
+      if (this.item) {
+        let iconName = this.item.icon;
         let last = iconName.length - 1;
         return iconName.substring(1, last);
       }
