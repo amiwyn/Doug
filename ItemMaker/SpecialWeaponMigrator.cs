@@ -78,6 +78,22 @@ namespace ItemMigrator
             weapon.Icon = CreateIcon(values[27]);
             weapon.Id = values[28];
             weapon.Description = values[29];
+            weapon.LuckFactor = int.Parse(values[30]);
+            weapon.AgilityFactor = int.Parse(values[31]);
+            weapon.StrengthFactor = int.Parse(values[32]);
+            weapon.ConstitutionFactor = int.Parse(values[33]);
+            weapon.IntelligenceFactor = int.Parse(values[34]);
+            weapon.HealthFactor = int.Parse(values[35]);
+            weapon.EnergyFactor = int.Parse(values[36]);
+            weapon.AttackSpeedFactor = int.Parse(values[37]);
+            weapon.CriticalDamageFactor = int.Parse(values[38]);
+            weapon.CriticalHitChanceFactor = int.Parse(values[39]);
+            weapon.Pierce = int.Parse(values[40]);
+            weapon.PierceFactor = int.Parse(values[41]);
+            weapon.HitRateFactor = int.Parse(values[42]);
+            weapon.DodgeFactor = int.Parse(values[43]);
+            weapon.FlatEnergyRegen = int.Parse(values[44]);
+            weapon.FlatHealthRegen = int.Parse(values[45]);
 
             return weapon;
         }

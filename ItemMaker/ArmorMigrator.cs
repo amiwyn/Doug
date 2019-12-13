@@ -33,7 +33,7 @@ namespace ItemMigrator
             var values = Split(line).Select(value => string.IsNullOrEmpty(value) ? "0" : value).ToList();
             Enum.TryParse(values[2], out EquipmentSlot slot);
 
-            //Name,Level,Slot,Agi Req.,Int Req.,Str Req.,Price,Health,Mana,Max Atk.,Min Atk.,Atk. Spd,Hitrate,Dodge,Defense,Resistance,Health Regen,Mana Regen,Luk,Agi,Str,Con,Int,Icon,Id,Description
+            //Name,Level,Slot,Agi Req.,Int Req.,Str Req.,Price,Health,Mana,Max Atk.,Min Atk.,Atk. Spd,Hitrate,Dodge,Defense,Resistance,Health Regen,Mana Regen,Luk,Agi,Str,Con,Int,Icon,Id,Description,
             return new EquipmentItem
             {
                 Name = values[0],
@@ -61,7 +61,23 @@ namespace ItemMigrator
                 Intelligence = int.Parse(values[22]),
                 Icon = CreateIcon(values[23]),
                 Id = values[24],
-                Description = values[25]
+                Description = values[25],
+                LuckFactor = int.Parse(values[26]),
+                AgilityFactor = int.Parse(values[27]),
+                StrengthFactor = int.Parse(values[28]),
+                ConstitutionFactor = int.Parse(values[29]),
+                IntelligenceFactor = int.Parse(values[30]),
+                HealthFactor = int.Parse(values[31]),
+                EnergyFactor = int.Parse(values[32]),
+                AttackSpeedFactor = int.Parse(values[33]),
+                CriticalDamageFactor = int.Parse(values[34]),
+                CriticalHitChanceFactor = int.Parse(values[35]),
+                Pierce = int.Parse(values[36]),
+                PierceFactor = int.Parse(values[37]),
+                HitRateFactor = int.Parse(values[38]),
+                DodgeFactor = int.Parse(values[39]),
+                FlatEnergyRegen = int.Parse(values[40]),
+                FlatHealthRegen = int.Parse(values[41])
             };
         }
     }

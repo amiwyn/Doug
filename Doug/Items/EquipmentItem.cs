@@ -52,6 +52,7 @@ namespace Doug.Items
         public int EnergyFactor { get; set; }
         public int DefenseFactor { get; set; }
         public int HitRateFactor { get; set; }
+        public int DodgeFactor { get; set; }
         public int PierceFactor { get; set; }
         public int AttackSpeedFactor { get; set; }
         public int CriticalHitChanceFactor { get; set; }
