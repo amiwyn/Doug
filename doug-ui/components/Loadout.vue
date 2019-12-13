@@ -1,30 +1,31 @@
 <template>
-  <v-container fluid>
-    <v-row>
-      <v-card>
-        <v-card-text>loadout component wiwpwip</v-card-text>
-        <v-card-actions>
-          <v-col cols="12">
-            <v-row>
-              <InventoryItem :item="getLoadout('skillbook')" />
-              <InventoryItem :item="getLoadout('head')" />
-              <InventoryItem :item="getLoadout('neck')" />
-            </v-row>
-            <v-row>
-              <InventoryItem :item="getLoadout('left_hand')" />
-              <InventoryItem :item="getLoadout('body')" />
-              <InventoryItem :item="getLoadout('right_hand')" />
-            </v-row>
-            <v-row>
-              <InventoryItem :item="getLoadout('left_ring')" />
-              <InventoryItem :item="getLoadout('boots')" />
-              <InventoryItem :item="getLoadout('right_ring')" />
-            </v-row>
-          </v-col>
-        </v-card-actions>
-      </v-card>
-    </v-row>
-  </v-container>
+  <v-card class="ma-2 px-2" max-height="300">
+    <v-card-text>loadout</v-card-text>
+    <v-container>
+      <v-row justify="center">
+        <v-col align="center">
+          <v-row>
+            <InventoryItem :item="getLoadout('skillbook')" />
+            <InventoryItem :item="getLoadout('head')" />
+          </v-row>
+          <v-row>
+            <InventoryItem :item="getLoadout('right_ring')" />
+            <InventoryItem :item="getLoadout('neck')" />
+            <InventoryItem :item="getLoadout('gloves')" />
+          </v-row>
+          <v-row>
+            <InventoryItem :item="getLoadout('left_hand')" />
+            <InventoryItem :item="getLoadout('body')" />
+            <InventoryItem :item="getLoadout('right_hand')" />
+          </v-row>
+          <v-row>
+            <InventoryItem :item="getLoadout('left_ring')" />
+            <InventoryItem :item="getLoadout('boots')" />
+          </v-row>
+        </v-col>
+      </v-row>
+    </v-container>
+  </v-card>
 </template>
 
 <script>

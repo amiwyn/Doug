@@ -4,28 +4,33 @@
       <v-dialog width="284">
         <template v-slot:activator="{ on }">
           <v-hover v-slot:default="{ hover }">
-            <div v-on="on">
-              <v-card
-                width="42"
-                height="42"
-                class="grey darken-1 ma-1 d-flex justify-center align-center icon"
-                :elevation="hover ? 9 : 2"
-              >
-                <img v-if="item" class="pa-auto" :src="`/sprites/${icon}.png`" :alt="icon" />
-              </v-card>
-              <div class="number-container">
-                <span class="numbering">{{ quantity }}</span>
+            <div>
+              <div v-on="on" v-if="item">
+                <v-card
+                  width="42"
+                  height="42"
+                  class="grey darken-1 ma-1 d-flex justify-center align-center icon"
+                  :elevation="hover ? 9 : 2"
+                >
+                  <img class="pa-auto" :src="`/sprites/${icon}.png`" :alt="icon" />
+                </v-card>
+                <div class="number-container">
+                  <span class="numbering">{{ quantity }}</span>
+                </div>
+              </div>
+              <div v-if="!item">
+                <v-card
+                  width="42"
+                  height="42"
+                  class="grey darken-1 ma-1 d-flex justify-center align-center icon"
+                  :elevation="hover ? 9 : 2"
+                ></v-card>
               </div>
             </div>
           </v-hover>
         </template>
 
-        <v-card>
-          <v-card-title>{{ name }}</v-card-title>
-          <v-card-text class="caption mt-2">{{ description }}</v-card-text>
-          <v-divider></v-divider>
-          <v-card-text class="caption mt-2">stats coming soon</v-card-text>
-        </v-card>
+        <ItemStat :item="itemData"/>
       </v-dialog>
     </div>
 
@@ -52,10 +57,12 @@
 
 <script>
 import Draggable from "vuedraggable";
+import ItemStat from "~/components/ItemStat.vue";
 
 export default {
   components: {
-    Draggable
+    Draggable,
+    ItemStat
   },
   props: {
     item: {
@@ -64,6 +71,7 @@ export default {
   },
   data() {
     return {
+      itemData: this.item ? this.item : {},
       name: this.item ? this.item.name : undefined,
       description: this.item ? this.item.description : undefined
     };
