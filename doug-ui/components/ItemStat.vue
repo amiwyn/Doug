@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <v-card v-if="item">
     <v-card-title >{{ item.name }}</v-card-title>
     <v-card-text class="caption">{{ item.description }}</v-card-text>
     <v-divider class="mb-2"></v-divider>
@@ -24,9 +24,17 @@
       <p v-if="isDisplayable(item.strength)" class="text-center caption">Strength {{ formatStat(item.strength) }}</p>
       <p v-if="isDisplayable(item.constitution)" class="text-center caption">Constitution {{ formatStat(item.constitution) }}</p>
       <p v-if="isDisplayable(item.intelligence)" class="text-center caption">Intelligence {{ formatStat(item.intelligence) }}</p>
+      <p class="text-center font-weight-bold caption">Value {{ item.price }}</p>
     </v-card-text>
     <v-divider></v-divider>
-    <v-card-text class="text-center caption mt-2">Value {{ item.price }}</v-card-text>
+    <v-card-actions v-if="equipmentActions">
+      <v-btn @click="unequip()" text>Unequip</v-btn>
+    </v-card-actions>
+    <v-card-actions v-if="!equipmentActions" >
+      <v-btn @click="use()" text>Use</v-btn>
+      <v-btn @click="equip()" text>Equip</v-btn>
+      <v-btn @click="sell()" text>Sell</v-btn>
+    </v-card-actions>
   </v-card>
 </template>
 
@@ -35,6 +43,9 @@ export default {
   props: {
     item: {
       type: Object
+    },
+    equipmentActions: {
+      type: Boolean
     }
   },
   methods: {
@@ -43,6 +54,26 @@ export default {
     },
     isDisplayable: function(stat) {
       return stat && stat !== 0
+    },
+    equip: function() {
+      this.$store.dispatch("user/equip", this.item.pos)
+        .then(result => this.$notifier.showMessage({ content: result }))
+      this.$emit('dialogClose')
+    },
+    unequip: function() {
+      this.$store.dispatch("user/unequip", this.item.slot)
+        .then(result => this.$notifier.showMessage({ content: result }))
+      this.$emit('dialogClose')
+    },
+    use: function() {
+      this.$store.dispatch("user/use", this.item.pos)
+        .then(result => this.$notifier.showMessage({ content: result }))
+      this.$emit('dialogClose')
+    },
+    sell: function() {
+      this.$store.dispatch("user/sell", this.item.pos)
+        .then(result => this.$notifier.showMessage({ content: result }))
+      this.$emit('dialogClose')
     }
   }
 }

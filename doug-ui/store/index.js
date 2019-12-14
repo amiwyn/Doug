@@ -1,12 +1,19 @@
 export const state = () => ({
-  authenticated: null,
   token: null
 })
 
+export const getters = {
+  user: state => {
+    return state.auth ? state.auth.user.user : {}
+  }
+}
+
 export const mutations = {
-  authenticate(state, token) {
-    state.token = token
-    state.authenticated = true
+  setInventory(state, items) {
+    state.auth.user.user.inventory_items = items
+  },
+  setLoadout(state, loadout) {
+    state.auth.user.user.loadout = loadout
   }
 }
 

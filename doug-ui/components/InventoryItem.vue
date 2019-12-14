@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>
-      <v-dialog width="284">
+      <v-dialog width="300" v-model="dialog">
         <template v-slot:activator="{ on }">
           <v-hover v-slot:default="{ hover }">
             <div>
@@ -13,7 +13,7 @@
                   class="ma-1 d-flex justify-center align-center icon"
                   :elevation="hover ? 9 : 2"
                 >
-                  <img class="pa-auto" :src="`/sprites/${icon}.png`"/>
+                  <img class="pa-auto" :src="`/sprites/${icon}.png`" />
                 </v-card>
                 <div class="number-container">
                   <span class="numbering">{{ quantity }}</span>
@@ -31,7 +31,7 @@
           </v-hover>
         </template>
 
-        <ItemStat :item="itemData"/>
+        <ItemStat :item="itemData" :equipmentActions="isEquipment" @dialogClose="closeDialog" />
       </v-dialog>
     </div>
 
@@ -68,13 +68,15 @@ export default {
   props: {
     item: {
       type: Object
+    },
+    isEquipped: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
     return {
-      itemData: this.item ? this.item : {},
-      name: this.item ? this.item.name : undefined,
-      description: this.item ? this.item.description : undefined,
+      dialog: false,
       rarityColors: ["#b0b0b0", "#6aad66", "#4c7cba", "#db9851", "#9b5eb8"]
     };
   },
@@ -91,6 +93,23 @@ export default {
         return iconName.substring(1, last);
       }
       return undefined;
+    },
+    itemData: function() {
+      return this.item;
+    },
+    name: function() {
+      return this.item.name;
+    },
+    description: function() {
+      return this.item.description;
+    },
+    isEquipment: function() {
+      return this.isEquipped;
+    }
+  },
+  methods: {
+    closeDialog: function() {
+      this.dialog = false;
     }
   }
 };

@@ -20,7 +20,7 @@ export default {
   },
   methods: {
     getItem: function(x, y) {
-      let items = [...this.$store.state.auth.user.user.inventory_items];
+      let items = [...this.$store.getters.user.inventory_items];
       items.sort((a, b) => a.inventory_position - b.inventory_position);
       let pos = x - 1 + 4 * (y - 1);
       let invItem = items.find(itm => itm.inventory_position === pos);
@@ -29,7 +29,7 @@ export default {
         return null;
       }
 
-      return { ...invItem.item, quantity: invItem.quantity };
+      return { ...invItem.item, quantity: invItem.quantity, pos: invItem.inventory_position };
     }
   }
 };
