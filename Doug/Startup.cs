@@ -1,10 +1,6 @@
 ﻿using System;
-using System.IO;
 using System.Net;
 using System.Net.Http;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 using Doug.Commands;
 using Doug.Effects;
 using Doug.Items;
@@ -114,6 +110,7 @@ namespace Doug
             services.AddScoped<ICraftingMenuService, CraftingMenuService>();
             services.AddScoped<ICraftingService, CraftingService>();
             services.AddScoped<ISkillService, SkillService>();
+            services.AddScoped<IInventoryService, InventoryService>();
 
             services.AddScoped<ICoffeeCommands, CoffeeCommands>();
             services.AddScoped<ISlursCommands, SlursCommands>();

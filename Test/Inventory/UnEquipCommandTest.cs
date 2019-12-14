@@ -1,7 +1,5 @@
 using System.Collections.Generic;
-using Doug.Commands;
 using Doug.Items;
-using Doug.Models;
 using Doug.Models.User;
 using Doug.Repositories;
 using Doug.Services;
@@ -14,18 +12,10 @@ namespace Test.Inventory
     [TestClass]
     public class UnEquipCommandTest
     {
-        private const string CommandText = "1";
-        private const string Channel = "coco-channel";
         private const string User = "testuser";
 
-        private readonly Command _command = new Command()
-        {
-            ChannelId = Channel,
-            Text = CommandText,
-            UserId = User
-        };
-
-        private InventoryCommands _inventoryCommands;
+        private InventoryService _inventoryService;
+        private User _user;
 
         private readonly Mock<IUserRepository> _userRepository = new Mock<IUserRepository>();
         private readonly Mock<ISlackWebApi> _slack = new Mock<ISlackWebApi>();
@@ -41,16 +31,18 @@ namespace Test.Inventory
             var loadout = new Loadout();
             loadout.Equip(new EquipmentItem() { Slot = EquipmentSlot.Body});
 
-            _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User() { Id = "testuser", Loadout = loadout });
+            _user = new User() {Id = "testuser", Loadout = loadout};
+
+            _userRepository.Setup(repo => repo.GetUser(User)).Returns(_user);
             _equipmentRepository.Setup(repo => repo.UnequipItem(It.IsAny<User>(), EquipmentSlot.Body)).Returns(new EquipmentItem());
 
-            _inventoryCommands = new InventoryCommands(_userRepository.Object, _slack.Object, _inventoryRepository.Object, _equipmentRepository.Object, _userService.Object, _actionFactory.Object, _targetActionFactory.Object);
+            _inventoryService = new InventoryService(_actionFactory.Object, _inventoryRepository.Object, _userService.Object, _slack.Object, _targetActionFactory.Object, _equipmentRepository.Object);
         }
 
         [TestMethod]
         public void WhenUnEquippingItem_ItemIsRemovedFromSlot()
         {
-            _inventoryCommands.UnEquip(_command);
+            _inventoryService.UnEquip(_user, EquipmentSlot.Body);
 
             _equipmentRepository.Verify(repo => repo.UnequipItem(It.IsAny<User>(), EquipmentSlot.Body));
         }
@@ -58,7 +50,7 @@ namespace Test.Inventory
         [TestMethod]
         public void WhenUnEquippingItem_ItemIsAddedToInventory()
         {
-            _inventoryCommands.UnEquip(_command);
+            _inventoryService.UnEquip(_user, EquipmentSlot.Body);
 
             _inventoryRepository.Verify(repo => repo.AddItem(It.IsAny<User>(), It.IsAny<EquipmentItem>()));
         }
@@ -66,11 +58,10 @@ namespace Test.Inventory
         [TestMethod]
         public void GivenUserHasNoItemInSlot_WhenUnEquippingItem_NoItemMessageSent()
         {
-            _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User() { Id = "testuser", InventoryItems = new List<InventoryItem>() });
+            var user = new User() {Id = "testuser", InventoryItems = new List<InventoryItem>()};
+            var result = _inventoryService.UnEquip(user, EquipmentSlot.Body);
 
-            var result = _inventoryCommands.UnEquip(_command);
-
-            Assert.AreEqual("No equipment in slot 1", result.Message);
+            Assert.AreEqual("No equipment in slot Body", result);
         }
     }
 }

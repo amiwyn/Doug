@@ -5,9 +5,9 @@
     <v-divider class="mb-2"></v-divider>
     <v-card-text>
       <p v-if="isDisplayable(item.level_requirement)" class="text-center font-weight-bold caption">Level {{ item.level_requirement }}</p>
-      <p v-if="isDisplayable(item.strength_requirement)" class="text-center caption">Str requirement {{ item.strength_requirement }}</p>
-      <p v-if="isDisplayable(item.agility_requirement)" class="text-center caption">Agi requirement {{ item.agility_requirement }}</p>
-      <p v-if="isDisplayable(item.intelligence_requirement)" class="text-center caption">Int requirement {{ item.intelligence_requirement }}</p>
+      <p v-if="isDisplayable(item.strength_requirement)" class="text-center caption">Str required {{ item.strength_requirement }}</p>
+      <p v-if="isDisplayable(item.agility_requirement)" class="text-center caption">Agi required {{ item.agility_requirement }}</p>
+      <p v-if="isDisplayable(item.intelligence_requirement)" class="text-center caption">Int required {{ item.intelligence_requirement }}</p>
       
       <p v-if="isDisplayable(item.max_attack)" class="text-center caption">Attack {{ item.min_attack }}/{{ item.max_attack }}</p>
       <p v-if="isDisplayable(item.health)" class="text-center caption">Health {{ formatStat(item.health) }}</p>

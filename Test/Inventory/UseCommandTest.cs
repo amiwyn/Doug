@@ -1,7 +1,5 @@
 using System.Collections.Generic;
-using Doug.Commands;
 using Doug.Items;
-using Doug.Models;
 using Doug.Models.User;
 using Doug.Repositories;
 using Doug.Services;
@@ -14,18 +12,11 @@ namespace Test.Inventory
     [TestClass]
     public class UseCommandTest
     {
-        private const string CommandText = "2";
         private const string Channel = "coco-channel";
         private const string User = "testuser";
 
-        private readonly Command _command = new Command()
-        {
-            ChannelId = Channel,
-            Text = CommandText,
-            UserId = User
-        };
-
-        private InventoryCommands _inventoryCommands;
+        private InventoryService _inventoryService;
+        private User _user;
 
         private readonly Mock<IUserRepository> _userRepository = new Mock<IUserRepository>();
         private readonly Mock<IInventoryRepository> _inventoryRepository = new Mock<IInventoryRepository>();
@@ -39,16 +30,19 @@ namespace Test.Inventory
         [TestInitialize]
         public void Setup()
         {
-            var items = new List<InventoryItem>() {new InventoryItem("testuser", "testitem") {InventoryPosition = 2, Item = _item.Object } };
-            _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User() { Id = "testuser", InventoryItems = items });
+            var items = new List<InventoryItem> {new InventoryItem("testuser", "testitem") {InventoryPosition = 2, Item = _item.Object } };
+            _user = new User {Id = "testuser", InventoryItems = items};
 
-            _inventoryCommands = new InventoryCommands(_userRepository.Object, _slack.Object, _inventoryRepository.Object, _equipmentRepository.Object, _userService.Object, _actionFactory.Object, _targetActionFactory.Object);
+
+            _userRepository.Setup(repo => repo.GetUser(User)).Returns(_user);
+
+            _inventoryService = new InventoryService(_actionFactory.Object, _inventoryRepository.Object, _userService.Object, _slack.Object, _targetActionFactory.Object, _equipmentRepository.Object);
         }
 
         [TestMethod]
         public void WhenUsingItem_ItemIsRemovedFromGiver()
         {
-            _inventoryCommands.Use(_command);
+            _inventoryService.Use(_user, 2, Channel);
 
             _item.Verify(item => item.Use(_actionFactory.Object, 2, It.IsAny<User>(), Channel));
         }
@@ -56,11 +50,10 @@ namespace Test.Inventory
         [TestMethod]
         public void GivenUserHasNoItemInSlot_WhenGivingItem_NoItemMessageSent()
         {
-            _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User() { Id = "testuser", InventoryItems = new List<InventoryItem>() });
+            var user = new User() {Id = "testuser", InventoryItems = new List<InventoryItem>()};
+            var result = _inventoryService.Use(user, 2, Channel);
 
-            var result = _inventoryCommands.Use(_command);
-
-            Assert.AreEqual("There is no item in slot 2.", result.Message);
+            Assert.AreEqual("There is no item in slot 2.", result);
         }
     }
 }

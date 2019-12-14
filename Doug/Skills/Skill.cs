@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Doug.Items.WeaponType;
 using Doug.Models;
 using Doug.Models.Combat;
 using Doug.Models.User;
