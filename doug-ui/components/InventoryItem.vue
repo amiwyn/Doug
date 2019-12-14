@@ -7,12 +7,13 @@
             <div>
               <div v-on="on" v-if="item">
                 <v-card
+                  :color="rarityColors[item.rarity]"
                   width="42"
                   height="42"
-                  class="grey darken-1 ma-1 d-flex justify-center align-center icon"
+                  class="ma-1 d-flex justify-center align-center icon"
                   :elevation="hover ? 9 : 2"
                 >
-                  <img class="pa-auto" :src="`/sprites/${icon}.png`" :alt="icon" />
+                  <img class="pa-auto" :src="`/sprites/${icon}.png`"/>
                 </v-card>
                 <div class="number-container">
                   <span class="numbering">{{ quantity }}</span>
@@ -73,7 +74,8 @@ export default {
     return {
       itemData: this.item ? this.item : {},
       name: this.item ? this.item.name : undefined,
-      description: this.item ? this.item.description : undefined
+      description: this.item ? this.item.description : undefined,
+      rarityColors: ["#b0b0b0", "#6aad66", "#4c7cba", "#db9851", "#9b5eb8"]
     };
   },
   computed: {

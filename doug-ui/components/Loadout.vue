@@ -5,22 +5,22 @@
       <v-row justify="center">
         <v-col align="center">
           <v-row>
-            <InventoryItem :item="getLoadout('skillbook')" />
-            <InventoryItem :item="getLoadout('head')" />
+            <LoadoutSlot :item="getLoadout('skillbook')" />
+            <LoadoutSlot :item="getLoadout('head')" />
           </v-row>
           <v-row>
-            <InventoryItem :item="getLoadout('right_ring')" />
-            <InventoryItem :item="getLoadout('neck')" />
-            <InventoryItem :item="getLoadout('gloves')" />
+            <LoadoutSlot :item="getLoadout('right_ring')" />
+            <LoadoutSlot :item="getLoadout('neck')" />
+            <LoadoutSlot :item="getLoadout('gloves')" />
           </v-row>
           <v-row>
-            <InventoryItem :item="getLoadout('left_hand')" />
-            <InventoryItem :item="getLoadout('body')" />
-            <InventoryItem :item="getLoadout('right_hand')" />
+            <LoadoutSlot :item="getLoadout('left_hand')" />
+            <LoadoutSlot :item="getLoadout('body')" />
+            <LoadoutSlot :item="getLoadout('right_hand')" />
           </v-row>
           <v-row>
-            <InventoryItem :item="getLoadout('left_ring')" />
-            <InventoryItem :item="getLoadout('boots')" />
+            <LoadoutSlot :item="getLoadout('left_ring')" />
+            <LoadoutSlot :item="getLoadout('boots')" />
           </v-row>
         </v-col>
       </v-row>
@@ -29,11 +29,11 @@
 </template>
 
 <script>
-import InventoryItem from "~/components/InventoryItem.vue";
+import LoadoutSlot from "~/components/LoadoutSlot.vue";
 
 export default {
   components: {
-    InventoryItem
+    LoadoutSlot
   },
   methods: {
     getItem: function(x, y) {
@@ -43,7 +43,8 @@ export default {
       return items.find(itm => itm.inventory_position === pos);
     },
     getLoadout: function(slot) {
-      return this.$store.state.auth.user.user.loadout[slot];
+      let item = this.$store.state.auth.user.user.loadout[slot];
+      return { item: item, slot: slot };
     }
   }
 };
