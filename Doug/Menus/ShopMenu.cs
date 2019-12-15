@@ -39,11 +39,8 @@ namespace Doug.Menus
         {
             var generalStoreButton = new Button(DougMessages.GeneralStore, ShopMenuService.GeneralStoreId, $"{Actions.ShopSwitch.ToString()}:0");
             var peasantShop = new Button(DougMessages.PeasantShop, ShopMenuService.PeasantShopId, $"{Actions.ShopSwitch.ToString()}:1");
-            var armoryShopButton = new Button(DougMessages.ArmoryShop, ShopMenuService.ArmoryShopId, $"{Actions.ShopSwitch.ToString()}:2");
-            var rogueShopButton = new Button(DougMessages.RogueShop, ShopMenuService.RogueShop, $"{Actions.ShopSwitch.ToString()}:3");
-            var magicShopButton = new Button(DougMessages.MagicShop, ShopMenuService.MagicShop, $"{Actions.ShopSwitch.ToString()}:4");
 
-            return new ActionList(new List<Accessory> { generalStoreButton, peasantShop, armoryShopButton, rogueShopButton, magicShopButton }, Actions.ShopSwitch.ToString());
+            return new ActionList(new List<Accessory> { generalStoreButton, peasantShop }, Actions.ShopSwitch.ToString());
         }
 
         private List<Block> ShopItemSection(Item item, string shopId)
@@ -53,12 +50,6 @@ namespace Doug.Menus
             var buttonBlock = new Button(string.Format(DougMessages.BuyFor, _governmentService.GetPriceWithTaxes(item)), item.Id, Actions.Buy.ToString());
 
             var shopItem = new List<Block> { new Section(textBlock, buttonBlock, $"{shopId}:{item.Id}") };
-
-            if (item is EquipmentItem equipmentItem)
-            {
-                var attributes = equipmentItem.GetDisplayAttributeList();
-                shopItem.Add(new Context(attributes));
-            }
 
             return shopItem;
         }
