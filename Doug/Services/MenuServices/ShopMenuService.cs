@@ -44,7 +44,15 @@ namespace Doug.Services.MenuServices
 
         public async Task<DougResponse> ShowShop(User user, string channel, string shopId)
         {
-            var shop = _shopRepository.GetShop(shopId);
+            Shop shop;
+            if (shopId == null)
+            {
+                shop = _shopRepository.GetShop(channel) ?? _shopRepository.GetShop(GeneralStoreId);
+            }
+            else
+            {
+                shop = _shopRepository.GetShop(shopId);
+            }
 
             if (shop == null)
             {

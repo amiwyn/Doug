@@ -8,7 +8,7 @@ namespace ImageCropper
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             var files = Directory.GetFiles("icons");
             foreach (var file in files)

@@ -1,31 +1,37 @@
 <template>
   <div>
     <div>
-      <v-dialog width="284">
+      <v-dialog width="300" v-model="dialog">
         <template v-slot:activator="{ on }">
           <v-hover v-slot:default="{ hover }">
-            <div v-on="on">
-              <v-card
-                width="42"
-                height="42"
-                class="grey darken-1 ma-1 d-flex justify-center align-center icon"
-                :elevation="hover ? 9 : 2"
-              >
-                <img v-if="item" class="pa-auto" :src="`/sprites/${icon}.png`" :alt="icon" />
-              </v-card>
-              <div class="number-container">
-                <span class="numbering">{{ quantity }}</span>
+            <div>
+              <div v-on="on" v-if="item">
+                <v-card
+                  :color="rarityColors[item.rarity]"
+                  width="42"
+                  height="42"
+                  class="ma-1 d-flex justify-center align-center icon"
+                  :elevation="hover ? 9 : 2"
+                >
+                  <img class="pa-auto" :src="`/sprites/${icon}.png`" />
+                </v-card>
+                <div class="number-container">
+                  <span class="numbering">{{ quantity }}</span>
+                </div>
+              </div>
+              <div v-if="!item">
+                <v-card
+                  width="42"
+                  height="42"
+                  class="grey darken-1 ma-1 d-flex justify-center align-center icon"
+                  :elevation="hover ? 9 : 2"
+                ></v-card>
               </div>
             </div>
           </v-hover>
         </template>
 
-        <v-card>
-          <v-card-title>{{ name }}</v-card-title>
-          <v-card-text class="caption mt-2">{{ description }}</v-card-text>
-          <v-divider></v-divider>
-          <v-card-text class="caption mt-2">stats coming soon</v-card-text>
-        </v-card>
+        <ItemStat :item="itemData" :equipmentActions="isEquipment" @dialogClose="closeDialog" />
       </v-dialog>
     </div>
 
@@ -52,20 +58,26 @@
 
 <script>
 import Draggable from "vuedraggable";
+import ItemStat from "~/components/ItemStat.vue";
 
 export default {
   components: {
-    Draggable
+    Draggable,
+    ItemStat
   },
   props: {
     item: {
       type: Object
+    },
+    isEquipped: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
     return {
-      name: this.item ? this.item.name : undefined,
-      description: this.item ? this.item.description : undefined
+      dialog: false,
+      rarityColors: ["#b0b0b0", "#6aad66", "#4c7cba", "#db9851", "#9b5eb8"]
     };
   },
   computed: {
@@ -81,6 +93,23 @@ export default {
         return iconName.substring(1, last);
       }
       return undefined;
+    },
+    itemData: function() {
+      return this.item;
+    },
+    name: function() {
+      return this.item.name;
+    },
+    description: function() {
+      return this.item.description;
+    },
+    isEquipment: function() {
+      return this.isEquipped;
+    }
+  },
+  methods: {
+    closeDialog: function() {
+      this.dialog = false;
     }
   }
 };

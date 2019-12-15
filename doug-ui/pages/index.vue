@@ -1,11 +1,11 @@
 <template>
   <v-container fluid>
-    <v-row>
-      <v-col>
+    <v-col cols="12">
+      <v-row>
         <Inventory />
         <Loadout />
-      </v-col>
-    </v-row>
+      </v-row>
+    </v-col>
   </v-container>
 </template>
 

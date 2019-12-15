@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Doug.Effects;
 using Doug.Models.Combat;
-using Doug.Skills.Utility;
 
 namespace Doug.Models.Monsters
 {

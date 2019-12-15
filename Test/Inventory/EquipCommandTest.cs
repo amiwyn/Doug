@@ -1,7 +1,5 @@
 using System.Collections.Generic;
-using Doug.Commands;
 using Doug.Items;
-using Doug.Models;
 using Doug.Models.User;
 using Doug.Repositories;
 using Doug.Services;
@@ -14,18 +12,9 @@ namespace Test.Inventory
     [TestClass]
     public class EquipCommandTest
     {
-        private const string CommandText = "6";
-        private const string Channel = "coco-channel";
         private const string User = "testuser";
 
-        private readonly Command _command = new Command()
-        {
-            ChannelId = Channel,
-            Text = CommandText,
-            UserId = User
-        };
-
-        private InventoryCommands _inventoryCommands;
+        private InventoryService _inventoryService;
 
         private readonly Mock<IUserRepository> _userRepository = new Mock<IUserRepository>();
         private readonly Mock<ISlackWebApi> _slack = new Mock<ISlackWebApi>();
@@ -37,22 +26,27 @@ namespace Test.Inventory
 
         private EquipmentItem _item;
 
+        private User _user;
+
         [TestInitialize]
         public void Setup()
         {
             _item = new EquipmentItem();
             var loadout = new Loadout();
+
             var items = new List<InventoryItem>() { new InventoryItem("testuser", "testitem") { InventoryPosition = 6, Item = _item } };
-            _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User { Id = "testuser", Experience = 35000, InventoryItems = items, Loadout = loadout });
+            _user = new User {Id = "testuser", Experience = 35000, InventoryItems = items, Loadout = loadout};
+
+            _userRepository.Setup(repo => repo.GetUser(User)).Returns(_user);
             _equipmentRepository.Setup(repo => repo.EquipItem(It.IsAny<User>(), It.IsAny<EquipmentItem>())).Returns(new List<EquipmentItem>());
 
-            _inventoryCommands = new InventoryCommands(_userRepository.Object, _slack.Object, _inventoryRepository.Object, _equipmentRepository.Object, _userService.Object, _actionFactory.Object, _targetActionFactory.Object);
+            _inventoryService = new InventoryService(_actionFactory.Object, _inventoryRepository.Object, _userService.Object, _slack.Object, _targetActionFactory.Object, _equipmentRepository.Object);
         }
 
         [TestMethod]
         public void GivenEmptyEquipmentSlot_WhenEquippingItem_ItemIsEquippedInSlot()
         {
-            _inventoryCommands.Equip(_command);
+            _inventoryService.Equip(_user, 6);
 
             _equipmentRepository.Verify(repo => repo.EquipItem(It.IsAny<User>(), _item));
         }
@@ -60,7 +54,7 @@ namespace Test.Inventory
         [TestMethod]
         public void GivenEmptyEquipmentSlot_WhenEquippingItem_ItemIsRemovedFromInventory()
         {
-            _inventoryCommands.Equip(_command);
+            _inventoryService.Equip(_user, 6);
 
             _inventoryRepository.Verify(repo => repo.RemoveItem(It.IsAny<User>(), 6));
         }
@@ -68,33 +62,29 @@ namespace Test.Inventory
         [TestMethod]
         public void GivenUserHasNoItemInSlot_WhenEquipping_NoItemMessageSent()
         {
-            _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User() { Id = "testuser", InventoryItems = new List<InventoryItem>() });
+            var result = _inventoryService.Equip(new User { Id = "testuser", InventoryItems = new List<InventoryItem>() }, 6);
 
-            var result = _inventoryCommands.Equip(_command);
-
-            Assert.AreEqual("There is no item in slot 6.", result.Message);
+            Assert.AreEqual("There is no item in slot 6.", result);
         }
 
         [TestMethod]
         public void GivenItemIsNotEquipAble_WhenEquipping_NotEquipAbleMessageSent()
         {
-            var items = new List<InventoryItem>() { new InventoryItem("testuser", "testitem") { InventoryPosition = 6, Item = new Consumable() } };
-            _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User() { Id = "testuser", InventoryItems = items });
+            var items = new List<InventoryItem> { new InventoryItem("testuser", "testitem") { InventoryPosition = 6, Item = new Consumable() } };
 
-            var result = _inventoryCommands.Equip(_command);
+            var result = _inventoryService.Equip(new User { Id = "testuser", InventoryItems = items }, 6);
 
-            Assert.AreEqual("This item is not equipable.", result.Message);
+            Assert.AreEqual("This item is not equipable.", result);
         }
 
         [TestMethod]
         public void GivenItemLevelIsTooHigh_WhenEquipping_ItemLevelTooHighMessageSent()
         {
-            var items = new List<InventoryItem>() { new InventoryItem("testuser", "testitem") { InventoryPosition = 6, Item = new EquipmentItem { LevelRequirement = 69 } } };
-            _userRepository.Setup(repo => repo.GetUser(User)).Returns(new User() { Id = "testuser", InventoryItems = items });
+            var items = new List<InventoryItem> { new InventoryItem("testuser", "testitem") { InventoryPosition = 6, Item = new EquipmentItem { LevelRequirement = 69 } } };
 
-            var result = _inventoryCommands.Equip(_command);
+            var result = _inventoryService.Equip(new User { Id = "testuser", InventoryItems = items }, 6);
 
-            Assert.AreEqual("You do not meet the level requirements to equip this item.", result.Message);
+            Assert.AreEqual("You do not meet the level requirements to equip this item.", result);
         }
     }
 }

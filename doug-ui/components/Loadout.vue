@@ -1,38 +1,39 @@
 <template>
-  <v-container fluid>
-    <v-row>
-      <v-card>
-        <v-card-text>loadout component wiwpwip</v-card-text>
-        <v-card-actions>
-          <v-col cols="12">
-            <v-row>
-              <InventoryItem :item="getLoadout('skillbook')" />
-              <InventoryItem :item="getLoadout('head')" />
-              <InventoryItem :item="getLoadout('neck')" />
-            </v-row>
-            <v-row>
-              <InventoryItem :item="getLoadout('left_hand')" />
-              <InventoryItem :item="getLoadout('body')" />
-              <InventoryItem :item="getLoadout('right_hand')" />
-            </v-row>
-            <v-row>
-              <InventoryItem :item="getLoadout('left_ring')" />
-              <InventoryItem :item="getLoadout('boots')" />
-              <InventoryItem :item="getLoadout('right_ring')" />
-            </v-row>
-          </v-col>
-        </v-card-actions>
-      </v-card>
-    </v-row>
-  </v-container>
+  <v-card class="ma-2 px-2" max-height="300">
+    <v-card-text>loadout</v-card-text>
+    <v-container>
+      <v-row justify="center">
+        <v-col align="center">
+          <v-row>
+            <LoadoutSlot :item="getLoadout('skillbook')" />
+            <LoadoutSlot :item="getLoadout('head')" />
+          </v-row>
+          <v-row>
+            <LoadoutSlot :item="getLoadout('right_ring')" />
+            <LoadoutSlot :item="getLoadout('neck')" />
+            <LoadoutSlot :item="getLoadout('gloves')" />
+          </v-row>
+          <v-row>
+            <LoadoutSlot :item="getLoadout('left_hand')" />
+            <LoadoutSlot :item="getLoadout('body')" />
+            <LoadoutSlot :item="getLoadout('right_hand')" />
+          </v-row>
+          <v-row>
+            <LoadoutSlot :item="getLoadout('left_ring')" />
+            <LoadoutSlot :item="getLoadout('boots')" />
+          </v-row>
+        </v-col>
+      </v-row>
+    </v-container>
+  </v-card>
 </template>
 
 <script>
-import InventoryItem from "~/components/InventoryItem.vue";
+import LoadoutSlot from "~/components/LoadoutSlot.vue";
 
 export default {
   components: {
-    InventoryItem
+    LoadoutSlot
   },
   methods: {
     getItem: function(x, y) {
@@ -42,7 +43,8 @@ export default {
       return items.find(itm => itm.inventory_position === pos);
     },
     getLoadout: function(slot) {
-      return this.$store.state.auth.user.user.loadout[slot];
+      let item = this.$store.state.auth.user.user.loadout[slot];
+      return { item: item, slot: slot };
     }
   }
 };

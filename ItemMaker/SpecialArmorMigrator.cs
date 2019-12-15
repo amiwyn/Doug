@@ -64,7 +64,23 @@ namespace ItemMigrator
                 IsTradable = values[26] == "1",
                 Icon = CreateIcon(values[27]),
                 Id = values[28],
-                Description = values[29]
+                Description = values[29],
+                LuckFactor = int.Parse(values[30]),
+                AgilityFactor = int.Parse(values[31]),
+                StrengthFactor = int.Parse(values[32]),
+                ConstitutionFactor = int.Parse(values[33]),
+                IntelligenceFactor = int.Parse(values[34]),
+                HealthFactor = int.Parse(values[35]),
+                EnergyFactor = int.Parse(values[36]),
+                AttackSpeedFactor = int.Parse(values[37]),
+                CriticalDamageFactor = int.Parse(values[38]),
+                CriticalHitChanceFactor = int.Parse(values[39]),
+                Pierce = int.Parse(values[40]),
+                PierceFactor = int.Parse(values[41]),
+                HitRateFactor = int.Parse(values[42]),
+                DodgeFactor = int.Parse(values[43]),
+                FlatEnergyRegen = int.Parse(values[44]),
+                FlatHealthRegen = int.Parse(values[45])
             };
         }
     }

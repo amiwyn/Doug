@@ -95,7 +95,7 @@ namespace Doug.Commands
         {
             var user = _userRepository.GetUser(command.UserId);
 
-            var shopId = command.GetArgumentCount() == 1 ? command.GetArgumentAt(0) : ShopMenuService.GeneralStoreId;
+            var shopId = command.GetArgumentCount() == 1 ? command.GetArgumentAt(0) : null;
 
             await _shopMenuService.ShowShop(user, command.ChannelId, shopId);
 

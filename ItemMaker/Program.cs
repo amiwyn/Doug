@@ -33,6 +33,8 @@ namespace ItemMigrator
             new ArmorMigrator().Migrate(serviceProvider.GetService<DougContext>(), "mage.csv");
             new ArmorMigrator().Migrate(serviceProvider.GetService<DougContext>(), "warrior.csv");
             new ArmorMigrator().Migrate(serviceProvider.GetService<DougContext>(), "rogue.csv");
+
+            new ShopsMigrator().Migrate(serviceProvider.GetService<DougContext>());
         }
     }
 }

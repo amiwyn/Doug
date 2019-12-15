@@ -30,6 +30,7 @@
       </v-container>
     </v-content>
 
+    <Snackbar></Snackbar>
     <v-footer fixed app>
       <span>&copy; 2019</span>
     </v-footer>
@@ -38,8 +39,12 @@
 
 <script>
 import { mapState } from "vuex";
+import Snackbar from '~/components/Snackbar.vue'
 
 export default {
+  components: {
+    Snackbar
+  },
   data() {
     return {
       drawer: false,
