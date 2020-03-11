@@ -16,7 +16,8 @@
         Skill,
         AcceptPartyInvite,
         RejectPartyInvite,
-        Craft
+        Craft,
+        BuyTicket
     }
 
     public enum InventoryActions

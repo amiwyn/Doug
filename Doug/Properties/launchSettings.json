@@ -13,6 +13,7 @@
       "commandName": "IISExpress",
       "launchUrl": "api/values",
       "environmentVariables": {
+        "ConnectionStrings__dougbotdb": "Server=tcp:dougdata.database.windows.net,1433;Initial Catalog=doug;Persist Security Info=False;User ID=Amiwyn;Password=Maison45;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;",
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },

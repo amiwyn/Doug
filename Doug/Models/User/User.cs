@@ -69,6 +69,7 @@ namespace Doug.Models.User
         public int Constitution { get; set; }
         public int Intelligence { get; set; }
         public string Token { get; set; }
+        public int LotteryTickets { get; set; }
 
 
         public long Experience { get; set; }
@@ -281,6 +282,11 @@ namespace Doug.Models.User
         {
             Health += (int)Math.Ceiling(TotalHealth() * TotalHealthRegen() * 0.01) + TotalFlatHealthRegen();
             Energy += (int)Math.Ceiling(TotalEnergy() * TotalEnergyRegen() * 0.01) + TotalFlatEnergyRegen();
+        }
+
+        public void AddLotteryTicketsBasedOnLuck()
+        {
+            LotteryTickets = TotalLuck();
         }
 
         public int CalculateExperienceGainedFromMonster(Monster monster, int partyMemberCount)

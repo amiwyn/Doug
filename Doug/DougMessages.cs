@@ -139,6 +139,10 @@
         public const string CraftingSelect = "Select items";
         public const string CraftingDialog = "Select two or more items to craft them. If the crafting was not successful you don't lose the items.";
         public const string SuccessCrafting = "You successfully crafted {0}!";
+        public const string LotteryText = "<!here> The lottery is now *OPEN* \n\n Everyone has received an amount of tickets equal to their luck. You can check your total tickets in your profile. The lottery winner will be drawn in 8 hours.";
+        public const string AdditionalTickets = "You can buy additional tickets here";
+        public const string TicketPrice = "Buy Ticket :rupee: {0}";
+        public const string LotteryWinner = "{0} is the lottery winner! Congratulations!";
 
 
         public const string DougError = "Beep boop, it's not working : {0}";

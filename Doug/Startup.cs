@@ -49,8 +49,6 @@ namespace Doug
                 };
             });
 
-            services.AddSingleton(new HttpClient(new HttpClientHandler(), false));
-
             services.AddScoped<EventLimiting>();
             services.AddScoped<RequestSigning>();
             services.AddScoped<Authentication>();
@@ -82,9 +80,20 @@ namespace Doug
             }
         }
 
+        public static IServiceCollection CreateStaticDougContext()
+        {
+            var services = new ServiceCollection();
+            RegisterDougServices(services);
+
+            var connectionString = Environment.GetEnvironmentVariable("ConnectionStrings__dougbotdb");
+            services.AddDbContext<DougContext>(options => options.UseSqlServer(connectionString));
+            return services;
+        }
+
         public static void RegisterDougServices(IServiceCollection services)
         {
-            services.AddScoped<ISlackWebApi, SlackWebApi>();
+            services.AddHttpClient<ISlackWebApi, SlackWebApi>();
+
             services.AddScoped<IEventDispatcher, EventDispatcher>();
             services.AddScoped<IEffectFactory, EffectFactory>();
             services.AddScoped<ISkillFactory, SkillFactory>();
@@ -111,6 +120,7 @@ namespace Doug
             services.AddScoped<ICraftingService, CraftingService>();
             services.AddScoped<ISkillService, SkillService>();
             services.AddScoped<IInventoryService, InventoryService>();
+            services.AddScoped<ILuaService, LuaService>();
 
             services.AddScoped<ICoffeeCommands, CoffeeCommands>();
             services.AddScoped<ISlursCommands, SlursCommands>();
