@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Net.Http;
+using Doug.API;
 using Doug.Commands;
 using Doug.Effects;
 using Doug.Items;
@@ -80,18 +81,9 @@ namespace Doug
             }
         }
 
-        public static IServiceCollection CreateStaticDougContext()
-        {
-            var services = new ServiceCollection();
-            RegisterDougServices(services);
-
-            var connectionString = Environment.GetEnvironmentVariable("ConnectionStrings__dougbotdb");
-            services.AddDbContext<DougContext>(options => options.UseSqlServer(connectionString));
-            return services;
-        }
-
         public static void RegisterDougServices(IServiceCollection services)
         {
+            services.AddScoped<DougApi>();
             services.AddHttpClient<ISlackWebApi, SlackWebApi>();
 
             services.AddScoped<IEventDispatcher, EventDispatcher>();

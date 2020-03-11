@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Doug.Models.User;
 using Doug.Repositories;
+using Doug.Services;
 using Doug.Slack;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Doug.API
 {
@@ -13,27 +13,33 @@ namespace Doug.API
         public string you { get; set; }
         public string channel { get; set; }
 
-        public DougApi(string user, string channel)
+        private readonly ISlackWebApi _slack;
+        private readonly IUserRepository _userRepository;
+        private readonly IInventoryService _inventoryService;
+
+        public DougApi(ISlackWebApi slack, IUserRepository userRepository, IInventoryService inventoryService)
         {
-            this.you = user;
-            this.channel = channel;
+            _slack = slack;
+            _userRepository = userRepository;
+            _inventoryService = inventoryService;
+        }
+
+        public void AddContext(string userId, string channelId)
+        {
+            you = userId;
+            channel = channelId;
         }
 
         public List<User> users => GetUsers();
-        private static List<User> GetUsers()
+        private List<User> GetUsers()
         {
-            var services = Startup.CreateStaticDougContext().BuildServiceProvider();
-            var userRepository = services.GetService<IUserRepository>();
-            return userRepository.GetUsers();
+            return _userRepository.GetUsers(); // TODO Map to a lua friendly format
         }
 
         public Action<object> print => SendEphemeral;
         private void SendEphemeral(object input)
         {
-            var services = Startup.CreateStaticDougContext().BuildServiceProvider();
-            var slack = services.GetService<ISlackWebApi>();
-
-            slack.SendEphemeralMessage(ParseString(input), you, channel);
+            _slack.SendEphemeralMessage(ParseString(input), you, channel);
         }
 
         private string ParseString(object input)
@@ -46,12 +52,13 @@ namespace Doug.API
             return input.ToString();
         }
 
-        public Action give => GiveItem;
-
-        private void GiveItem()
+        public Action<string, int> give => GiveItem;
+        private void GiveItem(string targetId, int itemSlot)
         {
-            var services = Startup.CreateStaticDougContext().BuildServiceProvider();
-            var slack = services.GetService<ISlackWebApi>();
+            var target = _userRepository.GetUser(targetId);
+            var user = _userRepository.GetUser(you);
+
+            _inventoryService.Give(user, target, itemSlot, channel);
         }
     }
 }

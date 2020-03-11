@@ -14,22 +14,31 @@ namespace Doug.Services
 
     public class LuaService : ILuaService
     {
+        private readonly DougApi _api;
+
+        public LuaService(DougApi api)
+        {
+            _api = api;
+        }
+
         public async Task<DougResponse> ExecuteScript(Command command)
         {
-            var state = new Lua();
-
-            state["doug"] = new DougApi(command.UserId, command.ChannelId);
-
-            var cancellationSource = new CancellationTokenSource();
-            cancellationSource.CancelAfter(TimeSpan.FromSeconds(20));
-
-            try
+            using (var state = new Lua())
             {
-                await Task.Run(() => state.DoString(command.Text), cancellationSource.Token);
-            }
-            catch (Exception e)
-            {
-                return new DougResponse(e.Message);
+                _api.AddContext(command.UserId, command.ChannelId);
+                state["doug"] = _api;
+
+                var cancellationSource = new CancellationTokenSource();
+                cancellationSource.CancelAfter(TimeSpan.FromSeconds(20));
+
+                try
+                {
+                    await Task.Run(() => state.DoString(command.Text), cancellationSource.Token);
+                }
+                catch (Exception e)
+                {
+                    return new DougResponse(e.Message);
+                }
             }
 
             return new DougResponse();
