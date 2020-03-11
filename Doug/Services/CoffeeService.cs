@@ -49,7 +49,7 @@ namespace Doug.Services
                 TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time") :
                 TimeZoneInfo.FindSystemTimeZoneById("America/New_York");
 
-            var timezoneOffset = timeZoneInfo.BaseUtcOffset;
+            var timezoneOffset = timeZoneInfo.GetUtcOffset(currentTime);
             var morningBreak = TimeSpan.FromHours(MorningBreak) - timezoneOffset;
             var afternoonBreak = TimeSpan.FromHours(AfternoonBreak) - timezoneOffset;
 

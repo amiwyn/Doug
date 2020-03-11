@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Doug.Models;
+using Doug.Models.User;
 
 namespace Doug.Services
 {
@@ -10,6 +11,7 @@ namespace Doug.Services
         bool RollAgainstOpponent(double userChances, double opponentChances);
         LootItem RandomFromWeightedTable(DropTable table);
         IEnumerable<LootItem> RandomTableDrop(DropTable table, double modifier);
+        User DrawLotteryWinner(List<User> users);
     }
 
     public class RandomService : IRandomService
@@ -48,6 +50,25 @@ namespace Doug.Services
         {
             var random = new Random();
             return table.Items.Where(elem => random.NextDouble() < elem.Probability + modifier);
+        }
+
+        public User DrawLotteryWinner(List<User> users)
+        {
+            var totalTickets = users.Sum(user => user.LotteryTickets);
+            var result = new Random().Next(0, totalTickets);
+
+            var total = 0;
+
+            foreach (var user in users)
+            {
+                total += user.LotteryTickets;
+                if (result < total)
+                {
+                    return user;
+                }
+            }
+
+            return users.Last();
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Net.Http;
+using Doug.API;
 using Doug.Commands;
 using Doug.Effects;
 using Doug.Items;
@@ -49,8 +50,6 @@ namespace Doug
                 };
             });
 
-            services.AddSingleton(new HttpClient(new HttpClientHandler(), false));
-
             services.AddScoped<EventLimiting>();
             services.AddScoped<RequestSigning>();
             services.AddScoped<Authentication>();
@@ -84,7 +83,9 @@ namespace Doug
 
         public static void RegisterDougServices(IServiceCollection services)
         {
-            services.AddScoped<ISlackWebApi, SlackWebApi>();
+            services.AddScoped<DougApi>();
+            services.AddHttpClient<ISlackWebApi, SlackWebApi>();
+
             services.AddScoped<IEventDispatcher, EventDispatcher>();
             services.AddScoped<IEffectFactory, EffectFactory>();
             services.AddScoped<ISkillFactory, SkillFactory>();
@@ -111,6 +112,7 @@ namespace Doug
             services.AddScoped<ICraftingService, CraftingService>();
             services.AddScoped<ISkillService, SkillService>();
             services.AddScoped<IInventoryService, InventoryService>();
+            services.AddScoped<ILuaService, LuaService>();
 
             services.AddScoped<ICoffeeCommands, CoffeeCommands>();
             services.AddScoped<ISlursCommands, SlursCommands>();

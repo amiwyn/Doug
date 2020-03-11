@@ -15,7 +15,9 @@ namespace Doug.Repositories
         User GetUser(string userId);
         User GetUserByToken(string token);
         void RegenerateUsers();
-
+        void AddTicketsToUsers();
+        void AddSingleTicket(string userId);
+        void ClearTickets();
     }
 
     public class UserRepository : IUserRepository
@@ -106,6 +108,33 @@ namespace Doug.Repositories
             var users = GetUsers();
 
             users.ForEach(user => user.RegenerateHealthAndEnergy());
+
+            _db.SaveChanges();
+        }
+
+        public void AddTicketsToUsers()
+        {
+            var users = GetUsers();
+
+            users.ForEach(user => user.AddLotteryTicketsBasedOnLuck());
+
+            _db.SaveChanges();
+        }
+
+        public void AddSingleTicket(string userId)
+        {
+            var user = GetUser(userId);
+
+            user.LotteryTickets++;
+
+            _db.SaveChanges();
+        }
+
+        public void ClearTickets()
+        {
+            var users = GetUsers();
+
+            users.ForEach(user => user.LotteryTickets = 0);
 
             _db.SaveChanges();
         }
