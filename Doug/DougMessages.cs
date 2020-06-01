@@ -4,8 +4,8 @@
     {
         public const string CoffeeParrotEmoji = ":coffeeparrot:";
         public const string CreditEmoji = ":rupee:";
-        public const string UpVote = "+1";
-        public const string Downvote = "-1";
+        public const string UpVote = "nodders";
+        public const string Downvote = "nopers";
 
         public const string Top5 = "Top users by level :";
         public const string JoinedCoffee = "{0} joined the coffee break.";
