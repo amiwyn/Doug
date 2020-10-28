@@ -1,44 +1,41 @@
-# ASP.NET Core (.NET Framework)
-# Build and test ASP.NET Core projects targeting the full .NET Framework.
-# Add steps that publish symbols, save build artifacts, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
-
 trigger:
 - master
 
 pool:
-  vmImage: 'windows-latest'
-
-variables:
-  solution: '**/*.sln'
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
+  vmImage: 'ubuntu-latest'
 
 steps:
-- task: NuGetToolInstaller@1
-
-- task: NuGetCommand@2
+- task: DotNetCoreCLI@2
+  displayName: Build Doug
   inputs:
-    restoreSolution: '$(solution)'
+    command: 'build'
+    projects: 'Doug/**.csproj'
 
-- task: VSBuild@1
+- task: DotNetCoreCLI@2
+  displayName: Build functions
   inputs:
-    solution: 'Doug/**.csproj'
-    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+    command: 'build'
+    projects: 'Functions/**.csproj'
 
-- task: VSBuild@1
+- task: DotNetCoreCLI@2
+  displayName: Publish Doug
   inputs:
-    solution: 'Functions/**.csproj'
-    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\Functions.zip"'
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+    command: 'publish'
+    projects: 'Doug/**.csproj'
+    publishWebProjects: true
+    arguments: '-o $(build.artifactStagingDirectory)\WebApp.zip'
+    zipAfterPublish: false
+    modifyOutputPath: false
 
-- task: VSTest@2
+- task: DotNetCoreCLI@2
+  displayName: Publish functions
   inputs:
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+    command: 'publish'
+    projects: 'Functions/**.csproj'
+    publishWebProjects: true
+    arguments: '-o $(build.artifactStagingDirectory)\Functions.zip'
+    zipAfterPublish: false
+    modifyOutputPath: false
 
 - task: Npm@1
   inputs:
